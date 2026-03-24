@@ -12,7 +12,7 @@
 body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif; background: #f7f8fa; min-height: 100vh; color: #111827; }
 
 .screen { display: none; min-height: 100vh; }
-.screen.active { display: flex; flex-direction: column; }
+.screen.active { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 .page-wrap { max-width: 480px; margin: 0 auto; padding: 24px 20px 80px; width: 100%; }
 
 .field-label { font-size: 12px; font-weight: 600; color: #6b7280; margin-bottom: 6px; margin-top: 16px; display: block; letter-spacing: 0.04em; }
@@ -98,6 +98,25 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .policy-checkbox.checked::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
 .policy-check-label { font-size: 13px; color: #555; font-weight: 500; }
 .policy-check-label.done { color: #1d7a3a; font-weight: 700; }
+/* 신청 버튼 + 완료 체크 행 */
+.policy-apply-row { display: flex; gap: 8px; align-items: stretch; margin-top: 12px; }
+.policy-apply-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 11px 12px; background: #7a5600; color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; transition: opacity 0.15s; }
+.policy-apply-btn:active { opacity: 0.8; }
+.policy-apply-btn.done-btn { background: #16a34a; }
+/* 완료 체크 버튼 */
+.policy-done-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 8px 12px; background: #f9fafb; border: 1.5px solid #e5e7eb; border-radius: 10px; cursor: pointer; min-width: 60px; flex-shrink: 0; transition: all 0.15s; }
+.policy-done-btn.checked { background: #f0fdf4; border-color: #86efac; }
+.policy-done-icon { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #d1d5db; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.policy-done-icon.checked { background: #16a34a; border-color: #16a34a; }
+.policy-done-icon.checked::after { content: '✓'; color: #fff; font-size: 12px; font-weight: 700; }
+.policy-done-label { font-size: 10px; color: #9ca3af; font-weight: 600; }
+.policy-done-label.checked { color: #16a34a; }
+/* 신청 완료 표시하기 — 독립 행 (기존 스타일 유지) */
+.policy-check-small { width: 20px; height: 20px; border-radius: 5px; border: 2px solid #d1d5db; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.policy-check-small.checked { background: #16a34a; border-color: #16a34a; }
+.policy-check-small.checked::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
+.policy-check-small-label { font-size: 12px; color: #6b7280; }
+.policy-check-small-label.checked { color: #16a34a; font-weight: 700; }
 .policy-applied-badge { font-size: 11px; background: #f0fdf4; color: #1d7a3a; padding: 2px 8px; border-radius: 8px; font-weight: 600; margin-left: auto; flex-shrink: 0; }
 /* ── 로그인 ── */
 .login-box { width: 100%; max-width: 360px; padding: 0 24px; }
@@ -156,7 +175,7 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 /* profile-edit-btn 삭제 - hdr-btn으로 대체 */
 .profile-edit-btn { display: none; }
 
-.app-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 60px; width: 100%; box-sizing: border-box; }
+.app-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 60px; width: 100%; box-sizing: border-box; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
 .status-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 8px; }
 .status-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
@@ -205,15 +224,15 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 
 /* ── 스와이프 ── */
 .swipe-container { display: flex; width: 900%; height: 100%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
-.swipe-page { width: calc(100% / 9); height: 100%; flex-shrink: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
-/* 사진 페이지(2번째 = nth-child(2))는 스크롤 없이 꽉 차게 */
+.swipe-page { width: calc(100% / 9); height: 100%; flex-shrink: 0; overflow: hidden; }
+/* 사진 페이지(2번째)는 스크롤 없이 꽉 차게 */
 .swipe-page:nth-child(2) { overflow: hidden; }
 .page-dots { display: flex; justify-content: center; gap: 6px; padding: 10px 0 4px; }
 .page-dot { width: 6px; height: 6px; border-radius: 50%; background: #d0d0d0; transition: all 0.2s; }
 .page-dot.active { background: #7a5600; width: 18px; border-radius: 3px; }
 
 /* ── 일기 페이지 ── */
-.diary-page { padding: 16px 16px 80px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+.diary-page { padding: 16px 16px 80px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; }
 .diary-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .diary-header h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; }
 .diary-write-btn { display: flex; align-items: center; gap: 5px; padding: 8px 16px; background: #7a5600; color: #fff; border: none; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; }
@@ -239,8 +258,8 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 
 /* ── 각 페이지 빈공간 제거 ── */
 .app-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 40px; width: 100%; }
-.mom-page { padding: 16px 16px 40px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; }
-.policy-page { padding: 16px 16px 40px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+.mom-page { padding: 16px 16px 40px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; }
+.policy-page { padding: 16px 16px 40px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; }
 .mom-page-header { margin-bottom: 16px; }
 .mom-page-header h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; }
 .mom-page-header p { font-size: 13px; color: #6b7280; margin-top: 4px; }
@@ -563,7 +582,7 @@ body.dark .milestone-name { color: #d0c0a8; }
 body.dark .export-btn { background: #2a2520; border-color: #3d3628; color: #c8a870; }
 
 /* ── 새 기능 페이지 공통 ── */
-.feature-page { padding: 16px 16px 60px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+.feature-page { padding: 16px 16px 60px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; }
 .feature-page-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
 .feature-page-sub { font-size: 13px; color: #6b7280; margin-bottom: 16px; }
 .feature-section-title { font-size: 12px; font-weight: 700; color: #7a5600; letter-spacing: 0.06em; text-transform: uppercase; margin: 16px 0 8px; }
@@ -992,53 +1011,137 @@ body.dark .feature-section-title { color: #c8a870; }
             <p>정부에서 지원하는 주요 혜택을 확인하세요</p>
           </div>
           <div class="policy-notice">
-            ⚠️ 아래 내용은 2026년 기준 정보입니다. 지역·소득에 따라 달라질 수 있으니 정확한 내용은 <strong>복지로(www.bokjiro.go.kr)</strong> 또는 주민센터에서 확인하세요.
+            ⚠️ 2026년 기준 정보입니다. 지역·소득에 따라 달라질 수 있으니 복지로(bokjiro.go.kr) 또는 주민센터에서 확인하세요.
           </div>
+
+          <!-- 부모급여 -->
           <div class="policy-card">
-            <div class="policy-card-header"><div class="policy-icon" style="background:#FFF0EB;">💰</div><div><div class="policy-card-title">부모급여</div><span class="policy-card-badge" style="background:#FFF0EB;color:#c0410f;">현금 지급</span></div></div>
+            <div class="policy-card-header">
+              <div class="policy-icon" style="background:#FFF0EB;">💰</div>
+              <div><div class="policy-card-title">부모급여</div><span class="policy-card-badge" style="background:#FFF0EB;color:#c0410f;">현금 지급</span></div>
+            </div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">0세 (0~11개월)</div><div class="policy-item-amount">월 100만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">1세 (12~23개월)</div><div class="policy-item-amount">월 50만원</div></div>
-            <div class="policy-apply-row"><a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004194" target="_blank">📋 온라인 신청하기</a><div class="policy-check-row" onclick="togglePolicyCheck('p-bumo')" style="flex-shrink:0;"><div class="policy-check-small" id="pc-p-bumo"></div><span class="policy-check-small-label" id="pl-p-bumo">완료</span></div></div>
+            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">어린이집 이용 시 보육료 바우처로 지급</div></div>
+            <div class="policy-apply-row">
+              <a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004194" target="_blank">📋 복지로 신청하기</a>
+              <div class="policy-done-btn" id="pdb-p-bumo" onclick="togglePolicyCheck('p-bumo')">
+                <div class="policy-done-icon" id="pc-p-bumo"></div>
+                <span class="policy-done-label" id="pl-p-bumo">완료</span>
+              </div>
+            </div>
           </div>
+
+          <!-- 첫만남이용권 -->
           <div class="policy-card">
-            <div class="policy-card-header"><div class="policy-icon" style="background:#EDFBF0;">🎁</div><div><div class="policy-card-title">첫만남이용권</div><span class="policy-card-badge" style="background:#EDFBF0;color:#1d7a3a;">바우처</span></div></div>
+            <div class="policy-card-header">
+              <div class="policy-icon" style="background:#EDFBF0;">🎁</div>
+              <div><div class="policy-card-title">첫만남이용권</div><span class="policy-card-badge" style="background:#EDFBF0;color:#1d7a3a;">바우처</span></div>
+            </div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">첫째 출생 시</div><div class="policy-item-amount">200만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">둘째 이상 출생 시</div><div class="policy-item-amount">300만원</div></div>
-            <div class="policy-apply-row"><a class="policy-apply-btn" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank">📋 행복출산 원스톱 신청</a><div class="policy-check-row" onclick="togglePolicyCheck('p-first')" style="flex-shrink:0;"><div class="policy-check-small" id="pc-p-first"></div><span class="policy-check-small-label" id="pl-p-first">완료</span></div></div>
+            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출생 후 1년 이내 국민행복카드로 사용</div></div>
+            <div class="policy-apply-row">
+              <a class="policy-apply-btn" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank">📋 행복출산 원스톱 신청</a>
+              <div class="policy-done-btn" id="pdb-p-first" onclick="togglePolicyCheck('p-first')">
+                <div class="policy-done-icon" id="pc-p-first"></div>
+                <span class="policy-done-label" id="pl-p-first">완료</span>
+              </div>
+            </div>
           </div>
+
+          <!-- 아동수당 -->
           <div class="policy-card">
-            <div class="policy-card-header"><div class="policy-icon" style="background:#EBF4FF;">👶</div><div><div class="policy-card-title">아동수당</div><span class="policy-card-badge" style="background:#EBF4FF;color:#1a5fa8;">월 정기 지급</span></div></div>
+            <div class="policy-card-header">
+              <div class="policy-icon" style="background:#EBF4FF;">👶</div>
+              <div><div class="policy-card-title">아동수당</div><span class="policy-card-badge" style="background:#EBF4FF;color:#1a5fa8;">월 정기 지급</span></div>
+            </div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">만 8세 미만 전 아동</div><div class="policy-item-amount">월 10만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">비수도권 거주 시</div><div class="policy-item-amount">월 10.5만원</div></div>
-            <div class="policy-apply-row"><a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004160" target="_blank">📋 복지로 신청하기</a><div class="policy-check-row" onclick="togglePolicyCheck('p-child')" style="flex-shrink:0;"><div class="policy-check-small" id="pc-p-child"></div><span class="policy-check-small-label" id="pl-p-child">완료</span></div></div>
+            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">인구감소지역 거주 시</div><div class="policy-item-amount">월 11~12만원</div></div>
+            <div class="policy-apply-row">
+              <a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004160" target="_blank">📋 복지로 신청하기</a>
+              <div class="policy-done-btn" id="pdb-p-child" onclick="togglePolicyCheck('p-child')">
+                <div class="policy-done-icon" id="pc-p-child"></div>
+                <span class="policy-done-label" id="pl-p-child">완료</span>
+              </div>
+            </div>
           </div>
+
+          <!-- 육아휴직 -->
           <div class="policy-card">
-            <div class="policy-card-header"><div class="policy-icon" style="background:#F3EEFB;">🏠</div><div><div class="policy-card-title">육아휴직 급여</div><span class="policy-card-badge" style="background:#F3EEFB;color:#7c3aaf;">2025 대폭 개편</span></div></div>
+            <div class="policy-card-header">
+              <div class="policy-icon" style="background:#F3EEFB;">🏠</div>
+              <div><div class="policy-card-title">육아휴직 급여</div><span class="policy-card-badge" style="background:#F3EEFB;color:#7c3aaf;">2025 대폭 개편</span></div>
+            </div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">1~3개월 (통상임금 100%)</div><div class="policy-item-amount">최대 월 250만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">4~6개월 (통상임금 100%)</div><div class="policy-item-amount">최대 월 200만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">7개월 이후 (통상임금 80%)</div><div class="policy-item-amount">최대 월 160만원</div></div>
-            <div class="policy-apply-row"><a class="policy-apply-btn" href="https://www.ei.go.kr/ei/eih/cm/hm/main.do" target="_blank">📋 고용보험 신청하기</a><div class="policy-check-row" onclick="togglePolicyCheck('p-parental')" style="flex-shrink:0;"><div class="policy-check-small" id="pc-p-parental"></div><span class="policy-check-small-label" id="pl-p-parental">완료</span></div></div>
+            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">각 부모 최대 사용 가능</div><div class="policy-item-amount">1년 6개월</div></div>
+            <div class="policy-apply-row">
+              <a class="policy-apply-btn" href="https://www.ei.go.kr/ei/eih/cm/hm/main.do" target="_blank">📋 고용보험 신청하기</a>
+              <div class="policy-done-btn" id="pdb-p-parental" onclick="togglePolicyCheck('p-parental')">
+                <div class="policy-done-icon" id="pc-p-parental"></div>
+                <span class="policy-done-label" id="pl-p-parental">완료</span>
+              </div>
+            </div>
           </div>
+
+          <!-- 출산휴가 -->
           <div class="policy-card">
-            <div class="policy-card-header"><div class="policy-icon" style="background:#FFF8E6;">🌸</div><div><div class="policy-card-title">출산휴가 급여</div><span class="policy-card-badge" style="background:#FFF8E6;color:#8a6d00;">2026 인상</span></div></div>
+            <div class="policy-card-header">
+              <div class="policy-icon" style="background:#FFF8E6;">🌸</div>
+              <div><div class="policy-card-title">출산휴가 급여</div><span class="policy-card-badge" style="background:#FFF8E6;color:#8a6d00;">2026 인상</span></div>
+            </div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산휴가 급여 상한액</div><div class="policy-item-amount">월 220만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산휴가 기간</div><div class="policy-item-amount">90일</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">배우자 출산휴가</div><div class="policy-item-amount">20일</div></div>
-            <div class="policy-apply-row"><a class="policy-apply-btn" href="https://www.ei.go.kr/ei/eih/cm/hm/main.do" target="_blank">📋 고용보험 신청하기</a><div class="policy-check-row" onclick="togglePolicyCheck('p-maternity')" style="flex-shrink:0;"><div class="policy-check-small" id="pc-p-maternity"></div><span class="policy-check-small-label" id="pl-p-maternity">완료</span></div></div>
+            <div class="policy-apply-row">
+              <a class="policy-apply-btn" href="https://www.ei.go.kr/ei/eih/cm/hm/main.do" target="_blank">📋 고용보험 신청하기</a>
+              <div class="policy-done-btn" id="pdb-p-maternity" onclick="togglePolicyCheck('p-maternity')">
+                <div class="policy-done-icon" id="pc-p-maternity"></div>
+                <span class="policy-done-label" id="pl-p-maternity">완료</span>
+              </div>
+            </div>
           </div>
+
+          <!-- 아이돌봄 -->
           <div class="policy-card">
-            <div class="policy-card-header"><div class="policy-icon" style="background:#EDFBF0;">🧸</div><div><div class="policy-card-title">아이돌봄 서비스</div><span class="policy-card-badge" style="background:#EDFBF0;color:#1d7a3a;">2026 확대</span></div></div>
+            <div class="policy-card-header">
+              <div class="policy-icon" style="background:#EDFBF0;">🧸</div>
+              <div><div class="policy-card-title">아이돌봄 서비스</div><span class="policy-card-badge" style="background:#EDFBF0;color:#1d7a3a;">2026 확대</span></div>
+            </div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">소득 기준 중위소득 250% 이하로 확대</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">야간 긴급돌봄</div><div class="policy-item-amount">하루 5,000원</div></div>
-            <div class="policy-apply-row"><a class="policy-apply-btn" href="https://www.idolbom.go.kr" target="_blank">📋 아이돌봄 신청하기</a><div class="policy-check-row" onclick="togglePolicyCheck('p-care')" style="flex-shrink:0;"><div class="policy-check-small" id="pc-p-care"></div><span class="policy-check-small-label" id="pl-p-care">완료</span></div></div>
+            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">유아돌봄수당 (신설)</div><div class="policy-item-amount">시간당 1,000원</div></div>
+            <div class="policy-apply-row">
+              <a class="policy-apply-btn" href="https://www.idolbom.go.kr" target="_blank">📋 아이돌봄 신청하기</a>
+              <div class="policy-done-btn" id="pdb-p-care" onclick="togglePolicyCheck('p-care')">
+                <div class="policy-done-icon" id="pc-p-care"></div>
+                <span class="policy-done-label" id="pl-p-care">완료</span>
+              </div>
+            </div>
           </div>
+
+          <!-- 산모·신생아 -->
           <div class="policy-card">
-            <div class="policy-card-header"><div class="policy-icon" style="background:#FFF0EB;">🏥</div><div><div class="policy-card-title">산모·신생아 건강관리</div><span class="policy-card-badge" style="background:#FFF0EB;color:#c0410f;">바우처</span></div></div>
-            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산 후 전문인력 파견, 출산일로부터 60일 이내</div></div>
-            <div class="policy-apply-row"><a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004126" target="_blank">📋 복지로 신청하기</a><div class="policy-check-row" onclick="togglePolicyCheck('p-sanmo')" style="flex-shrink:0;"><div class="policy-check-small" id="pc-p-sanmo"></div><span class="policy-check-small-label" id="pl-p-sanmo">완료</span></div></div>
+            <div class="policy-card-header">
+              <div class="policy-icon" style="background:#FFF0EB;">🏥</div>
+              <div><div class="policy-card-title">산모·신생아 건강관리</div><span class="policy-card-badge" style="background:#FFF0EB;color:#c0410f;">바우처</span></div>
+            </div>
+            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산 후 전문인력 파견</div></div>
+            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산일로부터 60일 이내 신청</div></div>
+            <div class="policy-apply-row">
+              <a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004126" target="_blank">📋 복지로 신청하기</a>
+              <div class="policy-done-btn" id="pdb-p-sanmo" onclick="togglePolicyCheck('p-sanmo')">
+                <div class="policy-done-icon" id="pc-p-sanmo"></div>
+                <span class="policy-done-label" id="pl-p-sanmo">완료</span>
+              </div>
+            </div>
           </div>
-          <a class="policy-link" href="https://www.bokjiro.go.kr" target="_blank">복지로에서 더 많은 혜택 확인하기 →</a>
-          <a class="policy-link" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank" style="margin-top:8px;">행복출산 원스톱 서비스 신청 →</a>
+
+          <a class="policy-link" href="https://www.bokjiro.go.kr" target="_blank">🔗 복지로에서 더 많은 혜택 확인하기</a>
+          <a class="policy-link" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank" style="margin-top:8px;">🔗 행복출산 원스톱 서비스</a>
         </div>
       </div>
 
@@ -2697,10 +2800,20 @@ function loadPolicyChecks() {
   const checks = JSON.parse(localStorage.getItem('policy_checks') || '{}');
   POLICY_KEYS.forEach(k => {
     const done = !!checks[k];
-    const cb = document.getElementById('pc-' + k);
-    const lb = document.getElementById('pl-' + k);
-    if (cb) cb.classList.toggle('checked', done);
-    if (lb) { lb.textContent = done ? '✅ 신청 완료!' : '신청 완료 표시하기'; lb.classList.toggle('done', done); }
+    const icon = document.getElementById('pc-' + k);
+    const label = document.getElementById('pl-' + k);
+    const btn = document.getElementById('pdb-' + k);
+    if (icon) icon.classList.toggle('checked', done);
+    if (label) {
+      label.textContent = done ? '✅' : '완료';
+      label.classList.toggle('checked', done);
+    }
+    if (btn) btn.classList.toggle('checked', done);
+    // 신청 버튼도 완료 시 초록으로
+    const applyBtn = btn?.previousElementSibling;
+    if (applyBtn && applyBtn.classList.contains('policy-apply-btn')) {
+      applyBtn.style.background = done ? '#16a34a' : '';
+    }
   });
 }
 
