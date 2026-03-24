@@ -21,11 +21,19 @@ input[type="text"], input[type="number"], input[type="datetime-local"], input[ty
   font-size: 15px; background: #fff; color: #1a1a1a; outline: none; font-family: inherit;
 }
 input:focus { border-color: #bfdbfe; }
-.btn-primary { width: 100%; padding: 15px; border: none; border-radius: 8px; background: #2563eb; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 20px; font-family: inherit; }
+.btn-primary { width: 100%; padding: 15px; border: none; border-radius: 8px; background: #7a5600; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 20px; font-family: inherit; }
 .btn-primary:active { opacity: 0.85; }
+
+/* ── 전체 배경 컬러 통일 (첫 화면 톤) ── */
+body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif; background: #fff7d6; min-height: 100vh; color: #111827; }
 
 /* ── 역할 선택 화면 ── */
 #screen-role { background: radial-gradient(circle at top, #fffdf2 0%, #fff7d6 34%, #f6e6a8 100%); align-items: center; justify-content: center; position: relative; overflow: hidden; }
+#screen-login { background: radial-gradient(circle at top, #fffdf2 0%, #fff7d6 60%, #f6e6a8 100%); align-items: center; justify-content: center; }
+#screen-profile { background: #fffdf2; }
+#screen-guide { background: #fffdf2; }
+#screen-dad { background: #fffdf2; }
+#screen-app { background: #fff7d6; }
 .role-box { width: 100%; max-width: 360px; padding: 0 24px; text-align: center; }
 .role-logo { margin-bottom: 28px; }
 .role-logo .logo-icon { font-size: 34px; margin-bottom: 8px; font-weight: 900; letter-spacing: -0.04em; color: #6f4e00; line-height: 1.15; text-shadow: 0 1px 0 rgba(255,255,255,0.45); }
@@ -41,8 +49,7 @@ input:focus { border-color: #bfdbfe; }
 .role-card .r-sub { font-size: 12px; color: #9ca3af; margin-top: 4px; }
 
 /* ── 아빠 화면 ── */
-#screen-dad { background: #f7f8fa; }
-.dad-header { background: #2563eb; padding: 52px 20px 16px; }
+.dad-header { background: #7a5600; padding: 52px 20px 16px; }
 .dad-header-inner { max-width: 480px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
 .dad-title { font-size: 20px; font-weight: 700; color: #fff; }
 .dad-sub { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 2px; }
@@ -92,7 +99,7 @@ input:focus { border-color: #bfdbfe; }
 .policy-check-label { font-size: 13px; color: #555; font-weight: 500; }
 .policy-check-label.done { color: #1d7a3a; font-weight: 700; }
 .policy-applied-badge { font-size: 11px; background: #f0fdf4; color: #1d7a3a; padding: 2px 8px; border-radius: 8px; font-weight: 600; margin-left: auto; flex-shrink: 0; }
-#screen-login { background: #f7f8fa; align-items: center; justify-content: center; }
+/* ── 로그인 ── */
 .login-box { width: 100%; max-width: 360px; padding: 0 24px; }
 .login-logo { text-align: center; margin-bottom: 28px; }
 .login-logo .logo-icon { font-size: 30px; margin-bottom: 10px; font-weight: 900; letter-spacing: -0.04em; color: #1f2937; line-height: 1.15; }
@@ -111,7 +118,7 @@ input:focus { border-color: #bfdbfe; }
 .login-hint { font-size: 12px; color: #9ca3af; text-align: center; margin-top: 16px; line-height: 1.6; }
 
 /* ── 프로필 ── */
-#screen-profile { background: #f7f8fa; }
+/* ── 프로필 ── */
 .profile-header { text-align: center; padding: 32px 0 8px; }
 .step-badge { display: inline-block; background: #ffffff; border: 1px solid #dbe3ef; color: #475569; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 8px; margin-bottom: 12px; }
 .profile-header h2 { font-size: 22px; font-weight: 700; color: #1a1a1a; }
@@ -120,18 +127,9 @@ input:focus { border-color: #bfdbfe; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
 /* ── 메인 앱 ── */
-#screen-app { background: #f7f8fa; }
-.app-header { background: #fff; padding: 44px 16px 10px; box-shadow: 0 1px 0 #e5e7eb; }
-.app-header-inner { max-width: 480px; margin: 0 auto; }
-.app-header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-.app-header-baby { display: flex; align-items: center; gap: 10px; }
-.app-header-actions { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
-.hdr-btn { display: flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 20px; border: 1px solid #e5e7eb; background: #f9fafb; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; color: #374151; font-family: inherit; }
-.hdr-btn:active { opacity: 0.8; }
-.hdr-btn.blue { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
-.hdr-btn.pink { background: #fdf2f8; border-color: #f9a8d4; color: #be185d; }
-.hdr-btn.amber { background: #fffbeb; border-color: #fde68a; color: #92400e; }
-.hdr-btn.gray { background: #f9fafb; border-color: #e5e7eb; color: #6b7280; }
+/* ── 메인 앱 ── */
+.app-header { background: #fff; padding: 52px 20px 14px; box-shadow: 0 1px 0 #e5e7eb; }
+.app-header-inner { max-width: 480px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
 .baby-avatar { width: 44px; height: 44px; border-radius: 12px; background: #eff6ff; border: 1px solid #dbeafe; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
 .baby-name { font-size: 18px; font-weight: 700; color: #1a1a1a; }
 .baby-age { font-size: 12px; color: #6b7280; margin-top: 2px; }
@@ -187,69 +185,31 @@ input:focus { border-color: #bfdbfe; }
 .section-title-row .section-title { margin-bottom: 0; }
 
 /* ── 스와이프 페이지 ── */
-.swipe-container { display: flex; width: 500%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
-.swipe-page { width: calc(100% / 5); height: calc(100vh - 130px); flex-shrink: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
-.page-dots { display: flex; justify-content: center; gap: 6px; padding: 8px 0 4px; }
+/* ── 스와이프 컨테이너 ── */
+.swipe-container { display: flex; width: 500%; height: 100%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
+.swipe-page { width: calc(100% / 5); height: 100%; flex-shrink: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+.page-dots { display: flex; justify-content: center; gap: 6px; padding: 10px 0 4px; }
 .page-dot { width: 6px; height: 6px; border-radius: 50%; background: #d0d0d0; transition: all 0.2s; }
-.page-dot.active { background: #2563eb; width: 18px; border-radius: 3px; }
+.page-dot.active { background: #7a5600; width: 18px; border-radius: 3px; }
+/* 사진 페이지(2번째)는 스크롤 없이 꽉 차게 */
+.swipe-page:nth-child(2) { overflow: hidden; }
 
-/* ── 일기 페이지 ── */
-.diary-page { padding: 16px 16px 80px; background: #fffdf7; min-height: 100%; max-width: 480px; margin: 0 auto; width: 100%; }
-.diary-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.diary-header h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; }
-.diary-write-btn { display: flex; align-items: center; gap: 5px; padding: 8px 14px; background: #2563eb; color: #fff; border: none; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; }
-.diary-write-btn:active { opacity: 0.85; }
-.diary-empty { text-align: center; padding: 60px 20px; color: #9ca3af; }
-.diary-empty-icon { font-size: 48px; margin-bottom: 12px; }
-.diary-empty-text { font-size: 15px; font-weight: 600; color: #6b7280; }
-.diary-empty-sub { font-size: 13px; color: #9ca3af; margin-top: 6px; }
-.diary-entry { background: #fff; border-radius: 16px; border: 1px solid #f3f0e8; margin-bottom: 14px; overflow: hidden; }
-.diary-entry-img { width: 100%; max-height: 260px; object-fit: cover; display: block; }
-.diary-entry-body { padding: 14px 16px 12px; }
-.diary-entry-date { font-size: 11px; color: #9ca3af; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
-.diary-entry-day-badge { background: #eff6ff; color: #1d4ed8; border-radius: 10px; padding: 2px 8px; font-size: 11px; font-weight: 700; }
-.diary-entry-text { font-size: 14px; color: #374151; line-height: 1.75; word-break: keep-all; white-space: pre-wrap; }
-.diary-entry-actions { display: flex; justify-content: flex-end; gap: 8px; padding-top: 10px; border-top: 1px solid #f9f9f9; margin-top: 10px; }
-.diary-action-btn { background: none; border: 1px solid #e5e7eb; border-radius: 8px; padding: 5px 12px; font-size: 12px; color: #6b7280; cursor: pointer; }
-.diary-action-btn.del { color: #ef4444; border-color: #fecaca; }
-
-/* ── 일기 작성 모달 ── */
-.diary-textarea { width: 100%; min-height: 120px; padding: 13px 14px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 15px; background: #fff; color: #1a1a1a; outline: none; font-family: inherit; resize: none; line-height: 1.7; }
-.diary-textarea:focus { border-color: #bfdbfe; }
-.diary-img-preview { width: 100%; max-height: 200px; object-fit: cover; border-radius: 10px; margin-top: 10px; display: none; }
-.diary-img-upload-btn { display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: #f3f4f6; border: 1px dashed #d1d5db; border-radius: 10px; font-size: 13px; color: #6b7280; cursor: pointer; margin-top: 10px; font-weight: 500; }
-.diary-img-upload-btn:active { background: #e5e7eb; }
-
-/* ── 각 페이지 빈공간 제거 ── */
-.app-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 40px; width: 100%; }
-.photo-page { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; background: #f7f8fa; min-height: 100%; }
-.photo-upload-area { position: relative; width: 100%; flex-shrink: 0; }
-.baby-photo-img { width: 100%; max-height: 65vh; object-fit: cover; object-position: center; display: block; background: #e8e8e8; }
-.baby-photo-placeholder { width: 100%; height: 55vw; max-height: 360px; background: #eef2f7; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; gap: 12px; }
-.baby-photo-placeholder .ph-icon { font-size: 48px; }
-.no-photo-info { padding: 16px 20px 0; text-align: center; width: 100%; }
-.no-photo-info .baby-dname { font-size: 22px; font-weight: 700; color: #1a1a1a; }
-.no-photo-info .baby-ddays { font-size: 13px; color: #6b7280; margin-top: 4px; }
-.no-photo-chips { display: flex; gap: 6px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
-.info-chip { background: #fff; border-radius: 12px; padding: 5px 12px; font-size: 12px; color: #555; }
-.diary-page { padding: 16px 16px 40px; background: #fffdf7; min-height: 100%; max-width: 480px; margin: 0 auto; width: 100%; }
-.mom-page { padding: 16px 16px 40px; background: #fff5f8; min-height: 100%; max-width: 480px; margin: 0 auto; width: 100%; }
-.policy-page { padding: 16px 16px 40px; background: #f7f8fa; min-height: 100%; max-width: 480px; margin: 0 auto; width: 100%; }
-.baby-photo-placeholder p { font-size: 15px; color: #9ca3af; font-weight: 500; }
-.no-photo-info { padding: 16px 20px 12px; text-align: center; width: 100%; }
-.no-photo-info .baby-dname { font-size: 22px; font-weight: 700; color: #1a1a1a; }
-.no-photo-info .baby-ddays { font-size: 13px; color: #6b7280; margin-top: 4px; }
-.no-photo-chips { display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
-
-/* ── 엄마 케어 카드 스타일 ── */
+/* ── 엄마 케어 페이지 ── */
+.mom-page { padding: 20px 16px 60px; background: #fffdf2; min-height: calc(100vh - 130px); max-width: 480px; margin: 0 auto; width: 100%; }
 .mom-page-header { margin-bottom: 16px; }
 .mom-page-header h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; }
 .mom-page-header p { font-size: 13px; color: #6b7280; margin-top: 4px; }
 .mom-birth-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 12px; font-size: 13px; font-weight: 700; margin-bottom: 16px; }
 .mom-birth-badge.natural { background: #eff6ff; color: #1d4ed8; }
 .mom-birth-badge.csection { background: #ede9fe; color: #6d28d9; }
-.mom-care-card { background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; padding: 16px; margin-bottom: 12px; box-shadow: none; }
-.mom-care-card-title { font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.mom-care-card { background: #fff; border-radius: 12px; border: 1px solid #e8d796; margin-bottom: 10px; overflow: hidden; }
+.mom-care-card-title { font-size: 15px; font-weight: 700; color: #1a1a1a; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; gap: 8px; }
+.mom-care-card-title:active { background: #fffbf0; }
+.mom-care-card-title-left { display: flex; align-items: center; gap: 8px; }
+.mom-care-card-arrow { font-size: 12px; color: #9ca3af; transition: transform 0.2s; flex-shrink: 0; }
+.mom-care-card-arrow.open { transform: rotate(90deg); }
+.mom-care-card-body { display: none; padding: 0 16px 14px; border-top: 1px solid #f3f0e0; }
+.mom-care-card-body.open { display: block; }
 .mom-care-item { display: flex; gap: 8px; padding: 5px 0; align-items: flex-start; }
 .mom-care-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
 .mom-care-dot.pink { background: #ec4899; }
@@ -264,31 +224,72 @@ input:focus { border-color: #bfdbfe; }
 .community-chip:active { background: #2563eb; color: #fff; }
 .community-result { background: #f8f9fb; border-radius: 8px; padding: 12px 14px; font-size: 13px; color: #333; line-height: 1.7; min-height: 60px; }
 .community-result.loading { color: #9ca3af; font-style: italic; }
-.search-btn { width: 100%; padding: 11px; background: #2563eb; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 8px; }
+.search-btn { width: 100%; padding: 11px; background: #7a5600; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 8px; }
 .search-btn:active { opacity: 0.85; }
 .mom-no-info { text-align: center; padding: 40px 0; color: #9ca3af; font-size: 14px; line-height: 1.8; }
 
-/* ── 아기 사진 페이지 ── */
-.photo-page { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 130px); background: #f7f8fa; padding: 8px 0 24px; }
-.photo-upload-area { position: relative; width: 100%; max-width: 440px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
-.baby-photo-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; object-position: center center; display: block; margin: 0 auto; background: #e8e8e8; }
-.baby-photo-placeholder { width: 100%; aspect-ratio: 3/4; background: #eef2f7; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; gap: 12px; margin: 0 auto; }
+/* ── 아기 사진 페이지 — 헤더 아래 화면 꽉 채우기 ── */
+.photo-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #fffdf2;
+  overflow: hidden;
+}
+.photo-upload-area {
+  position: relative;
+  width: 100%;
+  flex: 1;          /* 남은 공간 모두 차지 */
+  min-height: 0;    /* flex 자식이 넘치지 않도록 */
+  overflow: hidden;
+}
+.baby-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  background: #e8dfc0;
+}
+.baby-photo-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(160deg, #fffdf2 0%, #f6e6a8 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  gap: 12px;
+}
 .baby-photo-placeholder .ph-icon { font-size: 52px; }
-.baby-photo-placeholder p { font-size: 15px; color: #9ca3af; font-weight: 500; }
+.baby-photo-placeholder p { font-size: 15px; color: #a07830; font-weight: 500; }
 .photo-upload-input { display: none; }
-.photo-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 32px 24px 24px; background: linear-gradient(transparent, rgba(0,0,0,0.6)); }
-.photo-baby-name { font-size: 28px; font-weight: 700; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
-.photo-baby-days { font-size: 15px; color: rgba(255,255,255,0.88); margin-top: 4px; }
-.photo-info-row { display: flex; gap: 12px; margin-top: 10px; }
-.photo-info-chip { background: rgba(15,23,42,0.6); border-radius: 8px; padding: 4px 10px; font-size: 13px; color: #fff; }
-.photo-change-btn { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.4); border: none; border-radius: 12px; color: #fff; font-size: 12px; padding: 6px 12px; cursor: pointer; backdrop-filter: blur(4px); }
-.no-photo-info { padding: 24px 20px 0; text-align: center; width: 100%; max-width: 480px; }
-.no-photo-info .baby-dname { font-size: 24px; font-weight: 700; color: #1a1a1a; }
-.no-photo-info .baby-ddays { font-size: 14px; color: #6b7280; margin-top: 6px; }
-.no-photo-chips { display: flex; gap: 8px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
-.info-chip { background: #fff; border-radius: 12px; padding: 6px 14px; font-size: 13px; color: #555; box-shadow: none; }
+.photo-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 48px 20px 24px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.65));
+}
+.photo-baby-name { font-size: 26px; font-weight: 700; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.4); }
+.photo-baby-days { font-size: 14px; color: rgba(255,255,255,0.9); margin-top: 4px; }
+.photo-info-row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.photo-info-chip { background: rgba(0,0,0,0.35); border-radius: 8px; padding: 4px 10px; font-size: 12px; color: #fff; backdrop-filter: blur(4px); }
+.photo-change-btn {
+  position: absolute; top: 12px; right: 12px;
+  background: rgba(0,0,0,0.35);
+  border: none; border-radius: 20px;
+  color: #fff; font-size: 12px;
+  padding: 6px 12px; cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+/* 사진 없을 때 이름·태어난날 표시 — 플레이스홀더 오버레이로 */
+.no-photo-info {
+  display: none; /* 사진 있는 경우엔 overlay 사용, 없는 경우는 placeholder 안에서 처리 */
+}
 
-/* ── 정책 카드 스타일 ── */
+/* ── 정책 페이지 ── */
+.policy-page { padding: 20px 16px 60px; background: #fffdf2; min-height: calc(100vh - 130px); max-width: 480px; margin: 0 auto; width: 100%; }
 .policy-page-header { margin-bottom: 20px; }
 .policy-page-header h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; }
 .policy-page-header p { font-size: 13px; color: #6b7280; margin-top: 4px; }
@@ -304,16 +305,6 @@ input:focus { border-color: #bfdbfe; }
 .policy-item-amount { font-size: 13px; font-weight: 700; color: #1d4ed8; white-space: nowrap; flex-shrink: 0; }
 .policy-link { display: block; text-align: center; font-size: 12px; color: #1d4ed8; margin-top: 14px; padding: 8px; background: #EBF4FF; border-radius: 8px; text-decoration: none; }
 .policy-notice { background: #fff7ed; border-radius: 12px; padding: 10px 14px; font-size: 12px; color: #8a6d00; margin-bottom: 16px; line-height: 1.6; }
-.policy-apply-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 11px; margin-top: 12px; background: #2563eb; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; }
-.policy-apply-btn:active { opacity: 0.85; }
-.policy-apply-btn.done { background: #16a34a; }
-.policy-apply-row { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
-.policy-apply-row .policy-apply-btn { flex: 1; margin-top: 0; }
-.policy-check-row { display: flex; align-items: center; gap: 8px; padding: 4px 0 0; cursor: pointer; }
-.policy-check-small { width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid #d1d5db; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-.policy-check-small.checked { background: #16a34a; border-color: #16a34a; }
-.policy-check-small.checked::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
-.policy-check-small-label { font-size: 12px; color: #6b7280; }
 .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 300; align-items: flex-end; }
 .modal-bg.open { display: flex; }
 .modal { background: #fff; border-radius: 16px 16px 0 0; padding: 24px 20px 40px; width: 100%; max-height: 92vh; overflow-y: auto; }
@@ -410,7 +401,7 @@ input:focus { border-color: #bfdbfe; }
 }
 
 /* ── 신생아 케어 가이드 ── */
-#screen-guide { background: #f7f8fa; }
+/* ── 가이드 ── */
 .guide-header { background: #fff; padding: 52px 20px 14px; box-shadow: 0 1px 0 #e5e7eb; }
 .guide-header-inner { max-width: 480px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
 .guide-header-title { font-size: 18px; font-weight: 700; color: #1a1a1a; }
@@ -655,26 +646,20 @@ input:focus { border-color: #bfdbfe; }
 <div class="screen" id="screen-app">
   <div class="app-header">
     <div class="app-header-inner">
-      <!-- 위 줄: 아기 정보 + 날짜/잠금 -->
-      <div class="app-header-top">
-        <div class="app-header-baby">
-          <div class="baby-avatar" id="app-avatar">🍼</div>
-          <div>
-            <div class="baby-name" id="app-baby-name">아기</div>
-            <div class="baby-age" id="app-baby-age"></div>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <div class="header-date" id="app-date"></div>
-          <button class="hdr-btn gray" onclick="lockApp()">🔒 잠금</button>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="baby-avatar" id="app-avatar">🍼</div>
+        <div>
+          <div class="baby-name" id="app-baby-name">아기</div>
+          <div class="baby-age" id="app-baby-age"></div>
+          <button class="profile-edit-btn" onclick="openProfileEdit()">✏️ 프로필 수정</button>
         </div>
       </div>
-      <!-- 아래 줄: 액션 버튼들 가로 나열 -->
-      <div class="app-header-actions">
-        <button class="hdr-btn gray" onclick="openProfileEdit()">✏️ 프로필</button>
-        <button class="hdr-btn amber" onclick="openGuide('app')">📚 가이드</button>
-        <button class="hdr-btn pink" onclick="openInviteModal()">💌 초대</button>
-        <button class="hdr-btn blue" onclick="openDadView()">👨 아빠</button>
+      <div class="header-right">
+        <div class="header-date" id="app-date"></div>
+        <button class="lock-btn" onclick="lockApp()">잠금 🔒</button>
+        <button class="lock-btn" style="color:#f59e0b;font-weight:600;" onclick="openGuide('app')">📚 가이드</button>
+        <button class="lock-btn" style="color:#ec4899;font-weight:600;" onclick="openInviteModal()">💌 초대</button>
+        <button class="lock-btn" style="color:#1a5fa8;font-weight:600;" onclick="openDadView()">👨 아빠 확인</button>
       </div>
     </div>
     <!-- 페이지 인디케이터 -->
@@ -688,27 +673,10 @@ input:focus { border-color: #bfdbfe; }
   </div>
 
   <!-- 스와이프 컨테이너 -->
-  <div style="overflow:hidden; flex:1;">
+  <div style="overflow:hidden; flex:1; height:0; min-height:0;">
     <div class="swipe-container" id="swipe-container">
 
-      <!-- ── 페이지 0: 일기 ── -->
-      <div class="swipe-page">
-        <div class="diary-page">
-          <div class="diary-header">
-            <h2>📔 육아 일기</h2>
-            <button class="diary-write-btn" onclick="openDiaryWrite()">✏️ 쓰기</button>
-          </div>
-          <div id="diary-list">
-            <div class="diary-empty">
-              <div class="diary-empty-icon">📝</div>
-              <div class="diary-empty-text">아직 일기가 없어요</div>
-              <div class="diary-empty-sub">오늘 아기와의 소중한 순간을<br>기록해보세요 🍼</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── 페이지 1: 아기 사진 ── -->
+      <!-- ── 페이지 0: 아기 사진 ── -->
       <div class="swipe-page">
         <div class="photo-page" id="photo-page">
           <div class="photo-upload-area" id="photo-upload-area">
@@ -811,12 +779,9 @@ input:focus { border-color: #bfdbfe; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">0세 (0~11개월)</div><div class="policy-item-amount">월 100만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">1세 (12~23개월)</div><div class="policy-item-amount">월 50만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">어린이집 이용 시 보육료 바우처로 지급</div></div>
-            <div class="policy-apply-row">
-              <a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004194" target="_blank">📋 온라인 신청하기</a>
-              <div class="policy-check-row" onclick="togglePolicyCheck('p-bumo')" style="flex-shrink:0;">
-                <div class="policy-check-small" id="pc-p-bumo"></div>
-                <span class="policy-check-small-label" id="pl-p-bumo">완료</span>
-              </div>
+            <div class="policy-check-row" onclick="togglePolicyCheck('p-bumo')">
+              <div class="policy-checkbox" id="pc-p-bumo"></div>
+              <span class="policy-check-label" id="pl-p-bumo">신청 완료 표시하기</span>
             </div>
           </div>
 
@@ -832,12 +797,9 @@ input:focus { border-color: #bfdbfe; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">첫째 출생 시</div><div class="policy-item-amount">200만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">둘째 이상 출생 시</div><div class="policy-item-amount">300만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출생 후 1년 이내 국민행복카드로 사용</div></div>
-            <div class="policy-apply-row">
-              <a class="policy-apply-btn" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank">📋 행복출산 원스톱 신청</a>
-              <div class="policy-check-row" onclick="togglePolicyCheck('p-first')" style="flex-shrink:0;">
-                <div class="policy-check-small" id="pc-p-first"></div>
-                <span class="policy-check-small-label" id="pl-p-first">완료</span>
-              </div>
+            <div class="policy-check-row" onclick="togglePolicyCheck('p-first')">
+              <div class="policy-checkbox" id="pc-p-first"></div>
+              <span class="policy-check-label" id="pl-p-first">신청 완료 표시하기</span>
             </div>
           </div>
 
@@ -853,12 +815,9 @@ input:focus { border-color: #bfdbfe; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">만 8세 미만 전 아동 (2026년 만 9세로 확대 추진 중)</div><div class="policy-item-amount">월 10만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">비수도권 거주 시</div><div class="policy-item-amount">월 10.5만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">인구감소지역 거주 시</div><div class="policy-item-amount">월 11~12만원</div></div>
-            <div class="policy-apply-row">
-              <a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004160" target="_blank">📋 복지로 신청하기</a>
-              <div class="policy-check-row" onclick="togglePolicyCheck('p-child')" style="flex-shrink:0;">
-                <div class="policy-check-small" id="pc-p-child"></div>
-                <span class="policy-check-small-label" id="pl-p-child">완료</span>
-              </div>
+            <div class="policy-check-row" onclick="togglePolicyCheck('p-child')">
+              <div class="policy-checkbox" id="pc-p-child"></div>
+              <span class="policy-check-label" id="pl-p-child">신청 완료 표시하기</span>
             </div>
           </div>
 
@@ -875,12 +834,9 @@ input:focus { border-color: #bfdbfe; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">4~6개월 (통상임금 100%)</div><div class="policy-item-amount">최대 월 200만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">7개월 이후 (통상임금 80%)</div><div class="policy-item-amount">최대 월 160만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">사용 가능 기간 (각 부모)</div><div class="policy-item-amount">최대 1년 6개월</div></div>
-            <div class="policy-apply-row">
-              <a class="policy-apply-btn" href="https://www.ei.go.kr/ei/eih/cm/hm/main.do" target="_blank">📋 고용보험 신청하기</a>
-              <div class="policy-check-row" onclick="togglePolicyCheck('p-parental')" style="flex-shrink:0;">
-                <div class="policy-check-small" id="pc-p-parental"></div>
-                <span class="policy-check-small-label" id="pl-p-parental">완료</span>
-              </div>
+            <div class="policy-check-row" onclick="togglePolicyCheck('p-parental')">
+              <div class="policy-checkbox" id="pc-p-parental"></div>
+              <span class="policy-check-label" id="pl-p-parental">신청 완료 표시하기</span>
             </div>
           </div>
 
@@ -896,12 +852,9 @@ input:focus { border-color: #bfdbfe; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산휴가 급여 상한액 (2026 인상)</div><div class="policy-item-amount">월 220만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산휴가 기간</div><div class="policy-item-amount">90일</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">배우자 출산휴가</div><div class="policy-item-amount">20일</div></div>
-            <div class="policy-apply-row">
-              <a class="policy-apply-btn" href="https://www.ei.go.kr/ei/eih/cm/hm/main.do" target="_blank">📋 고용보험 신청하기</a>
-              <div class="policy-check-row" onclick="togglePolicyCheck('p-maternity')" style="flex-shrink:0;">
-                <div class="policy-check-small" id="pc-p-maternity"></div>
-                <span class="policy-check-small-label" id="pl-p-maternity">완료</span>
-              </div>
+            <div class="policy-check-row" onclick="togglePolicyCheck('p-maternity')">
+              <div class="policy-checkbox" id="pc-p-maternity"></div>
+              <span class="policy-check-label" id="pl-p-maternity">신청 완료 표시하기</span>
             </div>
           </div>
 
@@ -917,12 +870,9 @@ input:focus { border-color: #bfdbfe; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">소득 기준 중위소득 250% 이하로 확대</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">야간 긴급돌봄</div><div class="policy-item-amount">하루 5,000원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">유아돌봄수당 (신설)</div><div class="policy-item-amount">시간당 1,000원</div></div>
-            <div class="policy-apply-row">
-              <a class="policy-apply-btn" href="https://www.idolbom.go.kr" target="_blank">📋 아이돌봄 신청하기</a>
-              <div class="policy-check-row" onclick="togglePolicyCheck('p-care')" style="flex-shrink:0;">
-                <div class="policy-check-small" id="pc-p-care"></div>
-                <span class="policy-check-small-label" id="pl-p-care">완료</span>
-              </div>
+            <div class="policy-check-row" onclick="togglePolicyCheck('p-care')">
+              <div class="policy-checkbox" id="pc-p-care"></div>
+              <span class="policy-check-label" id="pl-p-care">신청 완료 표시하기</span>
             </div>
           </div>
 
@@ -938,12 +888,9 @@ input:focus { border-color: #bfdbfe; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산 후 산모·신생아 돌봄 전문인력 파견</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">기간: 출산일로부터 60일 이내 이용</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">신청처: 주민센터 또는 복지로 온라인 신청</div></div>
-            <div class="policy-apply-row">
-              <a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004126" target="_blank">📋 복지로 신청하기</a>
-              <div class="policy-check-row" onclick="togglePolicyCheck('p-sanmo')" style="flex-shrink:0;">
-                <div class="policy-check-small" id="pc-p-sanmo"></div>
-                <span class="policy-check-small-label" id="pl-p-sanmo">완료</span>
-              </div>
+            <div class="policy-check-row" onclick="togglePolicyCheck('p-sanmo')">
+              <div class="policy-checkbox" id="pc-p-sanmo"></div>
+              <span class="policy-check-label" id="pl-p-sanmo">신청 완료 표시하기</span>
             </div>
           </div>
 
@@ -989,25 +936,6 @@ input:focus { border-color: #bfdbfe; }
     <div id="dad-view-body"></div>
     <div class="modal-actions" style="margin-top:16px;">
       <button class="btn-save" onclick="closeModal('dad-view')">닫기</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ 일기 작성 모달 ═══════════ -->
-<div class="modal-bg" id="modal-diary">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <h2>📔 일기 쓰기</h2>
-    <span class="field-label">오늘 있었던 일을 적어보세요</span>
-    <textarea class="diary-textarea" id="diary-text" placeholder="오늘 아기가 처음으로 웃었어요 😊&#10;&#10;수유할 때 눈을 마주쳤는데 방긋 웃더라고요..."></textarea>
-    <label class="diary-img-upload-btn" for="diary-img-input">
-      📷 사진 추가하기
-    </label>
-    <input type="file" id="diary-img-input" accept="image/*" style="display:none;" onchange="previewDiaryImg(event)">
-    <img id="diary-img-preview" class="diary-img-preview" src="" alt="">
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeDiaryWrite()">취소</button>
-      <button class="btn-save" onclick="saveDiaryEntry()" style="background:#2563eb;">저장</button>
     </div>
   </div>
 </div>
@@ -1357,7 +1285,6 @@ function enterApp() {
   renderPhotoPage();
   renderMomCarePage();
   loadPolicyChecks();
-  renderDiaryList();
   showScreen('app');
 }
 
@@ -1479,6 +1406,20 @@ const MOM_CARE = {
   ]
 };
 
+let momCareOpenId = null;
+
+function toggleMomCare(id) {
+  momCareOpenId = momCareOpenId === id ? null : id;
+  document.querySelectorAll('.mom-care-card-body').forEach(el => {
+    const open = el.dataset.id === id && momCareOpenId === id;
+    el.classList.toggle('open', open);
+  });
+  document.querySelectorAll('.mom-care-card-arrow').forEach(el => {
+    const open = el.dataset.id === id && momCareOpenId === id;
+    el.classList.toggle('open', open);
+  });
+}
+
 function renderMomCarePage() {
   const raw = localStorage.getItem('baby_profile');
   if (!raw) return;
@@ -1490,30 +1431,47 @@ function renderMomCarePage() {
   badgeEl.innerHTML = '<span class="mom-birth-badge ' + careData.cls + '">' + careData.label + ' 산모</span>';
 
   let html = '';
+  let idx = 0;
+
   // 출산 방법별 섹션
   careData.sections.forEach(sec => {
-    html += '<div class="mom-care-card">';
-    html += '<div class="mom-care-card-title">' + sec.icon + ' ' + sec.title + '</div>';
+    const id = 'mc-' + idx++;
+    let bodyHtml = '';
     if (sec.warn) {
       sec.items.forEach(item => {
-        html += '<div class="mom-care-item"><div class="mom-care-dot pink"></div><div class="mom-care-text">' + item + '</div></div>';
+        bodyHtml += '<div class="mom-care-item"><div class="mom-care-dot pink"></div><div class="mom-care-text">' + item + '</div></div>';
       });
-      html += '<div class="mom-care-warn">⚠️ 위 증상이 나타나면 지체 없이 병원을 방문하세요.</div>';
+      bodyHtml += '<div class="mom-care-warn">⚠️ 위 증상이 나타나면 지체 없이 병원을 방문하세요.</div>';
     } else {
       sec.items.forEach(item => {
-        html += '<div class="mom-care-item"><div class="mom-care-dot ' + (p.birthType==='csection'?'purple':'pink') + '"></div><div class="mom-care-text">' + item + '</div></div>';
+        bodyHtml += '<div class="mom-care-item"><div class="mom-care-dot ' + (p.birthType === 'csection' ? 'purple' : 'pink') + '"></div><div class="mom-care-text">' + item + '</div></div>';
       });
     }
-    html += '</div>';
+    html +=
+      '<div class="mom-care-card">' +
+      '<div class="mom-care-card-title" onclick="toggleMomCare(\'' + id + '\')">' +
+        '<span class="mom-care-card-title-left">' + sec.icon + ' ' + sec.title + '</span>' +
+        '<span class="mom-care-card-arrow" data-id="' + id + '">▶</span>' +
+      '</div>' +
+      '<div class="mom-care-card-body" data-id="' + id + '">' + bodyHtml + '</div>' +
+      '</div>';
   });
+
   // 공통 섹션
   MOM_CARE.common.forEach(sec => {
-    html += '<div class="mom-care-card">';
-    html += '<div class="mom-care-card-title">' + sec.icon + ' ' + sec.title + '</div>';
+    const id = 'mc-' + idx++;
+    let bodyHtml = '';
     sec.items.forEach(item => {
-      html += '<div class="mom-care-item"><div class="mom-care-dot blue"></div><div class="mom-care-text">' + item + '</div></div>';
+      bodyHtml += '<div class="mom-care-item"><div class="mom-care-dot blue"></div><div class="mom-care-text">' + item + '</div></div>';
     });
-    html += '</div>';
+    html +=
+      '<div class="mom-care-card">' +
+      '<div class="mom-care-card-title" onclick="toggleMomCare(\'' + id + '\')">' +
+        '<span class="mom-care-card-title-left">' + sec.icon + ' ' + sec.title + '</span>' +
+        '<span class="mom-care-card-arrow" data-id="' + id + '">▶</span>' +
+      '</div>' +
+      '<div class="mom-care-card-body" data-id="' + id + '">' + bodyHtml + '</div>' +
+      '</div>';
   });
 
   document.getElementById('mom-care-content').innerHTML = html;
@@ -2162,14 +2120,17 @@ function saveEditPump() {
   closeModal('edit-record');
 }
 
-// ─── 스와이프 (4페이지) ───
+// ─── 스와이프 (5페이지) ───
 let currentPage = 1;
 let swipeTouchStartX = 0, swipeTouchStartY = 0;
 
 function goToPage(n) {
   currentPage = Math.max(0, Math.min(4, n));
   document.getElementById('swipe-container').style.transform = 'translateX(-' + (currentPage * 100 / 5) + '%)';
-  for (let i = 0; i < 5; i++) document.getElementById('dot-' + i).classList.toggle('active', i === currentPage);
+  for (let i = 0; i < 5; i++) {
+    const dot = document.getElementById('dot-' + i);
+    if (dot) dot.classList.toggle('active', i === currentPage);
+  }
 }
 
 function initSwipe() {
@@ -2233,10 +2194,18 @@ function renderPhotoPage() {
   document.getElementById('photo-days-text').textContent = daysText;
   document.getElementById('photo-info-chips').innerHTML = chips.map(c => '<span class="photo-info-chip">' + c + '</span>').join('');
 
-  // 사진 없을 때
-  document.getElementById('photo-name-noimg').textContent = name;
-  document.getElementById('photo-days-noimg').textContent = daysText;
-  document.getElementById('photo-chips-noimg').innerHTML = chips.map(c => '<span class="info-chip">' + c + '</span>').join('');
+  // 사진 없을 때 — 플레이스홀더 안에 이름·날짜 표시
+  const ph = document.getElementById('photo-placeholder');
+  if (ph && name) {
+    ph.innerHTML =
+      '<span class="ph-icon">📷</span>' +
+      '<div style="font-size:22px;font-weight:700;color:#6f4e00;margin-top:4px;">' + name + '</div>' +
+      '<div style="font-size:13px;color:#a07830;margin-top:2px;">' + daysText + '</div>' +
+      '<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;justify-content:center;">' +
+        chips.map(c => '<span style="background:rgba(111,78,0,0.1);border-radius:8px;padding:3px 10px;font-size:12px;color:#7a5600;">' + c + '</span>').join('') +
+      '</div>' +
+      '<div style="font-size:13px;color:#a07830;margin-top:16px;">탭해서 사진 추가하기</div>';
+  }
 
   // 저장된 사진 불러오기
   const saved = localStorage.getItem('baby_photo');
@@ -2410,15 +2379,8 @@ function loadPolicyChecks() {
     const done = !!checks[k];
     const cb = document.getElementById('pc-' + k);
     const lb = document.getElementById('pl-' + k);
-    if (cb) {
-      cb.classList.toggle('checked', done);
-      // 신청 버튼 색상도 완료 시 초록으로
-      const applyBtn = cb.closest('.policy-apply-row')?.querySelector('.policy-apply-btn');
-      if (applyBtn) {
-        applyBtn.style.background = done ? '#16a34a' : '';
-      }
-    }
-    if (lb) { lb.textContent = done ? '✅' : '완료'; lb.style.color = done ? '#16a34a' : ''; }
+    if (cb) cb.classList.toggle('checked', done);
+    if (lb) { lb.textContent = done ? '✅ 신청 완료!' : '신청 완료 표시하기'; lb.classList.toggle('done', done); }
   });
 }
 
@@ -2844,135 +2806,6 @@ function showLinkedBadge(name) {
   wrap.innerHTML = '<div class="dad-linked-badge">🔗 ' + (name ? name + ' 정보 연동됨' : '연동 완료') + '</div>';
   document.getElementById('dad-invite-wrap').style.display = 'none';
 }
-
-// ─── 일기 기능 ───
-let diaryEntries = [];
-let diaryImgData = null;
-let editingDiaryIdx = -1;
-
-function openDiaryWrite() {
-  editingDiaryIdx = -1;
-  document.getElementById('diary-text').value = '';
-  document.getElementById('diary-img-preview').style.display = 'none';
-  document.getElementById('diary-img-preview').src = '';
-  document.getElementById('diary-img-input').value = '';
-  diaryImgData = null;
-  document.getElementById('modal-diary').classList.add('open');
-}
-
-function closeDiaryWrite() {
-  document.getElementById('modal-diary').classList.remove('open');
-}
-
-function previewDiaryImg(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    diaryImgData = ev.target.result;
-    const preview = document.getElementById('diary-img-preview');
-    preview.src = diaryImgData;
-    preview.style.display = 'block';
-  };
-  reader.readAsDataURL(file);
-}
-
-function saveDiaryEntry() {
-  const text = document.getElementById('diary-text').value.trim();
-  if (!text && !diaryImgData) { alert('내용이나 사진을 추가해주세요.'); return; }
-  const now = new Date();
-  const raw = localStorage.getItem('baby_profile');
-  let days = '';
-  if (raw) {
-    const p = JSON.parse(raw);
-    if (p.birthDate) {
-      const d = Math.floor((now - new Date(p.birthDate)) / 86400000);
-      days = d + '일째';
-    }
-  }
-  const entry = {
-    id: Date.now(),
-    text,
-    img: diaryImgData || null,
-    date: now.toISOString(),
-    days
-  };
-  if (editingDiaryIdx >= 0) {
-    diaryEntries[editingDiaryIdx] = { ...diaryEntries[editingDiaryIdx], text, img: diaryImgData !== null ? diaryImgData : diaryEntries[editingDiaryIdx].img };
-  } else {
-    diaryEntries.unshift(entry);
-  }
-  saveDiary();
-  renderDiaryList();
-  closeDiaryWrite();
-}
-
-function deleteDiaryEntry(idx) {
-  if (!confirm('이 일기를 삭제할까요?')) return;
-  diaryEntries.splice(idx, 1);
-  saveDiary();
-  renderDiaryList();
-}
-
-function editDiaryEntry(idx) {
-  editingDiaryIdx = idx;
-  const e = diaryEntries[idx];
-  document.getElementById('diary-text').value = e.text || '';
-  if (e.img) {
-    diaryImgData = e.img;
-    const preview = document.getElementById('diary-img-preview');
-    preview.src = e.img;
-    preview.style.display = 'block';
-  } else {
-    diaryImgData = null;
-    document.getElementById('diary-img-preview').style.display = 'none';
-  }
-  document.getElementById('modal-diary').classList.add('open');
-}
-
-function fmtDiaryDate(iso) {
-  const d = new Date(iso);
-  const yy = d.getFullYear(), mm = d.getMonth() + 1, dd = d.getDate();
-  const h = d.getHours(), mi = d.getMinutes();
-  const ampm = h < 12 ? '오전' : '오후';
-  return yy + '년 ' + mm + '월 ' + dd + '일 ' + ampm + ' ' + (h % 12 || 12) + ':' + (mi < 10 ? '0' + mi : mi);
-}
-
-function renderDiaryList() {
-  const el = document.getElementById('diary-list');
-  if (!el) return;
-  if (!diaryEntries.length) {
-    el.innerHTML = '<div class="diary-empty"><div class="diary-empty-icon">📝</div><div class="diary-empty-text">아직 일기가 없어요</div><div class="diary-empty-sub">오늘 아기와의 소중한 순간을<br>기록해보세요 🍼</div></div>';
-    return;
-  }
-  el.innerHTML = diaryEntries.map((e, i) =>
-    '<div class="diary-entry">' +
-    (e.img ? '<img class="diary-entry-img" src="' + e.img + '" alt="일기 사진">' : '') +
-    '<div class="diary-entry-body">' +
-    '<div class="diary-entry-date">' + fmtDiaryDate(e.date) +
-    (e.days ? ' <span class="diary-entry-day-badge">🍼 ' + e.days + '</span>' : '') + '</div>' +
-    (e.text ? '<div class="diary-entry-text">' + e.text.replace(/</g, '&lt;') + '</div>' : '') +
-    '<div class="diary-entry-actions">' +
-    '<button class="diary-action-btn" onclick="editDiaryEntry(' + i + ')">✏️ 수정</button>' +
-    '<button class="diary-action-btn del" onclick="deleteDiaryEntry(' + i + ')">🗑️ 삭제</button>' +
-    '</div></div></div>'
-  ).join('');
-}
-
-function saveDiary() {
-  try { localStorage.setItem('diary_entries', JSON.stringify(diaryEntries.slice(0, 200))); } catch (e) {}
-}
-
-function loadDiary() {
-  try { const d = localStorage.getItem('diary_entries'); if (d) diaryEntries = JSON.parse(d); } catch (e) {}
-}
-
-// 일기 모달 배경 클릭 닫기
-document.getElementById('modal-diary').addEventListener('click', function(e) {
-  if (e.target === this) closeDiaryWrite();
-});
-
-loadDiary();
 
 setInterval(updateStatus, 60000);
 
