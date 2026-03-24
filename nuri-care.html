@@ -116,20 +116,8 @@ input:focus { border-color: #bfdbfe; }
 .step-badge { display: inline-block; background: #ffffff; border: 1px solid #dbe3ef; color: #475569; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 8px; margin-bottom: 12px; }
 .profile-header h2 { font-size: 22px; font-weight: 700; color: #1a1a1a; }
 .profile-header p { font-size: 14px; color: #6b7280; margin-top: 6px; }
-.profile-card { background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; padding: 14px 16px; margin-top: 10px; box-shadow: none; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 14px; align-items: start; }
-.row2 { display: grid; grid-template-columns: 1fr; gap: 8px; align-content: start; }
-
-
-.profile-main { display: flex; flex-direction: column; gap: 10px; }
-.profile-side { display: grid; grid-template-columns: 1fr; gap: 8px; }
-.profile-stat { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px 12px; }
-.profile-stat .label { font-size: 12px; color: #6b7280; margin-bottom: 4px; }
-.profile-stat .value { font-size: 14px; font-weight: 700; color: #111827; }
-@media (max-width: 420px) {
-  .profile-card { grid-template-columns: 1fr; }
-  .row2 { grid-template-columns: 1fr 1fr; }
-}
-
+.profile-card { background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; padding: 14px 16px; margin-top: 10px; box-shadow: none; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
 /* ── 메인 앱 ── */
 #screen-app { background: #f7f8fa; }
@@ -191,7 +179,7 @@ input:focus { border-color: #bfdbfe; }
 
 /* ── 스와이프 페이지 ── */
 .swipe-container { display: flex; width: 400%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
-.swipe-page { width: calc(100% / 4); height: calc(100vh - 130px); flex-shrink: 0; overflow: hidden; }
+.swipe-page { width: calc(100% / 4); min-height: calc(100vh - 130px); flex-shrink: 0; }
 .page-dots { display: flex; justify-content: center; gap: 6px; padding: 10px 0 4px; }
 .page-dot { width: 6px; height: 6px; border-radius: 50%; background: #d0d0d0; transition: all 0.2s; }
 .page-dot.active { background: #2563eb; width: 18px; border-radius: 3px; }
@@ -225,10 +213,10 @@ input:focus { border-color: #bfdbfe; }
 .mom-no-info { text-align: center; padding: 40px 0; color: #9ca3af; font-size: 14px; line-height: 1.8; }
 
 /* ── 아기 사진 페이지 ── */
-.photo-page { display: flex; flex-direction: column; align-items: center; justify-content: center; height: calc(100vh - 130px); overflow: hidden; background: #f7f8fa; padding: 8px 0 0; }
-.photo-upload-area { position: relative; width: 100%; max-width: 440px; margin: 0 auto; display: flex; align-items: center; justify-content: center; flex: 1; max-height: 100%; }
-.baby-photo-img { width: 100%; max-height: calc(100vh - 210px); aspect-ratio: 3/4; object-fit: cover; object-position: center center; display: block; margin: 0 auto; background: #e8e8e8; }
-.baby-photo-placeholder { width: 100%; max-height: calc(100vh - 210px); aspect-ratio: 3/4; background: #eef2f7; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; gap: 12px; margin: 0 auto; overflow: hidden; }
+.photo-page { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 130px); background: #f7f8fa; padding: 8px 0 24px; }
+.photo-upload-area { position: relative; width: 100%; max-width: 440px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+.baby-photo-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; object-position: center center; display: block; margin: 0 auto; background: #e8e8e8; }
+.baby-photo-placeholder { width: 100%; aspect-ratio: 3/4; background: #eef2f7; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; gap: 12px; margin: 0 auto; }
 .baby-photo-placeholder .ph-icon { font-size: 52px; }
 .baby-photo-placeholder p { font-size: 15px; color: #9ca3af; font-weight: 500; }
 .photo-upload-input { display: none; }
@@ -547,15 +535,15 @@ input:focus { border-color: #bfdbfe; }
       <p>아기에 대해 알려주세요 🍼</p>
     </div>
     <div class="profile-card">
-      <div class="profile-main"><span class="field-label">이름 또는 태명 *</span>
+      <span class="field-label">이름 또는 태명 *</span>
       <input type="text" id="p-name" placeholder="예: 하준이, 콩이">
       <span class="field-label">성별</span>
       <div class="opt-row">
         <button class="opt-btn sel" id="gender-boy" onclick="selGender('boy')">👦 남자아이</button>
         <button class="opt-btn" id="gender-girl" onclick="selGender('girl')">👧 여자아이</button>
         <button class="opt-btn" id="gender-unknown" onclick="selGender('unknown')">🤷 모름</button>
-      </div></div>
-      <div class="profile-side"><div class="row2">
+      </div>
+      <div class="row2">
         <div>
           <span class="field-label">태어난 날짜 *</span>
           <input type="date" id="p-birth-date">
@@ -563,8 +551,8 @@ input:focus { border-color: #bfdbfe; }
         <div>
           <span class="field-label">태어난 시각</span>
           <input type="time" id="p-birth-time">
-        </div></div>
-    </div>
+        </div>
+      </div>
       <div class="row2">
         <div>
           <span class="field-label">몸무게 (kg)</span>
