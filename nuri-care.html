@@ -185,8 +185,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .section-title-row .section-title { margin-bottom: 0; }
 
 /* ── 스와이프 ── */
-.swipe-container { display: flex; width: 500%; height: 100%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
-.swipe-page { width: calc(100% / 5); height: 100%; flex-shrink: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+.swipe-container { display: flex; width: 900%; height: 100%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
+.swipe-page { width: calc(100% / 9); height: 100%; flex-shrink: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
 /* 사진 페이지(2번째 = nth-child(2))는 스크롤 없이 꽉 차게 */
 .swipe-page:nth-child(2) { overflow: hidden; }
 .page-dots { display: flex; justify-content: center; gap: 6px; padding: 10px 0 4px; }
@@ -459,6 +459,98 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .guide-warn-box { background: #fef2f2; border-radius: 8px; padding: 10px 12px; margin-top: 10px; font-size: 12px; color: #991b1b; line-height: 1.6; word-break: keep-all; }
 .guide-empty { text-align: center; padding: 40px 0; color: #9ca3af; font-size: 14px; }
 .guide-btn-float { position: fixed; bottom: 24px; right: 20px; background: #2563eb; color: #fff; border: none; border-radius: 14px; padding: 12px 20px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 20px rgba(15, 23, 42, 0.16); z-index: 50; display: none; }
+/* ══════ 새 기능 CSS ══════ */
+
+/* ── 다크모드 ── */
+body.dark { background: #1a1612; color: #f0ead8; }
+body.dark .app-header, body.dark .timeline-card, body.dark .status-card,
+body.dark .mom-care-card, body.dark .policy-card, body.dark .guide-card,
+body.dark .dad-check-card, body.dark .dad-event-card, body.dark .diary-entry,
+body.dark .modal, body.dark .profile-card, body.dark .invite-section { background: #2a2520; border-color: #3d3628; color: #f0ead8; }
+body.dark .app-body, body.dark .diary-page, body.dark .mom-page, body.dark .policy-page { background: #1a1612; }
+body.dark .photo-page, body.dark .swipe-page { background: #1a1612; }
+body.dark .s-label, body.dark .baby-age, body.dark .header-date, body.dark .t-sub,
+body.dark .t-time, body.dark .policy-item-text, body.dark .mom-care-text,
+body.dark .field-label, body.dark .diary-entry-date { color: #a89880; }
+body.dark .baby-name, body.dark .t-title, body.dark .guide-card-title,
+body.dark .mom-care-card-title, body.dark .policy-card-title, body.dark .s-time,
+body.dark .dad-check-title, body.dark .diary-entry-text { color: #f0ead8; }
+body.dark input, body.dark textarea { background: #2a2520; border-color: #3d3628; color: #f0ead8; }
+body.dark .opt-btn { background: #2a2520; border-color: #3d3628; color: #f0ead8; }
+body.dark .section-title, body.dark .policy-page-header p, body.dark .mom-page-header p { color: #7a6a5a; }
+body.dark .sleeping-banner { background: #1e2d1a; border-color: #2d4a26; }
+body.dark .guide-card-subtitle { color: #8a7a6a; }
+body.dark .no-photo-info .baby-dname { color: #f0ead8; }
+
+/* ── 차트 탭 ── */
+.chart-tab-row { display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+.chart-tab-row::-webkit-scrollbar { display: none; }
+.chart-tab { padding: 6px 14px; border-radius: 20px; border: 1px solid #e8d796; background: #fff; font-size: 13px; font-weight: 600; color: #7a5600; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.chart-tab.active { background: #7a5600; color: #fff; border-color: #7a5600; }
+.chart-wrap { background: #fff; border-radius: 12px; border: 1px solid #e8d796; padding: 16px; margin-bottom: 12px; position: relative; }
+body.dark .chart-tab { background: #2a2520; border-color: #3d3628; color: #c8a870; }
+body.dark .chart-tab.active { background: #7a5600; color: #fff; }
+body.dark .chart-wrap { background: #2a2520; border-color: #3d3628; }
+.chart-canvas-wrap { width: 100%; overflow-x: auto; }
+.chart-empty { text-align: center; padding: 30px 0; color: #9ca3af; font-size: 13px; }
+.chart-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+.chart-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #6b7280; }
+.chart-legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── 성장 기록 ── */
+.growth-input-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.growth-input-row input { flex: 1; }
+.growth-add-btn { padding: 13px 16px; background: #7a5600; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.growth-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.growth-table th { background: #fff7d6; color: #7a5600; font-weight: 700; padding: 8px 10px; text-align: left; border-bottom: 1px solid #e8d796; }
+.growth-table td { padding: 8px 10px; border-bottom: 1px solid #f3f0e0; color: #374151; }
+body.dark .growth-table th { background: #2a2520; color: #c8a870; border-color: #3d3628; }
+body.dark .growth-table td { border-color: #3d3628; color: #d0c0a8; }
+
+/* ── 예방접종 ── */
+.vaccine-card { background: #fff; border-radius: 12px; border: 1px solid #e8d796; padding: 14px 16px; margin-bottom: 10px; }
+.vaccine-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f3f0e0; cursor: pointer; }
+.vaccine-row:last-child { border-bottom: none; }
+.vaccine-checkbox { width: 20px; height: 20px; border-radius: 5px; border: 2px solid #d1d5db; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.vaccine-checkbox.checked { background: #16a34a; border-color: #16a34a; }
+.vaccine-checkbox.checked::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
+.vaccine-name { font-size: 14px; font-weight: 600; color: #1a1a1a; flex: 1; }
+.vaccine-age-badge { font-size: 11px; background: #fff7d6; color: #7a5600; border-radius: 8px; padding: 2px 8px; font-weight: 700; flex-shrink: 0; }
+.vaccine-done-text { font-size: 12px; color: #16a34a; font-weight: 600; }
+body.dark .vaccine-card { background: #2a2520; border-color: #3d3628; }
+body.dark .vaccine-row { border-color: #3d3628; }
+body.dark .vaccine-name { color: #f0ead8; }
+body.dark .vaccine-age-badge { background: #3d3628; color: #c8a870; }
+
+/* ── 마일스톤 ── */
+.milestone-card { background: #fff; border-radius: 12px; border: 1px solid #e8d796; margin-bottom: 10px; overflow: hidden; }
+.milestone-cat-title { padding: 10px 14px; font-size: 13px; font-weight: 700; color: #7a5600; background: #fff7d6; border-bottom: 1px solid #e8d796; }
+.milestone-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #f3f0e0; cursor: pointer; }
+.milestone-row:last-child { border-bottom: none; }
+.milestone-cb { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #d1d5db; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.milestone-cb.checked { background: #f59e0b; border-color: #f59e0b; }
+.milestone-cb.checked::after { content: '★'; color: #fff; font-size: 10px; }
+.milestone-name { font-size: 14px; color: #374151; flex: 1; word-break: keep-all; }
+.milestone-name.done { color: #f59e0b; font-weight: 600; }
+.milestone-date { font-size: 11px; color: #9ca3af; flex-shrink: 0; }
+body.dark .milestone-card { background: #2a2520; border-color: #3d3628; }
+body.dark .milestone-cat-title { background: #2a2520; color: #c8a870; border-color: #3d3628; }
+body.dark .milestone-row { border-color: #3d3628; }
+body.dark .milestone-name { color: #d0c0a8; }
+
+/* ── 데이터 내보내기 버튼 ── */
+.export-btn { display: flex; align-items: center; gap: 6px; width: 100%; padding: 12px 14px; background: #fff; border: 1px solid #e8d796; border-radius: 10px; font-size: 14px; font-weight: 600; color: #7a5600; cursor: pointer; margin-bottom: 8px; }
+.export-btn:active { background: #fff7d6; }
+body.dark .export-btn { background: #2a2520; border-color: #3d3628; color: #c8a870; }
+
+/* ── 새 기능 페이지 공통 ── */
+.feature-page { padding: 16px 16px 60px; background: #fffdf2; min-height: 100%; max-width: 480px; margin: 0 auto; width: 100%; }
+.feature-page-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+.feature-page-sub { font-size: 13px; color: #6b7280; margin-bottom: 16px; }
+.feature-section-title { font-size: 12px; font-weight: 700; color: #7a5600; letter-spacing: 0.06em; text-transform: uppercase; margin: 16px 0 8px; }
+body.dark .feature-page { background: #1a1612; }
+body.dark .feature-page-title { color: #f0ead8; }
+body.dark .feature-section-title { color: #c8a870; }
 </style>
 </head>
 <body>
@@ -695,6 +787,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
       <div class="page-dot active" id="dot-2"></div>
       <div class="page-dot" id="dot-3"></div>
       <div class="page-dot" id="dot-4"></div>
+      <div class="page-dot" id="dot-5"></div>
+      <div class="page-dot" id="dot-6"></div>
+      <div class="page-dot" id="dot-7"></div>
+      <div class="page-dot" id="dot-8"></div>
     </div>
   </div>
 
@@ -777,7 +873,73 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
         </div>
       </div>
 
-      <!-- ── 페이지 3: 엄마 케어 ── -->
+      <!-- ── 페이지 3: 통계 차트 ── -->
+      <div class="swipe-page">
+        <div class="feature-page">
+          <div class="feature-page-title">📊 통계</div>
+          <div class="feature-page-sub">수유·수면·기저귀 패턴을 확인해요</div>
+          <div class="chart-tab-row">
+            <button class="chart-tab active" id="ctab-feed" onclick="selectChartTab('feed')">🍼 수유</button>
+            <button class="chart-tab" id="ctab-sleep" onclick="selectChartTab('sleep')">😴 수면</button>
+            <button class="chart-tab" id="ctab-diaper" onclick="selectChartTab('diaper')">🌿 기저귀</button>
+            <button class="chart-tab" id="ctab-pump" onclick="selectChartTab('pump')">🤱 유축</button>
+          </div>
+          <div class="chart-wrap">
+            <div style="font-size:13px;font-weight:600;color:#7a5600;margin-bottom:10px;" id="chart-period-label">최근 7일</div>
+            <canvas id="main-chart" height="180"></canvas>
+            <div id="chart-empty" class="chart-empty" style="display:none;">아직 기록이 없어요</div>
+            <div class="chart-legend" id="chart-legend"></div>
+          </div>
+          <div class="chart-wrap" id="chart-summary">
+            <div style="font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:10px;">요약</div>
+            <div id="chart-summary-body" style="font-size:13px;color:#555;line-height:2;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 페이지 4: 성장 기록 & 예방접종 ── -->
+      <div class="swipe-page">
+        <div class="feature-page">
+          <div class="feature-page-title">📏 성장 기록</div>
+          <div class="feature-page-sub">키·몸무게를 기록하고 추이를 확인해요</div>
+          <div class="feature-section-title">새 기록 추가</div>
+          <div class="chart-wrap">
+            <div style="display:flex;gap:8px;margin-bottom:8px;">
+              <input type="date" id="growth-date" style="flex:1;">
+            </div>
+            <div class="growth-input-row">
+              <input type="number" id="growth-weight" placeholder="몸무게 (kg)" step="0.01" min="0" max="30">
+              <input type="number" id="growth-height" placeholder="키 (cm)" step="0.1" min="0" max="120">
+              <button class="growth-add-btn" onclick="addGrowthRecord()">추가</button>
+            </div>
+          </div>
+          <div class="feature-section-title">성장 추이</div>
+          <div class="chart-wrap">
+            <canvas id="growth-chart" height="160"></canvas>
+            <div id="growth-empty" class="chart-empty" style="display:none;">아직 기록이 없어요</div>
+          </div>
+          <div class="feature-section-title">기록 목록</div>
+          <div class="chart-wrap" style="padding:0;overflow:hidden;">
+            <table class="growth-table" id="growth-table">
+              <tr><th>날짜</th><th>몸무게</th><th>키</th><th></th></tr>
+            </table>
+          </div>
+          <div class="feature-section-title" style="margin-top:20px;">💉 예방접종</div>
+          <div class="feature-page-sub" style="margin-top:-8px;">접종 완료 시 체크해주세요</div>
+          <div id="vaccine-list"></div>
+        </div>
+      </div>
+
+      <!-- ── 페이지 5: 발달 마일스톤 ── -->
+      <div class="swipe-page">
+        <div class="feature-page">
+          <div class="feature-page-title">⭐ 발달 마일스톤</div>
+          <div class="feature-page-sub">아기의 소중한 첫 순간들을 기록해요</div>
+          <div id="milestone-list"></div>
+        </div>
+      </div>
+
+      <!-- ── 페이지 6: 엄마 케어 ── -->
       <div class="swipe-page">
         <div class="mom-page" id="mom-care-page">
           <div class="mom-page-header">
@@ -797,147 +959,88 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
         </div>
       </div>
 
-      <!-- ── 페이지 4: 복지 정책 ── -->
+      <!-- ── 페이지 7: 복지 정책 ── -->
       <div class="swipe-page">
         <div class="policy-page">
           <div class="policy-page-header">
             <h2>🇰🇷 2026 출산 지원 정책</h2>
             <p>정부에서 지원하는 주요 혜택을 확인하세요</p>
           </div>
-
           <div class="policy-notice">
             ⚠️ 아래 내용은 2026년 기준 정보입니다. 지역·소득에 따라 달라질 수 있으니 정확한 내용은 <strong>복지로(www.bokjiro.go.kr)</strong> 또는 주민센터에서 확인하세요.
           </div>
-
-          <!-- 부모급여 -->
           <div class="policy-card">
-            <div class="policy-card-header">
-              <div class="policy-icon" style="background:#FFF0EB;">💰</div>
-              <div>
-                <div class="policy-card-title">부모급여</div>
-                <span class="policy-card-badge" style="background:#FFF0EB;color:#c0410f;">현금 지급</span>
-              </div>
-            </div>
+            <div class="policy-card-header"><div class="policy-icon" style="background:#FFF0EB;">💰</div><div><div class="policy-card-title">부모급여</div><span class="policy-card-badge" style="background:#FFF0EB;color:#c0410f;">현금 지급</span></div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">0세 (0~11개월)</div><div class="policy-item-amount">월 100만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">1세 (12~23개월)</div><div class="policy-item-amount">월 50만원</div></div>
-            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">어린이집 이용 시 보육료 바우처로 지급</div></div>
-            <div class="policy-check-row" onclick="togglePolicyCheck('p-bumo')">
-              <div class="policy-checkbox" id="pc-p-bumo"></div>
-              <span class="policy-check-label" id="pl-p-bumo">신청 완료 표시하기</span>
-            </div>
+            <div class="policy-apply-row"><a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004194" target="_blank">📋 온라인 신청하기</a><div class="policy-check-row" onclick="togglePolicyCheck('p-bumo')" style="flex-shrink:0;"><div class="policy-check-small" id="pc-p-bumo"></div><span class="policy-check-small-label" id="pl-p-bumo">완료</span></div></div>
           </div>
-
-          <!-- 첫만남이용권 -->
           <div class="policy-card">
-            <div class="policy-card-header">
-              <div class="policy-icon" style="background:#EDFBF0;">🎁</div>
-              <div>
-                <div class="policy-card-title">첫만남이용권</div>
-                <span class="policy-card-badge" style="background:#EDFBF0;color:#1d7a3a;">바우처</span>
-              </div>
-            </div>
+            <div class="policy-card-header"><div class="policy-icon" style="background:#EDFBF0;">🎁</div><div><div class="policy-card-title">첫만남이용권</div><span class="policy-card-badge" style="background:#EDFBF0;color:#1d7a3a;">바우처</span></div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">첫째 출생 시</div><div class="policy-item-amount">200만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">둘째 이상 출생 시</div><div class="policy-item-amount">300만원</div></div>
-            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출생 후 1년 이내 국민행복카드로 사용</div></div>
-            <div class="policy-check-row" onclick="togglePolicyCheck('p-first')">
-              <div class="policy-checkbox" id="pc-p-first"></div>
-              <span class="policy-check-label" id="pl-p-first">신청 완료 표시하기</span>
-            </div>
+            <div class="policy-apply-row"><a class="policy-apply-btn" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank">📋 행복출산 원스톱 신청</a><div class="policy-check-row" onclick="togglePolicyCheck('p-first')" style="flex-shrink:0;"><div class="policy-check-small" id="pc-p-first"></div><span class="policy-check-small-label" id="pl-p-first">완료</span></div></div>
           </div>
-
-          <!-- 아동수당 -->
           <div class="policy-card">
-            <div class="policy-card-header">
-              <div class="policy-icon" style="background:#EBF4FF;">👶</div>
-              <div>
-                <div class="policy-card-title">아동수당</div>
-                <span class="policy-card-badge" style="background:#EBF4FF;color:#1a5fa8;">월 정기 지급</span>
-              </div>
-            </div>
-            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">만 8세 미만 전 아동 (2026년 만 9세로 확대 추진 중)</div><div class="policy-item-amount">월 10만원</div></div>
+            <div class="policy-card-header"><div class="policy-icon" style="background:#EBF4FF;">👶</div><div><div class="policy-card-title">아동수당</div><span class="policy-card-badge" style="background:#EBF4FF;color:#1a5fa8;">월 정기 지급</span></div></div>
+            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">만 8세 미만 전 아동</div><div class="policy-item-amount">월 10만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">비수도권 거주 시</div><div class="policy-item-amount">월 10.5만원</div></div>
-            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">인구감소지역 거주 시</div><div class="policy-item-amount">월 11~12만원</div></div>
-            <div class="policy-check-row" onclick="togglePolicyCheck('p-child')">
-              <div class="policy-checkbox" id="pc-p-child"></div>
-              <span class="policy-check-label" id="pl-p-child">신청 완료 표시하기</span>
-            </div>
+            <div class="policy-apply-row"><a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004160" target="_blank">📋 복지로 신청하기</a><div class="policy-check-row" onclick="togglePolicyCheck('p-child')" style="flex-shrink:0;"><div class="policy-check-small" id="pc-p-child"></div><span class="policy-check-small-label" id="pl-p-child">완료</span></div></div>
           </div>
-
-          <!-- 육아휴직 -->
           <div class="policy-card">
-            <div class="policy-card-header">
-              <div class="policy-icon" style="background:#F3EEFB;">🏠</div>
-              <div>
-                <div class="policy-card-title">육아휴직 급여</div>
-                <span class="policy-card-badge" style="background:#F3EEFB;color:#7c3aaf;">2025 대폭 개편</span>
-              </div>
-            </div>
+            <div class="policy-card-header"><div class="policy-icon" style="background:#F3EEFB;">🏠</div><div><div class="policy-card-title">육아휴직 급여</div><span class="policy-card-badge" style="background:#F3EEFB;color:#7c3aaf;">2025 대폭 개편</span></div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">1~3개월 (통상임금 100%)</div><div class="policy-item-amount">최대 월 250만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">4~6개월 (통상임금 100%)</div><div class="policy-item-amount">최대 월 200만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">7개월 이후 (통상임금 80%)</div><div class="policy-item-amount">최대 월 160만원</div></div>
-            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">사용 가능 기간 (각 부모)</div><div class="policy-item-amount">최대 1년 6개월</div></div>
-            <div class="policy-check-row" onclick="togglePolicyCheck('p-parental')">
-              <div class="policy-checkbox" id="pc-p-parental"></div>
-              <span class="policy-check-label" id="pl-p-parental">신청 완료 표시하기</span>
-            </div>
+            <div class="policy-apply-row"><a class="policy-apply-btn" href="https://www.ei.go.kr/ei/eih/cm/hm/main.do" target="_blank">📋 고용보험 신청하기</a><div class="policy-check-row" onclick="togglePolicyCheck('p-parental')" style="flex-shrink:0;"><div class="policy-check-small" id="pc-p-parental"></div><span class="policy-check-small-label" id="pl-p-parental">완료</span></div></div>
           </div>
-
-          <!-- 출산휴가 -->
           <div class="policy-card">
-            <div class="policy-card-header">
-              <div class="policy-icon" style="background:#FFF8E6;">🌸</div>
-              <div>
-                <div class="policy-card-title">출산휴가 급여</div>
-                <span class="policy-card-badge" style="background:#FFF8E6;color:#8a6d00;">2026 인상</span>
-              </div>
-            </div>
-            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산휴가 급여 상한액 (2026 인상)</div><div class="policy-item-amount">월 220만원</div></div>
+            <div class="policy-card-header"><div class="policy-icon" style="background:#FFF8E6;">🌸</div><div><div class="policy-card-title">출산휴가 급여</div><span class="policy-card-badge" style="background:#FFF8E6;color:#8a6d00;">2026 인상</span></div></div>
+            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산휴가 급여 상한액</div><div class="policy-item-amount">월 220만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산휴가 기간</div><div class="policy-item-amount">90일</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">배우자 출산휴가</div><div class="policy-item-amount">20일</div></div>
-            <div class="policy-check-row" onclick="togglePolicyCheck('p-maternity')">
-              <div class="policy-checkbox" id="pc-p-maternity"></div>
-              <span class="policy-check-label" id="pl-p-maternity">신청 완료 표시하기</span>
-            </div>
+            <div class="policy-apply-row"><a class="policy-apply-btn" href="https://www.ei.go.kr/ei/eih/cm/hm/main.do" target="_blank">📋 고용보험 신청하기</a><div class="policy-check-row" onclick="togglePolicyCheck('p-maternity')" style="flex-shrink:0;"><div class="policy-check-small" id="pc-p-maternity"></div><span class="policy-check-small-label" id="pl-p-maternity">완료</span></div></div>
           </div>
-
-          <!-- 아이돌봄 -->
           <div class="policy-card">
-            <div class="policy-card-header">
-              <div class="policy-icon" style="background:#EDFBF0;">🧸</div>
-              <div>
-                <div class="policy-card-title">아이돌봄 서비스</div>
-                <span class="policy-card-badge" style="background:#EDFBF0;color:#1d7a3a;">2026 확대</span>
-              </div>
-            </div>
+            <div class="policy-card-header"><div class="policy-icon" style="background:#EDFBF0;">🧸</div><div><div class="policy-card-title">아이돌봄 서비스</div><span class="policy-card-badge" style="background:#EDFBF0;color:#1d7a3a;">2026 확대</span></div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">소득 기준 중위소득 250% 이하로 확대</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">야간 긴급돌봄</div><div class="policy-item-amount">하루 5,000원</div></div>
-            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">유아돌봄수당 (신설)</div><div class="policy-item-amount">시간당 1,000원</div></div>
-            <div class="policy-check-row" onclick="togglePolicyCheck('p-care')">
-              <div class="policy-checkbox" id="pc-p-care"></div>
-              <span class="policy-check-label" id="pl-p-care">신청 완료 표시하기</span>
-            </div>
+            <div class="policy-apply-row"><a class="policy-apply-btn" href="https://www.idolbom.go.kr" target="_blank">📋 아이돌봄 신청하기</a><div class="policy-check-row" onclick="togglePolicyCheck('p-care')" style="flex-shrink:0;"><div class="policy-check-small" id="pc-p-care"></div><span class="policy-check-small-label" id="pl-p-care">완료</span></div></div>
           </div>
-
-          <!-- 산모·신생아 건강관리 -->
           <div class="policy-card">
-            <div class="policy-card-header">
-              <div class="policy-icon" style="background:#FFF0EB;">🏥</div>
-              <div>
-                <div class="policy-card-title">산모·신생아 건강관리</div>
-                <span class="policy-card-badge" style="background:#FFF0EB;color:#c0410f;">바우처</span>
-              </div>
-            </div>
-            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산 후 산모·신생아 돌봄 전문인력 파견</div></div>
-            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">기간: 출산일로부터 60일 이내 이용</div></div>
-            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">신청처: 주민센터 또는 복지로 온라인 신청</div></div>
-            <div class="policy-check-row" onclick="togglePolicyCheck('p-sanmo')">
-              <div class="policy-checkbox" id="pc-p-sanmo"></div>
-              <span class="policy-check-label" id="pl-p-sanmo">신청 완료 표시하기</span>
-            </div>
+            <div class="policy-card-header"><div class="policy-icon" style="background:#FFF0EB;">🏥</div><div><div class="policy-card-title">산모·신생아 건강관리</div><span class="policy-card-badge" style="background:#FFF0EB;color:#c0410f;">바우처</span></div></div>
+            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산 후 전문인력 파견, 출산일로부터 60일 이내</div></div>
+            <div class="policy-apply-row"><a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004126" target="_blank">📋 복지로 신청하기</a><div class="policy-check-row" onclick="togglePolicyCheck('p-sanmo')" style="flex-shrink:0;"><div class="policy-check-small" id="pc-p-sanmo"></div><span class="policy-check-small-label" id="pl-p-sanmo">완료</span></div></div>
           </div>
-
           <a class="policy-link" href="https://www.bokjiro.go.kr" target="_blank">복지로에서 더 많은 혜택 확인하기 →</a>
           <a class="policy-link" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank" style="margin-top:8px;">행복출산 원스톱 서비스 신청 →</a>
+        </div>
+      </div>
+
+      <!-- ── 페이지 8: 설정 ── -->
+      <div class="swipe-page">
+        <div class="feature-page">
+          <div class="feature-page-title">⚙️ 설정</div>
+          <div class="feature-page-sub">앱 설정과 데이터를 관리해요</div>
+          <div class="feature-section-title">🌙 화면 설정</div>
+          <div class="chart-wrap" style="padding:14px 16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div><div style="font-size:14px;font-weight:600;">다크 모드</div><div style="font-size:12px;color:#9ca3af;margin-top:2px;">야간 수유 시 눈이 편해요</div></div>
+              <div id="dark-toggle" onclick="toggleDarkMode()" style="width:44px;height:24px;border-radius:12px;background:#d1d5db;cursor:pointer;position:relative;transition:background 0.2s;">
+                <div id="dark-knob" style="width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+              </div>
+            </div>
+          </div>
+          <div class="feature-section-title">📤 데이터 내보내기</div>
+          <button class="export-btn" onclick="exportCSV()">📊 기록 데이터 CSV로 내보내기</button>
+          <button class="export-btn" onclick="exportGrowthCSV()">📏 성장 기록 CSV로 내보내기</button>
+          <button class="export-btn" onclick="exportDiaryTxt()">📔 일기 텍스트로 내보내기</button>
+          <div class="feature-section-title">💾 데이터 관리</div>
+          <div class="chart-wrap" style="padding:14px 16px;">
+            <div style="font-size:13px;color:#6b7280;margin-bottom:10px;line-height:1.6;">저장된 데이터를 백업하거나 초기화할 수 있어요.</div>
+            <button class="export-btn" onclick="backupAllData()" style="margin-bottom:0;">💾 전체 데이터 백업 (JSON)</button>
+          </div>
+          <button onclick="confirmReset()" style="width:100%;padding:12px;background:none;border:1px solid #fecaca;border-radius:10px;color:#ef4444;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;">⚠️ 모든 데이터 초기화</button>
         </div>
       </div>
 
@@ -1340,14 +1443,23 @@ function saveProfile() {
 
 function enterApp() {
   loadData();
+  loadGrowthData();
+  loadDiary();
   renderAppHeader();
   goToPage(2);
   setTimeout(initSwipe, 100);
   renderPhotoPage();
   renderMomCarePage();
   loadPolicyChecks();
-  loadDiary();
   renderDiaryList();
+  renderVaccineList();
+  renderMilestoneList();
+  loadDarkMode();
+  setTimeout(() => {
+    renderMainChart();
+    renderGrowthChart();
+    renderGrowthTable();
+  }, 400);
   showScreen('app');
 }
 
@@ -2308,9 +2420,9 @@ let currentPage = 1;
 let swipeTouchStartX = 0, swipeTouchStartY = 0;
 
 function goToPage(n) {
-  currentPage = Math.max(0, Math.min(4, n));
-  document.getElementById('swipe-container').style.transform = 'translateX(-' + (currentPage * 100 / 5) + '%)';
-  for (let i = 0; i < 5; i++) {
+  currentPage = Math.max(0, Math.min(8, n));
+  document.getElementById('swipe-container').style.transform = 'translateX(-' + (currentPage * 100 / 9) + '%)';
+  for (let i = 0; i < 9; i++) {
     const dot = document.getElementById('dot-' + i);
     if (dot) dot.classList.toggle('active', i === currentPage);
   }
@@ -2988,6 +3100,367 @@ function showLinkedBadge(name) {
   const wrap = document.getElementById('dad-linked-badge-wrap');
   wrap.innerHTML = '<div class="dad-linked-badge">🔗 ' + (name ? name + ' 정보 연동됨' : '연동 완료') + '</div>';
   document.getElementById('dad-invite-wrap').style.display = 'none';
+}
+
+// ══════════════════════════════════════════
+// 📊 차트 & 통계
+// ══════════════════════════════════════════
+let chartTab = 'feed';
+let chartInstance = null;
+
+function selectChartTab(tab) {
+  chartTab = tab;
+  ['feed','sleep','diaper','pump'].forEach(t => {
+    document.getElementById('ctab-' + t).classList.toggle('active', t === tab);
+  });
+  renderMainChart();
+}
+
+function renderMainChart() {
+  const canvas = document.getElementById('main-chart');
+  const emptyEl = document.getElementById('chart-empty');
+  const summaryEl = document.getElementById('chart-summary-body');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  // 최근 7일 날짜 배열
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    days.push(d.toDateString());
+  }
+  const labels = days.map(d => { const dt = new Date(d); return (dt.getMonth()+1) + '/' + dt.getDate(); });
+  let data = new Array(7).fill(0);
+  let color = '#7a5600';
+  let unit = '회';
+
+  days.forEach((day, i) => {
+    const recs = records.filter(r => new Date(r.time).toDateString() === day);
+    if (chartTab === 'feed') {
+      data[i] = recs.filter(r => r.cat === 'feed').length;
+      color = '#c0410f'; unit = '회';
+    } else if (chartTab === 'sleep') {
+      const mins = recs.filter(r => r.cat === 'sleep' && r.sub.includes('시간')).reduce((a, r) => {
+        const hm = r.sub.match(/(\d+)시간\s*(\d+)?분?/);
+        return a + (hm ? parseInt(hm[1])*60 + (parseInt(hm[2])||0) : 0);
+      }, 0);
+      data[i] = Math.round(mins / 60 * 10) / 10;
+      color = '#1a5fa8'; unit = '시간';
+    } else if (chartTab === 'diaper') {
+      data[i] = recs.filter(r => r.cat === 'diaper').length;
+      color = '#1d7a3a'; unit = '회';
+    } else if (chartTab === 'pump') {
+      data[i] = recs.filter(r => r.cat === 'pump').reduce((a, r) => a + (r.total || 0), 0);
+      color = '#7c3aaf'; unit = 'ml';
+    }
+  });
+
+  const hasData = data.some(v => v > 0);
+  emptyEl.style.display = hasData ? 'none' : '';
+  if (!hasData) { ctx.clearRect(0, 0, canvas.width, canvas.height); return; }
+
+  // 간단한 바 차트 직접 그리기 (Chart.js 없이)
+  const W = canvas.offsetWidth || 320, H = 160;
+  canvas.width = W; canvas.height = H;
+  const max = Math.max(...data, 1);
+  const barW = Math.floor((W - 40) / 7) - 4;
+  ctx.clearRect(0, 0, W, H);
+  const dark = document.body.classList.contains('dark');
+  const gridColor = dark ? '#3d3628' : '#f0e8d0';
+  const textColor = dark ? '#a89880' : '#6b7280';
+  // 그리드
+  for (let g = 0; g <= 4; g++) {
+    const y = 10 + (H - 30) / 4 * g;
+    ctx.strokeStyle = gridColor; ctx.lineWidth = 0.5;
+    ctx.beginPath(); ctx.moveTo(30, y); ctx.lineTo(W - 4, y); ctx.stroke();
+    ctx.fillStyle = textColor; ctx.font = '10px sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText(Math.round(max - max/4*g), 26, y + 3);
+  }
+  data.forEach((v, i) => {
+    const x = 32 + i * ((W - 36) / 7);
+    const barH = v > 0 ? Math.max(4, (v / max) * (H - 32)) : 0;
+    const y = H - 20 - barH;
+    ctx.fillStyle = color + 'cc';
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(x, y, barW, barH, 3) : ctx.rect(x, y, barW, barH);
+    ctx.fill();
+    ctx.fillStyle = textColor; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(labels[i], x + barW/2, H - 6);
+    if (v > 0) { ctx.fillStyle = color; ctx.fillText(v + unit, x + barW/2, y - 3); }
+  });
+
+  // 요약
+  const total = data.reduce((a,b) => a+b, 0);
+  const avg = Math.round(total / 7 * 10) / 10;
+  summaryEl.innerHTML =
+    '7일 합계: <strong>' + total + unit + '</strong><br>' +
+    '하루 평균: <strong>' + avg + unit + '</strong><br>' +
+    '최다 기록일: <strong>' + labels[data.indexOf(Math.max(...data))] + ' (' + Math.max(...data) + unit + ')</strong>';
+}
+
+// ══════════════════════════════════════════
+// 📏 성장 기록
+// ══════════════════════════════════════════
+let growthRecords = [];
+
+function addGrowthRecord() {
+  const date = document.getElementById('growth-date').value;
+  const weight = parseFloat(document.getElementById('growth-weight').value);
+  const height = parseFloat(document.getElementById('growth-height').value);
+  if (!date) { alert('날짜를 입력해주세요.'); return; }
+  if (!weight && !height) { alert('몸무게 또는 키를 입력해주세요.'); return; }
+  growthRecords.unshift({ date, weight: weight||null, height: height||null });
+  growthRecords.sort((a,b) => new Date(b.date)-new Date(a.date));
+  document.getElementById('growth-weight').value = '';
+  document.getElementById('growth-height').value = '';
+  saveGrowthData();
+  renderGrowthChart();
+  renderGrowthTable();
+}
+
+function renderGrowthChart() {
+  const canvas = document.getElementById('growth-chart');
+  if (!canvas || !growthRecords.length) return;
+  const sorted = [...growthRecords].sort((a,b) => new Date(a.date)-new Date(b.date));
+  const W = canvas.offsetWidth || 320, H = 160;
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  const dark = document.body.classList.contains('dark');
+  const gridColor = dark ? '#3d3628' : '#f0e8d0';
+  const textColor = dark ? '#a89880' : '#6b7280';
+  ctx.clearRect(0, 0, W, H);
+  const weights = sorted.map(r => r.weight).filter(Boolean);
+  const heights = sorted.map(r => r.height).filter(Boolean);
+  if (!weights.length && !heights.length) return;
+  // 몸무게 선
+  if (weights.length > 0) {
+    const wMin = Math.min(...weights) * 0.95, wMax = Math.max(...weights) * 1.05;
+    ctx.strokeStyle = '#c0410f'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    sorted.filter(r => r.weight).forEach((r, i, arr) => {
+      const x = 30 + (sorted.indexOf(r)) / Math.max(sorted.length-1, 1) * (W-40);
+      const y = H - 20 - (r.weight - wMin) / (wMax - wMin + 0.001) * (H - 35);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      ctx.fillStyle = '#c0410f';
+      ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI*2); ctx.fill();
+    });
+    ctx.stroke();
+  }
+  // 날짜 레이블
+  ctx.fillStyle = textColor; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+  sorted.forEach((r, i) => {
+    const x = 30 + i / Math.max(sorted.length-1, 1) * (W-40);
+    const d = new Date(r.date);
+    ctx.fillText((d.getMonth()+1)+'/'+(d.getDate()), x, H - 6);
+  });
+  // 범례
+  const legendEl = document.createElement('div');
+  legendEl.className = 'chart-legend';
+  if (weights.length) legendEl.innerHTML += '<div class="chart-legend-item"><div class="chart-legend-dot" style="background:#c0410f"></div>몸무게(kg)</div>';
+  document.getElementById('growth-chart').parentNode.querySelector('.chart-legend') && (document.getElementById('growth-chart').parentNode.querySelector('.chart-legend').innerHTML = legendEl.innerHTML);
+}
+
+function renderGrowthTable() {
+  const table = document.getElementById('growth-table');
+  if (!table) return;
+  const rows = growthRecords.map((r, i) =>
+    '<tr><td>' + r.date + '</td><td>' + (r.weight ? r.weight+'kg' : '-') + '</td><td>' + (r.height ? r.height+'cm' : '-') + '</td>' +
+    '<td><button onclick="deleteGrowthRecord('+i+')" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:13px;">✕</button></td></tr>'
+  ).join('');
+  table.innerHTML = '<tr><th>날짜</th><th>몸무게</th><th>키</th><th></th></tr>' + (rows || '<tr><td colspan="4" style="text-align:center;color:#9ca3af;padding:16px;">기록 없음</td></tr>');
+}
+
+function deleteGrowthRecord(i) {
+  growthRecords.splice(i, 1);
+  saveGrowthData();
+  renderGrowthChart();
+  renderGrowthTable();
+}
+
+function saveGrowthData() { try { localStorage.setItem('growth_records', JSON.stringify(growthRecords)); } catch(e) {} }
+function loadGrowthData() { try { const d = localStorage.getItem('growth_records'); if (d) growthRecords = JSON.parse(d); } catch(e) {} }
+
+// ══════════════════════════════════════════
+// 💉 예방접종
+// ══════════════════════════════════════════
+const VACCINES = [
+  { id: 'v-hepb1', name: 'B형간염 1차', age: '출생 직후', desc: '출생 후 12시간 이내' },
+  { id: 'v-bcg', name: 'BCG (결핵)', age: '생후 4주 이내', desc: '피내용 또는 경피용' },
+  { id: 'v-hepb2', name: 'B형간염 2차', age: '생후 1개월', desc: '' },
+  { id: 'v-dtap1', name: 'DTaP 1차', age: '생후 2개월', desc: '디프테리아·파상풍·백일해' },
+  { id: 'v-ipv1', name: 'IPV 1차', age: '생후 2개월', desc: '폴리오' },
+  { id: 'v-hib1', name: 'Hib 1차', age: '생후 2개월', desc: '뇌수막염' },
+  { id: 'v-pcv1', name: 'PCV 1차', age: '생후 2개월', desc: '폐렴구균' },
+  { id: 'v-dtap2', name: 'DTaP 2차', age: '생후 4개월', desc: '' },
+  { id: 'v-ipv2', name: 'IPV 2차', age: '생후 4개월', desc: '' },
+  { id: 'v-hib2', name: 'Hib 2차', age: '생후 4개월', desc: '' },
+  { id: 'v-pcv2', name: 'PCV 2차', age: '생후 4개월', desc: '' },
+  { id: 'v-dtap3', name: 'DTaP 3차', age: '생후 6개월', desc: '' },
+  { id: 'v-hepb3', name: 'B형간염 3차', age: '생후 6개월', desc: '' },
+  { id: 'v-ipv3', name: 'IPV 3차', age: '생후 6개월', desc: '' },
+  { id: 'v-hib3', name: 'Hib 3차', age: '생후 6개월', desc: '' },
+  { id: 'v-pcv3', name: 'PCV 3차', age: '생후 6개월', desc: '' },
+  { id: 'v-flu1', name: '인플루엔자 1차', age: '생후 6개월~', desc: '매년 접종' },
+  { id: 'v-mmr1', name: 'MMR 1차', age: '생후 12~15개월', desc: '홍역·유행성이하선염·풍진' },
+  { id: 'v-var1', name: '수두 1차', age: '생후 12~15개월', desc: '' },
+  { id: 'v-hepa1', name: 'A형간염 1차', age: '생후 12~23개월', desc: '' },
+];
+
+function renderVaccineList() {
+  const el = document.getElementById('vaccine-list');
+  if (!el) return;
+  const checks = JSON.parse(localStorage.getItem('vaccine_checks') || '{}');
+  el.innerHTML = '<div class="vaccine-card">' + VACCINES.map(v => {
+    const done = !!checks[v.id];
+    return '<div class="vaccine-row" onclick="toggleVaccine(\'' + v.id + '\')">' +
+      '<div class="vaccine-checkbox' + (done?' checked':'') + '"></div>' +
+      '<div style="flex:1;min-width:0;">' +
+        '<div class="vaccine-name">' + v.name + '</div>' +
+        (v.desc ? '<div style="font-size:11px;color:#9ca3af;">' + v.desc + '</div>' : '') +
+      '</div>' +
+      '<div class="vaccine-age-badge">' + v.age + '</div>' +
+      (done ? '<div class="vaccine-done-text">✅</div>' : '') +
+      '</div>';
+  }).join('') + '</div>';
+}
+
+function toggleVaccine(id) {
+  const checks = JSON.parse(localStorage.getItem('vaccine_checks') || '{}');
+  checks[id] = !checks[id];
+  localStorage.setItem('vaccine_checks', JSON.stringify(checks));
+  renderVaccineList();
+}
+
+// ══════════════════════════════════════════
+// ⭐ 발달 마일스톤
+// ══════════════════════════════════════════
+const MILESTONES = {
+  '0~1개월': ['눈 맞춤', '소리에 반응', '손바닥 잡기 반사'],
+  '2~3개월': ['배로 누워 고개 들기', '소리 나는 쪽 보기', '방긋 웃기 시작'],
+  '4~5개월': ['뒤집기', '물건 잡기', '옹알이 시작'],
+  '6~7개월': ['혼자 앉기 시도', '이름에 반응', '"엄마""아빠" 옹알이'],
+  '8~9개월': ['기어다니기', '낯가림 시작', '잡고 서기'],
+  '10~12개월': ['혼자 서기', '첫 걸음마', '첫 단어 말하기'],
+};
+
+function renderMilestoneList() {
+  const el = document.getElementById('milestone-list');
+  if (!el) return;
+  const checks = JSON.parse(localStorage.getItem('milestone_checks') || '{}');
+  el.innerHTML = Object.entries(MILESTONES).map(([cat, items]) =>
+    '<div class="milestone-card">' +
+    '<div class="milestone-cat-title">👶 ' + cat + '</div>' +
+    items.map(item => {
+      const key = 'm-' + item;
+      const done = checks[key];
+      return '<div class="milestone-row" onclick="toggleMilestone(\'' + key + '\')">' +
+        '<div class="milestone-cb' + (done?' checked':'') + '"></div>' +
+        '<div class="milestone-name' + (done?' done':'') + '">' + item + '</div>' +
+        (done ? '<div class="milestone-date">' + (done === true ? '✅' : done) + '</div>' : '') +
+        '</div>';
+    }).join('') +
+    '</div>'
+  ).join('');
+}
+
+function toggleMilestone(key) {
+  const checks = JSON.parse(localStorage.getItem('milestone_checks') || '{}');
+  if (checks[key]) {
+    delete checks[key];
+  } else {
+    const now = new Date();
+    checks[key] = (now.getMonth()+1) + '/' + now.getDate();
+  }
+  localStorage.setItem('milestone_checks', JSON.stringify(checks));
+  renderMilestoneList();
+}
+
+// ══════════════════════════════════════════
+// 🌙 다크 모드
+// ══════════════════════════════════════════
+function toggleDarkMode() {
+  const isDark = document.body.classList.toggle('dark');
+  localStorage.setItem('dark_mode', isDark ? '1' : '0');
+  const toggle = document.getElementById('dark-toggle');
+  const knob = document.getElementById('dark-knob');
+  if (toggle) toggle.style.background = isDark ? '#7a5600' : '#d1d5db';
+  if (knob) knob.style.transform = isDark ? 'translateX(20px)' : 'translateX(0)';
+}
+
+function loadDarkMode() {
+  const saved = localStorage.getItem('dark_mode');
+  if (saved === '1') {
+    document.body.classList.add('dark');
+    const toggle = document.getElementById('dark-toggle');
+    const knob = document.getElementById('dark-knob');
+    if (toggle) toggle.style.background = '#7a5600';
+    if (knob) knob.style.transform = 'translateX(20px)';
+  }
+}
+
+// ══════════════════════════════════════════
+// 📤 데이터 내보내기
+// ══════════════════════════════════════════
+function downloadFile(content, filename, type) {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+function exportCSV() {
+  if (!records.length) { alert('내보낼 기록이 없어요.'); return; }
+  const header = '날짜,시각,종류,제목,내용\n';
+  const rows = records.map(r => {
+    const d = new Date(r.time);
+    return [
+      d.toLocaleDateString('ko-KR'),
+      d.toLocaleTimeString('ko-KR'),
+      r.cat, r.title,
+      '"' + (r.sub || '').replace(/"/g, '""') + '"'
+    ].join(',');
+  }).join('\n');
+  downloadFile('\uFEFF' + header + rows, '누리케어_기록_' + new Date().toISOString().slice(0,10) + '.csv', 'text/csv;charset=utf-8');
+}
+
+function exportGrowthCSV() {
+  if (!growthRecords.length) { alert('성장 기록이 없어요.'); return; }
+  const header = '날짜,몸무게(kg),키(cm)\n';
+  const rows = growthRecords.map(r => [r.date, r.weight||'', r.height||''].join(',')).join('\n');
+  downloadFile('\uFEFF' + header + rows, '누리케어_성장기록.csv', 'text/csv;charset=utf-8');
+}
+
+function exportDiaryTxt() {
+  if (!diaryEntries.length) { alert('일기가 없어요.'); return; }
+  const content = diaryEntries.map(e => {
+    const d = new Date(e.date);
+    return '📔 ' + d.toLocaleDateString('ko-KR') + ' ' + d.toLocaleTimeString('ko-KR') +
+      (e.days ? ' [' + e.days + ']' : '') + '\n' + (e.text || '') + '\n\n---\n';
+  }).join('\n');
+  downloadFile(content, '누리케어_일기.txt', 'text/plain;charset=utf-8');
+}
+
+function backupAllData() {
+  const data = {
+    records: records,
+    growthRecords: growthRecords,
+    diaryEntries: diaryEntries,
+    baby_profile: localStorage.getItem('baby_profile'),
+    dad_checks: localStorage.getItem('dad_checks'),
+    policy_checks: localStorage.getItem('policy_checks'),
+    vaccine_checks: localStorage.getItem('vaccine_checks'),
+    milestone_checks: localStorage.getItem('milestone_checks'),
+    backup_date: new Date().toISOString()
+  };
+  downloadFile(JSON.stringify(data, null, 2), '누리케어_백업_' + new Date().toISOString().slice(0,10) + '.json', 'application/json');
+}
+
+function confirmReset() {
+  if (!confirm('모든 데이터를 삭제할까요?\n이 작업은 되돌릴 수 없어요!')) return;
+  if (!confirm('정말로 삭제하시겠어요?')) return;
+  localStorage.clear();
+  location.reload();
 }
 
 setInterval(updateStatus, 60000);
