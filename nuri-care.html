@@ -126,18 +126,37 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .profile-card { background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; padding: 14px 16px; margin-top: 10px; box-shadow: none; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-/* ── 메인 앱 ── */
-/* ── 메인 앱 ── */
-.app-header { background: #fff; padding: 52px 20px 14px; box-shadow: 0 1px 0 #e5e7eb; }
-.app-header-inner { max-width: 480px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-.baby-avatar { width: 44px; height: 44px; border-radius: 12px; background: #eff6ff; border: 1px solid #dbeafe; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-.baby-name { font-size: 18px; font-weight: 700; color: #1a1a1a; }
-.baby-age { font-size: 12px; color: #6b7280; margin-top: 2px; }
-.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
-.header-date { font-size: 12px; color: #9ca3af; }
-.lock-btn { background: none; border: none; font-size: 12px; color: #ccc; cursor: pointer; padding: 2px 0; }
+/* ── 메인 앱 헤더 ── */
+.app-header { background: #fff; padding: 44px 16px 10px; box-shadow: 0 1px 0 #e5e7eb; flex-shrink: 0; }
+.app-header-inner { max-width: 480px; margin: 0 auto; }
+.app-header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.app-header-left { display: flex; align-items: center; gap: 10px; }
+.baby-avatar { width: 40px; height: 40px; border-radius: 12px; background: #fff7d6; border: 1px solid #e8d796; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.baby-name { font-size: 17px; font-weight: 700; color: #1a1a1a; }
+.baby-age { font-size: 11px; color: #6b7280; margin-top: 1px; }
+.app-header-top-right { display: flex; align-items: center; gap: 8px; }
+.header-date { font-size: 11px; color: #9ca3af; }
+.lock-btn { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 16px; font-size: 12px; color: #6b7280; cursor: pointer; padding: 4px 10px; font-weight: 500; }
+.lock-btn:active { background: #e5e7eb; }
+.app-header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+.app-header-actions::-webkit-scrollbar { display: none; }
+.hdr-btn { display: flex; align-items: center; gap: 4px; padding: 5px 11px; border-radius: 20px; border: 1.5px solid; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.hdr-btn:active { opacity: 0.8; }
+.hdr-btn.profile { background: #fffdf2; border-color: #e8d796; color: #7a5600; }
+.hdr-btn.guide   { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+.hdr-btn.invite  { background: #fdf2f8; border-color: #f9a8d4; color: #be185d; }
+.hdr-btn.dad     { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
+body.dark .app-header { background: #2a2520; box-shadow: 0 1px 0 #3d3628; }
+body.dark .baby-name { color: #f0ead8; }
+body.dark .lock-btn { background: #3d3628; border-color: #4d4030; color: #c8a870; }
+body.dark .hdr-btn.profile { background: #2a2520; border-color: #4d4030; color: #c8a870; }
+body.dark .hdr-btn.guide   { background: #2a2218; border-color: #5a4a10; color: #d4a020; }
+body.dark .hdr-btn.invite  { background: #2a1820; border-color: #6a2840; color: #ec4899; }
+body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: #60a5fa; }
+/* profile-edit-btn 삭제 - hdr-btn으로 대체 */
+.profile-edit-btn { display: none; }
 
-.app-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 80px; width: 100%; }
+.app-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 60px; width: 100%; box-sizing: border-box; }
 
 .status-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 8px; }
 .status-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
@@ -194,7 +213,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .page-dot.active { background: #7a5600; width: 18px; border-radius: 3px; }
 
 /* ── 일기 페이지 ── */
-.diary-page { padding: 16px 16px 80px; background: #fffdf2; min-height: 100%; max-width: 480px; margin: 0 auto; width: 100%; }
+.diary-page { padding: 16px 16px 80px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; }
 .diary-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .diary-header h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; }
 .diary-write-btn { display: flex; align-items: center; gap: 5px; padding: 8px 16px; background: #7a5600; color: #fff; border: none; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; }
@@ -220,8 +239,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 
 /* ── 각 페이지 빈공간 제거 ── */
 .app-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 40px; width: 100%; }
-.mom-page { padding: 16px 16px 40px; background: #fffdf2; min-height: 100%; max-width: 480px; margin: 0 auto; width: 100%; }
-.policy-page { padding: 16px 16px 40px; background: #fffdf2; min-height: 100%; max-width: 480px; margin: 0 auto; width: 100%; }
+.mom-page { padding: 16px 16px 40px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+.policy-page { padding: 16px 16px 40px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; }
 .mom-page-header { margin-bottom: 16px; }
 .mom-page-header h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; }
 .mom-page-header p { font-size: 13px; color: #6b7280; margin-top: 4px; }
@@ -315,7 +334,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 }
 
 /* ── 정책 페이지 ── */
-.policy-page { padding: 20px 16px 60px; background: #fffdf2; min-height: calc(100vh - 130px); max-width: 480px; margin: 0 auto; width: 100%; }
+/* ── 정책 카드 스타일 ── */
 .policy-page-header { margin-bottom: 20px; }
 .policy-page-header h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; }
 .policy-page-header p { font-size: 13px; color: #6b7280; margin-top: 4px; }
@@ -544,7 +563,7 @@ body.dark .milestone-name { color: #d0c0a8; }
 body.dark .export-btn { background: #2a2520; border-color: #3d3628; color: #c8a870; }
 
 /* ── 새 기능 페이지 공통 ── */
-.feature-page { padding: 16px 16px 60px; background: #fffdf2; min-height: 100%; max-width: 480px; margin: 0 auto; width: 100%; }
+.feature-page { padding: 16px 16px 60px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; }
 .feature-page-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
 .feature-page-sub { font-size: 13px; color: #6b7280; margin-bottom: 16px; }
 .feature-section-title { font-size: 12px; font-weight: 700; color: #7a5600; letter-spacing: 0.06em; text-transform: uppercase; margin: 16px 0 8px; }
@@ -764,20 +783,26 @@ body.dark .feature-section-title { color: #c8a870; }
 <div class="screen" id="screen-app">
   <div class="app-header">
     <div class="app-header-inner">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div class="baby-avatar" id="app-avatar">🍼</div>
-        <div>
-          <div class="baby-name" id="app-baby-name">아기</div>
-          <div class="baby-age" id="app-baby-age"></div>
-          <button class="profile-edit-btn" onclick="openProfileEdit()">✏️ 프로필 수정</button>
+      <!-- 위 줄: 아기 정보 + 날짜·잠금 -->
+      <div class="app-header-top">
+        <div class="app-header-left">
+          <div class="baby-avatar" id="app-avatar">🍼</div>
+          <div>
+            <div class="baby-name" id="app-baby-name">아기</div>
+            <div class="baby-age" id="app-baby-age"></div>
+          </div>
+        </div>
+        <div class="app-header-top-right">
+          <div class="header-date" id="app-date"></div>
+          <button class="lock-btn" onclick="lockApp()">🔒 잠금</button>
         </div>
       </div>
-      <div class="header-right">
-        <div class="header-date" id="app-date"></div>
-        <button class="lock-btn" onclick="lockApp()">잠금 🔒</button>
-        <button class="lock-btn" style="color:#f59e0b;font-weight:600;" onclick="openGuide('app')">📚 가이드</button>
-        <button class="lock-btn" style="color:#ec4899;font-weight:600;" onclick="openInviteModal()">💌 초대</button>
-        <button class="lock-btn" style="color:#1a5fa8;font-weight:600;" onclick="openDadView()">👨 아빠 확인</button>
+      <!-- 아래 줄: 기능 버튼 4개 가로 나열 -->
+      <div class="app-header-actions">
+        <button class="hdr-btn profile" onclick="openProfileEdit()">✏️ 프로필</button>
+        <button class="hdr-btn guide"   onclick="openGuide('app')">📚 가이드</button>
+        <button class="hdr-btn invite"  onclick="openInviteModal()">💌 초대</button>
+        <button class="hdr-btn dad"     onclick="openDadView()">👨 아빠</button>
       </div>
     </div>
     <!-- 페이지 인디케이터 -->
