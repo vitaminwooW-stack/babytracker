@@ -121,14 +121,23 @@ input:focus { border-color: #bfdbfe; }
 
 /* ── 메인 앱 ── */
 #screen-app { background: #f7f8fa; }
-.app-header { background: #fff; padding: 52px 20px 14px; box-shadow: 0 1px 0 #e5e7eb; }
-.app-header-inner { max-width: 480px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-.baby-avatar { width: 44px; height: 44px; border-radius: 12px; background: #eff6ff; border: 1px solid #dbeafe; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-.baby-name { font-size: 18px; font-weight: 700; color: #1a1a1a; }
-.baby-age { font-size: 12px; color: #6b7280; margin-top: 2px; }
+.app-header { background: #fff; padding: 44px 16px 10px; box-shadow: 0 1px 0 #e5e7eb; }
+.app-header-inner { max-width: 480px; margin: 0 auto; }
+.app-header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.app-header-baby { display: flex; align-items: center; gap: 10px; }
+.baby-avatar { width: 40px; height: 40px; border-radius: 12px; background: #eff6ff; border: 1px solid #dbeafe; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.baby-name { font-size: 17px; font-weight: 700; color: #1a1a1a; }
+.baby-age { font-size: 11px; color: #6b7280; margin-top: 1px; }
 .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
-.header-date { font-size: 12px; color: #9ca3af; }
+.header-date { font-size: 11px; color: #9ca3af; }
 .lock-btn { background: none; border: none; font-size: 12px; color: #ccc; cursor: pointer; padding: 2px 0; }
+.app-header-actions { display: flex; align-items: center; gap: 6px; }
+.hdr-btn { display: flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 20px; border: 1px solid #e5e7eb; background: #f9fafb; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; color: #374151; }
+.hdr-btn:active { background: #e5e7eb; }
+.hdr-btn.blue { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
+.hdr-btn.pink { background: #fdf2f8; border-color: #f9a8d4; color: #be185d; }
+.hdr-btn.amber { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+.hdr-btn.gray { background: #f9fafb; border-color: #e5e7eb; color: #6b7280; }
 
 .app-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 80px; width: 100%; }
 
@@ -213,10 +222,10 @@ input:focus { border-color: #bfdbfe; }
 .mom-no-info { text-align: center; padding: 40px 0; color: #9ca3af; font-size: 14px; line-height: 1.8; }
 
 /* ── 아기 사진 페이지 ── */
-.photo-page { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 130px); background: #f7f8fa; padding: 8px 0 24px; }
-.photo-upload-area { position: relative; width: 100%; max-width: 440px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
-.baby-photo-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; object-position: center center; display: block; margin: 0 auto; background: #e8e8e8; }
-.baby-photo-placeholder { width: 100%; aspect-ratio: 3/4; background: #eef2f7; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; gap: 12px; margin: 0 auto; }
+.photo-page { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; height: calc(100vh - 130px); max-height: calc(100vh - 130px); overflow-y: auto; background: #f7f8fa; padding: 0; }
+.photo-upload-area { position: relative; width: 100%; max-width: 440px; margin: 0 auto; flex-shrink: 0; }
+.baby-photo-img { width: 100%; max-height: 60vh; object-fit: cover; object-position: center center; display: block; margin: 0 auto; background: #e8e8e8; }
+.baby-photo-placeholder { width: 100%; max-height: 60vh; aspect-ratio: 3/4; background: #eef2f7; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; gap: 12px; margin: 0 auto; }
 .baby-photo-placeholder .ph-icon { font-size: 52px; }
 .baby-photo-placeholder p { font-size: 15px; color: #9ca3af; font-weight: 500; }
 .photo-upload-input { display: none; }
@@ -226,7 +235,7 @@ input:focus { border-color: #bfdbfe; }
 .photo-info-row { display: flex; gap: 12px; margin-top: 10px; }
 .photo-info-chip { background: rgba(15,23,42,0.6); border-radius: 8px; padding: 4px 10px; font-size: 13px; color: #fff; }
 .photo-change-btn { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.4); border: none; border-radius: 12px; color: #fff; font-size: 12px; padding: 6px 12px; cursor: pointer; backdrop-filter: blur(4px); }
-.no-photo-info { padding: 24px 20px 0; text-align: center; width: 100%; max-width: 480px; }
+.no-photo-info { padding: 16px 20px; text-align: center; width: 100%; max-width: 480px; flex-shrink: 0; }
 .no-photo-info .baby-dname { font-size: 24px; font-weight: 700; color: #1a1a1a; }
 .no-photo-info .baby-ddays { font-size: 14px; color: #6b7280; margin-top: 6px; }
 .no-photo-chips { display: flex; gap: 8px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
@@ -590,20 +599,26 @@ input:focus { border-color: #bfdbfe; }
 <div class="screen" id="screen-app">
   <div class="app-header">
     <div class="app-header-inner">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div class="baby-avatar" id="app-avatar">🍼</div>
-        <div>
-          <div class="baby-name" id="app-baby-name">아기</div>
-          <div class="baby-age" id="app-baby-age"></div>
-          <button class="profile-edit-btn" onclick="openProfileEdit()">✏️ 프로필 수정</button>
+      <!-- 위 줄: 아기 정보 + 날짜/잠금 -->
+      <div class="app-header-top">
+        <div class="app-header-baby">
+          <div class="baby-avatar" id="app-avatar">🍼</div>
+          <div>
+            <div class="baby-name" id="app-baby-name">아기</div>
+            <div class="baby-age" id="app-baby-age"></div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="header-date" id="app-date"></div>
+          <button class="hdr-btn gray" onclick="lockApp()">🔒 잠금</button>
         </div>
       </div>
-      <div class="header-right">
-        <div class="header-date" id="app-date"></div>
-        <button class="lock-btn" onclick="lockApp()">잠금 🔒</button>
-        <button class="lock-btn" style="color:#f59e0b;font-weight:600;" onclick="openGuide('app')">📚 가이드</button>
-        <button class="lock-btn" style="color:#ec4899;font-weight:600;" onclick="openInviteModal()">💌 초대</button>
-        <button class="lock-btn" style="color:#1a5fa8;font-weight:600;" onclick="openDadView()">👨 아빠 확인</button>
+      <!-- 아래 줄: 액션 버튼들 가로 나열 -->
+      <div class="app-header-actions">
+        <button class="hdr-btn gray" onclick="openProfileEdit()">✏️ 프로필</button>
+        <button class="hdr-btn amber" onclick="openGuide('app')">📚 가이드</button>
+        <button class="hdr-btn pink" onclick="openInviteModal()">💌 초대</button>
+        <button class="hdr-btn blue" onclick="openDadView()">👨 아빠</button>
       </div>
     </div>
     <!-- 페이지 인디케이터 -->
