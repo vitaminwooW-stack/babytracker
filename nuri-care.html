@@ -125,19 +125,19 @@ input:focus { border-color: #bfdbfe; }
 .app-header-inner { max-width: 480px; margin: 0 auto; }
 .app-header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .app-header-baby { display: flex; align-items: center; gap: 10px; }
-.baby-avatar { width: 40px; height: 40px; border-radius: 12px; background: #eff6ff; border: 1px solid #dbeafe; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-.baby-name { font-size: 17px; font-weight: 700; color: #1a1a1a; }
-.baby-age { font-size: 11px; color: #6b7280; margin-top: 1px; }
-.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
-.header-date { font-size: 11px; color: #9ca3af; }
-.lock-btn { background: none; border: none; font-size: 12px; color: #ccc; cursor: pointer; padding: 2px 0; }
-.app-header-actions { display: flex; align-items: center; gap: 6px; }
-.hdr-btn { display: flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 20px; border: 1px solid #e5e7eb; background: #f9fafb; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; color: #374151; }
-.hdr-btn:active { background: #e5e7eb; }
+.app-header-actions { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+.hdr-btn { display: flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 20px; border: 1px solid #e5e7eb; background: #f9fafb; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; color: #374151; font-family: inherit; }
+.hdr-btn:active { opacity: 0.8; }
 .hdr-btn.blue { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
 .hdr-btn.pink { background: #fdf2f8; border-color: #f9a8d4; color: #be185d; }
 .hdr-btn.amber { background: #fffbeb; border-color: #fde68a; color: #92400e; }
 .hdr-btn.gray { background: #f9fafb; border-color: #e5e7eb; color: #6b7280; }
+.baby-avatar { width: 44px; height: 44px; border-radius: 12px; background: #eff6ff; border: 1px solid #dbeafe; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.baby-name { font-size: 18px; font-weight: 700; color: #1a1a1a; }
+.baby-age { font-size: 12px; color: #6b7280; margin-top: 2px; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.header-date { font-size: 12px; color: #9ca3af; }
+.lock-btn { background: none; border: none; font-size: 12px; color: #ccc; cursor: pointer; padding: 2px 0; }
 
 .app-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 80px; width: 100%; }
 
@@ -187,14 +187,61 @@ input:focus { border-color: #bfdbfe; }
 .section-title-row .section-title { margin-bottom: 0; }
 
 /* ── 스와이프 페이지 ── */
-.swipe-container { display: flex; width: 400%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
-.swipe-page { width: calc(100% / 4); min-height: calc(100vh - 130px); flex-shrink: 0; }
-.page-dots { display: flex; justify-content: center; gap: 6px; padding: 10px 0 4px; }
+.swipe-container { display: flex; width: 500%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
+.swipe-page { width: calc(100% / 5); height: calc(100vh - 130px); flex-shrink: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+.page-dots { display: flex; justify-content: center; gap: 6px; padding: 8px 0 4px; }
 .page-dot { width: 6px; height: 6px; border-radius: 50%; background: #d0d0d0; transition: all 0.2s; }
 .page-dot.active { background: #2563eb; width: 18px; border-radius: 3px; }
 
-/* ── 엄마 케어 페이지 ── */
-.mom-page { padding: 20px 16px 60px; background: #f7f8fa; min-height: calc(100vh - 130px); max-width: 480px; margin: 0 auto; width: 100%; }
+/* ── 일기 페이지 ── */
+.diary-page { padding: 16px 16px 80px; background: #fffdf7; min-height: 100%; max-width: 480px; margin: 0 auto; width: 100%; }
+.diary-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.diary-header h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; }
+.diary-write-btn { display: flex; align-items: center; gap: 5px; padding: 8px 14px; background: #2563eb; color: #fff; border: none; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.diary-write-btn:active { opacity: 0.85; }
+.diary-empty { text-align: center; padding: 60px 20px; color: #9ca3af; }
+.diary-empty-icon { font-size: 48px; margin-bottom: 12px; }
+.diary-empty-text { font-size: 15px; font-weight: 600; color: #6b7280; }
+.diary-empty-sub { font-size: 13px; color: #9ca3af; margin-top: 6px; }
+.diary-entry { background: #fff; border-radius: 16px; border: 1px solid #f3f0e8; margin-bottom: 14px; overflow: hidden; }
+.diary-entry-img { width: 100%; max-height: 260px; object-fit: cover; display: block; }
+.diary-entry-body { padding: 14px 16px 12px; }
+.diary-entry-date { font-size: 11px; color: #9ca3af; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.diary-entry-day-badge { background: #eff6ff; color: #1d4ed8; border-radius: 10px; padding: 2px 8px; font-size: 11px; font-weight: 700; }
+.diary-entry-text { font-size: 14px; color: #374151; line-height: 1.75; word-break: keep-all; white-space: pre-wrap; }
+.diary-entry-actions { display: flex; justify-content: flex-end; gap: 8px; padding-top: 10px; border-top: 1px solid #f9f9f9; margin-top: 10px; }
+.diary-action-btn { background: none; border: 1px solid #e5e7eb; border-radius: 8px; padding: 5px 12px; font-size: 12px; color: #6b7280; cursor: pointer; }
+.diary-action-btn.del { color: #ef4444; border-color: #fecaca; }
+
+/* ── 일기 작성 모달 ── */
+.diary-textarea { width: 100%; min-height: 120px; padding: 13px 14px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 15px; background: #fff; color: #1a1a1a; outline: none; font-family: inherit; resize: none; line-height: 1.7; }
+.diary-textarea:focus { border-color: #bfdbfe; }
+.diary-img-preview { width: 100%; max-height: 200px; object-fit: cover; border-radius: 10px; margin-top: 10px; display: none; }
+.diary-img-upload-btn { display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: #f3f4f6; border: 1px dashed #d1d5db; border-radius: 10px; font-size: 13px; color: #6b7280; cursor: pointer; margin-top: 10px; font-weight: 500; }
+.diary-img-upload-btn:active { background: #e5e7eb; }
+
+/* ── 각 페이지 빈공간 제거 ── */
+.app-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 40px; width: 100%; }
+.photo-page { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; background: #f7f8fa; min-height: 100%; }
+.photo-upload-area { position: relative; width: 100%; flex-shrink: 0; }
+.baby-photo-img { width: 100%; max-height: 65vh; object-fit: cover; object-position: center; display: block; background: #e8e8e8; }
+.baby-photo-placeholder { width: 100%; height: 55vw; max-height: 360px; background: #eef2f7; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; gap: 12px; }
+.baby-photo-placeholder .ph-icon { font-size: 48px; }
+.no-photo-info { padding: 16px 20px 0; text-align: center; width: 100%; }
+.no-photo-info .baby-dname { font-size: 22px; font-weight: 700; color: #1a1a1a; }
+.no-photo-info .baby-ddays { font-size: 13px; color: #6b7280; margin-top: 4px; }
+.no-photo-chips { display: flex; gap: 6px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.info-chip { background: #fff; border-radius: 12px; padding: 5px 12px; font-size: 12px; color: #555; }
+.diary-page { padding: 16px 16px 40px; background: #fffdf7; min-height: 100%; max-width: 480px; margin: 0 auto; width: 100%; }
+.mom-page { padding: 16px 16px 40px; background: #fff5f8; min-height: 100%; max-width: 480px; margin: 0 auto; width: 100%; }
+.policy-page { padding: 16px 16px 40px; background: #f7f8fa; min-height: 100%; max-width: 480px; margin: 0 auto; width: 100%; }
+.baby-photo-placeholder p { font-size: 15px; color: #9ca3af; font-weight: 500; }
+.no-photo-info { padding: 16px 20px 12px; text-align: center; width: 100%; }
+.no-photo-info .baby-dname { font-size: 22px; font-weight: 700; color: #1a1a1a; }
+.no-photo-info .baby-ddays { font-size: 13px; color: #6b7280; margin-top: 4px; }
+.no-photo-chips { display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+
+/* ── 엄마 케어 카드 스타일 ── */
 .mom-page-header { margin-bottom: 16px; }
 .mom-page-header h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; }
 .mom-page-header p { font-size: 13px; color: #6b7280; margin-top: 4px; }
@@ -222,10 +269,10 @@ input:focus { border-color: #bfdbfe; }
 .mom-no-info { text-align: center; padding: 40px 0; color: #9ca3af; font-size: 14px; line-height: 1.8; }
 
 /* ── 아기 사진 페이지 ── */
-.photo-page { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; height: calc(100vh - 130px); max-height: calc(100vh - 130px); overflow-y: auto; background: #f7f8fa; padding: 0; }
-.photo-upload-area { position: relative; width: 100%; max-width: 440px; margin: 0 auto; flex-shrink: 0; }
-.baby-photo-img { width: 100%; max-height: 60vh; object-fit: cover; object-position: center center; display: block; margin: 0 auto; background: #e8e8e8; }
-.baby-photo-placeholder { width: 100%; max-height: 60vh; aspect-ratio: 3/4; background: #eef2f7; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; gap: 12px; margin: 0 auto; }
+.photo-page { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 130px); background: #f7f8fa; padding: 8px 0 24px; }
+.photo-upload-area { position: relative; width: 100%; max-width: 440px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+.baby-photo-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; object-position: center center; display: block; margin: 0 auto; background: #e8e8e8; }
+.baby-photo-placeholder { width: 100%; aspect-ratio: 3/4; background: #eef2f7; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; gap: 12px; margin: 0 auto; }
 .baby-photo-placeholder .ph-icon { font-size: 52px; }
 .baby-photo-placeholder p { font-size: 15px; color: #9ca3af; font-weight: 500; }
 .photo-upload-input { display: none; }
@@ -235,14 +282,13 @@ input:focus { border-color: #bfdbfe; }
 .photo-info-row { display: flex; gap: 12px; margin-top: 10px; }
 .photo-info-chip { background: rgba(15,23,42,0.6); border-radius: 8px; padding: 4px 10px; font-size: 13px; color: #fff; }
 .photo-change-btn { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.4); border: none; border-radius: 12px; color: #fff; font-size: 12px; padding: 6px 12px; cursor: pointer; backdrop-filter: blur(4px); }
-.no-photo-info { padding: 16px 20px; text-align: center; width: 100%; max-width: 480px; flex-shrink: 0; }
+.no-photo-info { padding: 24px 20px 0; text-align: center; width: 100%; max-width: 480px; }
 .no-photo-info .baby-dname { font-size: 24px; font-weight: 700; color: #1a1a1a; }
 .no-photo-info .baby-ddays { font-size: 14px; color: #6b7280; margin-top: 6px; }
 .no-photo-chips { display: flex; gap: 8px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
 .info-chip { background: #fff; border-radius: 12px; padding: 6px 14px; font-size: 13px; color: #555; box-shadow: none; }
 
-/* ── 정책 페이지 ── */
-.policy-page { padding: 20px 16px 60px; background: #f7f8fa; min-height: calc(100vh - 130px); max-width: 480px; margin: 0 auto; width: 100%; }
+/* ── 정책 카드 스타일 ── */
 .policy-page-header { margin-bottom: 20px; }
 .policy-page-header h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; }
 .policy-page-header p { font-size: 13px; color: #6b7280; margin-top: 4px; }
@@ -624,9 +670,10 @@ input:focus { border-color: #bfdbfe; }
     <!-- 페이지 인디케이터 -->
     <div class="page-dots">
       <div class="page-dot" id="dot-0"></div>
-      <div class="page-dot active" id="dot-1"></div>
-      <div class="page-dot" id="dot-2"></div>
+      <div class="page-dot" id="dot-1"></div>
+      <div class="page-dot active" id="dot-2"></div>
       <div class="page-dot" id="dot-3"></div>
+      <div class="page-dot" id="dot-4"></div>
     </div>
   </div>
 
@@ -634,7 +681,24 @@ input:focus { border-color: #bfdbfe; }
   <div style="overflow:hidden; flex:1;">
     <div class="swipe-container" id="swipe-container">
 
-      <!-- ── 페이지 0: 아기 사진 ── -->
+      <!-- ── 페이지 0: 일기 ── -->
+      <div class="swipe-page">
+        <div class="diary-page">
+          <div class="diary-header">
+            <h2>📔 육아 일기</h2>
+            <button class="diary-write-btn" onclick="openDiaryWrite()">✏️ 쓰기</button>
+          </div>
+          <div id="diary-list">
+            <div class="diary-empty">
+              <div class="diary-empty-icon">📝</div>
+              <div class="diary-empty-text">아직 일기가 없어요</div>
+              <div class="diary-empty-sub">오늘 아기와의 소중한 순간을<br>기록해보세요 🍼</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 페이지 1: 아기 사진 ── -->
       <div class="swipe-page">
         <div class="photo-page" id="photo-page">
           <div class="photo-upload-area" id="photo-upload-area">
@@ -894,6 +958,25 @@ input:focus { border-color: #bfdbfe; }
     <div id="dad-view-body"></div>
     <div class="modal-actions" style="margin-top:16px;">
       <button class="btn-save" onclick="closeModal('dad-view')">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 일기 작성 모달 ═══════════ -->
+<div class="modal-bg" id="modal-diary">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>📔 일기 쓰기</h2>
+    <span class="field-label">오늘 있었던 일을 적어보세요</span>
+    <textarea class="diary-textarea" id="diary-text" placeholder="오늘 아기가 처음으로 웃었어요 😊&#10;&#10;수유할 때 눈을 마주쳤는데 방긋 웃더라고요..."></textarea>
+    <label class="diary-img-upload-btn" for="diary-img-input">
+      📷 사진 추가하기
+    </label>
+    <input type="file" id="diary-img-input" accept="image/*" style="display:none;" onchange="previewDiaryImg(event)">
+    <img id="diary-img-preview" class="diary-img-preview" src="" alt="">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeDiaryWrite()">취소</button>
+      <button class="btn-save" onclick="saveDiaryEntry()" style="background:#2563eb;">저장</button>
     </div>
   </div>
 </div>
@@ -1238,11 +1321,12 @@ function saveProfile() {
 function enterApp() {
   loadData();
   renderAppHeader();
-  goToPage(1);
+  goToPage(2);
   setTimeout(initSwipe, 100);
   renderPhotoPage();
   renderMomCarePage();
   loadPolicyChecks();
+  renderDiaryList();
   showScreen('app');
 }
 
@@ -2052,9 +2136,9 @@ let currentPage = 1;
 let swipeTouchStartX = 0, swipeTouchStartY = 0;
 
 function goToPage(n) {
-  currentPage = Math.max(0, Math.min(3, n));
-  document.getElementById('swipe-container').style.transform = 'translateX(-' + (currentPage * 100 / 4) + '%)';
-  for (let i = 0; i < 4; i++) document.getElementById('dot-' + i).classList.toggle('active', i === currentPage);
+  currentPage = Math.max(0, Math.min(4, n));
+  document.getElementById('swipe-container').style.transform = 'translateX(-' + (currentPage * 100 / 5) + '%)';
+  for (let i = 0; i < 5; i++) document.getElementById('dot-' + i).classList.toggle('active', i === currentPage);
 }
 
 function initSwipe() {
@@ -2722,6 +2806,135 @@ function showLinkedBadge(name) {
   wrap.innerHTML = '<div class="dad-linked-badge">🔗 ' + (name ? name + ' 정보 연동됨' : '연동 완료') + '</div>';
   document.getElementById('dad-invite-wrap').style.display = 'none';
 }
+
+// ─── 일기 기능 ───
+let diaryEntries = [];
+let diaryImgData = null;
+let editingDiaryIdx = -1;
+
+function openDiaryWrite() {
+  editingDiaryIdx = -1;
+  document.getElementById('diary-text').value = '';
+  document.getElementById('diary-img-preview').style.display = 'none';
+  document.getElementById('diary-img-preview').src = '';
+  document.getElementById('diary-img-input').value = '';
+  diaryImgData = null;
+  document.getElementById('modal-diary').classList.add('open');
+}
+
+function closeDiaryWrite() {
+  document.getElementById('modal-diary').classList.remove('open');
+}
+
+function previewDiaryImg(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    diaryImgData = ev.target.result;
+    const preview = document.getElementById('diary-img-preview');
+    preview.src = diaryImgData;
+    preview.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveDiaryEntry() {
+  const text = document.getElementById('diary-text').value.trim();
+  if (!text && !diaryImgData) { alert('내용이나 사진을 추가해주세요.'); return; }
+  const now = new Date();
+  const raw = localStorage.getItem('baby_profile');
+  let days = '';
+  if (raw) {
+    const p = JSON.parse(raw);
+    if (p.birthDate) {
+      const d = Math.floor((now - new Date(p.birthDate)) / 86400000);
+      days = d + '일째';
+    }
+  }
+  const entry = {
+    id: Date.now(),
+    text,
+    img: diaryImgData || null,
+    date: now.toISOString(),
+    days
+  };
+  if (editingDiaryIdx >= 0) {
+    diaryEntries[editingDiaryIdx] = { ...diaryEntries[editingDiaryIdx], text, img: diaryImgData !== null ? diaryImgData : diaryEntries[editingDiaryIdx].img };
+  } else {
+    diaryEntries.unshift(entry);
+  }
+  saveDiary();
+  renderDiaryList();
+  closeDiaryWrite();
+}
+
+function deleteDiaryEntry(idx) {
+  if (!confirm('이 일기를 삭제할까요?')) return;
+  diaryEntries.splice(idx, 1);
+  saveDiary();
+  renderDiaryList();
+}
+
+function editDiaryEntry(idx) {
+  editingDiaryIdx = idx;
+  const e = diaryEntries[idx];
+  document.getElementById('diary-text').value = e.text || '';
+  if (e.img) {
+    diaryImgData = e.img;
+    const preview = document.getElementById('diary-img-preview');
+    preview.src = e.img;
+    preview.style.display = 'block';
+  } else {
+    diaryImgData = null;
+    document.getElementById('diary-img-preview').style.display = 'none';
+  }
+  document.getElementById('modal-diary').classList.add('open');
+}
+
+function fmtDiaryDate(iso) {
+  const d = new Date(iso);
+  const yy = d.getFullYear(), mm = d.getMonth() + 1, dd = d.getDate();
+  const h = d.getHours(), mi = d.getMinutes();
+  const ampm = h < 12 ? '오전' : '오후';
+  return yy + '년 ' + mm + '월 ' + dd + '일 ' + ampm + ' ' + (h % 12 || 12) + ':' + (mi < 10 ? '0' + mi : mi);
+}
+
+function renderDiaryList() {
+  const el = document.getElementById('diary-list');
+  if (!el) return;
+  if (!diaryEntries.length) {
+    el.innerHTML = '<div class="diary-empty"><div class="diary-empty-icon">📝</div><div class="diary-empty-text">아직 일기가 없어요</div><div class="diary-empty-sub">오늘 아기와의 소중한 순간을<br>기록해보세요 🍼</div></div>';
+    return;
+  }
+  el.innerHTML = diaryEntries.map((e, i) =>
+    '<div class="diary-entry">' +
+    (e.img ? '<img class="diary-entry-img" src="' + e.img + '" alt="일기 사진">' : '') +
+    '<div class="diary-entry-body">' +
+    '<div class="diary-entry-date">' + fmtDiaryDate(e.date) +
+    (e.days ? ' <span class="diary-entry-day-badge">🍼 ' + e.days + '</span>' : '') + '</div>' +
+    (e.text ? '<div class="diary-entry-text">' + e.text.replace(/</g, '&lt;') + '</div>' : '') +
+    '<div class="diary-entry-actions">' +
+    '<button class="diary-action-btn" onclick="editDiaryEntry(' + i + ')">✏️ 수정</button>' +
+    '<button class="diary-action-btn del" onclick="deleteDiaryEntry(' + i + ')">🗑️ 삭제</button>' +
+    '</div></div></div>'
+  ).join('');
+}
+
+function saveDiary() {
+  try { localStorage.setItem('diary_entries', JSON.stringify(diaryEntries.slice(0, 200))); } catch (e) {}
+}
+
+function loadDiary() {
+  try { const d = localStorage.getItem('diary_entries'); if (d) diaryEntries = JSON.parse(d); } catch (e) {}
+}
+
+// 일기 모달 배경 클릭 닫기
+document.getElementById('modal-diary').addEventListener('click', function(e) {
+  if (e.target === this) closeDiaryWrite();
+});
+
+loadDiary();
 
 setInterval(updateStatus, 60000);
 
