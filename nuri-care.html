@@ -27,7 +27,7 @@ input:focus { border-color: #bfdbfe; }
 /* ── 역할 선택 화면 ── */
 #screen-role { background: radial-gradient(circle at top, #fffdf2 0%, #fff7d6 34%, #f6e6a8 100%); align-items: center; justify-content: center; position: relative; overflow: hidden; }
 .role-box { width: 100%; max-width: 360px; padding: 0 24px; text-align: center; }
-.role-logo { margin-bottom: 32px; }
+.role-logo { margin-bottom: 28px; }
 .role-logo .logo-icon { font-size: 34px; margin-bottom: 8px; font-weight: 900; letter-spacing: -0.04em; color: #6f4e00; line-height: 1.15; text-shadow: 0 1px 0 rgba(255,255,255,0.45); }
 .role-logo h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; }
 .role-logo p { font-size: 14px; color: #6b7280; margin-top: 6px; }
@@ -94,7 +94,7 @@ input:focus { border-color: #bfdbfe; }
 .policy-applied-badge { font-size: 11px; background: #f0fdf4; color: #1d7a3a; padding: 2px 8px; border-radius: 8px; font-weight: 600; margin-left: auto; flex-shrink: 0; }
 #screen-login { background: #f7f8fa; align-items: center; justify-content: center; }
 .login-box { width: 100%; max-width: 360px; padding: 0 24px; }
-.login-logo { text-align: center; margin-bottom: 36px; }
+.login-logo { text-align: center; margin-bottom: 28px; }
 .login-logo .logo-icon { font-size: 30px; margin-bottom: 10px; font-weight: 900; letter-spacing: -0.04em; color: #1f2937; line-height: 1.15; }
 .login-logo h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; }
 .login-logo p { font-size: 14px; color: #6b7280; margin-top: 6px; }
@@ -116,7 +116,7 @@ input:focus { border-color: #bfdbfe; }
 .step-badge { display: inline-block; background: #ffffff; border: 1px solid #dbe3ef; color: #475569; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 8px; margin-bottom: 12px; }
 .profile-header h2 { font-size: 22px; font-weight: 700; color: #1a1a1a; }
 .profile-header p { font-size: 14px; color: #6b7280; margin-top: 6px; }
-.profile-card { background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; padding: 20px 18px; margin-top: 20px; box-shadow: none; }
+.profile-card { background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; padding: 14px 16px; margin-top: 10px; box-shadow: none; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
 /* ── 메인 앱 ── */
@@ -213,10 +213,10 @@ input:focus { border-color: #bfdbfe; }
 .mom-no-info { text-align: center; padding: 40px 0; color: #9ca3af; font-size: 14px; line-height: 1.8; }
 
 /* ── 아기 사진 페이지 ── */
-.photo-page { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: calc(100vh - 130px); background: #f7f8fa; padding-bottom: 40px; }
-.photo-upload-area { position: relative; width: 100%; max-width: 480px; }
-.baby-photo-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; background: #e8e8e8; }
-.baby-photo-placeholder { width: 100%; aspect-ratio: 3/4; background: #eef2f7; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; gap: 12px; }
+.photo-page { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 130px); background: #f7f8fa; padding: 8px 0 24px; }
+.photo-upload-area { position: relative; width: 100%; max-width: 440px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+.baby-photo-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; object-position: center center; display: block; margin: 0 auto; background: #e8e8e8; }
+.baby-photo-placeholder { width: 100%; aspect-ratio: 3/4; background: #eef2f7; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; gap: 12px; margin: 0 auto; }
 .baby-photo-placeholder .ph-icon { font-size: 52px; }
 .baby-photo-placeholder p { font-size: 15px; color: #9ca3af; font-weight: 500; }
 .photo-upload-input { display: none; }
@@ -386,7 +386,6 @@ input:focus { border-color: #bfdbfe; }
   <div class="role-box">
     <div class="role-logo">
       <div class="logo-icon">누리케어</div>
-      <h1>누리케어</h1>
       <p>누가 사용하시나요?</p>
     </div>
     <div class="role-cards">
@@ -485,7 +484,6 @@ input:focus { border-color: #bfdbfe; }
   <div class="login-box">
     <div class="login-logo">
       <div class="logo-icon">누리케어</div>
-      <h1>누리케어</h1>
       <p>소중한 아기의 하루를 기록해요</p>
     </div>
     <div id="pin-ui-set">
