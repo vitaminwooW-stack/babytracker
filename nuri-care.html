@@ -304,6 +304,16 @@ input:focus { border-color: #bfdbfe; }
 .policy-item-amount { font-size: 13px; font-weight: 700; color: #1d4ed8; white-space: nowrap; flex-shrink: 0; }
 .policy-link { display: block; text-align: center; font-size: 12px; color: #1d4ed8; margin-top: 14px; padding: 8px; background: #EBF4FF; border-radius: 8px; text-decoration: none; }
 .policy-notice { background: #fff7ed; border-radius: 12px; padding: 10px 14px; font-size: 12px; color: #8a6d00; margin-bottom: 16px; line-height: 1.6; }
+.policy-apply-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 11px; margin-top: 12px; background: #2563eb; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; }
+.policy-apply-btn:active { opacity: 0.85; }
+.policy-apply-btn.done { background: #16a34a; }
+.policy-apply-row { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
+.policy-apply-row .policy-apply-btn { flex: 1; margin-top: 0; }
+.policy-check-row { display: flex; align-items: center; gap: 8px; padding: 4px 0 0; cursor: pointer; }
+.policy-check-small { width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid #d1d5db; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.policy-check-small.checked { background: #16a34a; border-color: #16a34a; }
+.policy-check-small.checked::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
+.policy-check-small-label { font-size: 12px; color: #6b7280; }
 .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 300; align-items: flex-end; }
 .modal-bg.open { display: flex; }
 .modal { background: #fff; border-radius: 16px 16px 0 0; padding: 24px 20px 40px; width: 100%; max-height: 92vh; overflow-y: auto; }
@@ -801,9 +811,12 @@ input:focus { border-color: #bfdbfe; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">0세 (0~11개월)</div><div class="policy-item-amount">월 100만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">1세 (12~23개월)</div><div class="policy-item-amount">월 50만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">어린이집 이용 시 보육료 바우처로 지급</div></div>
-            <div class="policy-check-row" onclick="togglePolicyCheck('p-bumo')">
-              <div class="policy-checkbox" id="pc-p-bumo"></div>
-              <span class="policy-check-label" id="pl-p-bumo">신청 완료 표시하기</span>
+            <div class="policy-apply-row">
+              <a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004194" target="_blank">📋 온라인 신청하기</a>
+              <div class="policy-check-row" onclick="togglePolicyCheck('p-bumo')" style="flex-shrink:0;">
+                <div class="policy-check-small" id="pc-p-bumo"></div>
+                <span class="policy-check-small-label" id="pl-p-bumo">완료</span>
+              </div>
             </div>
           </div>
 
@@ -819,9 +832,12 @@ input:focus { border-color: #bfdbfe; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">첫째 출생 시</div><div class="policy-item-amount">200만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">둘째 이상 출생 시</div><div class="policy-item-amount">300만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출생 후 1년 이내 국민행복카드로 사용</div></div>
-            <div class="policy-check-row" onclick="togglePolicyCheck('p-first')">
-              <div class="policy-checkbox" id="pc-p-first"></div>
-              <span class="policy-check-label" id="pl-p-first">신청 완료 표시하기</span>
+            <div class="policy-apply-row">
+              <a class="policy-apply-btn" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank">📋 행복출산 원스톱 신청</a>
+              <div class="policy-check-row" onclick="togglePolicyCheck('p-first')" style="flex-shrink:0;">
+                <div class="policy-check-small" id="pc-p-first"></div>
+                <span class="policy-check-small-label" id="pl-p-first">완료</span>
+              </div>
             </div>
           </div>
 
@@ -837,9 +853,12 @@ input:focus { border-color: #bfdbfe; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">만 8세 미만 전 아동 (2026년 만 9세로 확대 추진 중)</div><div class="policy-item-amount">월 10만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">비수도권 거주 시</div><div class="policy-item-amount">월 10.5만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">인구감소지역 거주 시</div><div class="policy-item-amount">월 11~12만원</div></div>
-            <div class="policy-check-row" onclick="togglePolicyCheck('p-child')">
-              <div class="policy-checkbox" id="pc-p-child"></div>
-              <span class="policy-check-label" id="pl-p-child">신청 완료 표시하기</span>
+            <div class="policy-apply-row">
+              <a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004160" target="_blank">📋 복지로 신청하기</a>
+              <div class="policy-check-row" onclick="togglePolicyCheck('p-child')" style="flex-shrink:0;">
+                <div class="policy-check-small" id="pc-p-child"></div>
+                <span class="policy-check-small-label" id="pl-p-child">완료</span>
+              </div>
             </div>
           </div>
 
@@ -856,9 +875,12 @@ input:focus { border-color: #bfdbfe; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">4~6개월 (통상임금 100%)</div><div class="policy-item-amount">최대 월 200만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">7개월 이후 (통상임금 80%)</div><div class="policy-item-amount">최대 월 160만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">사용 가능 기간 (각 부모)</div><div class="policy-item-amount">최대 1년 6개월</div></div>
-            <div class="policy-check-row" onclick="togglePolicyCheck('p-parental')">
-              <div class="policy-checkbox" id="pc-p-parental"></div>
-              <span class="policy-check-label" id="pl-p-parental">신청 완료 표시하기</span>
+            <div class="policy-apply-row">
+              <a class="policy-apply-btn" href="https://www.ei.go.kr/ei/eih/cm/hm/main.do" target="_blank">📋 고용보험 신청하기</a>
+              <div class="policy-check-row" onclick="togglePolicyCheck('p-parental')" style="flex-shrink:0;">
+                <div class="policy-check-small" id="pc-p-parental"></div>
+                <span class="policy-check-small-label" id="pl-p-parental">완료</span>
+              </div>
             </div>
           </div>
 
@@ -874,9 +896,12 @@ input:focus { border-color: #bfdbfe; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산휴가 급여 상한액 (2026 인상)</div><div class="policy-item-amount">월 220만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산휴가 기간</div><div class="policy-item-amount">90일</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">배우자 출산휴가</div><div class="policy-item-amount">20일</div></div>
-            <div class="policy-check-row" onclick="togglePolicyCheck('p-maternity')">
-              <div class="policy-checkbox" id="pc-p-maternity"></div>
-              <span class="policy-check-label" id="pl-p-maternity">신청 완료 표시하기</span>
+            <div class="policy-apply-row">
+              <a class="policy-apply-btn" href="https://www.ei.go.kr/ei/eih/cm/hm/main.do" target="_blank">📋 고용보험 신청하기</a>
+              <div class="policy-check-row" onclick="togglePolicyCheck('p-maternity')" style="flex-shrink:0;">
+                <div class="policy-check-small" id="pc-p-maternity"></div>
+                <span class="policy-check-small-label" id="pl-p-maternity">완료</span>
+              </div>
             </div>
           </div>
 
@@ -892,9 +917,12 @@ input:focus { border-color: #bfdbfe; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">소득 기준 중위소득 250% 이하로 확대</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">야간 긴급돌봄</div><div class="policy-item-amount">하루 5,000원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">유아돌봄수당 (신설)</div><div class="policy-item-amount">시간당 1,000원</div></div>
-            <div class="policy-check-row" onclick="togglePolicyCheck('p-care')">
-              <div class="policy-checkbox" id="pc-p-care"></div>
-              <span class="policy-check-label" id="pl-p-care">신청 완료 표시하기</span>
+            <div class="policy-apply-row">
+              <a class="policy-apply-btn" href="https://www.idolbom.go.kr" target="_blank">📋 아이돌봄 신청하기</a>
+              <div class="policy-check-row" onclick="togglePolicyCheck('p-care')" style="flex-shrink:0;">
+                <div class="policy-check-small" id="pc-p-care"></div>
+                <span class="policy-check-small-label" id="pl-p-care">완료</span>
+              </div>
             </div>
           </div>
 
@@ -910,9 +938,12 @@ input:focus { border-color: #bfdbfe; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산 후 산모·신생아 돌봄 전문인력 파견</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">기간: 출산일로부터 60일 이내 이용</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">신청처: 주민센터 또는 복지로 온라인 신청</div></div>
-            <div class="policy-check-row" onclick="togglePolicyCheck('p-sanmo')">
-              <div class="policy-checkbox" id="pc-p-sanmo"></div>
-              <span class="policy-check-label" id="pl-p-sanmo">신청 완료 표시하기</span>
+            <div class="policy-apply-row">
+              <a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004126" target="_blank">📋 복지로 신청하기</a>
+              <div class="policy-check-row" onclick="togglePolicyCheck('p-sanmo')" style="flex-shrink:0;">
+                <div class="policy-check-small" id="pc-p-sanmo"></div>
+                <span class="policy-check-small-label" id="pl-p-sanmo">완료</span>
+              </div>
             </div>
           </div>
 
@@ -2379,8 +2410,15 @@ function loadPolicyChecks() {
     const done = !!checks[k];
     const cb = document.getElementById('pc-' + k);
     const lb = document.getElementById('pl-' + k);
-    if (cb) cb.classList.toggle('checked', done);
-    if (lb) { lb.textContent = done ? '✅ 신청 완료!' : '신청 완료 표시하기'; lb.classList.toggle('done', done); }
+    if (cb) {
+      cb.classList.toggle('checked', done);
+      // 신청 버튼 색상도 완료 시 초록으로
+      const applyBtn = cb.closest('.policy-apply-row')?.querySelector('.policy-apply-btn');
+      if (applyBtn) {
+        applyBtn.style.background = done ? '#16a34a' : '';
+      }
+    }
+    if (lb) { lb.textContent = done ? '✅' : '완료'; lb.style.color = done ? '#16a34a' : ''; }
   });
 }
 
