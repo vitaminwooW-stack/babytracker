@@ -13,6 +13,22 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 
 .screen { display: none; min-height: 100vh; }
 .screen.active { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+/* 아빠·가이드·프로필 화면은 전체 스크롤 허용 */
+#screen-dad.active { overflow-y: auto; overflow-x: hidden; }
+#screen-guide.active { display: flex; flex-direction: column; overflow: hidden; }
+#screen-profile.active { overflow-y: auto; overflow-x: hidden; }
+
+/* ── 뒤로가기·닫기 버튼 공통 ── */
+.nav-back-btn { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.22); border: none; border-radius: 20px; color: #fff; font-size: 13px; font-weight: 700; padding: 7px 14px; cursor: pointer; white-space: nowrap; }
+.nav-back-btn:active { opacity: 0.8; }
+.nav-close-btn { width: 34px; height: 34px; border-radius: 50%; background: rgba(0,0,0,0.07); border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #555; cursor: pointer; flex-shrink: 0; line-height: 1; }
+.nav-close-btn:active { background: rgba(0,0,0,0.15); }
+body.dark .nav-close-btn { background: rgba(255,255,255,0.1); color: #c8a870; }
+/* 모달 X 닫기 버튼 */
+.modal-close-x { position: absolute; top: 16px; right: 16px; width: 30px; height: 30px; border-radius: 50%; background: #f3f4f6; border: none; font-size: 16px; color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1; }
+.modal-close-x:active { background: #e5e7eb; }
+body.dark .modal-close-x { background: #3d3628; color: #c8a870; }
+.modal { position: relative; }
 .page-wrap { max-width: 480px; margin: 0 auto; padding: 24px 20px 80px; width: 100%; }
 
 .field-label { font-size: 12px; font-weight: 600; color: #6b7280; margin-bottom: 6px; margin-top: 16px; display: block; letter-spacing: 0.04em; }
@@ -55,7 +71,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .dad-sub { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 2px; }
 .dad-back-btn { background: rgba(255,255,255,0.2); border: none; border-radius: 12px; color: #fff; font-size: 13px; padding: 6px 14px; cursor: pointer; }
 
-.dad-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 80px; }
+.dad-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 80px; width: 100%; }
 
 .dad-section { margin-bottom: 20px; }
 .dad-section-title { font-size: 13px; font-weight: 700; color: #334155; letter-spacing: 0.04em; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
@@ -465,38 +481,49 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 }
 
 /* ── 신생아 케어 가이드 ── */
-/* ── 가이드 ── */
-.guide-header { background: #fff; padding: 52px 20px 14px; box-shadow: 0 1px 0 #e5e7eb; }
+/* ── 가이드 화면 ── */
+.guide-header { background: #fff; padding: 44px 16px 10px; box-shadow: 0 1px 0 #e5e7eb; flex-shrink: 0; }
 .guide-header-inner { max-width: 480px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
 .guide-header-title { font-size: 18px; font-weight: 700; color: #1a1a1a; }
-.guide-back-btn { background: none; border: 1px solid #e0e0e0; border-radius: 12px; font-size: 13px; color: #6b7280; cursor: pointer; padding: 6px 14px; }
-.guide-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 80px; }
-.guide-search { width: 100%; padding: 12px 14px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 14px; background: #fff; outline: none; margin-bottom: 16px; font-family: inherit; }
-.guide-search:focus { border-color: #bfdbfe; }
-.guide-category-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 16px; scrollbar-width: none; }
+.guide-search-bar { background: #fff; padding: 10px 16px 0; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; flex-shrink: 0; }
+.guide-body { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 12px 16px 80px; box-sizing: border-box; }
+.guide-search { width: 100%; padding: 11px 14px; border: 1.5px solid #e8d796; border-radius: 12px; font-size: 14px; background: #fffdf2; outline: none; font-family: inherit; box-sizing: border-box; display: block; margin-bottom: 12px; }
+.guide-search:focus { border-color: #7a5600; }
+.guide-category-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; flex-shrink: 0; }
 .guide-category-row::-webkit-scrollbar { display: none; }
-.guide-cat-btn { white-space: nowrap; padding: 6px 14px; border-radius: 12px; border: 1px solid #d1d5db; background: #fff; font-size: 13px; color: #555; cursor: pointer; font-weight: 500; flex-shrink: 0; }
-.guide-cat-btn.active { background: #2563eb; color: #fff; border-color: #1d4ed8; font-weight: 700; }
-.guide-card { background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; margin-bottom: 10px; box-shadow: none; overflow: hidden; }
+.guide-cat-btn { white-space: nowrap; padding: 7px 14px; border-radius: 20px; border: 1.5px solid #e8d796; background: #fffdf2; font-size: 13px; color: #7a5600; cursor: pointer; font-weight: 500; flex-shrink: 0; }
+.guide-cat-btn.active { background: #7a5600; color: #fff; border-color: #7a5600; font-weight: 700; }
+.guide-card { background: #fff; border-radius: 12px; border: 1px solid #e8d796; margin-bottom: 10px; overflow: hidden; }
 .guide-card-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; user-select: none; }
 .guide-card-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-.guide-card-meta { flex: 1; }
+.guide-card-meta { flex: 1; min-width: 0; }
 .guide-card-title { font-size: 15px; font-weight: 700; color: #1a1a1a; }
 .guide-card-subtitle { font-size: 12px; color: #6b7280; margin-top: 2px; }
-.guide-card-arrow { font-size: 14px; color: #ccc; transition: transform 0.2s; }
-.guide-card-arrow.open { transform: rotate(90deg); }
-.guide-card-body { display: none; padding: 0 16px 16px; border-top: 0.5px solid #f5f5f5; }
+.guide-card-arrow { font-size: 12px; color: #bbb; transition: transform 0.2s; flex-shrink: 0; }
+.guide-card-arrow.open { transform: rotate(90deg); color: #7a5600; }
+.guide-card-body { display: none; padding: 2px 16px 16px; border-top: 1px solid #f3f0e0; }
 .guide-card-body.open { display: block; }
-.guide-step { display: flex; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid #f8f8f8; align-items: flex-start; }
+.guide-step { display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid #f8f5ee; align-items: flex-start; }
 .guide-step:last-child { border-bottom: none; padding-bottom: 0; }
-.guide-step-num { width: 22px; height: 22px; border-radius: 50%; background: #2563eb; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
-.guide-step-num.tip { background: #f59e0b; }
+.guide-step-num { width: 22px; height: 22px; border-radius: 50%; background: #7a5600; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.guide-step-num.tip  { background: #f59e0b; }
 .guide-step-num.warn { background: #ef4444; }
-.guide-step-text { font-size: 13px; color: #333; line-height: 1.6; flex: 1; word-break: keep-all; }
-.guide-tip-box { background: #fffbeb; border-radius: 8px; padding: 10px 12px; margin-top: 10px; font-size: 12px; color: #92400e; line-height: 1.6; word-break: keep-all; }
-.guide-warn-box { background: #fef2f2; border-radius: 8px; padding: 10px 12px; margin-top: 10px; font-size: 12px; color: #991b1b; line-height: 1.6; word-break: keep-all; }
+.guide-step-text { font-size: 13px; color: #374151; line-height: 1.65; flex: 1; word-break: keep-all; }
+.guide-tip-box  { background: #fffbeb; border-radius: 10px; padding: 10px 14px; margin-top: 10px; font-size: 12px; color: #92400e; line-height: 1.65; word-break: keep-all; }
+.guide-warn-box { background: #fef2f2; border-radius: 10px; padding: 10px 14px; margin-top: 10px; font-size: 12px; color: #991b1b; line-height: 1.65; word-break: keep-all; }
 .guide-empty { text-align: center; padding: 40px 0; color: #9ca3af; font-size: 14px; }
-.guide-btn-float { position: fixed; bottom: 24px; right: 20px; background: #2563eb; color: #fff; border: none; border-radius: 14px; padding: 12px 20px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 20px rgba(15, 23, 42, 0.16); z-index: 50; display: none; }
+body.dark .guide-header { background: #2a2520; box-shadow: 0 1px 0 #3d3628; }
+body.dark .guide-header-title { color: #f0ead8; }
+body.dark .guide-search-bar { background: #2a2520; }
+body.dark .guide-search { background: #2a2520; border-color: #3d3628; color: #f0ead8; }
+body.dark .guide-cat-btn { background: #2a2520; border-color: #3d3628; color: #c8a870; }
+body.dark .guide-cat-btn.active { background: #7a5600; color: #fff; }
+body.dark .guide-card { background: #2a2520; border-color: #3d3628; }
+body.dark .guide-card-title { color: #f0ead8; }
+body.dark .guide-card-body { border-top-color: #3d3628; }
+body.dark .guide-step { border-bottom-color: #3d3628; }
+body.dark .guide-step-text { color: #d0c0a8; }
+body.dark .guide-card-subtitle { color: #8a7a6a; }
 /* ══════ 새 기능 CSS ══════ */
 
 /* ── 다크모드 ── */
@@ -589,9 +616,148 @@ body.dark .export-btn { background: #2a2520; border-color: #3d3628; color: #c8a8
 body.dark .feature-page { background: #1a1612; }
 body.dark .feature-page-title { color: #f0ead8; }
 body.dark .feature-section-title { color: #c8a870; }
+
+/* ══════ Decision Engine + Confidence Layer ══════ */
+.coach-card { border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; border: 1.5px solid; }
+.coach-card.green  { background: linear-gradient(135deg,#f0fdf4,#dcfce7); border-color: #86efac; }
+.coach-card.yellow { background: linear-gradient(135deg,#fffbeb,#fef9c3); border-color: #fde68a; }
+.coach-card.red    { background: linear-gradient(135deg,#fff1f2,#ffe4e6); border-color: #fca5a5; }
+.coach-card.blue   { background: linear-gradient(135deg,#eff6ff,#dbeafe); border-color: #93c5fd; }
+.coach-card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.coach-urgency { font-size: 20px; }
+.coach-title { font-size: 14px; font-weight: 700; color: #1a1a1a; flex: 1; }
+.coach-level { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
+.coach-level.high   { background: #fee2e2; color: #dc2626; }
+.coach-level.medium { background: #fef9c3; color: #92400e; }
+.coach-level.low    { background: #dcfce7; color: #16a34a; }
+.coach-level.info   { background: #dbeafe; color: #1d4ed8; }
+.coach-msg { font-size: 13px; color: #374151; line-height: 1.6; word-break: keep-all; }
+.coach-reason { font-size: 11px; color: #6b7280; margin-top: 3px; }
+.coach-action-btn { margin-top: 10px; display: inline-flex; align-items: center; gap: 5px; padding: 8px 16px; border-radius: 20px; border: none; font-size: 13px; font-weight: 700; cursor: pointer; }
+.coach-action-btn.sleep-btn { background: #1d4ed8; color: #fff; }
+.coach-action-btn.feed-btn  { background: #c0410f; color: #fff; }
+body.dark .coach-card.green  { background: #0f2a1a; border-color: #166534; }
+body.dark .coach-card.yellow { background: #1a1500; border-color: #713f12; }
+body.dark .coach-card.red    { background: #2a0f0f; border-color: #991b1b; }
+body.dark .coach-card.blue   { background: #0f1a2a; border-color: #1e3a5f; }
+body.dark .coach-title, body.dark .coach-msg { color: #f0ead8; }
+body.dark .coach-reason { color: #a89880; }
+
+/* 육아 점수 카드 */
+.score-card { background: #fff; border-radius: 14px; border: 1px solid #e8d796; padding: 14px 16px; margin-bottom: 10px; }
+.score-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.score-header-left { font-size: 13px; font-weight: 700; color: #7a5600; }
+.score-total-wrap { text-align: right; }
+.score-total-num { font-size: 26px; font-weight: 800; color: #1a1a1a; line-height: 1; }
+.score-total-label { font-size: 11px; color: #9ca3af; }
+.score-rows { display: flex; flex-direction: column; gap: 9px; }
+.score-row { display: flex; align-items: center; gap: 8px; }
+.score-row-icon { font-size: 14px; width: 20px; flex-shrink: 0; }
+.score-row-label { font-size: 12px; color: #555; width: 60px; flex-shrink: 0; }
+.score-bar-wrap { flex: 1; background: #f3f0e0; border-radius: 6px; height: 7px; overflow: hidden; }
+.score-bar { height: 100%; border-radius: 6px; transition: width 0.6s ease; }
+.score-bar.good { background: linear-gradient(90deg,#22c55e,#16a34a); }
+.score-bar.ok   { background: linear-gradient(90deg,#f59e0b,#d97706); }
+.score-bar.bad  { background: linear-gradient(90deg,#ef4444,#dc2626); }
+.score-row-val { font-size: 12px; font-weight: 700; color: #1a1a1a; width: 30px; text-align: right; flex-shrink: 0; }
+.score-comment { font-size: 12px; color: #6b7280; margin-top: 10px; line-height: 1.65; padding-top: 10px; border-top: 1px solid #f3f0e0; word-break: keep-all; }
+body.dark .score-card { background: #2a2520; border-color: #3d3628; }
+body.dark .score-total-num, body.dark .score-row-val { color: #f0ead8; }
+body.dark .score-row-label, body.dark .score-comment { color: #a89880; }
+body.dark .score-bar-wrap { background: #3d3628; }
+
+/* 원탭 빠른기록 */
+.quick-log-row { display: flex; gap: 7px; margin-bottom: 12px; }
+.quick-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 4px; background: #fff; border: 1.5px solid #e8d796; border-radius: 12px; cursor: pointer; transition: all 0.12s; }
+.quick-btn:active { transform: scale(0.93); background: #fff7d6; }
+.quick-btn-icon { font-size: 22px; }
+.quick-btn-label { font-size: 11px; font-weight: 700; color: #7a5600; }
+.quick-btn-time { font-size: 10px; color: #9ca3af; min-height: 14px; }
+body.dark .quick-btn { background: #2a2520; border-color: #3d3628; }
+body.dark .quick-btn-label { color: #c8a870; }
+
+/* ── 페이지 네비게이션 레이블 ── */
+.page-nav { display: flex; align-items: center; justify-content: space-between; padding: 6px 16px 2px; max-width: 480px; margin: 0 auto; }
+.page-nav-label { font-size: 11px; color: #9ca3af; font-weight: 500; }
+.page-nav-curr { font-size: 11px; font-weight: 700; color: #7a5600; }
+.page-dots { display: flex; justify-content: center; gap: 5px; padding: 4px 0 2px; }
+.page-dot { width: 5px; height: 5px; border-radius: 50%; background: #d0d0d0; transition: all 0.2s; flex-shrink: 0; }
+.page-dot.active { background: #7a5600; width: 16px; border-radius: 3px; }
+
+/* ── 온보딩 오버레이 ── */
+#onboarding-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 9000; display: flex; align-items: flex-end; }
+.onboarding-card { background: #fff; border-radius: 24px 24px 0 0; padding: 28px 24px 48px; width: 100%; max-width: 480px; margin: 0 auto; }
+.onboarding-step { display: none; }
+.onboarding-step.active { display: block; }
+.onboarding-icon { font-size: 48px; text-align: center; margin-bottom: 12px; }
+.onboarding-title { font-size: 20px; font-weight: 700; color: #1a1a1a; text-align: center; margin-bottom: 8px; }
+.onboarding-desc { font-size: 14px; color: #6b7280; text-align: center; line-height: 1.7; word-break: keep-all; margin-bottom: 24px; }
+.onboarding-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 20px; }
+.onboarding-dot { width: 8px; height: 8px; border-radius: 50%; background: #e5e7eb; }
+.onboarding-dot.active { background: #7a5600; width: 20px; border-radius: 4px; }
+.onboarding-btn { width: 100%; padding: 15px; background: #7a5600; color: #fff; border: none; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; }
+.onboarding-skip { display: block; text-align: center; margin-top: 12px; font-size: 13px; color: #9ca3af; cursor: pointer; }
+body.dark .onboarding-card { background: #2a2520; }
+body.dark .onboarding-title { color: #f0ead8; }
+
+/* ── 알림 권한 배너 ── */
+.notif-banner { background: linear-gradient(135deg,#fffbeb,#fef9c3); border: 1px solid #fde68a; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+.notif-banner-text { flex: 1; font-size: 13px; color: #92400e; line-height: 1.5; word-break: keep-all; }
+.notif-banner-btn { background: #7a5600; color: #fff; border: none; border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.notif-banner-close { background: none; border: none; color: #9ca3af; font-size: 16px; cursor: pointer; padding: 0; flex-shrink: 0; }
+
+/* ── PIN 힌트·분실 버튼 ── */
+.pin-forgot-btn { display: block; text-align: center; font-size: 12px; color: #9ca3af; cursor: pointer; margin-top: 8px; text-decoration: underline; }
+.pin-forgot-btn:active { color: #6b7280; }
+
+/* ── 데이터 백업 토스트 ── */
+.backup-toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 12px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; z-index: 8000; box-shadow: 0 4px 16px rgba(0,0,0,0.25); max-width: 300px; text-align: center; display: flex; align-items: center; gap: 8px; }
+.backup-toast-btn { background: #7a5600; border: none; border-radius: 8px; color: #fff; font-size: 12px; font-weight: 700; padding: 4px 10px; cursor: pointer; white-space: nowrap; }
 </style>
 </head>
 <body>
+
+<!-- ═══════════ 온보딩 오버레이 ═══════════ -->
+<div id="onboarding-overlay" style="display:none;">
+  <div class="onboarding-card">
+    <div class="onboarding-dots" id="ob-dots">
+      <div class="onboarding-dot active"></div>
+      <div class="onboarding-dot"></div>
+      <div class="onboarding-dot"></div>
+      <div class="onboarding-dot"></div>
+    </div>
+    <!-- Step 0 -->
+    <div class="onboarding-step active" id="ob-0">
+      <div class="onboarding-icon">🍼</div>
+      <div class="onboarding-title">누리케어에 오신 것을 환영해요!</div>
+      <div class="onboarding-desc">수유·수면·기저귀를 기록하고<br>아기의 패턴을 한눈에 파악해요.<br>아빠와 함께 사용할 수 있어요 💛</div>
+    </div>
+    <!-- Step 1 -->
+    <div class="onboarding-step" id="ob-1">
+      <div class="onboarding-icon">👆</div>
+      <div class="onboarding-title">좌우로 스와이프해서 이동해요</div>
+      <div class="onboarding-desc">
+        ← 일기 · 사진<br>
+        <strong>🍼 루틴 기록</strong> (시작 화면)<br>
+        통계 · 성장 · 마일스톤 · 엄마케어 · 복지 · 설정 →
+      </div>
+    </div>
+    <!-- Step 2 -->
+    <div class="onboarding-step" id="ob-2">
+      <div class="onboarding-icon">🎙️</div>
+      <div class="onboarding-title">음성으로 기록할 수 있어요</div>
+      <div class="onboarding-desc">"수유 완료", "기저귀 갈았어"<br>말 한 마디로 자동 기록돼요.<br>새벽 수유할 때 특히 유용해요 🌙</div>
+    </div>
+    <!-- Step 3 -->
+    <div class="onboarding-step" id="ob-3">
+      <div class="onboarding-icon">💾</div>
+      <div class="onboarding-title">데이터는 이 기기에 저장돼요</div>
+      <div class="onboarding-desc">소중한 기록을 지키려면<br><strong>설정 → 데이터 백업</strong>을 주기적으로 해주세요.<br>폰을 바꾸기 전에 꼭 백업하세요! ⚠️</div>
+    </div>
+    <button class="onboarding-btn" id="ob-btn" onclick="obNext()">다음</button>
+    <span class="onboarding-skip" onclick="obSkip()">건너뛰기</span>
+  </div>
+</div>
 
 <!-- ═══════════ 화면0: 역할 선택 ═══════════ -->
 <div class="screen" id="screen-role">
@@ -623,11 +789,11 @@ body.dark .feature-section-title { color: #c8a870; }
   <div class="dad-header">
     <div class="dad-header-inner">
       <div>
-        <div class="dad-title">아빠 체크리스트</div>
+        <div class="dad-title">👨 아빠 체크리스트</div>
         <div class="dad-sub" id="dad-baby-name-sub">아기를 위해 챙겨야 할 것들</div>
         <div id="dad-linked-badge-wrap"></div>
       </div>
-      <button class="dad-back-btn" onclick="showScreen('role')">← 홈</button>
+      <button class="nav-back-btn" onclick="showScreen('role')">✕ 나가기</button>
     </div>
     <!-- 초대 코드 입력 -->
     <div class="dad-invite-wrap" id="dad-invite-wrap">
@@ -678,15 +844,18 @@ body.dark .feature-section-title { color: #c8a870; }
 <div class="screen" id="screen-guide">
   <div class="guide-header">
     <div class="guide-header-inner">
-      <div>
-        <div class="guide-header-title">📚 신생아 케어 가이드</div>
-      </div>
-      <button class="guide-back-btn" id="guide-back-btn" onclick="closeGuide()">← 뒤로</button>
+      <div class="guide-header-title">📚 신생아 케어 가이드</div>
+      <button class="nav-close-btn" id="guide-back-btn" onclick="closeGuide()">✕</button>
+    </div>
+    <!-- 검색창 헤더 안에 -->
+    <div style="max-width:480px;margin:10px auto 0;padding:0 0 10px;">
+      <input type="text" class="guide-search" id="guide-search"
+        placeholder="🔍 트림, 기저귀, 목욕 등 검색..." oninput="filterGuide()">
+      <div class="guide-category-row" id="guide-cat-row"></div>
     </div>
   </div>
+  <!-- 카드 목록만 스크롤 -->
   <div class="guide-body">
-    <input type="text" class="guide-search" id="guide-search" placeholder="🔍  트림, 기저귀, 목욕 등 검색..." oninput="filterGuide()">
-    <div class="guide-category-row" id="guide-cat-row"></div>
     <div id="guide-list"></div>
   </div>
 </div>
@@ -735,6 +904,9 @@ body.dark .feature-section-title { color: #c8a870; }
       <button class="pin-key del" onclick="pinDel()">⌫</button>
     </div>
     <div class="login-hint" id="login-hint"></div>
+    <span class="pin-forgot-btn" id="pin-forgot-btn" onclick="pinForgot()" style="display:none;">
+      🔑 PIN을 잊어버렸어요
+    </span>
   </div>
 </div>
 
@@ -824,7 +996,12 @@ body.dark .feature-section-title { color: #c8a870; }
         <button class="hdr-btn dad"     onclick="openDadView()">👨 아빠</button>
       </div>
     </div>
-    <!-- 페이지 인디케이터 -->
+    <!-- 페이지 레이블 + 인디케이터 -->
+    <div class="page-nav">
+      <span class="page-nav-label">← 일기·사진</span>
+      <span class="page-nav-curr" id="page-nav-curr">🍼 루틴</span>
+      <span class="page-nav-label">통계·케어·설정 →</span>
+    </div>
     <div class="page-dots">
       <div class="page-dot" id="dot-0"></div>
       <div class="page-dot" id="dot-1"></div>
@@ -887,6 +1064,45 @@ body.dark .feature-section-title { color: #c8a870; }
       <!-- ── 페이지 2: 메인 트래커 (시작 페이지) ── -->
       <div class="swipe-page">
         <div class="app-body">
+
+          <!-- 알림 권한 배너 (필요시 표시) -->
+          <div class="notif-banner" id="notif-banner" style="display:none;">
+            <span class="notif-banner-text">🔔 재울 타이밍을 알림으로 받을 수 있어요</span>
+            <button class="notif-banner-btn" onclick="requestNotifPermission()">허용</button>
+            <button class="notif-banner-close" onclick="dismissNotifBanner()">✕</button>
+          </div>
+
+          <!-- ① 원탭 빠른기록 -->
+          <div class="quick-log-row">
+            <button class="quick-btn" onclick="quickLog('feed')" id="qb-feed">
+              <span class="quick-btn-icon">🍼</span>
+              <span class="quick-btn-label">수유</span>
+              <span class="quick-btn-time" id="qt-feed">-</span>
+            </button>
+            <button class="quick-btn" onclick="quickLog('sleep')" id="qb-sleep">
+              <span class="quick-btn-icon">😴</span>
+              <span class="quick-btn-label">수면</span>
+              <span class="quick-btn-time" id="qt-sleep">-</span>
+            </button>
+            <button class="quick-btn" onclick="quickLog('diaper')" id="qb-diaper">
+              <span class="quick-btn-icon">🌿</span>
+              <span class="quick-btn-label">기저귀</span>
+              <span class="quick-btn-time" id="qt-diaper">-</span>
+            </button>
+            <button class="quick-btn" onclick="quickLog('pump')" id="qb-pump">
+              <span class="quick-btn-icon">🤱</span>
+              <span class="quick-btn-label">유축</span>
+              <span class="quick-btn-time" id="qt-pump">-</span>
+            </button>
+          </div>
+
+          <!-- ② Decision Engine 코치 카드 -->
+          <div id="coach-card-wrap"></div>
+
+          <!-- ③ 오늘의 육아 점수 -->
+          <div id="score-card-wrap"></div>
+
+          <!-- 상태 요약 -->
           <div class="status-grid">
             <div class="status-card"><div class="s-icon">🍼</div><div class="s-label">마지막 수유</div><div class="s-time" id="last-feed">-</div></div>
             <div class="status-card"><div class="s-icon">🤱</div><div class="s-label">마지막 유축</div><div class="s-time" id="last-pump">-</div></div>
@@ -901,6 +1117,15 @@ body.dark .feature-section-title { color: #c8a870; }
             <button onclick="endSleep()">기상 기록</button>
           </div>
           <div class="section-title">기록하기</div>
+          <!-- 음성 기록 버튼 -->
+          <button id="voice-btn" onclick="toggleVoice()" style="
+            width:100%;padding:12px;margin-bottom:10px;
+            background:#7a5600;color:#fff;border:none;border-radius:12px;
+            font-size:14px;font-weight:700;cursor:pointer;
+            display:flex;align-items:center;justify-content:center;gap:8px;">
+            🎙️ 음성 기록
+          </button>
+          <style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}</style>
           <div class="btn-grid">
             <button class="btn-main btn-feed" onclick="openModal('feed')"><span class="b-icon">🍼</span><span class="b-label">수유</span></button>
             <button class="btn-main btn-pump" onclick="openPumpModal()"><span class="b-icon">🤱</span><span class="b-label">유축</span></button>
@@ -913,7 +1138,6 @@ body.dark .feature-section-title { color: #c8a870; }
           <div class="timeline-card">
             <div id="timeline"><div class="empty">아직 기록이 없어요 🌙<br>위 버튼을 눌러 첫 기록을 남겨보세요!</div></div>
           </div>
-          <button class="clear-btn" onclick="clearAll()">전체 기록 삭제</button>
         </div>
       </div>
 
@@ -1166,9 +1390,14 @@ body.dark .feature-section-title { color: #c8a870; }
           <div class="feature-section-title">💾 데이터 관리</div>
           <div class="chart-wrap" style="padding:14px 16px;">
             <div style="font-size:13px;color:#6b7280;margin-bottom:10px;line-height:1.6;">저장된 데이터를 백업하거나 초기화할 수 있어요.</div>
-            <button class="export-btn" onclick="backupAllData()" style="margin-bottom:0;">💾 전체 데이터 백업 (JSON)</button>
+            <button class="export-btn" onclick="backupAllData()" style="margin-bottom:8px;">💾 전체 데이터 백업 (JSON)</button>
+            <button class="export-btn" onclick="clearTodayRecords()" style="color:#f59e0b;border-color:#fde68a;">🗑️ 오늘 기록만 삭제</button>
           </div>
-          <button onclick="confirmReset()" style="width:100%;padding:12px;background:none;border:1px solid #fecaca;border-radius:10px;color:#ef4444;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;">⚠️ 모든 데이터 초기화</button>
+          <div class="chart-wrap" style="padding:14px 16px;border:1px solid #fecaca;background:#fff5f5;margin-top:8px;">
+            <div style="font-size:12px;color:#ef4444;font-weight:700;margin-bottom:6px;">⚠️ 위험 구역</div>
+            <div style="font-size:12px;color:#9ca3af;margin-bottom:10px;line-height:1.6;">아래 작업은 되돌릴 수 없어요.<br>반드시 백업 후 진행하세요.</div>
+            <button onclick="confirmReset()" style="width:100%;padding:12px;background:none;border:1.5px solid #fecaca;border-radius:10px;color:#ef4444;font-size:13px;font-weight:600;cursor:pointer;">⛔ 모든 데이터 초기화</button>
+          </div>
         </div>
       </div>
 
@@ -1180,6 +1409,7 @@ body.dark .feature-section-title { color: #c8a870; }
 <div class="modal-bg" id="modal-invite">
   <div class="modal">
     <div class="modal-handle"></div>
+    <button class="modal-close-x" onclick="closeModal('invite')">✕</button>
     <h2>💌 아빠에게 초대 코드 보내기</h2>
     <p style="font-size:13px;color:#888;margin-bottom:16px;line-height:1.6;">아빠가 초대 코드를 입력하면<br>아기 정보가 아빠 화면에 연동돼요!</p>
     <div class="invite-section" style="margin-top:0;">
@@ -1204,6 +1434,7 @@ body.dark .feature-section-title { color: #c8a870; }
 <div class="modal-bg" id="modal-dad-view">
   <div class="modal dad-view-modal" style="max-height:88vh;">
     <div class="modal-handle"></div>
+    <button class="modal-close-x" onclick="closeModal('dad-view')">✕</button>
     <h2>👨 아빠 체크리스트</h2>
     <div id="dad-view-summary" class="dad-view-summary"></div>
     <div id="dad-view-body"></div>
@@ -1217,6 +1448,7 @@ body.dark .feature-section-title { color: #c8a870; }
 <div class="modal-bg" id="modal-diary">
   <div class="modal">
     <div class="modal-handle"></div>
+    <button class="modal-close-x" onclick="closeDiaryWrite()">✕</button>
     <h2 id="diary-modal-title">📔 일기 쓰기</h2>
     <span class="field-label">오늘 있었던 일을 적어보세요</span>
     <textarea class="diary-textarea" id="diary-text" placeholder="오늘 아기가 처음으로 웃었어요 😊&#10;&#10;수유할 때 눈을 마주쳤는데 방긋 웃더라고요..."></textarea>
@@ -1236,6 +1468,7 @@ body.dark .feature-section-title { color: #c8a870; }
 <div class="modal-bg" id="modal-feed">
   <div class="modal">
     <div class="modal-handle"></div>
+    <button class="modal-close-x" onclick="closeModal('feed')">✕</button>
     <h2>🍼 수유 기록</h2>
     <span class="field-label">수유 방법</span>
     <div class="opt-row">
@@ -1260,6 +1493,7 @@ body.dark .feature-section-title { color: #c8a870; }
 <div class="modal-bg" id="modal-pump">
   <div class="modal">
     <div class="modal-handle"></div>
+    <button class="modal-close-x" onclick="closePumpModal()">✕</button>
     <h2>🤱 유축 기록</h2>
 
     <!-- 스톱워치 -->
@@ -1317,6 +1551,7 @@ body.dark .feature-section-title { color: #c8a870; }
 <div class="modal-bg" id="modal-profile-edit">
   <div class="modal">
     <div class="modal-handle"></div>
+    <button class="modal-close-x" onclick="closeModal('profile-edit')">✕</button>
     <h2>✏️ 프로필 수정</h2>
     <span class="field-label">이름 또는 태명 *</span>
     <input type="text" id="ep-name" placeholder="예: 하준이, 콩이">
@@ -1371,6 +1606,7 @@ body.dark .feature-section-title { color: #c8a870; }
 <div class="modal-bg" id="modal-edit-record">
   <div class="modal">
     <div class="modal-handle"></div>
+    <button class="modal-close-x" onclick="closeModal('edit-record')">✕</button>
     <h2 id="edit-record-title">기록 수정</h2>
     <div id="edit-record-body"></div>
     <div class="modal-actions">
@@ -1384,6 +1620,7 @@ body.dark .feature-section-title { color: #c8a870; }
 <div class="modal-bg" id="modal-sleep">
   <div class="modal">
     <div class="modal-handle"></div>
+    <button class="modal-close-x" onclick="closeModal('sleep')">✕</button>
     <h2>😴 수면 기록</h2>
     <span class="field-label">수면 상태</span>
     <div class="opt-row">
@@ -1407,6 +1644,7 @@ body.dark .feature-section-title { color: #c8a870; }
 <div class="modal-bg" id="modal-diaper">
   <div class="modal">
     <div class="modal-handle"></div>
+    <button class="modal-close-x" onclick="closeModal('diaper')">✕</button>
     <h2>🌿 기저귀 기록</h2>
     <span class="field-label">종류</span>
     <div class="opt-row">
@@ -1449,35 +1687,6 @@ let pinMode = '';
 let pinBuffer = '';
 let pinFirst = '';
 
-function initLogin() {
-  const savedPin = localStorage.getItem('baby_pin');
-  pinBuffer = '';
-  pinFirst = '';
-  document.querySelectorAll('[id^="pin-ui"]').forEach(e => e.style.display = 'none');
-  document.getElementById('pin-error').textContent = '';
-  updateDots('set', 0);
-  updateDots('confirm', 0);
-  updateDots('login', 0);
-
-  if (!savedPin) {
-    pinMode = 'set';
-    document.getElementById('pin-ui-set').style.display = '';
-    document.getElementById('login-hint').textContent = '설정한 PIN은 잊어버리면 앱을 초기화해야 해요.';
-  } else {
-    pinMode = 'login';
-    document.getElementById('pin-ui-login').style.display = '';
-    document.getElementById('login-hint').textContent = '설정한 PIN 4자리를 입력해주세요.';
-    const p = localStorage.getItem('baby_profile');
-    if (p) {
-      const name = JSON.parse(p).name;
-      document.getElementById('login-name-label').textContent = name + '의 루틴 기록 🍼';
-    } else {
-      document.getElementById('login-name-label').textContent = 'PIN을 입력해주세요';
-    }
-  }
-  showScreen('login');
-}
-
 function updateDots(mode, len) {
   const prefix = mode === 'set' ? 's' : mode === 'confirm' ? 'c' : 'l';
   for (let i = 0; i < 4; i++) {
@@ -1499,38 +1708,6 @@ function pinDel() {
   pinBuffer = pinBuffer.slice(0, -1);
   const m = pinMode === 'confirm' ? 'confirm' : pinMode === 'login' ? 'login' : 'set';
   updateDots(m, pinBuffer.length);
-}
-
-function processPIN() {
-  const err = document.getElementById('pin-error');
-  if (pinMode === 'set') {
-    pinFirst = pinBuffer; pinBuffer = '';
-    pinMode = 'confirm';
-    document.getElementById('pin-ui-set').style.display = 'none';
-    document.getElementById('pin-ui-confirm').style.display = '';
-    err.textContent = '';
-  } else if (pinMode === 'confirm') {
-    if (pinBuffer === pinFirst) {
-      localStorage.setItem('baby_pin', pinBuffer);
-      pinBuffer = ''; err.textContent = '';
-      const profile = localStorage.getItem('baby_profile');
-      profile ? enterApp() : showScreen('profile');
-    } else {
-      err.textContent = 'PIN이 일치하지 않아요. 다시 입력해주세요.';
-      pinBuffer = ''; updateDots('confirm', 0);
-    }
-  } else {
-    if (pinBuffer === localStorage.getItem('baby_pin')) {
-      pinBuffer = ''; err.textContent = '';
-      const profile = localStorage.getItem('baby_profile');
-      profile ? enterApp() : showScreen('profile');
-    } else {
-      err.textContent = '잘못된 PIN이에요.';
-      pinBuffer = ''; updateDots('login', 0);
-      const dots = document.getElementById('dots-login');
-      dots.style.animation = 'shake 0.3s'; setTimeout(() => dots.style.animation = '', 300);
-    }
-  }
 }
 
 // ─── 프로필 ───
@@ -1569,28 +1746,6 @@ function saveProfile() {
   enterApp();
 }
 
-function enterApp() {
-  loadData();
-  loadGrowthData();
-  loadDiary();
-  renderAppHeader();
-  goToPage(2);
-  setTimeout(initSwipe, 100);
-  renderPhotoPage();
-  renderMomCarePage();
-  loadPolicyChecks();
-  renderDiaryList();
-  renderVaccineList();
-  renderMilestoneList();
-  loadDarkMode();
-  setTimeout(() => {
-    renderMainChart();
-    renderGrowthChart();
-    renderGrowthTable();
-  }, 400);
-  showScreen('app');
-}
-
 // ─── 일기 기능 ───
 let diaryEntries = [];
 let diaryImgData = null;
@@ -1609,19 +1764,6 @@ function openDiaryWrite() {
 
 function closeDiaryWrite() {
   document.getElementById('modal-diary').classList.remove('open');
-}
-
-function previewDiaryImg(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    diaryImgData = ev.target.result;
-    const preview = document.getElementById('diary-img-preview');
-    preview.src = diaryImgData;
-    preview.style.display = 'block';
-  };
-  reader.readAsDataURL(file);
 }
 
 function saveDiaryEntry() {
@@ -2294,6 +2436,10 @@ function updateStatus() {
   const today = new Date().toDateString();
   const todayPumps = records.filter(r => r.cat === 'pump' && new Date(r.time).toDateString() === today);
   document.getElementById('today-pump-count').textContent = todayPumps.length + '회';
+  // Decision Engine + Score
+  renderCoachCard();
+  renderScoreCard();
+  updateQuickBtnTimes();
 }
 
 function renderTimeline() {
@@ -2334,14 +2480,6 @@ function loadData() {
   } catch (e) { sleepingStart = null; }
   renderTimeline();
   updateStatus();
-}
-
-function clearAll() {
-  if (!confirm('모든 기록을 삭제할까요?')) return;
-  records = []; sleepingStart = null;
-  clearInterval(sleepTimer);
-  document.getElementById('sleeping-banner').style.display = 'none';
-  saveData(); renderTimeline(); updateStatus();
 }
 
 // 모달 배경 클릭 닫기
@@ -2547,15 +2685,6 @@ function saveEditPump() {
 let currentPage = 1;
 let swipeTouchStartX = 0, swipeTouchStartY = 0;
 
-function goToPage(n) {
-  currentPage = Math.max(0, Math.min(8, n));
-  document.getElementById('swipe-container').style.transform = 'translateX(-' + (currentPage * 100 / 9) + '%)';
-  for (let i = 0; i < 9; i++) {
-    const dot = document.getElementById('dot-' + i);
-    if (dot) dot.classList.toggle('active', i === currentPage);
-  }
-}
-
 function initSwipe() {
   const el = document.getElementById('swipe-container');
   el.addEventListener('touchstart', e => { swipeTouchStartX = e.touches[0].clientX; swipeTouchStartY = e.touches[0].clientY; }, { passive: true });
@@ -2569,17 +2698,6 @@ function initSwipe() {
 }
 
 // ─── 사진 업로드 ───
-function handlePhotoUpload(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const data = ev.target.result;
-    localStorage.setItem('baby_photo', data);
-    showBabyPhoto(data);
-  };
-  reader.readAsDataURL(file);
-}
 
 function showBabyPhoto(data) {
   const img = document.getElementById('baby-photo-img');
@@ -2636,14 +2754,6 @@ function renderPhotoPage() {
 }
 
 // ─── 역할 선택 ───
-function selectRole(role) {
-  if (role === 'dad') {
-    renderDadScreen(false);
-    showScreen('dad');
-  } else {
-    initLogin();
-  }
-}
 
 // ─── 아빠 체크리스트 데이터 ───
 const DAD_ITEMS = {
@@ -3594,14 +3704,871 @@ function backupAllData() {
   downloadFile(JSON.stringify(data, null, 2), '누리케어_백업_' + new Date().toISOString().slice(0,10) + '.json', 'application/json');
 }
 
+// ══════════════════════════════════════════
+// 🧠 Decision Engine — Wake Window & Coach
+// ══════════════════════════════════════════
+
+// 월령별 권장 wake window (분) — 신생아~12개월
+const WAKE_WINDOWS = [
+  { maxDays: 14,  min: 45,  max: 60,  label: '신생아' },
+  { maxDays: 42,  min: 60,  max: 90,  label: '1~6주' },
+  { maxDays: 84,  min: 75,  max: 105, label: '6~12주' },
+  { maxDays: 120, min: 90,  max: 120, label: '3~4개월' },
+  { maxDays: 180, min: 105, max: 150, label: '4~6개월' },
+  { maxDays: 270, min: 120, max: 180, label: '6~9개월' },
+  { maxDays: 365, min: 150, max: 210, label: '9~12개월' },
+  { maxDays: 9999,min: 180, max: 270, label: '12개월+' },
+];
+
+// 월령별 하루 권장 수유 횟수
+const FEED_RECS = [
+  { maxDays: 14,  min: 8,  max: 12 },
+  { maxDays: 90,  min: 8,  max: 12 },
+  { maxDays: 180, min: 6,  max: 8  },
+  { maxDays: 365, min: 5,  max: 7  },
+  { maxDays: 9999,min: 4,  max: 6  },
+];
+
+// 월령별 하루 권장 수면시간 (시간)
+const SLEEP_RECS = [
+  { maxDays: 90,  min: 14, max: 17 },
+  { maxDays: 180, min: 13, max: 16 },
+  { maxDays: 365, min: 12, max: 15 },
+  { maxDays: 9999,min: 11, max: 14 },
+];
+
+function getBabyAgeDays() {
+  try {
+    const p = JSON.parse(localStorage.getItem('baby_profile') || '{}');
+    if (!p.birthDate) return null;
+    return Math.floor((Date.now() - new Date(p.birthDate).getTime()) / 86400000);
+  } catch(e) { return null; }
+}
+
+function getWakeWindow(days) {
+  return WAKE_WINDOWS.find(w => days <= w.maxDays) || WAKE_WINDOWS[WAKE_WINDOWS.length-1];
+}
+function getFeedRec(days) {
+  return FEED_RECS.find(w => days <= w.maxDays) || FEED_RECS[FEED_RECS.length-1];
+}
+function getSleepRec(days) {
+  return SLEEP_RECS.find(w => days <= w.maxDays) || SLEEP_RECS[SLEEP_RECS.length-1];
+}
+
+function renderCoachCard() {
+  const wrap = document.getElementById('coach-card-wrap');
+  if (!wrap) return;
+  const days = getBabyAgeDays();
+  const now = Date.now();
+  const cards = [];
+
+  // ── 수면 타이밍 판단 ──
+  if (!sleepingStart) {
+    // 마지막 기상 또는 수면 종료 시각 찾기
+    const lastWake = records.find(r => r.cat === 'sleep' && r.title === '기상');
+    const lastSleepStart = records.find(r => r.cat === 'sleep' && r.title === '수면 시작');
+    let awakeStart = null;
+
+    if (lastWake) awakeStart = new Date(lastWake.time);
+    else if (lastSleepStart) {
+      // 수면 시작만 있고 기상 없으면 깨어있는 시간 없음 (자는 중)
+      awakeStart = null;
+    }
+
+    if (awakeStart && days !== null) {
+      const ww = getWakeWindow(days);
+      const awakeMin = Math.round((now - awakeStart.getTime()) / 60000);
+      const remainMin = ww.max - awakeMin;
+      const idealMin = ww.min;
+
+      if (awakeMin >= ww.max + 10) {
+        cards.push({ color:'red', urgency:'🚨', level:'high', levelText:'긴급',
+          title: '과피로 위험 — 지금 바로 재우세요',
+          msg: `깨어있은 지 <strong>${awakeMin}분</strong>이에요. 권장 wake window(${ww.max}분)를 <strong>${awakeMin-ww.max}분 초과</strong>했어요. 과피로 상태에서는 오히려 잠들기 어려워요.`,
+          reason: `${ww.label} 권장 wake window: ${ww.min}~${ww.max}분`,
+          action: '😴 수면 기록하기', actionType: 'sleep'
+        });
+      } else if (awakeMin >= ww.min) {
+        cards.push({ color:'yellow', urgency:'⏰', level:'medium', levelText:'권장',
+          title: '재울 타이밍이에요',
+          msg: `깨어있은 지 <strong>${awakeMin}분</strong>이에요. 지금이 재우기 가장 좋은 시간이에요. ${remainMin > 0 ? remainMin+'분 내로 재워주세요.' : '이미 이상적 시간이에요.'}`,
+          reason: `${ww.label} 권장 wake window: ${ww.min}~${ww.max}분`,
+          action: '😴 수면 시작', actionType: 'sleep'
+        });
+      } else {
+        const leftMin = idealMin - awakeMin;
+        cards.push({ color:'green', urgency:'✅', level:'low', levelText:'양호',
+          title: '수면 타이밍 — 아직 여유 있어요',
+          msg: `깨어있은 지 <strong>${awakeMin}분</strong>이에요. 약 <strong>${leftMin}분 후</strong>부터 재울 타이밍이에요.`,
+          reason: `${ww.label} 권장 wake window: ${ww.min}~${ww.max}분`,
+          action: null
+        });
+      }
+    } else if (days !== null && !awakeStart && !lastSleepStart) {
+      // 첫 기록 없을 때
+      cards.push({ color:'blue', urgency:'💡', level:'info', levelText:'안내',
+        title: '수면 기록을 시작해보세요',
+        msg: '수면 시작 버튼을 누르면 재울 타이밍을 자동으로 알려드려요.',
+        reason: '', action: '😴 수면 시작', actionType: 'sleep'
+      });
+    }
+  } else {
+    // 현재 자는 중
+    const sleepMin = Math.round((now - (sleepingStart instanceof Date ? sleepingStart : new Date(sleepingStart)).getTime()) / 60000);
+    cards.push({ color:'blue', urgency:'😴', level:'info', levelText:'수면중',
+      title: '지금 자고 있어요',
+      msg: `자기 시작한 지 <strong>${Math.floor(sleepMin/60) > 0 ? Math.floor(sleepMin/60)+'시간 ' : ''}${sleepMin%60}분</strong>이 지났어요.`,
+      reason: '기상 버튼을 누르면 수면 시간이 자동 기록돼요.',
+      action: null
+    });
+  }
+
+  // ── 수유 타이밍 판단 ──
+  const lastFeed = records.find(r => r.cat === 'feed');
+  if (lastFeed && days !== null) {
+    const feedMin = Math.round((now - new Date(lastFeed.time).getTime()) / 60000);
+    // 신생아~6개월: 2~3시간 간격
+    const feedInterval = days < 90 ? 150 : days < 180 ? 180 : 240;
+    if (feedMin >= feedInterval) {
+      cards.push({ color: feedMin >= feedInterval + 30 ? 'red' : 'yellow',
+        urgency: feedMin >= feedInterval + 30 ? '🍼' : '⏰',
+        level: feedMin >= feedInterval + 30 ? 'high' : 'medium',
+        levelText: feedMin >= feedInterval + 30 ? '수유 필요' : '수유 권장',
+        title: `마지막 수유 ${feedMin >= 60 ? Math.floor(feedMin/60)+'시간 '+feedMin%60+'분' : feedMin+'분'} 전이에요`,
+        msg: feedMin >= feedInterval + 30
+          ? `수유 간격이 <strong>${Math.floor(feedMin/60)}시간 ${feedMin%60}분</strong>이에요. 배가 많이 고플 수 있어요.`
+          : `슬슬 수유 준비를 해주세요. 약 <strong>${feedInterval - feedMin}분 후</strong> 수유 시간이에요.`,
+        reason: `${days < 90 ? '신생아' : days < 180 ? '3~6개월' : '6개월+'} 권장 수유 간격: ${Math.floor(feedInterval/60)}~${Math.floor((feedInterval+60)/60)}시간`,
+        action: feedMin >= feedInterval + 30 ? '🍼 수유 기록' : null,
+        actionType: 'feed'
+      });
+    }
+  }
+
+  // 카드 렌더링
+  if (!cards.length) {
+    wrap.innerHTML = '';
+    return;
+  }
+  wrap.innerHTML = cards.map(c =>
+    `<div class="coach-card ${c.color}">
+      <div class="coach-card-top">
+        <span class="coach-urgency">${c.urgency}</span>
+        <span class="coach-title">${c.title}</span>
+        <span class="coach-level ${c.level}">${c.levelText}</span>
+      </div>
+      <div class="coach-msg">${c.msg}</div>
+      ${c.reason ? `<div class="coach-reason">📌 ${c.reason}</div>` : ''}
+      ${c.action ? `<button class="coach-action-btn ${c.actionType}-btn" onclick="${c.actionType === 'sleep' ? "openModal('sleep')" : "openModal('feed')"}">${c.action}</button>` : ''}
+    </div>`
+  ).join('');
+}
+
+// ══════════════════════════════════════════
+// 📊 Confidence Layer — 육아 점수
+// ══════════════════════════════════════════
+function renderScoreCard() {
+  const wrap = document.getElementById('score-card-wrap');
+  if (!wrap) return;
+  const days = getBabyAgeDays();
+  if (days === null) { wrap.innerHTML = ''; return; }
+
+  const today = new Date().toDateString();
+  const todayRecs = records.filter(r => new Date(r.time).toDateString() === today);
+
+  // 수유 점수
+  const feedRec = getFeedRec(days);
+  const feedCount = todayRecs.filter(r => r.cat === 'feed').length;
+  const feedScore = Math.min(100, Math.round((feedCount / feedRec.min) * 100));
+  const feedOk = feedCount >= feedRec.min;
+
+  // 수면 점수 (오늘 수면 총합)
+  const sleepRec = getSleepRec(days);
+  let sleepHours = 0;
+  todayRecs.filter(r => r.cat === 'sleep' && r.sub && r.sub.includes('시간')).forEach(r => {
+    const m = r.sub.match(/(\d+)시간\s*(\d+)?분?/);
+    if (m) sleepHours += parseInt(m[1]) + (parseInt(m[2])||0)/60;
+  });
+  if (sleepingStart) {
+    const st = sleepingStart instanceof Date ? sleepingStart : new Date(sleepingStart);
+    sleepHours += (Date.now() - st.getTime()) / 3600000;
+  }
+  const sleepScore = Math.min(100, Math.round((sleepHours / sleepRec.min) * 100));
+  const sleepOk = sleepHours >= sleepRec.min;
+
+  // 기저귀 점수 (신생아 기준 6~12회)
+  const diaperCount = todayRecs.filter(r => r.cat === 'diaper').length;
+  const diaperMin = days < 30 ? 6 : days < 90 ? 5 : 4;
+  const diaperScore = Math.min(100, Math.round((diaperCount / diaperMin) * 100));
+  const diaperOk = diaperCount >= diaperMin;
+
+  const total = Math.round((feedScore * 0.4 + sleepScore * 0.4 + diaperScore * 0.2));
+  const totalColor = total >= 80 ? '#22c55e' : total >= 60 ? '#f59e0b' : '#ef4444';
+  const totalEmoji = total >= 80 ? '😊' : total >= 60 ? '😐' : '😟';
+
+  // 코멘트
+  const comments = [];
+  if (feedOk) comments.push(`수유 ${feedCount}회로 목표 달성이에요 🍼`);
+  else comments.push(`수유가 ${feedCount}회예요. 오늘 목표 ${feedRec.min}회까지 ${feedRec.min - feedCount}회 남았어요.`);
+  if (!sleepOk && sleepHours > 0) comments.push(`수면이 ${sleepHours.toFixed(1)}시간으로 권장(${sleepRec.min}시간)보다 적어요.`);
+  if (diaperCount < diaperMin) comments.push(`기저귀가 ${diaperCount}회예요. 수분 섭취를 확인해보세요 💧`);
+
+  wrap.innerHTML = `
+    <div class="score-card">
+      <div class="score-header">
+        <div class="score-header-left">📋 오늘의 육아 점수</div>
+        <div class="score-total-wrap">
+          <div class="score-total-num" style="color:${totalColor}">${totalEmoji} ${total}</div>
+          <div class="score-total-label">/ 100점</div>
+        </div>
+      </div>
+      <div class="score-rows">
+        <div class="score-row">
+          <span class="score-row-icon">🍼</span>
+          <span class="score-row-label">수유 ${feedCount}회</span>
+          <div class="score-bar-wrap"><div class="score-bar ${feedScore>=80?'good':feedScore>=50?'ok':'bad'}" style="width:${feedScore}%"></div></div>
+          <span class="score-row-val">${feedScore}</span>
+        </div>
+        <div class="score-row">
+          <span class="score-row-icon">😴</span>
+          <span class="score-row-label">수면 ${sleepHours.toFixed(1)}h</span>
+          <div class="score-bar-wrap"><div class="score-bar ${sleepScore>=80?'good':sleepScore>=50?'ok':'bad'}" style="width:${sleepScore}%"></div></div>
+          <span class="score-row-val">${sleepScore}</span>
+        </div>
+        <div class="score-row">
+          <span class="score-row-icon">🌿</span>
+          <span class="score-row-label">기저귀 ${diaperCount}회</span>
+          <div class="score-bar-wrap"><div class="score-bar ${diaperScore>=80?'good':diaperScore>=50?'ok':'bad'}" style="width:${diaperScore}%"></div></div>
+          <span class="score-row-val">${diaperScore}</span>
+        </div>
+      </div>
+      ${comments.length ? `<div class="score-comment">💬 ${comments.join(' ')}</div>` : ''}
+    </div>`;
+}
+
+// ══════════════════════════════════════════
+// ⚡ 원탭 빠른기록
+// ══════════════════════════════════════════
+function quickLog(cat) {
+  const now = nowLocal();
+  const labels = { feed:'수유', sleep:'수면 시작', diaper:'기저귀 교체', pump:'유축' };
+  const icons  = { feed:'🍼', sleep:'😴', diaper:'🌿', pump:'🤱' };
+  const subs   = { feed:'모유 · 빠른기록', sleep:'현재 자는 중', diaper:'빠른기록', pump:'빠른기록' };
+
+  if (cat === 'sleep') {
+    if (sleepingStart) {
+      // 이미 자는 중이면 기상 기록
+      endSleep();
+    } else {
+      sleepingStart = new Date();
+      updateSleepBanner();
+      addRecord({ type:'sleep', time:now, title:'수면 시작', sub:'현재 자는 중', icon:'😴', cat:'sleep' });
+    }
+  } else {
+    addRecord({ type:cat, time:now, title:labels[cat], sub:subs[cat], icon:icons[cat], cat });
+  }
+  updateQuickBtnTimes();
+  // 탭 피드백 애니메이션
+  const btn = document.getElementById('qb-' + cat);
+  if (btn) { btn.style.background = '#fff7d6'; setTimeout(() => btn.style.background = '', 300); }
+}
+
+function updateQuickBtnTimes() {
+  ['feed','sleep','diaper','pump'].forEach(cat => {
+    const el = document.getElementById('qt-' + cat);
+    if (!el) return;
+    const rec = records.find(r => r.cat === cat);
+    el.textContent = rec ? timeDiff(rec.time) : '-';
+  });
+}
+
+setInterval(updateStatus, 30000); // 30초마다 코치 카드·점수 갱신
+
+// ══════════════════════════════════════════
+// 🎙️ 음성 인식 (Voice Input)
+// ══════════════════════════════════════════
+let voiceRecognition = null;
+let voiceActive = false;
+let voiceStarting = false; // start() 호출 후 실제 시작까지의 gap 보호
+
+function initVoice() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) return false;
+
+  // 매번 새로 생성 — 재사용 시 InvalidStateError 방지
+  voiceRecognition = new SpeechRecognition();
+  voiceRecognition.lang = 'ko-KR';
+  voiceRecognition.continuous = false;
+  voiceRecognition.interimResults = false;
+  voiceRecognition.maxAlternatives = 1;
+
+  voiceRecognition.onstart = () => {
+    voiceStarting = false;
+    voiceActive = true;
+    setVoiceBtnState(true);
+  };
+
+  voiceRecognition.onresult = (e) => {
+    const text = e.results[0][0].transcript.trim();
+    processVoiceCommand(text);
+  };
+
+  voiceRecognition.onerror = (e) => {
+    voiceActive = false;
+    voiceStarting = false;
+    setVoiceBtnState(false);
+    if (e.error === 'no-speech') {
+      showVoiceToast('말소리를 못 들었어요. 다시 눌러보세요.', false);
+    }
+  };
+
+  voiceRecognition.onend = () => {
+    voiceActive = false;
+    voiceStarting = false;
+    setVoiceBtnState(false);
+    voiceRecognition = null; // 다음 사용 시 새로 생성
+  };
+
+  return true;
+}
+
+function toggleVoice() {
+  // 이미 시작 중이거나 활성화된 경우 → 중지
+  if (voiceStarting || voiceActive) {
+    if (voiceRecognition) {
+      try { voiceRecognition.stop(); } catch(e) {}
+    }
+    voiceActive = false;
+    voiceStarting = false;
+    setVoiceBtnState(false);
+    return;
+  }
+
+  // 새로 시작
+  if (!initVoice()) {
+    alert('이 브라우저에서는 음성 인식이 지원되지 않아요.\nChrome 또는 Safari를 사용해주세요.');
+    return;
+  }
+
+  voiceStarting = true;
+  setVoiceBtnState('starting');
+
+  try {
+    voiceRecognition.start();
+  } catch(e) {
+    voiceStarting = false;
+    voiceActive = false;
+    voiceRecognition = null;
+    setVoiceBtnState(false);
+    console.warn('Voice start error:', e);
+  }
+}
+
+function setVoiceBtnState(state) {
+  const btn = document.getElementById('voice-btn');
+  if (!btn) return;
+  if (state === true) {
+    btn.style.background = '#dc2626';
+    btn.innerHTML = '🔴 듣는 중... (탭해서 중지)';
+    btn.style.animation = 'pulse 1s infinite';
+  } else if (state === 'starting') {
+    btn.style.background = '#92400e';
+    btn.innerHTML = '⏳ 준비 중...';
+    btn.style.animation = '';
+  } else {
+    btn.style.background = '#7a5600';
+    btn.innerHTML = '🎙️ 음성 기록';
+    btn.style.animation = '';
+  }
+}
+
+// 하위 호환 (기존 setVoiceBtn 호출 제거됨)
+
+function processVoiceCommand(text) {
+  const t = text.toLowerCase().replace(/\s/g, '');
+  let matched = false;
+
+  // 수유 관련
+  if (t.includes('수유') || t.includes('밥먹') || t.includes('젖') || t.includes('분유')) {
+    quickLog('feed');
+    speak('수유 기록했어요 🍼');
+    matched = true;
+  }
+  // 수면 관련
+  else if (t.includes('잠') || t.includes('수면') || t.includes('재웠') || t.includes('잔다') || t.includes('자기시작')) {
+    quickLog('sleep');
+    speak(sleepingStart ? '기상 기록했어요 ☀️' : '수면 시작 기록했어요 😴');
+    matched = true;
+  }
+  // 기상
+  else if (t.includes('기상') || t.includes('일어났') || t.includes('깼')) {
+    if (sleepingStart) { endSleep(); speak('기상 기록했어요 ☀️'); }
+    else speak('현재 수면 기록이 없어요.');
+    matched = true;
+  }
+  // 기저귀
+  else if (t.includes('기저귀') || t.includes('대변') || t.includes('소변') || t.includes('응가') || t.includes('쉬했')) {
+    quickLog('diaper');
+    speak('기저귀 교체 기록했어요 🌿');
+    matched = true;
+  }
+  // 유축
+  else if (t.includes('유축')) {
+    quickLog('pump');
+    speak('유축 기록했어요 🤱');
+    matched = true;
+  }
+  // 상태 확인
+  else if (t.includes('상태') || t.includes('어때') || t.includes('점수')) {
+    speakStatus();
+    matched = true;
+  }
+  // 재울타이밍
+  else if (t.includes('재워') || t.includes('재울') || t.includes('수면타이밍') || t.includes('언제재워')) {
+    speakSleepTiming();
+    matched = true;
+  }
+
+  if (!matched) {
+    speak('죄송해요, 다시 말씀해주세요. 수유, 수면, 기저귀 등을 말씀해보세요.');
+  }
+  showVoiceToast(text, matched);
+}
+
+function setVoiceBtn(active) { setVoiceBtnState(active); }
+
+function showVoiceToast(text, ok) {
+  const old = document.getElementById('voice-toast');
+  if (old) old.remove();
+  const toast = document.createElement('div');
+  toast.id = 'voice-toast';
+  toast.style.cssText = `position:fixed;bottom:100px;left:50%;transform:translateX(-50%);
+    background:${ok?'#1a1a1a':'#dc2626'};color:#fff;padding:10px 18px;border-radius:20px;
+    font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.25);
+    max-width:280px;text-align:center;`;
+  toast.textContent = `"${text}"`;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2500);
+}
+
+// ══════════════════════════════════════════
+// 🔊 음성 안내 (Text-to-Speech)
+// ══════════════════════════════════════════
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'ko-KR';
+  utter.rate = 1.0;
+  utter.pitch = 1.05;
+  window.speechSynthesis.speak(utter);
+}
+
+function speakStatus() {
+  const days = getBabyAgeDays();
+  if (!days) { speak('아기 프로필을 먼저 설정해주세요.'); return; }
+  const today = new Date().toDateString();
+  const feedCount = records.filter(r => r.cat==='feed' && new Date(r.time).toDateString()===today).length;
+  const diaperCount = records.filter(r => r.cat==='diaper' && new Date(r.time).toDateString()===today).length;
+  const lastFeed = records.find(r => r.cat==='feed');
+  const feedAgo = lastFeed ? Math.round((Date.now()-new Date(lastFeed.time).getTime())/60000) : null;
+  let msg = `오늘 수유 ${feedCount}회, 기저귀 ${diaperCount}회 기록됐어요.`;
+  if (feedAgo) msg += ` 마지막 수유는 ${feedAgo >= 60 ? Math.floor(feedAgo/60)+'시간 '+feedAgo%60+'분' : feedAgo+'분'} 전이에요.`;
+  if (sleepingStart) {
+    const st = sleepingStart instanceof Date ? sleepingStart : new Date(sleepingStart);
+    const sleepMin = Math.round((Date.now()-st.getTime())/60000);
+    msg += ` 현재 ${sleepMin}분째 자는 중이에요.`;
+  }
+  speak(msg);
+}
+
+function speakSleepTiming() {
+  const days = getBabyAgeDays();
+  if (!days) { speak('아기 프로필을 먼저 설정해주세요.'); return; }
+  if (sleepingStart) { speak('지금 자고 있어요.'); return; }
+  const lastWake = records.find(r => r.cat==='sleep' && r.title==='기상');
+  if (!lastWake) { speak('기상 기록이 없어요. 수면 기록을 먼저 해주세요.'); return; }
+  const ww = getWakeWindow(days);
+  const awakeMin = Math.round((Date.now()-new Date(lastWake.time).getTime())/60000);
+  if (awakeMin >= ww.max + 10) {
+    speak(`과피로 위험이에요! 깨어있은 지 ${awakeMin}분, 권장 시간을 ${awakeMin-ww.max}분 초과했어요. 지금 바로 재워주세요.`);
+  } else if (awakeMin >= ww.min) {
+    speak(`지금이 재울 타이밍이에요. 깨어있은 지 ${awakeMin}분이에요.`);
+  } else {
+    speak(`아직 여유 있어요. 약 ${ww.min - awakeMin}분 후 재울 타이밍이에요.`);
+  }
+}
+
+// 앱 시작: 역할 선택 화면부터
+// ══════════════════════════════════════════
+// 🔴 즉시1: 사진 리사이즈
+// ══════════════════════════════════════════
+function resizeImage(dataUrl, maxW, maxH, quality) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      if (w > maxW || h > maxH) {
+        const ratio = Math.min(maxW/w, maxH/h);
+        w = Math.round(w*ratio); h = Math.round(h*ratio);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', quality||0.78));
+    };
+    img.src = dataUrl;
+  });
+}
+
+function handlePhotoUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async ev => {
+    try {
+      const resized = await resizeImage(ev.target.result, 1200, 1600, 0.78);
+      try {
+        localStorage.setItem('baby_photo', resized);
+      } catch(q) {
+        const smaller = await resizeImage(ev.target.result, 800, 1067, 0.6);
+        localStorage.setItem('baby_photo', smaller);
+        showBackupToast('📷 사진을 압축해서 저장했어요');
+      }
+      showBabyPhoto(resized);
+    } catch(e) { alert('사진 저장에 실패했어요. 다른 사진을 시도해보세요.'); }
+  };
+  reader.readAsDataURL(file);
+}
+
+function previewDiaryImg(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async ev => {
+    diaryImgData = await resizeImage(ev.target.result, 1000, 1400, 0.75);
+    const preview = document.getElementById('diary-img-preview');
+    preview.src = diaryImgData;
+    preview.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ══════════════════════════════════════════
+// 🔴 즉시2: 삭제 이중 확인
+// ══════════════════════════════════════════
+function clearAll() {
+  if (!confirm('기록을 삭제할까요?\n이 작업은 되돌릴 수 없어요.')) return;
+  records = []; sleepingStart = null;
+  clearInterval(sleepTimer);
+  document.getElementById('sleeping-banner').style.display = 'none';
+  saveData(); renderTimeline(); updateStatus();
+}
+
+function clearTodayRecords() {
+  const today = new Date().toDateString();
+  const cnt = records.filter(r => new Date(r.time).toDateString() === today).length;
+  if (!cnt) { alert('오늘 기록이 없어요.'); return; }
+  if (!confirm(`오늘 기록 ${cnt}개를 삭제할까요?`)) return;
+  records = records.filter(r => new Date(r.time).toDateString() !== today);
+  saveData(); renderTimeline(); updateStatus();
+  showBackupToast(`🗑️ 오늘 기록 ${cnt}개 삭제됐어요`);
+}
+
 function confirmReset() {
-  if (!confirm('모든 데이터를 삭제할까요?\n이 작업은 되돌릴 수 없어요!')) return;
-  if (!confirm('정말로 삭제하시겠어요?')) return;
+  if (!confirm('⚠️ 모든 데이터를 삭제할까요?\n절대 되돌릴 수 없어요!')) return;
+  const code = prompt('삭제하려면 "삭제확인"을 입력하세요:');
+  if (code !== '삭제확인') { alert('취소됐어요.'); return; }
   localStorage.clear();
   location.reload();
 }
 
-setInterval(updateStatus, 60000);
+// ══════════════════════════════════════════
+// 🔴 즉시3: PIN 개선
+// ══════════════════════════════════════════
+let pinFailCount = 0;
+
+function processPIN() {
+  const err = document.getElementById('pin-error');
+  if (pinMode === 'set') {
+    pinFirst = pinBuffer; pinBuffer = '';
+    pinMode = 'confirm';
+    document.getElementById('pin-ui-set').style.display = 'none';
+    document.getElementById('pin-ui-confirm').style.display = '';
+    err.textContent = '';
+  } else if (pinMode === 'confirm') {
+    if (pinBuffer === pinFirst) {
+      localStorage.setItem('baby_pin', pinBuffer);
+      pinBuffer = ''; err.textContent = '';
+      const profile = localStorage.getItem('baby_profile');
+      profile ? enterApp() : showScreen('profile');
+    } else {
+      err.textContent = 'PIN이 일치하지 않아요. 다시 입력해주세요.';
+      pinBuffer = ''; updateDots('confirm', 0);
+    }
+  } else {
+    if (pinBuffer === localStorage.getItem('baby_pin')) {
+      pinBuffer = ''; err.textContent = '';
+      pinFailCount = 0;
+      const fb = document.getElementById('pin-forgot-btn');
+      if (fb) fb.style.display = 'none';
+      const profile = localStorage.getItem('baby_profile');
+      profile ? enterApp() : showScreen('profile');
+    } else {
+      pinFailCount++;
+      pinBuffer = ''; updateDots('login', 0);
+      const dots = document.getElementById('dots-login');
+      dots.style.animation = 'shake 0.3s';
+      setTimeout(() => dots.style.animation = '', 300);
+      err.textContent = `잘못된 PIN이에요. (${pinFailCount}회 실패)`;
+      if (pinFailCount >= 3) {
+        const fb = document.getElementById('pin-forgot-btn');
+        if (fb) fb.style.display = 'block';
+      }
+    }
+  }
+}
+
+function pinForgot() {
+  if (!confirm('PIN을 잊으셨나요?\n\n확인: PIN만 재설정 (기존 기록 유지)\n취소: 계속 시도')) return;
+  localStorage.removeItem('baby_pin');
+  pinFailCount = 0;
+  alert('PIN이 초기화됐어요.\n기존 기록은 모두 유지돼요 ✅');
+  initLogin();
+}
+
+function initLogin() {
+  const savedPin = localStorage.getItem('baby_pin');
+  pinBuffer = ''; pinFirst = ''; pinFailCount = 0;
+  document.querySelectorAll('[id^="pin-ui"]').forEach(e => e.style.display = 'none');
+  document.getElementById('pin-error').textContent = '';
+  updateDots('set', 0); updateDots('confirm', 0); updateDots('login', 0);
+  const fb = document.getElementById('pin-forgot-btn');
+  if (fb) fb.style.display = 'none';
+  if (!savedPin) {
+    pinMode = 'set';
+    document.getElementById('pin-ui-set').style.display = '';
+    document.getElementById('login-hint').textContent = 'PIN을 잊어도 데이터 유지하며 재설정 가능해요.';
+  } else {
+    pinMode = 'login';
+    document.getElementById('pin-ui-login').style.display = '';
+    document.getElementById('login-hint').textContent = 'PIN 4자리를 입력해주세요.';
+    const p = localStorage.getItem('baby_profile');
+    if (p) document.getElementById('login-name-label').textContent = JSON.parse(p).name + '의 누리케어 🍼';
+  }
+  showScreen('login');
+}
+
+// ══════════════════════════════════════════
+// 🟡 중요1: 백업 토스트
+// ══════════════════════════════════════════
+function showBackupToast(msg) {
+  const old = document.getElementById('backup-toast-el');
+  if (old) old.remove();
+  const el = document.createElement('div');
+  el.id = 'backup-toast-el';
+  el.className = 'backup-toast';
+  el.innerHTML = `<span>${msg}</span>`;
+  document.body.appendChild(el);
+  setTimeout(() => { if (el.parentNode) el.remove(); }, 3000);
+}
+
+function checkBackupReminder() {
+  const last = parseInt(localStorage.getItem('last_backup_remind') || '0');
+  const now = Date.now();
+  if (now - last > 7*24*60*60*1000 && records.length > 20) {
+    setTimeout(() => {
+      const old = document.getElementById('backup-toast-el');
+      if (old) old.remove();
+      const el = document.createElement('div');
+      el.id = 'backup-toast-el';
+      el.className = 'backup-toast';
+      el.innerHTML = `<span>💾 기록 ${records.length}개, 백업하세요!</span>
+        <button class="backup-toast-btn" onclick="backupAllData();this.closest('#backup-toast-el').remove()">백업</button>
+        <button style="background:none;border:none;color:#9ca3af;font-size:18px;cursor:pointer;padding:0 4px;" onclick="this.closest('#backup-toast-el').remove()">✕</button>`;
+      document.body.appendChild(el);
+      localStorage.setItem('last_backup_remind', now.toString());
+      setTimeout(() => { if(el.parentNode) el.remove(); }, 10000);
+    }, 3000);
+  }
+}
+
+// ══════════════════════════════════════════
+// 🟡 중요2: 페이지 레이블
+// ══════════════════════════════════════════
+const PAGE_LABELS = [
+  '📔 일기','📷 사진','🍼 루틴','📊 통계',
+  '📏 성장','⭐ 마일스톤','👩 엄마케어','🇰🇷 복지','⚙️ 설정'
+];
+
+function updatePageLabel(n) {
+  const el = document.getElementById('page-nav-curr');
+  if (el) el.textContent = PAGE_LABELS[n] || '';
+}
+
+function goToPage(n) {
+  currentPage = Math.max(0, Math.min(8, n));
+  document.getElementById('swipe-container').style.transform =
+    'translateX(-' + (currentPage * 100 / 9) + '%)';
+  for (let i = 0; i < 9; i++) {
+    const dot = document.getElementById('dot-' + i);
+    if (dot) dot.classList.toggle('active', i === currentPage);
+  }
+  updatePageLabel(currentPage);
+  if (currentPage === 3) setTimeout(renderMainChart, 100);
+  if (currentPage === 4) setTimeout(() => { renderGrowthChart(); renderGrowthTable(); }, 100);
+}
+
+// ══════════════════════════════════════════
+// 🟢 개선1: Web Notification
+// ══════════════════════════════════════════
+let notifPermission = false;
+let sleepNotifTimer = null;
+let feedNotifTimer = null;
+
+function requestNotifPermission() {
+  if (!('Notification' in window)) { alert('이 브라우저는 알림을 지원하지 않아요.'); return; }
+  Notification.requestPermission().then(perm => {
+    notifPermission = perm === 'granted';
+    localStorage.setItem('notif_permission', notifPermission ? '1' : '0');
+    dismissNotifBanner();
+    if (notifPermission) {
+      showBackupToast('🔔 알림 허용됐어요! 재울 타이밍을 알려드릴게요');
+      scheduleNotifications();
+    }
+  });
+}
+
+function dismissNotifBanner() {
+  const el = document.getElementById('notif-banner');
+  if (el) el.style.display = 'none';
+  localStorage.setItem('notif_banner_dismissed', '1');
+}
+
+function checkNotifBanner() {
+  if (localStorage.getItem('notif_banner_dismissed') === '1') return;
+  if (localStorage.getItem('notif_permission') === '1') return;
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'granted') return;
+  const el = document.getElementById('notif-banner');
+  if (el) el.style.display = 'flex';
+}
+
+function scheduleNotifications() {
+  if (!notifPermission) return;
+  clearTimeout(sleepNotifTimer); clearTimeout(feedNotifTimer);
+  const days = getBabyAgeDays();
+  if (!days) return;
+  // 수면 타이밍 알림
+  if (!sleepingStart) {
+    const lastWake = records.find(r => r.cat === 'sleep' && r.title === '기상');
+    if (lastWake) {
+      const ww = getWakeWindow(days);
+      const awakeMs = Date.now() - new Date(lastWake.time).getTime();
+      const targetMs = ww.min * 60000 - awakeMs;
+      if (targetMs > 0 && targetMs < 3*3600000) {
+        sleepNotifTimer = setTimeout(() => {
+          if (!sleepingStart) {
+            new Notification('😴 누리케어 — 재울 타이밍이에요!', {
+              body: `깨어있은 지 ${ww.min}분이 됐어요. 지금 재워보세요.`
+            });
+          }
+        }, targetMs);
+      }
+    }
+  }
+  // 수유 알림
+  const lastFeed = records.find(r => r.cat === 'feed');
+  if (lastFeed) {
+    const interval = days < 90 ? 150 : days < 180 ? 180 : 240;
+    const feedMs = Date.now() - new Date(lastFeed.time).getTime();
+    const targetMs = interval * 60000 - feedMs;
+    if (targetMs > 0 && targetMs < 4*3600000) {
+      feedNotifTimer = setTimeout(() => {
+        new Notification('🍼 누리케어 — 수유 시간이에요!', {
+          body: `마지막 수유로부터 ${interval}분이 됐어요.`
+        });
+      }, targetMs);
+    }
+  }
+}
+
+// ══════════════════════════════════════════
+// 🟢 개선2: 온보딩
+// ══════════════════════════════════════════
+let obStep = 0;
+
+function showOnboarding() {
+  if (localStorage.getItem('onboarding_done') === '1') return;
+  document.getElementById('onboarding-overlay').style.display = 'flex';
+}
+
+function obNext() {
+  obStep++;
+  const total = 4;
+  if (obStep >= total) { obFinish(); return; }
+  document.querySelectorAll('.onboarding-step').forEach((el,i) => el.classList.toggle('active', i===obStep));
+  document.querySelectorAll('.onboarding-dot').forEach((el,i) => el.classList.toggle('active', i===obStep));
+  const btn = document.getElementById('ob-btn');
+  if (btn) btn.textContent = obStep === total-1 ? '시작하기 🍼' : '다음';
+}
+
+function obFinish() {
+  document.getElementById('onboarding-overlay').style.display = 'none';
+  localStorage.setItem('onboarding_done', '1');
+  initLogin();
+}
+
+function obSkip() {
+  document.getElementById('onboarding-overlay').style.display = 'none';
+  localStorage.setItem('onboarding_done', '1');
+  initLogin();
+}
+
+// ══════════════════════════════════════════
+// enterApp 통합 (모든 기능 초기화)
+// ══════════════════════════════════════════
+function enterApp() {
+  loadData();
+  loadGrowthData();
+  loadDiary();
+  renderAppHeader();
+  goToPage(2);
+  setTimeout(initSwipe, 100);
+  renderPhotoPage();
+  renderMomCarePage();
+  loadPolicyChecks();
+  renderDiaryList();
+  renderVaccineList();
+  renderMilestoneList();
+  loadDarkMode();
+  setTimeout(() => {
+    renderMainChart();
+    renderGrowthChart();
+    renderGrowthTable();
+    checkBackupReminder();
+    checkNotifBanner();
+    if (localStorage.getItem('notif_permission') === '1') {
+      notifPermission = true;
+      scheduleNotifications();
+    }
+  }, 500);
+  showScreen('app');
+}
+
+// selectRole — 온보딩 포함
+function selectRole(role) {
+  if (role === 'dad') {
+    renderDadScreen(false);
+    showScreen('dad');
+  } else {
+    if (localStorage.getItem('onboarding_done') !== '1') {
+      showOnboarding();
+    } else {
+      initLogin();
+    }
+  }
+}
 
 // 앱 시작: 역할 선택 화면부터
 showScreen('role');
