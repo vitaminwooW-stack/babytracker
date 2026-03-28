@@ -760,8 +760,28 @@ body.dark .active-session-title { color: #f0ead8; }@keyframes micPulse { 0%,100%
 .voice-commands-row { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; max-width: 320px; }
 .voice-cmd { background: #fff7d6; border: 1px solid #e8d796; border-radius: 16px; padding: 5px 12px; font-size: 12px; color: #7a5600; font-weight: 600; }
 
-/* ── 진행 중 세션 카드 ── */
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+/* ── 아빠 기록 섹션 ── */
+.dad-rec-section { background: #fff; border-radius: 14px; border: 1.5px solid #e8d796; padding: 14px 16px; margin-bottom: 14px; }
+.dad-rec-title { font-size: 13px; font-weight: 700; color: #7a5600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.dad-rec-badge { font-size: 10px; font-weight: 600; background: #f0fdf4; color: #16a34a; border: 1px solid #86efac; border-radius: 10px; padding: 2px 8px; }
+.dad-rec-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.dad-rec-btn { padding: 12px 8px; border-radius: 12px; border: 1.5px solid; font-size: 13px; font-weight: 700; cursor: pointer; text-align: center; transition: all 0.1s; }
+.dad-rec-btn:active { opacity: 0.75; transform: scale(0.97); }
+.dad-rec-btn.feed   { background: #fff7ed; border-color: #fdba74; color: #c2410c; }
+.dad-rec-btn.diaper { background: #f0fdf4; border-color: #86efac; color: #15803d; }
+.dad-rec-btn.sleep  { background: #eff6ff; border-color: #93c5fd; color: #1d4ed8; }
+.dad-rec-btn.bath   { background: #fdf4ff; border-color: #d8b4fe; color: #7c3aed; }
+.dad-rec-today { border-top: 1px solid #f3f0e0; padding-top: 10px; }
+.dad-rec-item { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #f8f5ee; }
+.dad-rec-item:last-child { border-bottom: none; }
+.dad-rec-item-icon { font-size: 18px; flex-shrink: 0; }
+.dad-rec-item-info { flex: 1; }
+.dad-rec-item-title { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+.dad-rec-item-time { font-size: 11px; color: #9ca3af; }
+.dad-rec-empty { font-size: 12px; color: #9ca3af; text-align: center; padding: 8px 0; }
+body.dark .dad-rec-section { background: #2a2520; border-color: #3d3628; }
+body.dark .dad-rec-title { color: #c8a870; }
+body.dark .dad-rec-item-title { color: #f0ead8; }
 </style>
 </head>
 <body>
@@ -844,7 +864,6 @@ body.dark .active-session-title { color: #f0ead8; }@keyframes micPulse { 0%,100%
       </div>
       <button class="nav-back-btn" onclick="showScreen('role')">✕ 나가기</button>
     </div>
-    <!-- 초대 코드 입력 -->
     <div class="dad-invite-wrap" id="dad-invite-wrap">
       <span class="dad-invite-label">엄마에게 초대 코드를 받으셨나요?</span>
       <div class="dad-invite-row">
@@ -854,35 +873,40 @@ body.dark .active-session-title { color: #f0ead8; }@keyframes micPulse { 0%,100%
     </div>
   </div>
   <div class="dad-body">
+
+    <!-- ★ 아빠 기록 섹션 ★ -->
+    <div class="dad-rec-section">
+      <div class="dad-rec-title">📋 아빠 기록 <span class="dad-rec-badge">엄마에게 공유됨</span></div>
+      <div class="dad-rec-btns">
+        <button class="dad-rec-btn feed" onclick="dadRecord('feed')">🍼 분유/수유</button>
+        <button class="dad-rec-btn diaper" onclick="dadRecord('diaper')">🌿 기저귀</button>
+        <button class="dad-rec-btn sleep" onclick="dadRecord('sleep')">😴 재웠어요</button>
+        <button class="dad-rec-btn bath" onclick="dadRecord('bath')">🛁 목욕</button>
+      </div>
+      <div class="dad-rec-today" id="dad-rec-today"></div>
+    </div>
+
     <div class="dad-progress" id="dad-progress-wrap">
       <div class="dad-progress-bar-wrap"><div class="dad-progress-bar" id="dad-progress-bar" style="width:0%"></div></div>
       <div class="dad-progress-text" id="dad-progress-text">0 / 0</div>
     </div>
 
-    <!-- 섹션1: 지금 당장 -->
     <div class="dad-section">
       <div class="dad-section-title"><span>🚨</span> 지금 당장 챙겨요</div>
       <div class="dad-check-card" id="dad-checklist-urgent"></div>
     </div>
-
-    <!-- 섹션2: 곧 필요해요 -->
     <div class="dad-section">
       <div class="dad-section-title"><span>📋</span> 곧 필요해요</div>
       <div class="dad-check-card" id="dad-checklist-soon"></div>
     </div>
-
-    <!-- 섹션3: 준비하면 좋아요 -->
     <div class="dad-section">
       <div class="dad-section-title"><span>💡</span> 알아두면 좋아요</div>
       <div class="dad-check-card" id="dad-checklist-prep"></div>
     </div>
-
-    <!-- 섹션4: 아내를 위한 이벤트 (비밀!) -->
     <div class="dad-section">
       <div class="dad-section-title"><span>💝</span> 아내를 위한 깜짝 이벤트<span class="dad-section-secret">😉 엄마 몰래</span></div>
       <div class="dad-event-card" id="dad-checklist-events"></div>
     </div>
-
     <button onclick="openGuide('dad')" style="width:100%;padding:14px;background:#fff;border:1.5px solid #e0e0e0;border-radius:14px;font-size:14px;font-weight:700;color:#555;cursor:pointer;margin-top:8px;">
       신생아 케어 가이드 보기
     </button>
@@ -2398,16 +2422,23 @@ function saveSleep() {
 }
 
 function endSleep() {
-  if (!sleepingStart) return;
+  if (!sleepingStart) {
+    speak('수면 시작 기록이 없어요. 먼저 수면 시작이라고 말씀해주세요.');
+    return;
+  }
   const now = new Date();
-  // sleepingStart가 문자열로 저장됐을 경우 대비해 Date로 변환
   const startTime = sleepingStart instanceof Date ? sleepingStart : new Date(sleepingStart);
+  if (isNaN(startTime.getTime())) {
+    sleepingStart = null;
+    saveData();
+    return;
+  }
   const dur = Math.round((now - startTime) / 60000);
   const h = Math.floor(dur / 60), m = dur % 60;
   const sub = (h > 0 ? h + '시간 ' : '') + m + '분';
   addRecord({
     type: 'sleep',
-    time: now.toISOString().slice(0, 16),
+    time: nowLocal(),
     title: '기상',
     sub: '수면 ' + sub,
     icon: '☀️',
@@ -2415,10 +2446,14 @@ function endSleep() {
   });
   sleepingStart = null;
   clearInterval(sleepTimer);
-  document.getElementById('sleeping-banner').style.display = 'none';
+  const banner = document.getElementById('sleeping-banner');
+  if (banner) banner.style.display = 'none';
   saveData();
   renderTimeline();
   updateStatus();
+  renderActiveSessions();
+  updateQuickBtns();
+  setVoiceBtnState(false);
 }
 
 function updateSleepBanner() {
@@ -2452,9 +2487,30 @@ function addRecord(r) {
   updateStatus();
 }
 
+// ── 한국 시간 (KST = UTC+9) ──
 function nowLocal() {
+  // getTimezoneOffset이 0이거나 양수(서버 환경)인 경우에도 KST 보장
   const now = new Date();
-  return new Date(now - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+  const kst = new Date(now.getTime() + (9 * 60 * 60 * 1000) - (now.getTimezoneOffset() * 60 * 1000));
+  // 실제 로컬이 KST면 중복 방지
+  const offsetMin = now.getTimezoneOffset();
+  if (offsetMin === -540) {
+    // 이미 KST
+    return new Date(now.getTime() - offsetMin * 60000).toISOString().slice(0, 16);
+  }
+  // KST로 강제 변환
+  return new Date(now.getTime() + (9 * 3600000)).toISOString().slice(0, 16);
+}
+
+function nowDate() {
+  // 현재 KST Date 객체
+  return new Date();
+}
+
+function toKST(date) {
+  // Date 객체 → KST datetime-local 문자열
+  const d = date instanceof Date ? date : new Date(date);
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
 }
 
 function timeDiff(t) {
@@ -2474,19 +2530,21 @@ function fmtTime(t) {
 function renderTimeline() {
   const el = document.getElementById('timeline');
   if (!records.length) { el.innerHTML = '<div class="empty">아직 기록이 없어요 🌙<br>위 버튼을 눌러 첫 기록을 남겨보세요!</div>'; return; }
-  // 시간 순서대로 정렬 (최신이 위)
   const sorted = records
     .map((r, i) => ({ ...r, _origIdx: i }))
     .sort((a, b) => new Date(b.time) - new Date(a.time));
-  el.innerHTML = sorted.slice(0, 60).map(r =>
-    '<div class="t-item"><div class="t-badge ' + r.cat + '">' + r.icon + '</div>' +
-    '<div class="t-info"><div class="t-title">' + r.title + '</div><div class="t-sub">' + r.sub + '</div></div>' +
-    '<div class="t-time">' + fmtTime(r.time) + '</div>' +
-    '<div class="t-actions">' +
-    '<button class="t-edit-btn" onclick="editRecord(' + r._origIdx + ')">✏️</button>' +
-    '<button class="t-del-btn" onclick="deleteRecord(' + r._origIdx + ')">🗑️</button>' +
-    '</div></div>'
-  ).join('');
+  el.innerHTML = sorted.slice(0, 60).map(r => {
+    const dadBadge = r.byDad
+      ? '<span style="font-size:10px;background:#eff6ff;color:#1d4ed8;border-radius:8px;padding:1px 6px;font-weight:700;margin-left:4px;">👨 아빠</span>'
+      : '';
+    return '<div class="t-item"><div class="t-badge ' + r.cat + '">' + r.icon + '</div>' +
+      '<div class="t-info"><div class="t-title">' + r.title + dadBadge + '</div><div class="t-sub">' + r.sub + '</div></div>' +
+      '<div class="t-time">' + fmtTime(r.time) + '</div>' +
+      '<div class="t-actions">' +
+      '<button class="t-edit-btn" onclick="editRecord(' + r._origIdx + ')">✏️</button>' +
+      '<button class="t-del-btn" onclick="deleteRecord(' + r._origIdx + ')">🗑️</button>' +
+      '</div></div>';
+  }).join('');
 }
 
 function saveData() {
@@ -3874,23 +3932,41 @@ function renderCoachCard() {
     }
   }
 
-  // 카드 렌더링
+  // 카드 렌더링 — 심플 버전
   if (!cards.length) {
     wrap.innerHTML = '';
     return;
   }
-  wrap.innerHTML = cards.map(c =>
-    `<div class="coach-card ${c.color}">
-      <div class="coach-card-top">
-        <span class="coach-urgency">${c.urgency}</span>
-        <span class="coach-title">${c.title}</span>
-        <span class="coach-level ${c.level}">${c.levelText}</span>
+  // 가장 중요한 카드 1개만 표시 (high > medium > low > info)
+  const priority = { high:0, medium:1, low:2, info:3 };
+  cards.sort((a,b) => (priority[a.level]||3) - (priority[b.level]||3));
+  const c = cards[0];
+
+  // 색상 맵
+  const colorMap = {
+    red:    { bg:'#fff1f2', border:'#fca5a5', text:'#dc2626' },
+    yellow: { bg:'#fffbeb', border:'#fde68a', text:'#92400e' },
+    green:  { bg:'#f0fdf4', border:'#86efac', text:'#16a34a' },
+    blue:   { bg:'#eff6ff', border:'#93c5fd', text:'#1d4ed8' },
+  };
+  const col = colorMap[c.color] || colorMap.blue;
+
+  wrap.innerHTML = `
+    <div style="
+      background:${col.bg}; border:1.5px solid ${col.border};
+      border-radius:14px; padding:12px 14px; margin-bottom:10px;
+      display:flex; align-items:center; gap:10px;
+    ">
+      <span style="font-size:22px;flex-shrink:0;">${c.urgency}</span>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:700;color:${col.text};line-height:1.4;">${c.title}</div>
+        ${c.reason ? `<div style="font-size:11px;color:#9ca3af;margin-top:2px;">${c.reason}</div>` : ''}
       </div>
-      <div class="coach-msg">${c.msg}</div>
-      ${c.reason ? `<div class="coach-reason">📌 ${c.reason}</div>` : ''}
-      ${c.action ? `<button class="coach-action-btn ${c.actionType}-btn" onclick="${c.actionType === 'sleep' ? "openModal('sleep')" : "openModal('feed')"}">${c.action}</button>` : ''}
-    </div>`
-  ).join('');
+      ${c.action ? `<button onclick="quickStartAction('${c.actionType}')" style="
+        background:${col.text};color:#fff;border:none;border-radius:20px;
+        padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;
+        white-space:nowrap;flex-shrink:0;">${c.action}</button>` : ''}
+    </div>`;
 }
 
 // ══════════════════════════════════════════
@@ -4157,7 +4233,6 @@ function speakSleepTiming() {
   }
 }
 
-// 앱 시작: 역할 선택 화면부터
 // ══════════════════════════════════════════
 // 🔴 즉시1: 사진 리사이즈
 // ══════════════════════════════════════════
@@ -4523,6 +4598,7 @@ function selectRole(role) {
   if (role === 'dad') {
     renderDadScreen(false);
     showScreen('dad');
+    setTimeout(renderDadTodayRecords, 200);
   } else {
     if (localStorage.getItem('onboarding_done') !== '1') {
       showOnboarding();
@@ -4531,8 +4607,6 @@ function selectRole(role) {
     }
   }
 }
-
-// 앱 시작: 역할 선택 화면부터
 
 // ══════════════════════════════════════════
 // 세션 상태 관리 (수면·유축·수유 시작→종료 쌍)
@@ -4568,7 +4642,7 @@ function startSession(type) {
     }
     sleepingStart = now;
     updateSleepBanner();
-    addRecord({ type:'sleep', time:now.toISOString().slice(0,16), title:'수면 시작', sub:'자는 중', icon:'😴', cat:'sleep' });
+    addRecord({ type:'sleep', time:nowLocal(), title:'수면 시작', sub:'자는 중', icon:'😴', cat:'sleep' });
     speak('수면 시작을 기록했어요 😴');
   } else if (type === 'pump') {
     if (pumpingStart) {
@@ -4578,7 +4652,7 @@ function startSession(type) {
     }
     pumpingStart = now;
     saveSessions();
-    addRecord({ type:'pump', time:now.toISOString().slice(0,16), title:'유축 시작', sub:'유축 중', icon:'🤱', cat:'pump' });
+    addRecord({ type:'pump', time:nowLocal(), title:'유축 시작', sub:'유축 중', icon:'🤱', cat:'pump' });
     speak('유축 시작을 기록했어요 🤱');
   } else if (type === 'feed') {
     if (feedingStart) {
@@ -4588,10 +4662,10 @@ function startSession(type) {
     }
     feedingStart = now;
     saveSessions();
-    addRecord({ type:'feed', time:now.toISOString().slice(0,16), title:'수유 시작', sub:'수유 중', icon:'🍼', cat:'feed' });
+    addRecord({ type:'feed', time:nowLocal(), title:'수유 시작', sub:'수유 중', icon:'🍼', cat:'feed' });
     speak('수유 시작을 기록했어요 🍼');
   } else if (type === 'diaper') {
-    addRecord({ type:'diaper', time:now.toISOString().slice(0,16), title:'기저귀 교체', sub:'기저귀', icon:'🌿', cat:'diaper' });
+    addRecord({ type:'diaper', time:nowLocal(), title:'기저귀 교체', sub:'기저귀', icon:'🌿', cat:'diaper' });
     speak('기저귀 교체를 기록했어요 🌿');
   }
   renderActiveSessions();
@@ -4620,7 +4694,7 @@ function endSession(type) {
     const dur = Math.round((now - startTime) / 60000);
     const h = Math.floor(dur/60), m = dur%60;
     const durStr = (h>0 ? h+'시간 ':'')+m+'분';
-    addRecord({ type:'pump', time:now.toISOString().slice(0,16), title:'유축 완료', sub:'총 '+durStr, icon:'🤱', cat:'pump' });
+    addRecord({ type:'pump', time:nowLocal(), title:'유축 완료', sub:'총 '+durStr, icon:'🤱', cat:'pump' });
     pumpingStart = null;
     saveSessions();
     speak(`유축 완료! ${durStr} 동안 유축했어요 🤱`);
@@ -4632,7 +4706,7 @@ function endSession(type) {
     }
     const startTime = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
     const dur = Math.round((now - startTime) / 60000);
-    addRecord({ type:'feed', time:now.toISOString().slice(0,16), title:'수유 완료', sub:dur+'분', icon:'🍼', cat:'feed' });
+    addRecord({ type:'feed', time:nowLocal(), title:'수유 완료', sub:dur+'분', icon:'🍼', cat:'feed' });
     feedingStart = null;
     saveSessions();
     speak(`수유 완료! ${dur}분 수유했어요 🍼`);
@@ -4868,7 +4942,81 @@ function updateStatus() {
   updateQuickBtns();
 }
 
-// enterApp에 세션 로드 추가 — 아래 enterApp 본체에 통합됨
+// ══════════════════════════════════════════
+// 👨 아빠 기록 — 엄마 기록과 공유
+// ══════════════════════════════════════════
+const DAD_RECORD_LABELS = {
+  feed:   { title:'아빠가 분유 먹였어요', icon:'🍼', cat:'feed' },
+  diaper: { title:'아빠가 기저귀 갈았어요', icon:'🌿', cat:'diaper' },
+  sleep:  { title:'아빠가 재웠어요', icon:'😴', cat:'sleep' },
+  bath:   { title:'아빠가 목욕시켰어요', icon:'🛁', cat:'etc' },
+};
+
+function dadRecord(type) {
+  const info = DAD_RECORD_LABELS[type];
+  if (!info) return;
+  const rec = {
+    type: info.cat,
+    time: nowLocal(),
+    title: info.title,
+    sub: '👨 아빠 기록',
+    icon: info.icon,
+    cat: info.cat,
+    byDad: true,
+  };
+  try {
+    const raw = localStorage.getItem('baby_records');
+    const recs = raw ? JSON.parse(raw) : [];
+    recs.unshift(rec);
+    localStorage.setItem('baby_records', JSON.stringify(recs.slice(0, 500)));
+    showDadToast(info.icon + ' ' + info.title);
+    renderDadTodayRecords();
+  } catch(e) {
+    alert('기록 저장에 실패했어요.');
+  }
+}
+
+function renderDadTodayRecords() {
+  const el = document.getElementById('dad-rec-today');
+  if (!el) return;
+  try {
+    const raw = localStorage.getItem('baby_records');
+    const recs = raw ? JSON.parse(raw) : [];
+    const today = new Date().toDateString();
+    const todayDad = recs.filter(r => r.byDad && new Date(r.time).toDateString() === today).slice(0, 10);
+    if (!todayDad.length) {
+      el.innerHTML = '<div class="dad-rec-empty">오늘 아직 기록이 없어요<br>위 버튼을 눌러 기록해보세요 💪</div>';
+      return;
+    }
+    el.innerHTML = todayDad.map(r => {
+      const t = new Date(r.time);
+      const ts = t.getHours().toString().padStart(2,'0') + ':' + t.getMinutes().toString().padStart(2,'0');
+      return `<div class="dad-rec-item">
+        <span class="dad-rec-item-icon">${r.icon}</span>
+        <div class="dad-rec-item-info">
+          <div class="dad-rec-item-title">${r.title}</div>
+          <div class="dad-rec-item-time">오늘 ${ts}</div>
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e) { el.innerHTML = ''; }
+}
+
+function showDadToast(msg) {
+  const old = document.getElementById('dad-toast');
+  if (old) old.remove();
+  const el = document.createElement('div');
+  el.id = 'dad-toast';
+  el.style.cssText = `position:fixed;bottom:100px;left:50%;transform:translateX(-50%);
+    background:#1a3a1a;color:#fff;padding:12px 22px;border-radius:20px;
+    font-size:14px;font-weight:700;z-index:9999;
+    box-shadow:0 4px 16px rgba(0,0,0,0.25);white-space:nowrap;`;
+  el.textContent = msg + ' 기록 완료!';
+  document.body.appendChild(el);
+  setTimeout(() => { if(el.parentNode) el.remove(); }, 2500);
+}
+
+// renderDadScreen 후 오늘 기록 렌더 — selectRole에서 처리
 
 showScreen('role');
 </script>
