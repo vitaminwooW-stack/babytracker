@@ -14,7 +14,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .screen { display: none; min-height: 100vh; }
 .screen.active { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 /* 아빠·가이드·프로필 화면은 전체 스크롤 허용 */
-#screen-dad.active { overflow-y: auto; overflow-x: hidden; }
 #screen-guide.active { display: flex; flex-direction: column; overflow: hidden; }
 #screen-profile.active { overflow-y: auto; overflow-x: hidden; }
 
@@ -43,33 +42,16 @@ input:focus { border-color: #bfdbfe; }
 /* ── 전체 배경 컬러 통일 (첫 화면 톤) ── */
 body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif; background: #fff7d6; min-height: 100vh; color: #111827; }
 
-/* ── 역할 선택 화면 ── */
-#screen-role { background: radial-gradient(circle at top, #fffdf2 0%, #fff7d6 34%, #f6e6a8 100%); align-items: center; justify-content: center; position: relative; overflow: hidden; }
 #screen-login { background: radial-gradient(circle at top, #fffdf2 0%, #fff7d6 60%, #f6e6a8 100%); align-items: center; justify-content: center; }
 #screen-profile { background: #fffdf2; }
 #screen-guide { background: #fffdf2; }
-#screen-dad { background: #fffdf2; }
 #screen-app { background: #fff7d6; }
-.role-box { width: 100%; max-width: 360px; padding: 0 24px; text-align: center; }
-.role-logo { margin-bottom: 28px; }
 .role-logo .logo-icon { font-size: 34px; margin-bottom: 8px; font-weight: 900; letter-spacing: -0.04em; color: #6f4e00; line-height: 1.15; text-shadow: 0 1px 0 rgba(255,255,255,0.45); }
 .role-logo h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; }
 .role-logo p { font-size: 14px; color: #6b7280; margin-top: 6px; }
-.role-cards { display: flex; gap: 14px; margin-top: 8px; }
-.role-card { flex: 1; background: rgba(255,255,255,0.94); border-radius: 14px; padding: 24px 12px; border: 1px solid #e8d796; cursor: pointer; transition: all 0.15s; box-shadow: 0 8px 24px rgba(111, 78, 0, 0.06); backdrop-filter: blur(6px); }
 .role-card:active { transform: scale(0.96); }
-.role-card.mom { border-color: #f5b8d0; }
-.role-card.dad { border-color: #bfdbfe; }
-.role-card .r-icon { width: 48px; height: 48px; margin: 0 auto 10px; border-radius: 14px; background: linear-gradient(180deg, #fffaf0 0%, #fff1c7 100%); color: #7a5600; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; box-shadow: inset 0 1px 0 rgba(255,255,255,0.65); }
-.role-card .r-name { font-size: 18px; font-weight: 700; color: #1a1a1a; }
-.role-card .r-sub { font-size: 12px; color: #9ca3af; margin-top: 4px; }
-
+.role-card .role-card .role-card 
 /* ── 아빠 화면 ── */
-.dad-header { background: #7a5600; padding: 52px 20px 16px; }
-.dad-header-inner { max-width: 480px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-.dad-title { font-size: 20px; font-weight: 700; color: #fff; }
-.dad-sub { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 2px; }
-.dad-back-btn { background: rgba(255,255,255,0.2); border: none; border-radius: 12px; color: #fff; font-size: 13px; padding: 6px 14px; cursor: pointer; }
 
 .dad-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 80px; width: 100%; }
 
@@ -171,8 +153,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .baby-age { font-size: 11px; color: #6b7280; margin-top: 1px; }
 .app-header-top-right { display: flex; align-items: center; gap: 8px; }
 .header-date { font-size: 11px; color: #9ca3af; }
-.lock-btn { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 16px; font-size: 12px; color: #6b7280; cursor: pointer; padding: 4px 10px; font-weight: 500; }
-.lock-btn:active { background: #e5e7eb; }
 .app-header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
 .app-header-actions::-webkit-scrollbar { display: none; }
 .hdr-btn { display: flex; align-items: center; gap: 4px; padding: 5px 11px; border-radius: 20px; border: 1.5px solid; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
@@ -183,12 +163,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .hdr-btn.dad     { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
 body.dark .app-header { background: #2a2520; box-shadow: 0 1px 0 #3d3628; }
 body.dark .baby-name { color: #f0ead8; }
-body.dark .lock-btn { background: #3d3628; border-color: #4d4030; color: #c8a870; }
-body.dark .hdr-btn.profile { background: #2a2520; border-color: #4d4030; color: #c8a870; }
+body.dark body.dark .hdr-btn.profile { background: #2a2520; border-color: #4d4030; color: #c8a870; }
 body.dark .hdr-btn.guide   { background: #2a2218; border-color: #5a4a10; color: #d4a020; }
 body.dark .hdr-btn.invite  { background: #2a1820; border-color: #6a2840; color: #ec4899; }
 body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: #60a5fa; }
-/* profile-edit-btn 삭제 - hdr-btn으로 대체 */
 .profile-edit-btn { display: none; }
 
 .app-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 60px; width: 100%; box-sizing: border-box; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
@@ -243,9 +221,6 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .swipe-page { width: calc(100% / 10); height: 100%; flex-shrink: 0; overflow: hidden; }
 /* 사진 페이지(2번째)는 스크롤 없이 꽉 차게 */
 .swipe-page:nth-child(2) { overflow: hidden; }
-.page-dots { display: flex; justify-content: center; gap: 6px; padding: 10px 0 4px; }
-.page-dot { width: 6px; height: 6px; border-radius: 50%; background: #d0d0d0; transition: all 0.2s; }
-.page-dot.active { background: #7a5600; width: 18px; border-radius: 3px; }
 
 /* ── 일기 페이지 ── */
 .diary-page { padding: 16px 16px 80px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; }
@@ -644,31 +619,9 @@ body.dark .coach-title, body.dark .coach-msg { color: #f0ead8; }
 body.dark .coach-reason { color: #a89880; }
 
 /* 육아 점수 카드 */
-.score-card { background: #fff; border-radius: 14px; border: 1px solid #e8d796; padding: 14px 16px; margin-bottom: 10px; }
-.score-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.score-header-left { font-size: 13px; font-weight: 700; color: #7a5600; }
-.score-total-wrap { text-align: right; }
-.score-total-num { font-size: 26px; font-weight: 800; color: #1a1a1a; line-height: 1; }
-.score-total-label { font-size: 11px; color: #9ca3af; }
-.score-rows { display: flex; flex-direction: column; gap: 9px; }
-.score-row { display: flex; align-items: center; gap: 8px; }
-.score-row-icon { font-size: 14px; width: 20px; flex-shrink: 0; }
-.score-row-label { font-size: 12px; color: #555; width: 60px; flex-shrink: 0; }
-.score-bar-wrap { flex: 1; background: #f3f0e0; border-radius: 6px; height: 7px; overflow: hidden; }
-.score-bar { height: 100%; border-radius: 6px; transition: width 0.6s ease; }
-.score-bar.good { background: linear-gradient(90deg,#22c55e,#16a34a); }
 .score-bar.ok   { background: linear-gradient(90deg,#f59e0b,#d97706); }
 .score-bar.bad  { background: linear-gradient(90deg,#ef4444,#dc2626); }
-.score-row-val { font-size: 12px; font-weight: 700; color: #1a1a1a; width: 30px; text-align: right; flex-shrink: 0; }
-.score-comment { font-size: 12px; color: #6b7280; margin-top: 10px; line-height: 1.65; padding-top: 10px; border-top: 1px solid #f3f0e0; word-break: keep-all; }
-body.dark .score-card { background: #2a2520; border-color: #3d3628; }
-body.dark .score-total-num, body.dark .score-row-val { color: #f0ead8; }
-body.dark .score-row-label, body.dark .score-comment { color: #a89880; }
-body.dark .score-bar-wrap { background: #3d3628; }
-
-/* 원탭 빠른기록 */
-.quick-log-row { display: flex; gap: 7px; margin-bottom: 12px; }
-.quick-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 4px; background: #fff; border: 1.5px solid #e8d796; border-radius: 12px; cursor: pointer; transition: all 0.12s; }
+body.dark .quick-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 4px; background: #fff; border: 1.5px solid #e8d796; border-radius: 12px; cursor: pointer; transition: all 0.12s; }
 .quick-btn:active { transform: scale(0.93); background: #fff7d6; }
 .quick-btn-icon { font-size: 22px; }
 .quick-btn-label { font-size: 11px; font-weight: 700; color: #7a5600; }
@@ -677,12 +630,6 @@ body.dark .quick-btn { background: #2a2520; border-color: #3d3628; }
 body.dark .quick-btn-label { color: #c8a870; }
 
 /* ── 페이지 네비게이션 레이블 ── */
-.page-nav { display: flex; align-items: center; justify-content: space-between; padding: 6px 16px 2px; max-width: 480px; margin: 0 auto; }
-.page-nav-label { font-size: 11px; color: #9ca3af; font-weight: 500; }
-.page-nav-curr { font-size: 11px; font-weight: 700; color: #7a5600; }
-.page-dots { display: flex; justify-content: center; gap: 5px; padding: 4px 0 2px; }
-.page-dot { width: 5px; height: 5px; border-radius: 50%; background: #d0d0d0; transition: all 0.2s; flex-shrink: 0; }
-.page-dot.active { background: #7a5600; width: 16px; border-radius: 3px; }
 
 /* ── 온보딩 오버레이 ── */
 #onboarding-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 9000; display: flex; align-items: flex-end; }
@@ -795,8 +742,7 @@ body.dark .quick-nav-bar { background: #2a2520; border-top-color: #3d3628; }
 body.dark .qnav-btn.active { background: #3d3628; }
 body.dark .qnav-btn.active::after { background: #c8a870; }
 /* page-dots, page-nav 숨김 (탭바로 대체) */
-.page-dots, .page-nav { display: none; }
-</style>
+.page-dots, </style>
 </head>
 <script>
 // ── Service Worker 등록 (자동 업데이트) ──
@@ -1003,7 +949,7 @@ if ('serviceWorker' in navigator) {
 <div class="screen" id="screen-app">
   <div class="app-header">
     <div class="app-header-inner">
-      <!-- 위 줄: 아기 정보 + 날짜·잠금 -->
+      <!-- 위 줄: 아기 정보 + 날짜 -->
       <div class="app-header-top">
         <div class="app-header-left">
           <div class="baby-avatar" id="app-avatar">🍼</div>
@@ -1014,15 +960,13 @@ if ('serviceWorker' in navigator) {
         </div>
         <div class="app-header-top-right">
           <div class="header-date" id="app-date"></div>
-          <button class="lock-btn" onclick="lockApp()">🔒 잠금</button>
         </div>
       </div>
-      <!-- 아래 줄: 기능 버튼 4개 가로 나열 -->
+      <!-- 아래 줄: 기능 버튼 3개 -->
       <div class="app-header-actions">
         <button class="hdr-btn profile" onclick="openProfileEdit()">✏️ 프로필</button>
         <button class="hdr-btn guide"   onclick="openGuide('app')">📚 가이드</button>
         <button class="hdr-btn invite"  onclick="openInviteModal()">💌 초대</button>
-        <button class="hdr-btn dad"     onclick="openDadView()">👨 아빠탭</button>
       </div>
     </div>
     <!-- 빠른 이동 탭바 (클릭 가능) -->
@@ -1035,8 +979,8 @@ if ('serviceWorker' in navigator) {
       <button class="qnav-btn" onclick="goToPage(5)" id="qn-5">⭐</button>
       <button class="qnav-btn" onclick="goToPage(6)" id="qn-6">👩</button>
       <button class="qnav-btn" onclick="goToPage(7)" id="qn-7">🇰🇷</button>
-      <button class="qnav-btn" onclick="goToPage(8)" id="qn-8">⚙️</button>
-      <button class="qnav-btn" onclick="goToPage(9)" id="qn-9">👨</button>
+      <button class="qnav-btn" onclick="goToPage(8)" id="qn-8">👨</button>
+      <button class="qnav-btn" onclick="goToPage(9)" id="qn-9">⚙️</button>
     </div>
   </div>
 
@@ -1423,46 +1367,7 @@ if ('serviceWorker' in navigator) {
         </div>
       </div>
 
-      <!-- ── 페이지 8: 설정 ── -->
-      <div class="swipe-page">
-        <div class="feature-page">
-          <div class="feature-page-title">⚙️ 설정</div>
-          <div class="feature-page-sub">앱 설정과 데이터를 관리해요</div>
-
-          <!-- 아빠 탭 바로가기 (간단하게) -->
-          <div class="feature-section-title">🌙 화면 설정</div>
-          <div class="chart-wrap" style="padding:14px 16px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;">
-              <div><div style="font-size:14px;font-weight:600;">다크 모드</div><div style="font-size:12px;color:#9ca3af;margin-top:2px;">야간 수유 시 눈이 편해요</div></div>
-              <div id="dark-toggle" onclick="toggleDarkMode()" style="width:44px;height:24px;border-radius:12px;background:#d1d5db;cursor:pointer;position:relative;transition:background 0.2s;">
-                <div id="dark-knob" style="width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
-              </div>
-            </div>
-          </div>
-          <div class="feature-section-title">📤 데이터 내보내기</div>
-          <button class="export-btn" onclick="exportCSV()">📊 기록 데이터 CSV로 내보내기</button>
-          <button class="export-btn" onclick="exportGrowthCSV()">📏 성장 기록 CSV로 내보내기</button>
-          <button class="export-btn" onclick="exportDiaryTxt()">📔 일기 텍스트로 내보내기</button>
-          <div class="feature-section-title">💾 데이터 관리</div>
-          <div class="chart-wrap" style="padding:14px 16px;">
-            <!-- 저장 공간 현황 -->
-            <div id="storage-status" style="margin-bottom:12px;"></div>
-            <div style="font-size:12px;color:#9ca3af;margin-bottom:10px;line-height:1.6;">
-              ⚠️ 모든 기록은 <strong>이 기기의 브라우저</strong>에만 저장돼요.<br>
-              폰 교체·브라우저 변경 전 반드시 백업하세요!
-            </div>
-            <button class="export-btn" onclick="backupAllData()" style="margin-bottom:8px;">💾 전체 데이터 백업 (JSON)</button>
-            <button class="export-btn" onclick="clearTodayRecords()" style="color:#f59e0b;border-color:#fde68a;">🗑️ 오늘 기록만 삭제</button>
-          </div>
-          <div class="chart-wrap" style="padding:14px 16px;border:1px solid #fecaca;background:#fff5f5;margin-top:8px;">
-            <div style="font-size:12px;color:#ef4444;font-weight:700;margin-bottom:6px;">⚠️ 위험 구역</div>
-            <div style="font-size:12px;color:#9ca3af;margin-bottom:10px;line-height:1.6;">아래 작업은 되돌릴 수 없어요.<br>반드시 백업 후 진행하세요.</div>
-            <button onclick="confirmReset()" style="width:100%;padding:12px;background:none;border:1.5px solid #fecaca;border-radius:10px;color:#ef4444;font-size:13px;font-weight:600;cursor:pointer;">⛔ 모든 데이터 초기화</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── 페이지 9: 👨 아빠 탭 ── -->
+      <!-- ── 페이지 8: 👨 아빠 탭 ── -->
       <div class="swipe-page">
         <div class="feature-page" id="dad-tab-page">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
@@ -1474,7 +1379,7 @@ if ('serviceWorker' in navigator) {
           <div class="dad-rec-section">
             <div class="dad-rec-title">📋 아빠 기록 <span class="dad-rec-badge">엄마 타임라인에 공유됨</span></div>
             <div class="dad-rec-btns">
-              <button class="dad-rec-btn feed"   onclick="dadRecord('feed')">🍼 분유·수유</button>
+              <button class="dad-rec-btn feed"   onclick="dadRecordFeed()">🍼 분유·수유</button>
               <button class="dad-rec-btn diaper" onclick="dadRecord('diaper')">🌿 기저귀</button>
               <button class="dad-rec-btn sleep"  onclick="dadRecord('sleep')">😴 재웠어요</button>
               <button class="dad-rec-btn bath"   onclick="dadRecord('bath')">🛁 목욕</button>
@@ -1510,6 +1415,45 @@ if ('serviceWorker' in navigator) {
           <button onclick="openGuide('app')" style="width:100%;padding:14px;background:#fff;border:1.5px solid #e0e0e0;border-radius:14px;font-size:14px;font-weight:700;color:#555;cursor:pointer;margin-top:8px;">
             📚 신생아 케어 가이드 보기
           </button>
+        </div>
+      </div>
+
+      <!-- ── 페이지 9: 설정 ── -->
+      <div class="swipe-page">
+        <div class="feature-page">
+          <div class="feature-page-title">⚙️ 설정</div>
+          <div class="feature-page-sub">앱 설정과 데이터를 관리해요</div>
+
+          <!-- 아빠 탭 바로가기 (간단하게) -->
+          <div class="feature-section-title">🌙 화면 설정</div>
+          <div class="chart-wrap" style="padding:14px 16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div><div style="font-size:14px;font-weight:600;">다크 모드</div><div style="font-size:12px;color:#9ca3af;margin-top:2px;">야간 수유 시 눈이 편해요</div></div>
+              <div id="dark-toggle" onclick="toggleDarkMode()" style="width:44px;height:24px;border-radius:12px;background:#d1d5db;cursor:pointer;position:relative;transition:background 0.2s;">
+                <div id="dark-knob" style="width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+              </div>
+            </div>
+          </div>
+          <div class="feature-section-title">📤 데이터 내보내기</div>
+          <button class="export-btn" onclick="exportCSV()">📊 기록 데이터 CSV로 내보내기</button>
+          <button class="export-btn" onclick="exportGrowthCSV()">📏 성장 기록 CSV로 내보내기</button>
+          <button class="export-btn" onclick="exportDiaryTxt()">📔 일기 텍스트로 내보내기</button>
+          <div class="feature-section-title">💾 데이터 관리</div>
+          <div class="chart-wrap" style="padding:14px 16px;">
+            <!-- 저장 공간 현황 -->
+            <div id="storage-status" style="margin-bottom:12px;"></div>
+            <div style="font-size:12px;color:#9ca3af;margin-bottom:10px;line-height:1.6;">
+              ⚠️ 모든 기록은 <strong>이 기기의 브라우저</strong>에만 저장돼요.<br>
+              폰 교체·브라우저 변경 전 반드시 백업하세요!
+            </div>
+            <button class="export-btn" onclick="backupAllData()" style="margin-bottom:8px;">💾 전체 데이터 백업 (JSON)</button>
+            <button class="export-btn" onclick="clearTodayRecords()" style="color:#f59e0b;border-color:#fde68a;">🗑️ 오늘 기록만 삭제</button>
+          </div>
+          <div class="chart-wrap" style="padding:14px 16px;border:1px solid #fecaca;background:#fff5f5;margin-top:8px;">
+            <div style="font-size:12px;color:#ef4444;font-weight:700;margin-bottom:6px;">⚠️ 위험 구역</div>
+            <div style="font-size:12px;color:#9ca3af;margin-bottom:10px;line-height:1.6;">아래 작업은 되돌릴 수 없어요.<br>반드시 백업 후 진행하세요.</div>
+            <button onclick="confirmReset()" style="width:100%;padding:12px;background:none;border:1.5px solid #fecaca;border-radius:10px;color:#ef4444;font-size:13px;font-weight:600;cursor:pointer;">⛔ 모든 데이터 초기화</button>
+          </div>
         </div>
       </div>
 
@@ -2218,12 +2162,17 @@ function renderAppHeader() {
   document.getElementById('app-avatar').textContent = avatarMap[p.gender] || '👶';
   if (p.birthDate) {
     const days = Math.floor((new Date() - new Date(p.birthDate)) / 86400000);
-    const weeks = Math.floor(days / 7);
-    let age = days < 7 ? '태어난 지 ' + days + '일' : weeks < 8 ? '태어난 지 ' + weeks + '주' : Math.floor(days / 30) + '개월';
-    document.getElementById('app-baby-age').textContent = age;
+    // 항상 일 수로 표시
+    const ageText = `생후 ${days}일째 🌱`;
+    document.getElementById('app-baby-age').textContent = ageText;
   }
+  // 귀여운 날짜 표현
   const t = new Date();
-  document.getElementById('app-date').textContent = (t.getMonth() + 1) + '월 ' + t.getDate() + '일';
+  const month = t.getMonth() + 1;
+  const day = t.getDate();
+  const dayNames = ['일','월','화','수','목','금','토'];
+  const dayName = dayNames[t.getDay()];
+  document.getElementById('app-date').textContent = `${month}월 ${day}일 ${dayName}요일 🌸`;
 }
 
 function lockApp() {
@@ -3103,7 +3052,6 @@ function toggleDadTabCheck(id) {
   localStorage.setItem('dad_checks', JSON.stringify(checks));
   renderDadTabChecklist();
 }
-
 
 function toggleDadCheck(id) {
   const checks = JSON.parse(localStorage.getItem('dad_checks') || '{}');
@@ -4572,7 +4520,7 @@ function checkBackupReminder() {
 // ══════════════════════════════════════════
 const PAGE_LABELS = [
   '📔 일기','📷 사진','🍼 루틴','📊 통계',
-  '📏 성장','⭐ 마일스톤','👩 엄마케어','🇰🇷 복지','⚙️ 설정','👨 아빠탭'
+  '📏 성장','⭐ 마일스톤','👩 엄마케어','🇰🇷 복지','👨 아빠탭','⚙️ 설정'
 ];
 
 function updatePageLabel(n) {
@@ -4597,7 +4545,7 @@ function goToPage(n) {
   updatePageLabel(currentPage);
   if (currentPage === 3) setTimeout(renderMainChart, 100);
   if (currentPage === 4) setTimeout(() => { renderGrowthChart(); renderGrowthTable(); }, 100);
-  if (currentPage === 9) {
+  if (currentPage === 8) {  // 아빠 탭 (이제 8번째)
     renderDadTabChecklist();
     renderDadTodayRecords();
   }
@@ -4696,8 +4644,6 @@ function obNext() {
   const btn = document.getElementById('ob-btn');
   if (btn) btn.textContent = obStep === total-1 ? '시작하기 🍼' : '다음';
 }
-
-
 
 // ══════════════════════════════════════════
 // enterApp 통합 (모든 기능 초기화)
@@ -4801,7 +4747,7 @@ function selectRole(role) {
 }
 
 function switchRole() {
-  goToPage(9);
+  goToPage(8);
   setTimeout(() => {
     renderDadTabChecklist();
     renderDadTodayRecords();
@@ -4815,9 +4761,9 @@ function updateSettingsRoleUI() {
   if (btn) btn.textContent = '👨 아빠 탭 바로 가기 →';
 }
 
-// 헤더 아빠 버튼 → 아빠 탭으로
+// 헤더 아빠 버튼 → 아빠 탭(8번째)으로
 function openDadView() {
-  goToPage(9);
+  goToPage(8);
   setTimeout(() => {
     renderDadTabChecklist();
     renderDadTodayRecords();
@@ -5168,28 +5114,36 @@ const DAD_RECORD_LABELS = {
   bath:   { title:'아빠가 목욕시켰어요', icon:'🛁', cat:'etc' },
 };
 
+// 아빠 분유 기록 — ml 입력 포함
+function dadRecordFeed() {
+  const ml = prompt('몇 ml 먹였나요? (모르면 그냥 확인)');
+  const mlText = ml && !isNaN(parseInt(ml)) ? parseInt(ml) + 'ml' : '';
+  const title = mlText ? `아빠가 분유 ${mlText} 먹였어요` : '아빠가 분유 먹였어요';
+  const sub = mlText ? `👨 아빠 기록 · ${mlText}` : '👨 아빠 기록';
+  _saveDadRecord({ type:'feed', time:nowLocal(), title, sub, icon:'🍼', cat:'feed', byDad:true });
+  showDadToast(`🍼 ${title}`);
+  renderDadTodayRecords();
+}
+
 function dadRecord(type) {
   const info = DAD_RECORD_LABELS[type];
   if (!info) return;
-  const rec = {
-    type: info.cat,
-    time: nowLocal(),
-    title: info.title,
-    sub: '👨 아빠 기록',
-    icon: info.icon,
-    cat: info.cat,
-    byDad: true,
-  };
+  _saveDadRecord({
+    type: info.cat, time: nowLocal(),
+    title: info.title, sub: '👨 아빠 기록',
+    icon: info.icon, cat: info.cat, byDad: true,
+  });
+  showDadToast(info.icon + ' ' + info.title);
+  renderDadTodayRecords();
+}
+
+function _saveDadRecord(rec) {
   try {
     const raw = localStorage.getItem('baby_records');
     const recs = raw ? JSON.parse(raw) : [];
     recs.unshift(rec);
     localStorage.setItem('baby_records', JSON.stringify(recs.slice(0, 500)));
-    showDadToast(info.icon + ' ' + info.title);
-    renderDadTodayRecords();
-  } catch(e) {
-    alert('기록 저장에 실패했어요.');
-  }
+  } catch(e) { alert('기록 저장에 실패했어요.'); }
 }
 
 function renderDadTodayRecords() {
