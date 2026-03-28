@@ -782,8 +782,49 @@ body.dark .active-session-title { color: #f0ead8; }@keyframes micPulse { 0%,100%
 body.dark .dad-rec-section { background: #2a2520; border-color: #3d3628; }
 body.dark .dad-rec-title { color: #c8a870; }
 body.dark .dad-rec-item-title { color: #f0ead8; }
+
+/* ── 빠른 이동 탭바 ── */
+.quick-nav-bar { display: flex; align-items: center; justify-content: space-around; padding: 4px 8px 2px; background: #fff; border-top: 1px solid #f3f0e0; overflow-x: auto; scrollbar-width: none; gap: 2px; }
+.quick-nav-bar::-webkit-scrollbar { display: none; }
+.qnav-btn { flex: 1; min-width: 32px; padding: 5px 2px 3px; border: none; background: none; font-size: 18px; border-radius: 8px; cursor: pointer; transition: background 0.15s; line-height: 1; position: relative; }
+.qnav-btn::after { content: ''; display: block; height: 3px; border-radius: 2px; background: transparent; margin: 2px auto 0; width: 20px; transition: background 0.15s; }
+.qnav-btn.active::after { background: #7a5600; }
+.qnav-btn.active { background: #fff7d6; }
+.qnav-btn:active { background: #f3f0e0; }
+body.dark .quick-nav-bar { background: #2a2520; border-top-color: #3d3628; }
+body.dark .qnav-btn.active { background: #3d3628; }
+body.dark .qnav-btn.active::after { background: #c8a870; }
+/* page-dots, page-nav 숨김 (탭바로 대체) */
+.page-dots, .page-nav { display: none; }
 </style>
 </head>
+<script>
+// ── Service Worker 등록 (자동 업데이트) ──
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').then(reg => {
+    // 새 버전 감지 시 사용자에게 알림
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          // 업데이트 토스트 표시
+          const el = document.createElement('div');
+          el.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+            background:#1d4ed8;color:#fff;padding:12px 20px;border-radius:20px;
+            font-size:13px;font-weight:700;z-index:9999;display:flex;align-items:center;gap:10px;
+            box-shadow:0 4px 16px rgba(0,0,0,0.25);white-space:nowrap;`;
+          el.innerHTML = `<span>🆕 새 버전이 있어요!</span>
+            <button onclick="location.reload()" style="background:#fff;color:#1d4ed8;border:none;
+              border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;">
+              업데이트
+            </button>`;
+          document.body.appendChild(el);
+        }
+      });
+    });
+  }).catch(() => {});
+}
+</script>
 <body>
 
 <!-- ═══════════ 온보딩 오버레이 ═══════════ -->
@@ -984,23 +1025,18 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
         <button class="hdr-btn dad"     onclick="openDadView()">👨 아빠탭</button>
       </div>
     </div>
-    <!-- 페이지 레이블 + 인디케이터 -->
-    <div class="page-nav">
-      <span class="page-nav-label">← 일기·사진</span>
-      <span class="page-nav-curr" id="page-nav-curr">🍼 루틴</span>
-      <span class="page-nav-label">통계·성장·아빠 →</span>
-    </div>
-    <div class="page-dots">
-      <div class="page-dot" id="dot-0"></div>
-      <div class="page-dot" id="dot-1"></div>
-      <div class="page-dot active" id="dot-2"></div>
-      <div class="page-dot" id="dot-3"></div>
-      <div class="page-dot" id="dot-4"></div>
-      <div class="page-dot" id="dot-5"></div>
-      <div class="page-dot" id="dot-6"></div>
-      <div class="page-dot" id="dot-7"></div>
-      <div class="page-dot" id="dot-8"></div>
-      <div class="page-dot" id="dot-9"></div>
+    <!-- 빠른 이동 탭바 (클릭 가능) -->
+    <div class="quick-nav-bar">
+      <button class="qnav-btn" onclick="goToPage(0)" id="qn-0">📔</button>
+      <button class="qnav-btn" onclick="goToPage(1)" id="qn-1">📷</button>
+      <button class="qnav-btn active" onclick="goToPage(2)" id="qn-2">🍼</button>
+      <button class="qnav-btn" onclick="goToPage(3)" id="qn-3">📊</button>
+      <button class="qnav-btn" onclick="goToPage(4)" id="qn-4">📏</button>
+      <button class="qnav-btn" onclick="goToPage(5)" id="qn-5">⭐</button>
+      <button class="qnav-btn" onclick="goToPage(6)" id="qn-6">👩</button>
+      <button class="qnav-btn" onclick="goToPage(7)" id="qn-7">🇰🇷</button>
+      <button class="qnav-btn" onclick="goToPage(8)" id="qn-8">⚙️</button>
+      <button class="qnav-btn" onclick="goToPage(9)" id="qn-9">👨</button>
     </div>
   </div>
 
@@ -1393,16 +1429,7 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
           <div class="feature-page-title">⚙️ 설정</div>
           <div class="feature-page-sub">앱 설정과 데이터를 관리해요</div>
 
-          <!-- 아빠 탭 안내 -->
-          <div class="feature-section-title">👤 사용자 설정</div>
-          <div class="chart-wrap" style="padding:14px 16px;">
-            <div style="font-size:13px;color:#555;margin-bottom:10px;line-height:1.6;">
-              엄마·아빠 모두 같은 앱을 사용해요.<br>
-              아빠 탭(맨 오른쪽)에서 아빠만의 기록·체크리스트를 볼 수 있어요.
-            </div>
-            <button class="export-btn" onclick="goToPage(9)" style="margin-bottom:0;">👨 아빠 탭 바로 가기 →</button>
-          </div>
-
+          <!-- 아빠 탭 바로가기 (간단하게) -->
           <div class="feature-section-title">🌙 화면 설정</div>
           <div class="chart-wrap" style="padding:14px 16px;">
             <div style="display:flex;align-items:center;justify-content:space-between;">
@@ -4084,74 +4111,41 @@ function renderScoreCard() {
 
   const today = new Date().toDateString();
   const todayRecs = records.filter(r => new Date(r.time).toDateString() === today);
-
-  // 수유 점수
-  const feedRec = getFeedRec(days);
   const feedCount = todayRecs.filter(r => r.cat === 'feed').length;
-  const feedScore = Math.min(100, Math.round((feedCount / feedRec.min) * 100));
-  const feedOk = feedCount >= feedRec.min;
-
-  // 수면 점수 (오늘 수면 총합)
-  const sleepRec = getSleepRec(days);
-  let sleepHours = 0;
-  todayRecs.filter(r => r.cat === 'sleep' && r.sub && r.sub.includes('시간')).forEach(r => {
-    const m = r.sub.match(/(\d+)시간\s*(\d+)?분?/);
-    if (m) sleepHours += parseInt(m[1]) + (parseInt(m[2])||0)/60;
-  });
-  if (sleepingStart) {
-    const st = sleepingStart instanceof Date ? sleepingStart : new Date(sleepingStart);
-    sleepHours += (Date.now() - st.getTime()) / 3600000;
-  }
-  const sleepScore = Math.min(100, Math.round((sleepHours / sleepRec.min) * 100));
-  const sleepOk = sleepHours >= sleepRec.min;
-
-  // 기저귀 점수 (신생아 기준 6~12회)
   const diaperCount = todayRecs.filter(r => r.cat === 'diaper').length;
-  const diaperMin = days < 30 ? 6 : days < 90 ? 5 : 4;
-  const diaperScore = Math.min(100, Math.round((diaperCount / diaperMin) * 100));
-  const diaperOk = diaperCount >= diaperMin;
+  const totalRecs = todayRecs.length;
 
-  const total = Math.round((feedScore * 0.4 + sleepScore * 0.4 + diaperScore * 0.2));
-  const totalColor = total >= 80 ? '#22c55e' : total >= 60 ? '#f59e0b' : '#ef4444';
-  const totalEmoji = total >= 80 ? '😊' : total >= 60 ? '😐' : '😟';
+  // 독려 메시지 풀 (점수 없이 항상 긍정적)
+  const CHEER_MSGS = [
+    { emoji:'🌸', msg:'지금 이 순간 최선을 다하고 있어요. 그것만으로 충분해요.' },
+    { emoji:'💛', msg:'아기가 엄마 목소리를 가장 좋아한다는 거 알고 있죠? 엄마는 최고예요.' },
+    { emoji:'🌙', msg:'새벽마다 일어나는 것, 보이지 않아도 모두 기억될 거예요.' },
+    { emoji:'🍼', msg:'수유 한 번 한 번이 아기에게 사랑을 전하는 시간이에요.' },
+    { emoji:'☀️', msg:'오늘도 해냈어요. 육아는 완벽함이 아니라 사랑으로 하는 거예요.' },
+    { emoji:'🤱', msg:'힘들어도 계속하는 것 자체가 대단한 일이에요.' },
+    { emoji:'💪', msg:'아기는 지금 이 순간 세상에서 가장 사랑받고 있어요.' },
+    { emoji:'🌈', msg:'잠 못 자고 힘든 날도 있지만, 그게 엄마의 사랑이에요.' },
+  ];
+  const cheer = CHEER_MSGS[new Date().getDate() % CHEER_MSGS.length];
 
-  // 코멘트
-  const comments = [];
-  if (feedOk) comments.push(`수유 ${feedCount}회로 목표 달성이에요 🍼`);
-  else comments.push(`수유가 ${feedCount}회예요. 오늘 목표 ${feedRec.min}회까지 ${feedRec.min - feedCount}회 남았어요.`);
-  if (!sleepOk && sleepHours > 0) comments.push(`수면이 ${sleepHours.toFixed(1)}시간으로 권장(${sleepRec.min}시간)보다 적어요.`);
-  if (diaperCount < diaperMin) comments.push(`기저귀가 ${diaperCount}회예요. 수분 섭취를 확인해보세요 💧`);
+  // 오늘 활동 요약 (점수 없이 기록 수만)
+  let actSummary = '';
+  if (totalRecs === 0) {
+    actSummary = '오늘 첫 기록을 남겨보세요 🌱';
+  } else {
+    const parts = [];
+    if (feedCount > 0) parts.push(`수유 ${feedCount}회`);
+    if (diaperCount > 0) parts.push(`기저귀 ${diaperCount}회`);
+    const etc = totalRecs - feedCount - diaperCount;
+    if (etc > 0) parts.push(`기타 ${etc}회`);
+    actSummary = `오늘 ${parts.join(', ')} 기록 완료 ✅`;
+  }
 
   wrap.innerHTML = `
-    <div class="score-card">
-      <div class="score-header">
-        <div class="score-header-left">📋 오늘의 육아 점수</div>
-        <div class="score-total-wrap">
-          <div class="score-total-num" style="color:${totalColor}">${totalEmoji} ${total}</div>
-          <div class="score-total-label">/ 100점</div>
-        </div>
-      </div>
-      <div class="score-rows">
-        <div class="score-row">
-          <span class="score-row-icon">🍼</span>
-          <span class="score-row-label">수유 ${feedCount}회</span>
-          <div class="score-bar-wrap"><div class="score-bar ${feedScore>=80?'good':feedScore>=50?'ok':'bad'}" style="width:${feedScore}%"></div></div>
-          <span class="score-row-val">${feedScore}</span>
-        </div>
-        <div class="score-row">
-          <span class="score-row-icon">😴</span>
-          <span class="score-row-label">수면 ${sleepHours.toFixed(1)}h</span>
-          <div class="score-bar-wrap"><div class="score-bar ${sleepScore>=80?'good':sleepScore>=50?'ok':'bad'}" style="width:${sleepScore}%"></div></div>
-          <span class="score-row-val">${sleepScore}</span>
-        </div>
-        <div class="score-row">
-          <span class="score-row-icon">🌿</span>
-          <span class="score-row-label">기저귀 ${diaperCount}회</span>
-          <div class="score-bar-wrap"><div class="score-bar ${diaperScore>=80?'good':diaperScore>=50?'ok':'bad'}" style="width:${diaperScore}%"></div></div>
-          <span class="score-row-val">${diaperScore}</span>
-        </div>
-      </div>
-      ${comments.length ? `<div class="score-comment">💬 ${comments.join(' ')}</div>` : ''}
+    <div style="background:linear-gradient(135deg,#fffbf0,#fff7d6);border:1.5px solid #e8d796;border-radius:14px;padding:16px;margin-bottom:10px;">
+      <div style="font-size:28px;margin-bottom:8px;">${cheer.emoji}</div>
+      <div style="font-size:14px;font-weight:700;color:#7a5600;margin-bottom:6px;line-height:1.5;word-break:keep-all;">${cheer.msg}</div>
+      <div style="font-size:12px;color:#9ca3af;border-top:1px solid #e8d796;padding-top:10px;margin-top:10px;">${actSummary}</div>
     </div>`;
 }
 
@@ -4590,14 +4584,19 @@ function goToPage(n) {
   currentPage = Math.max(0, Math.min(9, n));
   document.getElementById('swipe-container').style.transform =
     'translateX(-' + (currentPage * 100 / 10) + '%)';
+  // dots (숨겨져 있지만 호환성 유지)
   for (let i = 0; i < 10; i++) {
     const dot = document.getElementById('dot-' + i);
     if (dot) dot.classList.toggle('active', i === currentPage);
   }
+  // 탭바 active 업데이트
+  for (let i = 0; i < 10; i++) {
+    const qn = document.getElementById('qn-' + i);
+    if (qn) qn.classList.toggle('active', i === currentPage);
+  }
   updatePageLabel(currentPage);
   if (currentPage === 3) setTimeout(renderMainChart, 100);
   if (currentPage === 4) setTimeout(() => { renderGrowthChart(); renderGrowthTable(); }, 100);
-  // 아빠 탭 진입 시 체크리스트 렌더
   if (currentPage === 9) {
     renderDadTabChecklist();
     renderDadTodayRecords();
