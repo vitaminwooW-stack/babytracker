@@ -239,8 +239,8 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .section-title-row .section-title { margin-bottom: 0; }
 
 /* ── 스와이프 ── */
-.swipe-container { display: flex; width: 900%; height: 100%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
-.swipe-page { width: calc(100% / 9); height: 100%; flex-shrink: 0; overflow: hidden; }
+.swipe-container { display: flex; width: 1000%; height: 100%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
+.swipe-page { width: calc(100% / 10); height: 100%; flex-shrink: 0; overflow: hidden; }
 /* 사진 페이지(2번째)는 스크롤 없이 꽉 차게 */
 .swipe-page:nth-child(2) { overflow: hidden; }
 .page-dots { display: flex; justify-content: center; gap: 6px; padding: 10px 0 4px; }
@@ -828,95 +828,6 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
   </div>
 </div>
 
-<!-- ═══════════ 화면0: 역할 선택 ═══════════ -->
-<div class="screen" id="screen-role">
-  <div class="role-box">
-    <div class="role-logo">
-      <div class="logo-icon">누리케어</div>
-      <p>처음 사용하시나요? 역할을 선택해주세요</p>
-    </div>
-    <div class="role-cards">
-      <div class="role-card mom" onclick="setRoleAndContinue('mom')">
-        <div class="r-icon">👩</div>
-        <div class="r-name">엄마</div>
-        <div class="r-sub">기록 · 관리</div>
-      </div>
-      <div class="role-card dad" onclick="setRoleAndContinue('dad')">
-        <div class="r-icon">👨</div>
-        <div class="r-name">아빠</div>
-        <div class="r-sub">체크리스트 · 기록</div>
-      </div>
-    </div>
-    <div style="font-size:12px;color:#9ca3af;text-align:center;margin-top:12px;line-height:1.6;">
-      선택하면 다음부터 이 화면 없이 바로 시작해요<br>
-      <span style="color:#7a5600;font-weight:600;">설정에서 역할을 변경할 수 있어요</span>
-    </div>
-    <button onclick="openGuide('role')" style="margin-top:16px;width:100%;padding:14px;background:#fff;border:1.5px solid #e0e0e0;border-radius:14px;font-size:14px;font-weight:700;color:#555;cursor:pointer;">
-      📚 신생아 케어 가이드 보기
-    </button>
-  </div>
-</div>
-
-<!-- ═══════════ 화면: 아빠 ═══════════ -->
-<div class="screen" id="screen-dad">
-  <div class="dad-header">
-    <div class="dad-header-inner">
-      <div>
-        <div class="dad-title">👨 아빠 체크리스트</div>
-        <div class="dad-sub" id="dad-baby-name-sub">아기를 위해 챙겨야 할 것들</div>
-        <div id="dad-linked-badge-wrap"></div>
-      </div>
-      <button class="nav-back-btn" onclick="showScreen('role')">✕ 나가기</button>
-    </div>
-    <div class="dad-invite-wrap" id="dad-invite-wrap">
-      <span class="dad-invite-label">엄마에게 초대 코드를 받으셨나요?</span>
-      <div class="dad-invite-row">
-        <input type="text" class="dad-invite-input" id="dad-invite-input" placeholder="코드 6자리 입력" maxlength="6">
-        <button class="dad-invite-btn" onclick="applyInviteCode()">연동</button>
-      </div>
-    </div>
-  </div>
-  <div class="dad-body">
-
-    <!-- ★ 아빠 기록 섹션 ★ -->
-    <div class="dad-rec-section">
-      <div class="dad-rec-title">📋 아빠 기록 <span class="dad-rec-badge">엄마에게 공유됨</span></div>
-      <div class="dad-rec-btns">
-        <button class="dad-rec-btn feed" onclick="dadRecord('feed')">🍼 분유/수유</button>
-        <button class="dad-rec-btn diaper" onclick="dadRecord('diaper')">🌿 기저귀</button>
-        <button class="dad-rec-btn sleep" onclick="dadRecord('sleep')">😴 재웠어요</button>
-        <button class="dad-rec-btn bath" onclick="dadRecord('bath')">🛁 목욕</button>
-      </div>
-      <div class="dad-rec-today" id="dad-rec-today"></div>
-    </div>
-
-    <div class="dad-progress" id="dad-progress-wrap">
-      <div class="dad-progress-bar-wrap"><div class="dad-progress-bar" id="dad-progress-bar" style="width:0%"></div></div>
-      <div class="dad-progress-text" id="dad-progress-text">0 / 0</div>
-    </div>
-
-    <div class="dad-section">
-      <div class="dad-section-title"><span>🚨</span> 지금 당장 챙겨요</div>
-      <div class="dad-check-card" id="dad-checklist-urgent"></div>
-    </div>
-    <div class="dad-section">
-      <div class="dad-section-title"><span>📋</span> 곧 필요해요</div>
-      <div class="dad-check-card" id="dad-checklist-soon"></div>
-    </div>
-    <div class="dad-section">
-      <div class="dad-section-title"><span>💡</span> 알아두면 좋아요</div>
-      <div class="dad-check-card" id="dad-checklist-prep"></div>
-    </div>
-    <div class="dad-section">
-      <div class="dad-section-title"><span>💝</span> 아내를 위한 깜짝 이벤트<span class="dad-section-secret">😉 엄마 몰래</span></div>
-      <div class="dad-event-card" id="dad-checklist-events"></div>
-    </div>
-    <button onclick="openGuide('dad')" style="width:100%;padding:14px;background:#fff;border:1.5px solid #e0e0e0;border-radius:14px;font-size:14px;font-weight:700;color:#555;cursor:pointer;margin-top:8px;">
-      신생아 케어 가이드 보기
-    </button>
-  </div>
-</div>
-
 <!-- ═══════════ 화면: 신생아 케어 가이드 ═══════════ -->
 <div class="screen" id="screen-guide">
   <div class="guide-header">
@@ -1070,14 +981,14 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
         <button class="hdr-btn profile" onclick="openProfileEdit()">✏️ 프로필</button>
         <button class="hdr-btn guide"   onclick="openGuide('app')">📚 가이드</button>
         <button class="hdr-btn invite"  onclick="openInviteModal()">💌 초대</button>
-        <button class="hdr-btn dad"     onclick="openDadView()">👨 아빠</button>
+        <button class="hdr-btn dad"     onclick="openDadView()">👨 아빠탭</button>
       </div>
     </div>
     <!-- 페이지 레이블 + 인디케이터 -->
     <div class="page-nav">
       <span class="page-nav-label">← 일기·사진</span>
       <span class="page-nav-curr" id="page-nav-curr">🍼 루틴</span>
-      <span class="page-nav-label">통계·케어·설정 →</span>
+      <span class="page-nav-label">통계·성장·아빠 →</span>
     </div>
     <div class="page-dots">
       <div class="page-dot" id="dot-0"></div>
@@ -1089,6 +1000,7 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
       <div class="page-dot" id="dot-6"></div>
       <div class="page-dot" id="dot-7"></div>
       <div class="page-dot" id="dot-8"></div>
+      <div class="page-dot" id="dot-9"></div>
     </div>
   </div>
 
@@ -1481,16 +1393,14 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
           <div class="feature-page-title">⚙️ 설정</div>
           <div class="feature-page-sub">앱 설정과 데이터를 관리해요</div>
 
-          <!-- 현재 역할 & 전환 -->
+          <!-- 아빠 탭 안내 -->
           <div class="feature-section-title">👤 사용자 설정</div>
           <div class="chart-wrap" style="padding:14px 16px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-              <div>
-                <div style="font-size:14px;font-weight:600;" id="settings-role-label">현재: 엄마 모드</div>
-                <div style="font-size:12px;color:#9ca3af;margin-top:2px;">다음 실행부터 자동으로 이 역할로 시작해요</div>
-              </div>
+            <div style="font-size:13px;color:#555;margin-bottom:10px;line-height:1.6;">
+              엄마·아빠 모두 같은 앱을 사용해요.<br>
+              아빠 탭(맨 오른쪽)에서 아빠만의 기록·체크리스트를 볼 수 있어요.
             </div>
-            <button class="export-btn" onclick="switchRole()" style="margin-bottom:0;" id="settings-role-btn">👨 아빠 탭으로 전환하기</button>
+            <button class="export-btn" onclick="goToPage(9)" style="margin-bottom:0;">👨 아빠 탭 바로 가기 →</button>
           </div>
 
           <div class="feature-section-title">🌙 화면 설정</div>
@@ -1525,7 +1435,58 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
         </div>
       </div>
 
-    </div><!-- /swipe-container -->
+      <!-- ── 페이지 9: 👨 아빠 탭 ── -->
+      <div class="swipe-page">
+        <div class="feature-page" id="dad-tab-page">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+            <div class="feature-page-title" style="margin-bottom:0;">👨 아빠 탭</div>
+          </div>
+          <div class="feature-page-sub">아빠도 기록하고 함께 육아해요 💛</div>
+
+          <!-- 아빠 기록 버튼 -->
+          <div class="dad-rec-section">
+            <div class="dad-rec-title">📋 아빠 기록 <span class="dad-rec-badge">엄마 타임라인에 공유됨</span></div>
+            <div class="dad-rec-btns">
+              <button class="dad-rec-btn feed"   onclick="dadRecord('feed')">🍼 분유·수유</button>
+              <button class="dad-rec-btn diaper" onclick="dadRecord('diaper')">🌿 기저귀</button>
+              <button class="dad-rec-btn sleep"  onclick="dadRecord('sleep')">😴 재웠어요</button>
+              <button class="dad-rec-btn bath"   onclick="dadRecord('bath')">🛁 목욕</button>
+            </div>
+            <div class="dad-rec-today" id="dad-rec-today">
+              <div class="dad-rec-empty">오늘 아직 기록이 없어요<br>위 버튼을 눌러 기록해보세요 💪</div>
+            </div>
+          </div>
+
+          <!-- 체크리스트 진행률 -->
+          <div class="dad-progress" id="dad-tab-progress-wrap">
+            <div class="dad-progress-bar-wrap"><div class="dad-progress-bar" id="dad-tab-progress-bar" style="width:0%"></div></div>
+            <div class="dad-progress-text" id="dad-tab-progress-text">0 / 0</div>
+          </div>
+
+          <!-- 체크리스트 -->
+          <div class="dad-section">
+            <div class="dad-section-title"><span>🚨</span> 지금 당장 챙겨요</div>
+            <div class="dad-check-card" id="dad-tab-checklist-urgent"></div>
+          </div>
+          <div class="dad-section">
+            <div class="dad-section-title"><span>📋</span> 곧 필요해요</div>
+            <div class="dad-check-card" id="dad-tab-checklist-soon"></div>
+          </div>
+          <div class="dad-section">
+            <div class="dad-section-title"><span>💡</span> 알아두면 좋아요</div>
+            <div class="dad-check-card" id="dad-tab-checklist-prep"></div>
+          </div>
+          <div class="dad-section">
+            <div class="dad-section-title"><span>💝</span> 아내를 위한 이벤트 <span class="dad-section-secret">😉 엄마 몰래</span></div>
+            <div class="dad-event-card" id="dad-tab-checklist-events"></div>
+          </div>
+          <button onclick="openGuide('app')" style="width:100%;padding:14px;background:#fff;border:1.5px solid #e0e0e0;border-radius:14px;font-size:14px;font-weight:700;color:#555;cursor:pointer;margin-top:8px;">
+            📚 신생아 케어 가이드 보기
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /swipe-container (아빠탭 추가 후 10페이지) -->
   </div>
 </div>
 
@@ -2994,9 +2955,9 @@ function renderDadScreen(readonly) {
   const raw = localStorage.getItem('baby_profile');
   if (!readonly && raw) {
     const p = JSON.parse(raw);
-    document.getElementById('dad-baby-name-sub').textContent = p.name + '를 위해 챙겨야 할 것들';
+    const sub = document.getElementById('dad-baby-name-sub');
+    if (sub) sub.textContent = p.name + '를 위해 챙겨야 할 것들';
   }
-  // 초대 코드 연동 상태 확인
   if (!readonly) {
     const linked = localStorage.getItem('dad_linked');
     const profile = localStorage.getItem('baby_profile');
@@ -3034,7 +2995,6 @@ function renderDadScreen(readonly) {
     }).join('');
   });
 
-  // 이벤트 섹션 — readonly(엄마 보기)에서는 렌더 안 함
   if (!readonly) {
     const evEl = document.getElementById('dad-checklist-events');
     if (evEl) {
@@ -3058,34 +3018,65 @@ function renderDadScreen(readonly) {
   if (!readonly) updateDadProgress();
 }
 
-function openDadView() {
+// 앱 내부 아빠 탭 체크리스트 렌더
+function renderDadTabChecklist() {
   const checks = JSON.parse(localStorage.getItem('dad_checks') || '{}');
+  const tagLabels = { urgent:'🚨 지금 바로', soon:'📋 곧 필요', prep:'💡 알아두기' };
+
+  ['urgent','soon','prep'].forEach(section => {
+    const el = document.getElementById('dad-tab-checklist-' + section);
+    if (!el) return;
+    el.innerHTML = DAD_ITEMS[section].map((item, idx) => {
+      const done = !!checks[item.id];
+      const praise = PRAISE_MSGS[(idx + section.length) % PRAISE_MSGS.length];
+      return '<div class="dad-check-item' + (done ? ' done' : '') + '" onclick="toggleDadTabCheck(\'' + item.id + '\')">' +
+        '<div class="dad-checkbox' + (done ? ' checked' : '') + '"></div>' +
+        '<div class="dad-check-info">' +
+        '<div class="dad-check-title' + (done ? ' done-text' : '') + '">' + item.title + '</div>' +
+        (done
+          ? '<div class="dad-praise">' + praise + '</div>'
+          : '<div class="dad-check-desc">' + item.desc.replace(/\n/g,'<br>') + '</div>'
+        ) +
+        '<span class="dad-check-tag ' + (done ? 'done-tag' : item.tag) + '">' +
+          (done ? '✅ 완료' : tagLabels[item.tag]) + '</span>' +
+        '</div></div>';
+    }).join('');
+  });
+
+  // 이벤트
+  const evEl = document.getElementById('dad-tab-checklist-events');
+  if (evEl) {
+    evEl.innerHTML = DAD_EVENTS.map((item, idx) => {
+      const done = !!checks[item.id];
+      const praise = EVENT_PRAISE[idx % EVENT_PRAISE.length];
+      return '<div class="dad-event-item' + (done ? ' done' : '') + '" onclick="toggleDadTabCheck(\'' + item.id + '\')">' +
+        '<div class="dad-event-checkbox' + (done ? ' checked' : '') + '"></div>' +
+        '<div class="dad-event-info">' +
+        '<div class="dad-event-title' + (done ? ' done-text' : '') + '">' + item.title + '</div>' +
+        (done ? '<div class="dad-event-praise">' + praise + '</div>'
+               : '<div class="dad-event-desc">' + item.desc.replace(/\n/g,'<br>') + '</div>') +
+        '<span class="dad-event-tag ' + (done ? 'done-tag' : '') + '">' + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
+        '</div></div>';
+    }).join('');
+  }
+
+  // 진행률
   const allItems = [...DAD_ITEMS.urgent, ...DAD_ITEMS.soon, ...DAD_ITEMS.prep];
-  const total = allItems.length;
   const doneCount = allItems.filter(i => checks[i.id]).length;
-  const pct = Math.round(doneCount / total * 100);
-
-  // 요약 칩
-  const summaryEl = document.getElementById('dad-view-summary');
-  let mood = doneCount === 0 ? '아직 시작 안 했어요 😅' : doneCount < 5 ? '조금씩 하고 있어요 🙂' : doneCount < 10 ? '열심히 하고 있어요 💪' : '거의 다 했어요! 🎉';
-  summaryEl.innerHTML =
-    '<div class="dad-view-chip">전체 ' + total + '개</div>' +
-    '<div class="dad-view-chip good">완료 ' + doneCount + '개 (' + pct + '%)</div>' +
-    '<div class="dad-view-chip">' + mood + '</div>';
-
-  // 섹션별 렌더
-  const body = document.getElementById('dad-view-body');
-  const sectionTitles = { urgent: '🚨 지금 당장', soon: '📋 곧 필요해요', prep: '💡 알아두면 좋아요' };
-  body.innerHTML = ['urgent','soon','prep'].map(s =>
-    '<div style="margin-bottom:16px;">' +
-    '<div style="font-size:12px;font-weight:700;color:#1a5fa8;margin-bottom:8px;">' + sectionTitles[s] + '</div>' +
-    '<div class="dad-check-card" id="dv-checklist-' + s + '"></div>' +
-    '</div>'
-  ).join('');
-
-  renderDadScreen(true); // 읽기 전용 렌더
-  document.getElementById('modal-dad-view').classList.add('open');
+  const pct = Math.round(doneCount / allItems.length * 100);
+  const bar = document.getElementById('dad-tab-progress-bar');
+  const txt = document.getElementById('dad-tab-progress-text');
+  if (bar) bar.style.width = pct + '%';
+  if (txt) txt.textContent = doneCount + ' / ' + allItems.length;
 }
+
+function toggleDadTabCheck(id) {
+  const checks = JSON.parse(localStorage.getItem('dad_checks') || '{}');
+  checks[id] = !checks[id];
+  localStorage.setItem('dad_checks', JSON.stringify(checks));
+  renderDadTabChecklist();
+}
+
 
 function toggleDadCheck(id) {
   const checks = JSON.parse(localStorage.getItem('dad_checks') || '{}');
@@ -4301,14 +4292,57 @@ function showVoiceToast(text, ok) {
 // ══════════════════════════════════════════
 // 🔊 음성 안내 (Text-to-Speech)
 // ══════════════════════════════════════════
+// ══════════════════════════════════════════
+// 🔊 TTS — 기기 최고품질 한국어 음성 자동 선택
+// ══════════════════════════════════════════
+let _bestVoice = null;
+
+function getBestKoreanVoice() {
+  if (_bestVoice) return _bestVoice;
+  const voices = window.speechSynthesis.getVoices();
+  if (!voices.length) return null;
+  const koVoices = voices.filter(v => v.lang && v.lang.startsWith('ko'));
+  // 품질 우선순위
+  const tests = [
+    v => /enhanced|premium/i.test(v.name),       // iOS 향상됨
+    v => /유나|yuna/i.test(v.name),               // iPhone 유나
+    v => /google/i.test(v.name),                  // Android Google TTS
+    v => /siri/i.test(v.name),                    // Siri
+    v => v.localService === true,                  // 로컬 음성
+    () => true,                                    // 아무거나
+  ];
+  for (const test of tests) {
+    const found = koVoices.find(test);
+    if (found) { _bestVoice = found; return found; }
+  }
+  _bestVoice = voices[0]; return _bestVoice;
+}
+
 function speak(text) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const utter = new SpeechSynthesisUtterance(text);
   utter.lang = 'ko-KR';
-  utter.rate = 1.0;
-  utter.pitch = 1.05;
-  window.speechSynthesis.speak(utter);
+  utter.rate = 0.92;   // 살짝 천천히 → 더 자연스럽게
+  utter.pitch = 1.0;
+  utter.volume = 1.0;
+  const trySpeak = () => {
+    const v = getBestKoreanVoice();
+    if (v) utter.voice = v;
+    window.speechSynthesis.speak(utter);
+  };
+  // 음성 목록이 아직 안 로드된 경우 대기
+  if (window.speechSynthesis.getVoices().length === 0) {
+    window.speechSynthesis.onvoiceschanged = () => { _bestVoice = null; trySpeak(); };
+  } else {
+    trySpeak();
+  }
+}
+
+// 앱 로드 시 음성 미리 로드
+if (window.speechSynthesis) {
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged = () => { _bestVoice = null; };
 }
 
 function speakStatus() {
@@ -4544,7 +4578,7 @@ function checkBackupReminder() {
 // ══════════════════════════════════════════
 const PAGE_LABELS = [
   '📔 일기','📷 사진','🍼 루틴','📊 통계',
-  '📏 성장','⭐ 마일스톤','👩 엄마케어','🇰🇷 복지','⚙️ 설정'
+  '📏 성장','⭐ 마일스톤','👩 엄마케어','🇰🇷 복지','⚙️ 설정','👨 아빠탭'
 ];
 
 function updatePageLabel(n) {
@@ -4553,16 +4587,21 @@ function updatePageLabel(n) {
 }
 
 function goToPage(n) {
-  currentPage = Math.max(0, Math.min(8, n));
+  currentPage = Math.max(0, Math.min(9, n));
   document.getElementById('swipe-container').style.transform =
-    'translateX(-' + (currentPage * 100 / 9) + '%)';
-  for (let i = 0; i < 9; i++) {
+    'translateX(-' + (currentPage * 100 / 10) + '%)';
+  for (let i = 0; i < 10; i++) {
     const dot = document.getElementById('dot-' + i);
     if (dot) dot.classList.toggle('active', i === currentPage);
   }
   updatePageLabel(currentPage);
   if (currentPage === 3) setTimeout(renderMainChart, 100);
   if (currentPage === 4) setTimeout(() => { renderGrowthChart(); renderGrowthTable(); }, 100);
+  // 아빠 탭 진입 시 체크리스트 렌더
+  if (currentPage === 9) {
+    renderDadTabChecklist();
+    renderDadTodayRecords();
+  }
 }
 
 // ══════════════════════════════════════════
@@ -4659,17 +4698,7 @@ function obNext() {
   if (btn) btn.textContent = obStep === total-1 ? '시작하기 🍼' : '다음';
 }
 
-function obFinish() {
-  document.getElementById('onboarding-overlay').style.display = 'none';
-  localStorage.setItem('onboarding_done', '1');
-  initLogin();
-}
 
-function obSkip() {
-  document.getElementById('onboarding-overlay').style.display = 'none';
-  localStorage.setItem('onboarding_done', '1');
-  initLogin();
-}
 
 // ══════════════════════════════════════════
 // enterApp 통합 (모든 기능 초기화)
@@ -4694,6 +4723,7 @@ function enterApp() {
   startSessionTimer();
   updateSettingsRoleUI();
   renderStorageStatus();
+  renderDadTodayRecords(); // 아빠 탭 오늘 기록
   setTimeout(() => {
     renderMainChart();
     renderGrowthChart();
@@ -4738,69 +4768,61 @@ function renderStorageStatus() {
 }
 
 // ══════════════════════════════════════════
-// 👤 역할 자동 라우팅 시스템
+// 👤 앱 시작 — 역할선택 없이 바로 PIN
 // ══════════════════════════════════════════
-
 function appStart() {
-  const savedRole = localStorage.getItem('app_role');
-  if (!savedRole) {
-    // 처음 실행 — 역할 선택 화면
-    showScreen('role');
-    return;
-  }
-  if (savedRole === 'dad') {
-    renderDadScreen(false);
-    showScreen('dad');
-    setTimeout(renderDadTodayRecords, 200);
+  // 역할선택 화면 없이 바로 PIN 로그인으로
+  if (localStorage.getItem('onboarding_done') !== '1') {
+    showOnboarding();
   } else {
-    // 엄마 — 온보딩 또는 PIN
-    if (localStorage.getItem('onboarding_done') !== '1') {
-      showOnboarding();
-    } else {
-      initLogin();
-    }
+    initLogin();
   }
+}
+
+// 온보딩 후 PIN으로 (obFinish, obSkip에서 호출)
+function obFinish() {
+  document.getElementById('onboarding-overlay').style.display = 'none';
+  localStorage.setItem('onboarding_done', '1');
+  initLogin();
+}
+
+function obSkip() {
+  document.getElementById('onboarding-overlay').style.display = 'none';
+  localStorage.setItem('onboarding_done', '1');
+  initLogin();
 }
 
 function setRoleAndContinue(role) {
-  localStorage.setItem('app_role', role);
-  selectRole(role);
+  // 역할선택 화면은 더 이상 사용 안 함 — 호환성 유지
+  initLogin();
 }
 
 function selectRole(role) {
-  if (role === 'dad') {
-    renderDadScreen(false);
-    showScreen('dad');
-    setTimeout(renderDadTodayRecords, 200);
-  } else {
-    if (localStorage.getItem('onboarding_done') !== '1') {
-      showOnboarding();
-    } else {
-      initLogin();
-    }
-  }
+  initLogin();
 }
 
 function switchRole() {
-  const current = localStorage.getItem('app_role') || 'mom';
-  const next = current === 'mom' ? 'dad' : 'mom';
-  if (confirm(`역할을 ${next === 'dad' ? '아빠' : '엄마'} 모드로 전환할까요?\n다음 실행부터 자동으로 ${next === 'dad' ? '아빠' : '엄마'} 화면으로 시작해요.`)) {
-    localStorage.setItem('app_role', next);
-    updateSettingsRoleUI();
-    if (next === 'dad') {
-      renderDadScreen(false);
-      showScreen('dad');
-      setTimeout(renderDadTodayRecords, 200);
-    }
-  }
+  goToPage(9);
+  setTimeout(() => {
+    renderDadTabChecklist();
+    renderDadTodayRecords();
+  }, 200);
 }
 
 function updateSettingsRoleUI() {
-  const role = localStorage.getItem('app_role') || 'mom';
   const label = document.getElementById('settings-role-label');
   const btn = document.getElementById('settings-role-btn');
-  if (label) label.textContent = `현재: ${role === 'mom' ? '엄마' : '아빠'} 모드`;
-  if (btn) btn.textContent = role === 'mom' ? '👨 아빠 탭으로 전환하기' : '👩 엄마 모드로 전환하기';
+  if (label) label.textContent = '👨 아빠 탭은 앱 안 마지막 페이지에 있어요';
+  if (btn) btn.textContent = '👨 아빠 탭 바로 가기 →';
+}
+
+// 헤더 아빠 버튼 → 아빠 탭으로
+function openDadView() {
+  goToPage(9);
+  setTimeout(() => {
+    renderDadTabChecklist();
+    renderDadTodayRecords();
+  }, 150);
 }
 
 // ══════════════════════════════════════════
