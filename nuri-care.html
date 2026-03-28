@@ -833,22 +833,26 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
   <div class="role-box">
     <div class="role-logo">
       <div class="logo-icon">누리케어</div>
-      <p>누가 사용하시나요?</p>
+      <p>처음 사용하시나요? 역할을 선택해주세요</p>
     </div>
     <div class="role-cards">
-      <div class="role-card mom" onclick="selectRole('mom')">
+      <div class="role-card mom" onclick="setRoleAndContinue('mom')">
         <div class="r-icon">👩</div>
         <div class="r-name">엄마</div>
         <div class="r-sub">기록 · 관리</div>
       </div>
-      <div class="role-card dad" onclick="selectRole('dad')">
+      <div class="role-card dad" onclick="setRoleAndContinue('dad')">
         <div class="r-icon">👨</div>
         <div class="r-name">아빠</div>
-        <div class="r-sub">체크리스트 · 확인</div>
+        <div class="r-sub">체크리스트 · 기록</div>
       </div>
     </div>
-    <button onclick="openGuide('role')" style="margin-top:20px;width:100%;padding:14px;background:#fff;border:1.5px solid #e0e0e0;border-radius:14px;font-size:14px;font-weight:700;color:#555;cursor:pointer;">
-      신생아 케어 가이드 보기
+    <div style="font-size:12px;color:#9ca3af;text-align:center;margin-top:12px;line-height:1.6;">
+      선택하면 다음부터 이 화면 없이 바로 시작해요<br>
+      <span style="color:#7a5600;font-weight:600;">설정에서 역할을 변경할 수 있어요</span>
+    </div>
+    <button onclick="openGuide('role')" style="margin-top:16px;width:100%;padding:14px;background:#fff;border:1.5px solid #e0e0e0;border-radius:14px;font-size:14px;font-weight:700;color:#555;cursor:pointer;">
+      📚 신생아 케어 가이드 보기
     </button>
   </div>
 </div>
@@ -1304,10 +1308,33 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
         <div class="policy-page">
           <div class="policy-page-header">
             <h2>🇰🇷 2026 출산 지원 정책</h2>
-            <p>정부에서 지원하는 주요 혜택을 확인하세요</p>
+            <p>출산 후 받을 수 있는 혜택을 한번에 신청하세요</p>
           </div>
+
+          <!-- ★ 원클릭 한번에 신청 배너 ★ -->
+          <div style="background:linear-gradient(135deg,#1d4ed8,#2563eb);border-radius:16px;padding:18px 16px;margin-bottom:16px;color:#fff;">
+            <div style="font-size:15px;font-weight:800;margin-bottom:4px;">🚀 행복출산 원스톱 서비스</div>
+            <div style="font-size:13px;opacity:0.9;margin-bottom:12px;line-height:1.5;">부모급여·첫만남이용권·아동수당을<br><strong>한 번에 신청</strong>할 수 있어요 (정부24)</div>
+            <a href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank"
+              style="display:block;background:#fff;color:#1d4ed8;border-radius:10px;padding:12px;text-align:center;font-size:14px;font-weight:800;text-decoration:none;">
+              📲 지금 바로 원스톱 신청하기
+            </a>
+            <div style="font-size:11px;opacity:0.75;text-align:center;margin-top:8px;">정부24 → 행복출산 → 한번에 신청</div>
+          </div>
+
+          <!-- 개별 신청 안내 -->
+          <div style="background:#fff7d6;border-radius:12px;padding:12px 14px;margin-bottom:14px;border:1px solid #e8d796;">
+            <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:6px;">📋 원스톱으로 신청 가능한 혜택</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <span style="background:#fff;border:1px solid #e8d796;border-radius:8px;padding:4px 10px;font-size:12px;color:#7a5600;font-weight:600;">💰 부모급여</span>
+              <span style="background:#fff;border:1px solid #e8d796;border-radius:8px;padding:4px 10px;font-size:12px;color:#7a5600;font-weight:600;">🎁 첫만남이용권</span>
+              <span style="background:#fff;border:1px solid #e8d796;border-radius:8px;padding:4px 10px;font-size:12px;color:#7a5600;font-weight:600;">👶 아동수당</span>
+              <span style="background:#fff;border:1px solid #e8d796;border-radius:8px;padding:4px 10px;font-size:12px;color:#7a5600;font-weight:600;">🏥 산모·신생아</span>
+            </div>
+          </div>
+
           <div class="policy-notice">
-            ⚠️ 2026년 기준 정보입니다. 지역·소득에 따라 달라질 수 있으니 복지로(bokjiro.go.kr) 또는 주민센터에서 확인하세요.
+            ⚠️ 2026년 기준 정보예요. 개별 신청은 각 기관 앱·웹에서도 가능해요.
           </div>
 
           <!-- 부모급여 -->
@@ -1319,8 +1346,9 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">0세 (0~11개월)</div><div class="policy-item-amount">월 100만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">1세 (12~23개월)</div><div class="policy-item-amount">월 50만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">어린이집 이용 시 보육료 바우처로 지급</div></div>
+            <div style="font-size:11px;color:#6b7280;margin:8px 0 4px;padding-top:8px;border-top:1px solid #f3f0e0;">✅ 원스톱 서비스에서 신청하거나 주민센터 방문 신청</div>
             <div class="policy-apply-row">
-              <a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004194" target="_blank">📋 복지로 신청하기</a>
+              <a class="policy-apply-btn" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank">🚀 원스톱 신청</a>
               <div class="policy-done-btn" id="pdb-p-bumo" onclick="togglePolicyCheck('p-bumo')">
                 <div class="policy-done-icon" id="pc-p-bumo"></div>
                 <span class="policy-done-label" id="pl-p-bumo">완료</span>
@@ -1337,8 +1365,9 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">첫째 출생 시</div><div class="policy-item-amount">200만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">둘째 이상 출생 시</div><div class="policy-item-amount">300만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출생 후 1년 이내 국민행복카드로 사용</div></div>
+            <div style="font-size:11px;color:#6b7280;margin:8px 0 4px;padding-top:8px;border-top:1px solid #f3f0e0;">✅ 원스톱 서비스 또는 국민행복카드 발급 기관에서 신청</div>
             <div class="policy-apply-row">
-              <a class="policy-apply-btn" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank">📋 행복출산 원스톱 신청</a>
+              <a class="policy-apply-btn" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank">🚀 원스톱 신청</a>
               <div class="policy-done-btn" id="pdb-p-first" onclick="togglePolicyCheck('p-first')">
                 <div class="policy-done-icon" id="pc-p-first"></div>
                 <span class="policy-done-label" id="pl-p-first">완료</span>
@@ -1355,8 +1384,9 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">만 8세 미만 전 아동</div><div class="policy-item-amount">월 10만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">비수도권 거주 시</div><div class="policy-item-amount">월 10.5만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">인구감소지역 거주 시</div><div class="policy-item-amount">월 11~12만원</div></div>
+            <div style="font-size:11px;color:#6b7280;margin:8px 0 4px;padding-top:8px;border-top:1px solid #f3f0e0;">✅ 원스톱 서비스, 복지로, 주민센터 방문 신청</div>
             <div class="policy-apply-row">
-              <a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004160" target="_blank">📋 복지로 신청하기</a>
+              <a class="policy-apply-btn" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank">🚀 원스톱 신청</a>
               <div class="policy-done-btn" id="pdb-p-child" onclick="togglePolicyCheck('p-child')">
                 <div class="policy-done-icon" id="pc-p-child"></div>
                 <span class="policy-done-label" id="pl-p-child">완료</span>
@@ -1373,9 +1403,10 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">1~3개월 (통상임금 100%)</div><div class="policy-item-amount">최대 월 250만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">4~6개월 (통상임금 100%)</div><div class="policy-item-amount">최대 월 200만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">7개월 이후 (통상임금 80%)</div><div class="policy-item-amount">최대 월 160만원</div></div>
-            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">각 부모 최대 사용 가능</div><div class="policy-item-amount">1년 6개월</div></div>
+            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">각 부모 최대</div><div class="policy-item-amount">1년 6개월</div></div>
+            <div style="font-size:11px;color:#6b7280;margin:8px 0 4px;padding-top:8px;border-top:1px solid #f3f0e0;">📌 고용보험 앱 또는 고용24 웹에서 신청 (원스톱 미포함)</div>
             <div class="policy-apply-row">
-              <a class="policy-apply-btn" href="https://www.ei.go.kr/ei/eih/cm/hm/main.do" target="_blank">📋 고용보험 신청하기</a>
+              <a class="policy-apply-btn" href="https://www.ei.go.kr" target="_blank">💼 고용24 신청</a>
               <div class="policy-done-btn" id="pdb-p-parental" onclick="togglePolicyCheck('p-parental')">
                 <div class="policy-done-icon" id="pc-p-parental"></div>
                 <span class="policy-done-label" id="pl-p-parental">완료</span>
@@ -1392,8 +1423,9 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산휴가 급여 상한액</div><div class="policy-item-amount">월 220만원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산휴가 기간</div><div class="policy-item-amount">90일</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">배우자 출산휴가</div><div class="policy-item-amount">20일</div></div>
+            <div style="font-size:11px;color:#6b7280;margin:8px 0 4px;padding-top:8px;border-top:1px solid #f3f0e0;">📌 고용보험 앱 또는 고용24 웹에서 신청</div>
             <div class="policy-apply-row">
-              <a class="policy-apply-btn" href="https://www.ei.go.kr/ei/eih/cm/hm/main.do" target="_blank">📋 고용보험 신청하기</a>
+              <a class="policy-apply-btn" href="https://www.ei.go.kr" target="_blank">💼 고용24 신청</a>
               <div class="policy-done-btn" id="pdb-p-maternity" onclick="togglePolicyCheck('p-maternity')">
                 <div class="policy-done-icon" id="pc-p-maternity"></div>
                 <span class="policy-done-label" id="pl-p-maternity">완료</span>
@@ -1407,11 +1439,12 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
               <div class="policy-icon" style="background:#EDFBF0;">🧸</div>
               <div><div class="policy-card-title">아이돌봄 서비스</div><span class="policy-card-badge" style="background:#EDFBF0;color:#1d7a3a;">2026 확대</span></div>
             </div>
-            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">소득 기준 중위소득 250% 이하로 확대</div></div>
+            <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">중위소득 250% 이하 가정 이용 가능</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">야간 긴급돌봄</div><div class="policy-item-amount">하루 5,000원</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">유아돌봄수당 (신설)</div><div class="policy-item-amount">시간당 1,000원</div></div>
+            <div style="font-size:11px;color:#6b7280;margin:8px 0 4px;padding-top:8px;border-top:1px solid #f3f0e0;">📌 아이돌봄 앱 또는 idolbom.go.kr에서 신청</div>
             <div class="policy-apply-row">
-              <a class="policy-apply-btn" href="https://www.idolbom.go.kr" target="_blank">📋 아이돌봄 신청하기</a>
+              <a class="policy-apply-btn" href="https://www.idolbom.go.kr" target="_blank">🧸 아이돌봄 신청</a>
               <div class="policy-done-btn" id="pdb-p-care" onclick="togglePolicyCheck('p-care')">
                 <div class="policy-done-icon" id="pc-p-care"></div>
                 <span class="policy-done-label" id="pl-p-care">완료</span>
@@ -1427,8 +1460,9 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
             </div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산 후 전문인력 파견</div></div>
             <div class="policy-item"><div class="policy-item-dot"></div><div class="policy-item-text">출산일로부터 60일 이내 신청</div></div>
+            <div style="font-size:11px;color:#6b7280;margin:8px 0 4px;padding-top:8px;border-top:1px solid #f3f0e0;">✅ 원스톱 서비스 또는 주민센터 방문 신청</div>
             <div class="policy-apply-row">
-              <a class="policy-apply-btn" href="https://www.bokjiro.go.kr/ssis-tbu/twataa/welfareInfo/moveTWAT52011M.do?welfareInfoId=WLF00004126" target="_blank">📋 복지로 신청하기</a>
+              <a class="policy-apply-btn" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank">🚀 원스톱 신청</a>
               <div class="policy-done-btn" id="pdb-p-sanmo" onclick="togglePolicyCheck('p-sanmo')">
                 <div class="policy-done-icon" id="pc-p-sanmo"></div>
                 <span class="policy-done-label" id="pl-p-sanmo">완료</span>
@@ -1436,8 +1470,8 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
             </div>
           </div>
 
-          <a class="policy-link" href="https://www.bokjiro.go.kr" target="_blank">🔗 복지로에서 더 많은 혜택 확인하기</a>
-          <a class="policy-link" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank" style="margin-top:8px;">🔗 행복출산 원스톱 서비스</a>
+          <a class="policy-link" href="https://www.bokjiro.go.kr" target="_blank">🔗 복지로 — 전체 복지 혜택 검색</a>
+          <a class="policy-link" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank" style="margin-top:8px;">🚀 행복출산 원스톱 서비스</a>
         </div>
       </div>
 
@@ -1446,6 +1480,19 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
         <div class="feature-page">
           <div class="feature-page-title">⚙️ 설정</div>
           <div class="feature-page-sub">앱 설정과 데이터를 관리해요</div>
+
+          <!-- 현재 역할 & 전환 -->
+          <div class="feature-section-title">👤 사용자 설정</div>
+          <div class="chart-wrap" style="padding:14px 16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <div>
+                <div style="font-size:14px;font-weight:600;" id="settings-role-label">현재: 엄마 모드</div>
+                <div style="font-size:12px;color:#9ca3af;margin-top:2px;">다음 실행부터 자동으로 이 역할로 시작해요</div>
+              </div>
+            </div>
+            <button class="export-btn" onclick="switchRole()" style="margin-bottom:0;" id="settings-role-btn">👨 아빠 탭으로 전환하기</button>
+          </div>
+
           <div class="feature-section-title">🌙 화면 설정</div>
           <div class="chart-wrap" style="padding:14px 16px;">
             <div style="display:flex;align-items:center;justify-content:space-between;">
@@ -1461,7 +1508,12 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
           <button class="export-btn" onclick="exportDiaryTxt()">📔 일기 텍스트로 내보내기</button>
           <div class="feature-section-title">💾 데이터 관리</div>
           <div class="chart-wrap" style="padding:14px 16px;">
-            <div style="font-size:13px;color:#6b7280;margin-bottom:10px;line-height:1.6;">저장된 데이터를 백업하거나 초기화할 수 있어요.</div>
+            <!-- 저장 공간 현황 -->
+            <div id="storage-status" style="margin-bottom:12px;"></div>
+            <div style="font-size:12px;color:#9ca3af;margin-bottom:10px;line-height:1.6;">
+              ⚠️ 모든 기록은 <strong>이 기기의 브라우저</strong>에만 저장돼요.<br>
+              폰 교체·브라우저 변경 전 반드시 백업하세요!
+            </div>
             <button class="export-btn" onclick="backupAllData()" style="margin-bottom:8px;">💾 전체 데이터 백업 (JSON)</button>
             <button class="export-btn" onclick="clearTodayRecords()" style="color:#f59e0b;border-color:#fde68a;">🗑️ 오늘 기록만 삭제</button>
           </div>
@@ -2547,26 +2599,87 @@ function renderTimeline() {
   }).join('');
 }
 
+// ══════════════════════════════════════════
+// 💾 데이터 저장·불러오기 (안전 강화)
+// ══════════════════════════════════════════
 function saveData() {
-  try { localStorage.setItem('baby_records', JSON.stringify(records.slice(0, 500))); } catch (e) {}
-  try { localStorage.setItem('baby_sleeping', sleepingStart ? sleepingStart.toISOString() : ''); } catch (e) {}
+  // 1. baby_records 저장 (용량 초과 시 오래된 기록 자동 정리)
+  try {
+    localStorage.setItem('baby_records', JSON.stringify(records.slice(0, 500)));
+  } catch(e) {
+    // QuotaExceededError — 최근 200개만 보존
+    try {
+      localStorage.setItem('baby_records', JSON.stringify(records.slice(0, 200)));
+      console.warn('localStorage 용량 부족 — 최근 200개만 저장됨');
+    } catch(e2) { console.error('baby_records 저장 실패:', e2); }
+  }
+  // 2. 수면 시작 저장
+  try {
+    localStorage.setItem('baby_sleeping', sleepingStart ? sleepingStart.toISOString() : '');
+  } catch(e) {}
+  // 3. 마지막 저장 시각 기록
+  try {
+    localStorage.setItem('last_saved', new Date().toISOString());
+  } catch(e) {}
 }
 
 function loadData() {
-  try { const r = localStorage.getItem('baby_records'); if (r) records = JSON.parse(r); } catch (e) {}
+  // 1. records 불러오기
+  try {
+    const r = localStorage.getItem('baby_records');
+    if (r) {
+      const parsed = JSON.parse(r);
+      if (Array.isArray(parsed)) {
+        records = parsed;
+      } else {
+        console.warn('baby_records 형식 오류 — 빈 배열로 초기화');
+        records = [];
+      }
+    }
+  } catch(e) {
+    console.error('baby_records 파싱 오류:', e);
+    records = [];
+  }
+  // 2. 수면 시작 불러오기
   try {
     const s = localStorage.getItem('baby_sleeping');
-    if (s && s.trim() !== '') {
-      sleepingStart = new Date(s);
-      if (!isNaN(sleepingStart.getTime())) {
+    if (s && s.trim()) {
+      const d = new Date(s);
+      if (!isNaN(d.getTime())) {
+        sleepingStart = d;
         updateSleepBanner();
       } else {
         sleepingStart = null;
+        localStorage.removeItem('baby_sleeping');
       }
     }
-  } catch (e) { sleepingStart = null; }
+  } catch(e) { sleepingStart = null; }
+  // 3. 마지막 저장 시각 표시
+  try {
+    const ls = localStorage.getItem('last_saved');
+    if (ls) {
+      const d = new Date(ls);
+      const diffH = Math.round((Date.now() - d.getTime()) / 3600000);
+      if (diffH > 24) {
+        console.warn(`마지막 저장: ${diffH}시간 전 — 백업 권장`);
+      }
+    }
+  } catch(e) {}
   renderTimeline();
   updateStatus();
+}
+
+// ── localStorage 사용량 확인 ──
+function checkStorageUsage() {
+  try {
+    let total = 0;
+    for (const key of Object.keys(localStorage)) {
+      total += (localStorage.getItem(key) || '').length;
+    }
+    const kb = Math.round(total / 1024);
+    const pct = Math.round((total / (5 * 1024 * 1024)) * 100);
+    return { kb, pct };
+  } catch(e) { return { kb: 0, pct: 0 }; }
 }
 
 // 모달 배경 클릭 닫기
@@ -4579,6 +4692,8 @@ function enterApp() {
   renderActiveSessions();
   updateQuickBtns();
   startSessionTimer();
+  updateSettingsRoleUI();
+  renderStorageStatus();
   setTimeout(() => {
     renderMainChart();
     renderGrowthChart();
@@ -4593,7 +4708,65 @@ function enterApp() {
   showScreen('app');
 }
 
-// selectRole — 온보딩 포함
+function renderStorageStatus() {
+  const el = document.getElementById('storage-status');
+  if (!el) return;
+  const { kb, pct } = checkStorageUsage();
+  const recCount = records.length;
+  const lastSaved = localStorage.getItem('last_saved');
+  const lastSavedStr = lastSaved
+    ? (() => {
+        const d = new Date(lastSaved);
+        const diffM = Math.round((Date.now() - d.getTime()) / 60000);
+        if (diffM < 60) return diffM + '분 전';
+        if (diffM < 1440) return Math.floor(diffM/60) + '시간 전';
+        return Math.floor(diffM/1440) + '일 전';
+      })()
+    : '없음';
+
+  const barColor = pct > 80 ? '#ef4444' : pct > 50 ? '#f59e0b' : '#22c55e';
+  el.innerHTML = `
+    <div style="font-size:12px;color:#6b7280;margin-bottom:6px;">
+      📊 기록 ${recCount}개 · 저장공간 ${kb}KB 사용 · 마지막 저장 ${lastSavedStr}
+    </div>
+    <div style="background:#f3f0e0;border-radius:4px;height:6px;overflow:hidden;">
+      <div style="background:${barColor};height:100%;width:${Math.min(pct,100)}%;border-radius:4px;transition:width 0.3s;"></div>
+    </div>
+    <div style="font-size:11px;color:${pct > 80 ? '#ef4444' : '#9ca3af'};margin-top:4px;">
+      ${pct > 80 ? '⚠️ 저장 공간이 부족해요! 지금 백업하세요.' : `용량 ${pct}% 사용 중 (최대 ~5MB)`}
+    </div>`;
+}
+
+// ══════════════════════════════════════════
+// 👤 역할 자동 라우팅 시스템
+// ══════════════════════════════════════════
+
+function appStart() {
+  const savedRole = localStorage.getItem('app_role');
+  if (!savedRole) {
+    // 처음 실행 — 역할 선택 화면
+    showScreen('role');
+    return;
+  }
+  if (savedRole === 'dad') {
+    renderDadScreen(false);
+    showScreen('dad');
+    setTimeout(renderDadTodayRecords, 200);
+  } else {
+    // 엄마 — 온보딩 또는 PIN
+    if (localStorage.getItem('onboarding_done') !== '1') {
+      showOnboarding();
+    } else {
+      initLogin();
+    }
+  }
+}
+
+function setRoleAndContinue(role) {
+  localStorage.setItem('app_role', role);
+  selectRole(role);
+}
+
 function selectRole(role) {
   if (role === 'dad') {
     renderDadScreen(false);
@@ -4606,6 +4779,28 @@ function selectRole(role) {
       initLogin();
     }
   }
+}
+
+function switchRole() {
+  const current = localStorage.getItem('app_role') || 'mom';
+  const next = current === 'mom' ? 'dad' : 'mom';
+  if (confirm(`역할을 ${next === 'dad' ? '아빠' : '엄마'} 모드로 전환할까요?\n다음 실행부터 자동으로 ${next === 'dad' ? '아빠' : '엄마'} 화면으로 시작해요.`)) {
+    localStorage.setItem('app_role', next);
+    updateSettingsRoleUI();
+    if (next === 'dad') {
+      renderDadScreen(false);
+      showScreen('dad');
+      setTimeout(renderDadTodayRecords, 200);
+    }
+  }
+}
+
+function updateSettingsRoleUI() {
+  const role = localStorage.getItem('app_role') || 'mom';
+  const label = document.getElementById('settings-role-label');
+  const btn = document.getElementById('settings-role-btn');
+  if (label) label.textContent = `현재: ${role === 'mom' ? '엄마' : '아빠'} 모드`;
+  if (btn) btn.textContent = role === 'mom' ? '👨 아빠 탭으로 전환하기' : '👩 엄마 모드로 전환하기';
 }
 
 // ══════════════════════════════════════════
@@ -5018,7 +5213,7 @@ function showDadToast(msg) {
 
 // renderDadScreen 후 오늘 기록 렌더 — selectRole에서 처리
 
-showScreen('role');
+appStart(); // 역할 기억 기반 자동 라우팅
 </script>
 </body>
 </html>
