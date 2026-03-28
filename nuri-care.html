@@ -765,6 +765,10 @@ body.dark .quick-btn { background: #2a2520; box-shadow: 0 2px 8px rgba(0,0,0,0.2
 body.dark .quick-btn.active-session { background: linear-gradient(135deg,#3d3628,#4d4530); }
 body.dark .quick-btn-label { color: #c8a870; }
 </style>
+
+<!-- Firebase SDK (compat 버전 — 실시간 동기화용) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 </head>
 <script>
 // ── Service Worker 등록 (자동 업데이트) ──
@@ -1442,8 +1446,28 @@ if ('serviceWorker' in navigator) {
         <div class="feature-page" id="dad-tab-page">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
             <div class="feature-page-title" style="margin-bottom:0;">👨 아빠 탭</div>
+            <div id="dad-linked-status" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;background:#f0fdf4;color:#16a34a;display:none;">🔗 연동됨</div>
           </div>
-          <div class="feature-page-sub">아빠도 기록하고 함께 육아해요 💛</div>
+          <div class="feature-page-sub" id="dad-tab-sub">아빠도 기록하고 함께 육아해요 💛</div>
+
+          <!-- 초대 코드 입력 (미연동 상태에서만 표시) -->
+          <div id="dad-invite-section" style="background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:14px;padding:16px;margin-bottom:14px;">
+            <div style="font-size:14px;font-weight:700;color:#1d4ed8;margin-bottom:6px;">🔗 엄마 앱과 연동하기</div>
+            <div style="font-size:12px;color:#6b7280;margin-bottom:12px;line-height:1.6;">
+              엄마에게 초대 링크를 받아서<br>아래에 코드를 입력해주세요.
+            </div>
+            <div style="display:flex;gap:8px;">
+              <input type="text" id="dad-tab-invite-input"
+                placeholder="초대 코드 6자리"
+                maxlength="6"
+                style="flex:1;padding:11px 14px;border:1.5px solid #bfdbfe;border-radius:10px;font-size:16px;font-weight:700;letter-spacing:4px;text-transform:uppercase;outline:none;background:#fff;color:#1a1a1a;text-align:center;">
+              <button onclick="applyDadInviteCode()"
+                style="padding:11px 18px;background:#1d4ed8;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;">
+                연동
+              </button>
+            </div>
+            <div id="dad-invite-error" style="font-size:12px;color:#ef4444;margin-top:8px;display:none;"></div>
+          </div>
 
           <!-- 아빠 기록 버튼 -->
           <div class="dad-rec-section">
@@ -1494,7 +1518,33 @@ if ('serviceWorker' in navigator) {
           <div class="feature-page-title">⚙️ 설정</div>
           <div class="feature-page-sub">앱 설정과 데이터를 관리해요</div>
 
-          <!-- 아빠 탭 바로가기 (간단하게) -->
+          <div class="feature-section-title">🔥 실시간 동기화</div>
+          <div class="chart-wrap" style="padding:14px 16px;">
+            <div id="fb-sync-status" style="font-size:13px;line-height:1.6;margin-bottom:10px;">
+              <span style="color:#9ca3af;">확인 중...</span>
+            </div>
+            <div style="font-size:11px;color:#9ca3af;line-height:1.6;margin-bottom:10px;">
+              Firebase 설정 전: 로컬 전용 (초대 링크로 스냅샷 공유)<br>
+              Firebase 설정 후: 엄마·아빠 실시간 양방향 동기화
+            </div>
+            <button class="export-btn" onclick="fbPushAll && fbPushAll()" style="margin-bottom:0;">
+              🔄 지금 동기화
+            </button>
+          </div>
+
+          <!-- Firebase 설정 안내 -->
+          <div class="chart-wrap" style="padding:14px 16px;background:#fffbeb;border:1px solid #fde68a;margin-top:4px;">
+            <div style="font-size:12px;font-weight:700;color:#92400e;margin-bottom:6px;">⚡ Firebase 설정 방법</div>
+            <div style="font-size:11px;color:#78350f;line-height:1.7;">
+              1. <a href="https://console.firebase.google.com" target="_blank" style="color:#d97706;font-weight:700;">console.firebase.google.com</a> 접속<br>
+              2. 새 프로젝트 만들기 (무료)<br>
+              3. Realtime Database 생성 → 테스트 모드<br>
+              4. 프로젝트 설정 → 웹앱 추가 → 설정 복사<br>
+              5. nuri-care.html의 FIREBASE_CONFIG 부분 교체<br>
+              6. GitHub에 다시 업로드
+            </div>
+          </div>
+
           <div class="feature-section-title">🌙 화면 설정</div>
           <div class="chart-wrap" style="padding:14px 16px;">
             <div style="display:flex;align-items:center;justify-content:space-between;">
@@ -1536,21 +1586,37 @@ if ('serviceWorker' in navigator) {
   <div class="modal">
     <div class="modal-handle"></div>
     <button class="modal-close-x" onclick="closeModal('invite')">✕</button>
-    <h2>💌 아빠에게 초대 코드 보내기</h2>
-    <p style="font-size:13px;color:#888;margin-bottom:16px;line-height:1.6;">아빠가 초대 코드를 입력하면<br>아기 정보가 아빠 화면에 연동돼요!</p>
-    <div class="invite-section" style="margin-top:0;">
+    <h2>💌 아빠 초대하기</h2>
+    <p style="font-size:13px;color:#6b7280;margin-bottom:16px;line-height:1.6;">
+      링크를 카카오톡으로 보내주세요.<br>
+      아빠가 링크를 누르면 바로 연동돼요!
+    </p>
+
+    <!-- 초대 링크 방식 (메인) -->
+    <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:14px;margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:700;color:#16a34a;margin-bottom:8px;">📲 링크로 초대 (추천)</div>
+      <div style="font-size:11px;color:#6b7280;margin-bottom:10px;line-height:1.5;">
+        아빠가 링크를 누르면 초대 코드가 자동으로 입력돼요
+      </div>
+      <button onclick="shareInviteLink()" style="width:100%;padding:12px;background:#16a34a;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;">
+        💬 카카오톡으로 링크 보내기
+      </button>
+    </div>
+
+    <!-- 코드 직접 공유 방식 -->
+    <div style="background:#fff7d6;border:1.5px solid #e8d796;border-radius:12px;padding:14px;">
+      <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:8px;">🔢 코드로 초대</div>
       <div class="invite-code-box">
         <div class="invite-code-text" id="invite-code-display">------</div>
         <button class="invite-copy-btn" onclick="copyInviteCode()">복사</button>
       </div>
-      <div class="invite-desc">
-        ① 위 코드를 아빠에게 카카오톡으로 보내세요<br>
-        ② 아빠가 앱 열기 → 아빠 선택 → 코드 입력<br>
-        ③ 아기 이름이 아빠 화면에 표시돼요 🍼
+      <div style="font-size:11px;color:#9ca3af;margin-top:8px;line-height:1.5;">
+        코드를 카카오톡으로 보내면 아빠가 앱에서 직접 입력할 수 있어요
       </div>
-      <button class="invite-gen-btn" onclick="generateInviteCode()">새 코드 생성</button>
+      <button class="invite-gen-btn" onclick="generateInviteCode()" style="margin-top:8px;">새 코드 생성</button>
     </div>
-    <div class="modal-actions" style="margin-top:16px;">
+
+    <div class="modal-actions" style="margin-top:14px;">
       <button class="btn-save" onclick="closeModal('invite')">닫기</button>
     </div>
   </div>
@@ -2544,6 +2610,8 @@ function addRecord(r) {
   saveData();
   renderTimeline();
   updateStatus();
+  // Firebase 실시간 동기화
+  if (typeof _pushRecordToFirebase === 'function') _pushRecordToFirebase(r);
 }
 
 // ── 한국 시간 (KST = UTC+9) ──
@@ -3121,6 +3189,7 @@ function toggleDadTabCheck(id) {
   checks[id] = !checks[id];
   localStorage.setItem('dad_checks', JSON.stringify(checks));
   renderDadTabChecklist();
+  if (typeof _syncDadChecksToFirebase === 'function') _syncDadChecksToFirebase();
 }
 
 function toggleDadCheck(id) {
@@ -3128,6 +3197,7 @@ function toggleDadCheck(id) {
   checks[id] = !checks[id];
   localStorage.setItem('dad_checks', JSON.stringify(checks));
   renderDadScreen(false);
+  if (typeof _syncDadChecksToFirebase === 'function') _syncDadChecksToFirebase();
 }
 
 function updateDadProgress() {
@@ -3519,72 +3589,210 @@ const EVENT_PRAISE = [
   '굿! 이런 남편 흔치 않아요 👑',
 ];
 
-// ─── 초대 코드 ───
+// ══════════════════════════════════════════
+// 💌 초대 코드 & 링크 시스템
+// ══════════════════════════════════════════
+
 function generateInviteCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let code = '';
   for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
-  const raw = localStorage.getItem('baby_profile') || '{}';
-  const payload = btoa(unescape(encodeURIComponent(JSON.stringify({ code, profile: JSON.parse(raw) }))));
+  // 아기 프로필 + 오늘 기록을 payload에 포함
+  const profile = localStorage.getItem('baby_profile') || '{}';
+  const records = localStorage.getItem('baby_records') || '[]';
+  const payload = btoa(unescape(encodeURIComponent(JSON.stringify({
+    code,
+    profile: JSON.parse(profile),
+    records: JSON.parse(records).slice(0, 100), // 최근 100개
+    ts: Date.now()
+  }))));
   localStorage.setItem('invite_code', code);
   localStorage.setItem('invite_payload_' + code, payload);
-  document.getElementById('invite-code-display').textContent = code;
-  return code;
+  const el = document.getElementById('invite-code-display');
+  if (el) el.textContent = code;
+  return { code, payload };
 }
 
 function openInviteModal() {
   const saved = localStorage.getItem('invite_code');
   if (saved) {
-    document.getElementById('invite-code-display').textContent = saved;
+    // 기존 코드 재사용 + payload 갱신 (최신 기록 반영)
+    if (typeof generateInviteCodeWithFB === 'function') generateInviteCodeWithFB();
+    else generateInviteCode();
+    // 코드는 유지
+    const savedCode = localStorage.getItem('invite_code');
+    const el = document.getElementById('invite-code-display');
+    if (el) el.textContent = savedCode;
   } else {
     generateInviteCode();
   }
   document.getElementById('modal-invite').classList.add('open');
 }
 
+// 링크 방식 초대 (카카오톡 공유)
+function shareInviteLink() {
+  const { code, payload } = generateInviteCode();
+  // 현재 앱 URL에 초대 파라미터 추가
+  const baseUrl = window.location.href.split('?')[0].split('#')[0];
+  const inviteUrl = `${baseUrl}?invite=${code}&data=${encodeURIComponent(payload)}`;
+
+  const shareText = `👶 누리케어 — 육아 기록 앱\n아빠도 함께 기록해요!\n\n아래 링크를 누르면 바로 연동돼요:\n${inviteUrl}`;
+
+  // 카카오톡 공유 or 클립보드 복사
+  if (navigator.share) {
+    navigator.share({
+      title: '누리케어 — 아빠 초대',
+      text: '아빠도 함께 육아 기록해요!',
+      url: inviteUrl
+    }).catch(() => _copyToClipboard(shareText));
+  } else {
+    _copyToClipboard(shareText);
+  }
+}
+
 function copyInviteCode() {
   const code = document.getElementById('invite-code-display').textContent;
-  const text = '아기 루틴 앱 초대 코드: ' + code + '\n\n앱 열기 → 아빠 선택 → 코드 입력하면 연동돼요! 🍼';
+  const baseUrl = window.location.href.split('?')[0].split('#')[0];
+  const payload = localStorage.getItem('invite_payload_' + code) || '';
+  const inviteUrl = `${baseUrl}?invite=${code}&data=${encodeURIComponent(payload)}`;
+  const text = `누리케어 초대 코드: ${code}\n\n링크로 바로 연동: ${inviteUrl}`;
+  _copyToClipboard(text);
+}
+
+function _copyToClipboard(text) {
   if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(() => alert('코드가 복사됐어요! 카카오톡으로 보내주세요 💌'));
+    navigator.clipboard.writeText(text)
+      .then(() => alert('복사됐어요! 카카오톡에 붙여넣기 해주세요 💌'))
+      .catch(() => _fallbackCopy(text));
   } else {
-    const el = document.createElement('textarea');
-    el.value = text; document.body.appendChild(el); el.select();
-    document.execCommand('copy'); document.body.removeChild(el);
-    alert('코드가 복사됐어요! 카카오톡으로 보내주세요 💌');
+    _fallbackCopy(text);
   }
 }
 
-function applyInviteCode() {
-  const input = document.getElementById('dad-invite-input').value.trim().toUpperCase();
-  if (input.length < 6) { alert('6자리 코드를 입력해주세요.'); return; }
-  // 같은 기기에 저장된 payload 찾기
+function _fallbackCopy(text) {
+  const el = document.createElement('textarea');
+  el.value = text;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+  alert('복사됐어요! 카카오톡에 붙여넣기 해주세요 💌');
+}
+
+// ── 아빠 탭 연동 코드 입력 ──
+function applyDadInviteCode() {
+  const input = (document.getElementById('dad-tab-invite-input').value || '').trim().toUpperCase();
+  const errEl = document.getElementById('dad-invite-error');
+  if (errEl) errEl.style.display = 'none';
+
+  if (input.length < 6) {
+    if (errEl) { errEl.textContent = '6자리 코드를 입력해주세요.'; errEl.style.display = ''; }
+    return;
+  }
+
+  // localStorage에서 payload 찾기 (같은 기기)
   const payload = localStorage.getItem('invite_payload_' + input);
   if (payload) {
-    try {
-      const data = JSON.parse(decodeURIComponent(escape(atob(payload))));
-      if (data.profile) {
-        localStorage.setItem('baby_profile', JSON.stringify(data.profile));
-        localStorage.setItem('dad_linked', input);
-        showLinkedBadge(data.profile.name);
-        alert('연동 완료! ' + (data.profile.name || '아기') + ' 정보가 연결됐어요 🍼');
-        renderDadScreen(false);
-      }
-    } catch(e) { alert('코드 처리 중 오류가 생겼어요.'); }
-  } else {
-    // 코드는 맞지만 다른 기기인 경우
-    localStorage.setItem('dad_linked', input);
-    showLinkedBadge('');
-    alert('코드가 저장됐어요! 엄마 기기와 같은 앱을 사용하면 연동돼요 🔗');
+    _applyInvitePayload(input, payload);
+    return;
   }
-  document.getElementById('dad-invite-wrap').style.display = 'none';
+
+  // 찾지 못한 경우 (다른 기기) — 코드만 저장
+  localStorage.setItem('dad_linked', input);
+  _showDadLinkedState(null);
+  alert('코드가 저장됐어요.\n엄마와 같은 기기에서 앱을 열어야 기록이 보여요.\n\n(현재는 아빠 기록만 가능해요)');
 }
 
-function showLinkedBadge(name) {
-  const wrap = document.getElementById('dad-linked-badge-wrap');
-  wrap.innerHTML = '<div class="dad-linked-badge">🔗 ' + (name ? name + ' 정보 연동됨' : '연동 완료') + '</div>';
-  document.getElementById('dad-invite-wrap').style.display = 'none';
+function _applyInvitePayload(code, payloadStr) {
+  try {
+    const data = JSON.parse(decodeURIComponent(escape(atob(payloadStr))));
+    if (data.profile) {
+      localStorage.setItem('baby_profile', JSON.stringify(data.profile));
+    }
+    if (data.records && Array.isArray(data.records)) {
+      // 기존 기록과 병합 (중복 제거)
+      const existing = JSON.parse(localStorage.getItem('baby_records') || '[]');
+      const merged = [...data.records, ...existing]
+        .filter((r, i, arr) => arr.findIndex(x => x.time === r.time && x.cat === r.cat) === i)
+        .slice(0, 500);
+      localStorage.setItem('baby_records', JSON.stringify(merged));
+    }
+    localStorage.setItem('dad_linked', code);
+    _showDadLinkedState(data.profile);
+    // 아빠 PIN 설정 안내
+    if (!localStorage.getItem('baby_pin')) {
+      setTimeout(() => {
+        alert(`연동 완료! 🎉\n${data.profile?.name || '아기'} 기록이 연결됐어요.\n\n앱 잠금을 위해 PIN을 설정해주세요.`);
+      }, 400);
+    } else {
+      setTimeout(() => {
+        alert(`연동 완료! 🎉\n${data.profile?.name || '아기'} 기록이 연결됐어요.`);
+      }, 400);
+    }
+    renderDadTabChecklist();
+    renderDadTodayRecords();
+  } catch(e) {
+    const errEl = document.getElementById('dad-invite-error');
+    if (errEl) { errEl.textContent = '코드 처리 중 오류가 생겼어요. 다시 시도해주세요.'; errEl.style.display = ''; }
+  }
 }
+
+function _showDadLinkedState(profile) {
+  const section = document.getElementById('dad-invite-section');
+  const status = document.getElementById('dad-linked-status');
+  const sub = document.getElementById('dad-tab-sub');
+  if (section) section.style.display = 'none';
+  if (status) { status.style.display = ''; status.textContent = '🔗 ' + (profile?.name || '아기') + ' 연동됨'; }
+  if (sub) sub.textContent = (profile?.name || '아기') + '의 기록을 함께 해요 💛';
+}
+
+// URL 파라미터에서 초대 코드 자동 감지
+function checkInviteFromURL() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('invite');
+    const data = params.get('data');
+    if (!code) return false;
+
+    // payload를 localStorage에 저장
+    if (data) {
+      localStorage.setItem('invite_payload_' + code, decodeURIComponent(data));
+    }
+
+    // 아빠 탭 초대 입력창에 코드 자동 입력
+    const inputEl = document.getElementById('dad-tab-invite-input');
+    if (inputEl) inputEl.value = code;
+
+    // URL에서 파라미터 제거 (깔끔하게)
+    const cleanUrl = window.location.pathname;
+    window.history.replaceState({}, '', cleanUrl);
+
+    return { code, data };
+  } catch(e) { return false; }
+}
+
+// 연동 상태 초기화 (앱 시작 시)
+function initDadLinkState() {
+  const linked = localStorage.getItem('dad_linked');
+  if (linked) {
+    const payload = localStorage.getItem('invite_payload_' + linked);
+    let profile = null;
+    if (payload) {
+      try {
+        const d = JSON.parse(decodeURIComponent(escape(atob(payload))));
+        profile = d.profile;
+      } catch(e) {}
+    }
+    if (!profile) {
+      try { profile = JSON.parse(localStorage.getItem('baby_profile') || 'null'); } catch(e) {}
+    }
+    _showDadLinkedState(profile);
+  }
+}
+
+// 구버전 applyInviteCode 호환성 유지
+function applyInviteCode() { applyDadInviteCode(); }
+function showLinkedBadge(name) { _showDadLinkedState(name ? { name } : null); }
 
 // ══════════════════════════════════════════
 // 📊 차트 & 통계
@@ -4543,7 +4751,15 @@ function processPIN() {
       localStorage.setItem('baby_pin', pinBuffer);
       pinBuffer = ''; err.textContent = '';
       const profile = localStorage.getItem('baby_profile');
-      profile ? enterApp() : showScreen('profile');
+      if (profile) {
+        enterApp();
+        // 초대 링크로 들어온 경우 아빠 탭으로 자동 이동
+        if (localStorage.getItem('dad_linked')) {
+          setTimeout(() => goToPage(8), 600);
+        }
+      } else {
+        showScreen('profile');
+      }
     } else {
       err.textContent = 'PIN이 일치하지 않아요. 다시 입력해주세요.';
       pinBuffer = ''; updateDots('confirm', 0);
@@ -4555,7 +4771,15 @@ function processPIN() {
       const fb = document.getElementById('pin-forgot-btn');
       if (fb) fb.style.display = 'none';
       const profile = localStorage.getItem('baby_profile');
-      profile ? enterApp() : showScreen('profile');
+      if (profile) {
+        enterApp();
+        // 초대 링크로 들어온 경우 아빠 탭으로 자동 이동
+        if (localStorage.getItem('dad_linked')) {
+          setTimeout(() => goToPage(8), 600);
+        }
+      } else {
+        showScreen('profile');
+      }
     } else {
       pinFailCount++;
       pinBuffer = ''; updateDots('login', 0);
@@ -4587,16 +4811,26 @@ function initLogin() {
   updateDots('set', 0); updateDots('confirm', 0); updateDots('login', 0);
   const fb = document.getElementById('pin-forgot-btn');
   if (fb) fb.style.display = 'none';
+
+  const isDadInvite = !!localStorage.getItem('dad_linked');
+
   if (!savedPin) {
     pinMode = 'set';
     document.getElementById('pin-ui-set').style.display = '';
-    document.getElementById('login-hint').textContent = 'PIN을 잊어도 데이터 유지하며 재설정 가능해요.';
+    document.getElementById('login-hint').textContent = isDadInvite
+      ? '아빠용 PIN 4자리를 설정해주세요.'
+      : 'PIN을 잊어도 데이터 유지하며 재설정 가능해요.';
   } else {
     pinMode = 'login';
     document.getElementById('pin-ui-login').style.display = '';
-    document.getElementById('login-hint').textContent = 'PIN 4자리를 입력해주세요.';
     const p = localStorage.getItem('baby_profile');
-    if (p) document.getElementById('login-name-label').textContent = JSON.parse(p).name + '의 누리케어 🍼';
+    if (p) {
+      const name = JSON.parse(p).name;
+      document.getElementById('login-name-label').textContent = isDadInvite
+        ? `${name} 아빠 모드 🍼`
+        : `${name}의 누리케어 🍼`;
+    }
+    document.getElementById('login-hint').textContent = 'PIN 4자리를 입력해주세요.';
   }
   showScreen('login');
 }
@@ -4790,6 +5024,7 @@ function enterApp() {
   updateSettingsRoleUI();
   renderStorageStatus();
   renderDadTodayRecords();
+  initDadLinkState();
   setTimeout(() => {
     renderMainChart();
     renderGrowthChart();
@@ -4799,6 +5034,10 @@ function enterApp() {
     if (localStorage.getItem('notif_permission') === '1') {
       notifPermission = true;
       scheduleNotifications();
+    }
+    if (typeof fbConnect === 'function') {
+      fbConnect();
+      fbRenderStatus();
     }
   }, 500);
   showScreen('app');
@@ -4839,19 +5078,27 @@ function renderStorageStatus() {
 function appStart() {
   const splash = document.getElementById('screen-splash');
 
-  // 스플래시 → PIN 디졸브 전환
+  // URL에 초대 파라미터 있으면 먼저 처리 (아빠가 링크 클릭)
+  const inviteFromUrl = checkInviteFromURL();
+  if (inviteFromUrl && inviteFromUrl.data) {
+    // 아기 데이터 미리 저장
+    try {
+      const decoded = decodeURIComponent(inviteFromUrl.data);
+      _applyInvitePayload(inviteFromUrl.code, decoded);
+    if (typeof _applyInvitePayloadFB === 'function') _applyInvitePayloadFB(inviteFromUrl.code, decoded);
+    } catch(e) {}
+  }
+
   function showSplashThenLogin() {
-    // 1.5초 후 페이드아웃
     setTimeout(() => {
       if (splash) splash.classList.add('fade-out');
       setTimeout(() => {
         if (splash) splash.style.display = 'none';
         if (localStorage.getItem('onboarding_done') !== '1') {
-          showOnboarding();
-        } else {
-          initLogin();
+          localStorage.setItem('onboarding_done', '1'); // 초대 링크면 온보딩 스킵
         }
-      }, 750); // 페이드아웃 0.7s 후
+        initLogin();
+      }, 750);
     }, 1500);
   }
 
@@ -4933,6 +5180,8 @@ function saveSessions() {
     localStorage.setItem('baby_pumping', pumpingStart ? pumpingStart.toISOString() : '');
     localStorage.setItem('baby_feeding', feedingStart ? feedingStart.toISOString() : '');
   } catch(e) {}
+  // Firebase 세션 동기화
+  if (typeof _syncSessionToFirebase === 'function') _syncSessionToFirebase();
 }
 
 // ── 세션 시작 ──
@@ -5326,6 +5575,508 @@ function showDadToast(msg) {
   el.textContent = msg + ' 기록 완료!';
   document.body.appendChild(el);
   setTimeout(() => { if(el.parentNode) el.remove(); }, 2500);
+}
+
+// ══════════════════════════════════════════
+// 🔥 Firebase 실시간 동기화 엔진
+// ══════════════════════════════════════════
+
+let _familyId = null;      // Firebase family ID (= 초대 코드)
+let _syncActive = false;   // 동기화 활성화 여부
+let _syncListeners = [];   // 리스너 목록 (정리용)
+let _lastSyncTs = 0;       // 마지막 동기화 타임스탬프
+
+// Firebase 준비될 때까지 대기
+function waitForFirebase(cb, retries = 20) {
+  if (window._nuriDB !== undefined) { cb(window._nuriDB); return; }
+  if (retries <= 0) { cb(null); return; }
+  setTimeout(() => waitForFirebase(cb, retries - 1), 150);
+}
+
+// familyId 결정 (초대 코드 = familyId)
+function getFamilyId() {
+  if (_familyId) return _familyId;
+  const linked = localStorage.getItem('dad_linked');
+  const own = localStorage.getItem('invite_code');
+  _familyId = linked || own || null;
+  return _familyId;
+}
+
+// Firebase 동기화 시작
+function startFirebaseSync() {
+  waitForFirebase(db => {
+    if (!db) { console.log('Firebase 없음 — 로컬 모드'); return; }
+    const fid = getFamilyId();
+    if (!fid) { console.log('familyId 없음 — 초대 후 동기화 시작'); return; }
+
+    _syncActive = true;
+    const F = window._nuriFirebase;
+    console.log('🔥 Firebase 동기화 시작:', fid);
+
+    // ── records 실시간 구독 ──
+    const recRef = F.ref(db, `families/${fid}/records`);
+    const recUnsub = F.onValue(recRef, snap => {
+      if (!snap.exists()) return;
+      const fbRecs = snap.val();
+      if (!fbRecs) return;
+      // 배열로 변환 + 로컬과 병합
+      const fbArr = Object.values(fbRecs).sort((a,b) => new Date(b.time) - new Date(a.time));
+      const merged = _mergeRecords(records, fbArr);
+      if (JSON.stringify(merged) !== JSON.stringify(records)) {
+        records = merged;
+        try { localStorage.setItem('baby_records', JSON.stringify(records.slice(0,500))); } catch(e) {}
+        renderTimeline();
+        updateStatus();
+        renderDadTodayRecords();
+        _showSyncToast('🔄 기록이 업데이트됐어요');
+      }
+    });
+    _syncListeners.push(recUnsub);
+
+    // ── profile 실시간 구독 ──
+    const profRef = F.ref(db, `families/${fid}/profile`);
+    const profUnsub = F.onValue(profRef, snap => {
+      if (!snap.exists()) return;
+      const fbProf = snap.val();
+      if (!fbProf) return;
+      const local = JSON.parse(localStorage.getItem('baby_profile') || '{}');
+      if (JSON.stringify(fbProf) !== JSON.stringify(local)) {
+        localStorage.setItem('baby_profile', JSON.stringify(fbProf));
+        renderAppHeader();
+      }
+    });
+    _syncListeners.push(profUnsub);
+
+    // ── sessions 실시간 구독 (수면·유축 진행 중 상태) ──
+    const sessRef = F.ref(db, `families/${fid}/sessions`);
+    const sessUnsub = F.onValue(sessRef, snap => {
+      if (!snap.exists()) return;
+      const sess = snap.val();
+      if (!sess) return;
+      let changed = false;
+      if (sess.sleeping && !sleepingStart) {
+        sleepingStart = new Date(sess.sleeping);
+        updateSleepBanner();
+        changed = true;
+      } else if (!sess.sleeping && sleepingStart) {
+        sleepingStart = null;
+        const banner = document.getElementById('sleeping-banner');
+        if (banner) banner.style.display = 'none';
+        changed = true;
+      }
+      if (sess.pumping && !pumpingStart) {
+        pumpingStart = new Date(sess.pumping);
+        changed = true;
+      } else if (!sess.pumping && pumpingStart) {
+        pumpingStart = null;
+        changed = true;
+      }
+      if (changed) { renderActiveSessions(); updateQuickBtns(); }
+    });
+    _syncListeners.push(sessUnsub);
+
+    // ── dad_checks 실시간 구독 ──
+    const dadRef = F.ref(db, `families/${fid}/dad_checks`);
+    const dadUnsub = F.onValue(dadRef, snap => {
+      if (!snap.exists()) return;
+      const fbChecks = snap.val();
+      if (fbChecks) {
+        localStorage.setItem('dad_checks', JSON.stringify(fbChecks));
+        if (document.getElementById('dad-tab-checklist-urgent')) renderDadTabChecklist();
+      }
+    });
+    _syncListeners.push(dadUnsub);
+
+    // ── 초기 업로드: 로컬 데이터 → Firebase (첫 연동 시) ──
+    _uploadLocalToFirebase(db, fid);
+  });
+}
+
+// 로컬 데이터를 Firebase에 업로드 (첫 연동·재연동 시)
+function _uploadLocalToFirebase(db, fid) {
+  const F = window._nuriFirebase;
+  const profile = JSON.parse(localStorage.getItem('baby_profile') || 'null');
+  if (!profile) return;
+
+  // profile 업로드
+  F.set(F.ref(db, `families/${fid}/profile`), profile).catch(e => console.warn('profile upload:', e));
+
+  // records 업로드 (최근 200개)
+  const recs = records.slice(0, 200);
+  if (recs.length > 0) {
+    const recsObj = {};
+    recs.forEach((r, i) => { recsObj[`r${Date.now()}_${i}`] = r; });
+    F.update(F.ref(db, `families/${fid}/records`), recsObj).catch(e => console.warn('records upload:', e));
+  }
+}
+
+// _mergeRecords: Firebase 모듈에 정의됨
+
+// Firebase에 기록 저장 (addRecord 호출 시 자동 실행)
+function _pushRecordToFirebase(r) {
+  waitForFirebase(db => {
+    if (!db || !_syncActive) return;
+    const fid = getFamilyId();
+    if (!fid) return;
+    const F = window._nuriFirebase;
+    const key = `r${Date.now()}_${Math.random().toString(36).slice(2,7)}`;
+    F.set(F.ref(db, `families/${fid}/records/${key}`), { ...r, _ts: Date.now() })
+      .catch(e => console.warn('record push:', e));
+  });
+}
+
+// Firebase에 session 저장
+function _syncSessionToFirebase() {
+  waitForFirebase(db => {
+    if (!db || !_syncActive) return;
+    const fid = getFamilyId();
+    if (!fid) return;
+    const F = window._nuriFirebase;
+    F.set(F.ref(db, `families/${fid}/sessions`), {
+      sleeping: sleepingStart ? sleepingStart.toISOString() : null,
+      pumping: pumpingStart ? pumpingStart.toISOString() : null,
+      feeding: feedingStart ? feedingStart.toISOString() : null,
+    }).catch(e => console.warn('session sync:', e));
+  });
+}
+
+// Firebase에 dad_checks 저장
+function _syncDadChecksToFirebase() {
+  waitForFirebase(db => {
+    if (!db || !_syncActive) return;
+    const fid = getFamilyId();
+    if (!fid) return;
+    const F = window._nuriFirebase;
+    const checks = JSON.parse(localStorage.getItem('dad_checks') || '{}');
+    F.set(F.ref(db, `families/${fid}/dad_checks`), checks)
+      .catch(e => console.warn('dad_checks sync:', e));
+  });
+}
+
+// 동기화 알림 토스트
+function _showSyncToast(msg) {
+  const now = Date.now();
+  if (now - _lastSyncTs < 3000) return; // 3초 내 중복 방지
+  _lastSyncTs = now;
+  const old = document.getElementById('sync-toast');
+  if (old) old.remove();
+  const el = document.createElement('div');
+  el.id = 'sync-toast';
+  el.style.cssText = `position:fixed;top:70px;right:12px;background:rgba(22,163,74,0.92);
+    color:#fff;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;
+    z-index:9998;box-shadow:0 2px 8px rgba(0,0,0,0.2);pointer-events:none;`;
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => { if (el.parentNode) el.remove(); }, 2500);
+}
+
+// 동기화 상태 표시 (설정 페이지용)
+function renderSyncStatus() {
+  const el = document.getElementById('firebase-sync-status');
+  if (!el) return;
+  const fid = getFamilyId();
+  if (!fid) {
+    el.innerHTML = `<span style="color:#9ca3af;">💤 초대 코드 연동 전</span>`;
+    return;
+  }
+  if (!window._nuriDB) {
+    el.innerHTML = `<span style="color:#f59e0b;">⚠️ Firebase 설정값 미입력 (로컬 모드)</span>`;
+    return;
+  }
+  el.innerHTML = _syncActive
+    ? `<span style="color:#16a34a;">🔥 실시간 동기화 중 · Family: ${fid}</span>`
+    : `<span style="color:#9ca3af;">⏸️ 동기화 대기 중</span>`;
+}
+
+// ══════════════════════════════════════════════════════
+// 🔥 Firebase 실시간 동기화 모듈
+// ══════════════════════════════════════════════════════
+
+// ⚠️ 아래 firebaseConfig를 본인의 Firebase 프로젝트 설정으로 교체하세요!
+// Firebase 콘솔(console.firebase.google.com) → 프로젝트 설정 → 웹앱 추가 → 설정 복사
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCb0M8jD5qzj9KUTvTdIWSQumUmujFoIMo",
+  authDomain: "nuri-care.firebaseapp.com",
+  databaseURL: "https://nuri-care-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "nuri-care",
+  storageBucket: "nuri-care.firebasestorage.app",
+  messagingSenderId: "951857740699",
+  appId: "1:951857740699:web:26af03a44598da80d27f3e"
+};
+
+// Firebase 사용 여부 (config 미설정 시 자동으로 오프라인 모드)
+// Firebase 활성화 여부 (실제 config가 설정된 경우 true)
+const FB_ENABLED = typeof FIREBASE_CONFIG !== 'undefined' &&
+  FIREBASE_CONFIG.apiKey &&
+  !FIREBASE_CONFIG.apiKey.startsWith('YOUR_');
+
+let fbApp = null;
+let fbDb = null;
+let fbFamilyId = null;          // 가족 공유 공간 ID
+let fbSyncActive = false;       // 리스너 활성화 여부
+let fbIsSyncing = false;        // 무한루프 방지 플래그
+let fbLastRemoteUpdate = 0;     // 마지막 원격 업데이트 시각
+
+// ── Firebase 초기화 ──
+function fbInit() {
+  if (!FB_ENABLED) return;
+  try {
+    fbApp = firebase.initializeApp(FIREBASE_CONFIG);
+    fbDb = firebase.database();
+    console.log('✅ Firebase 초기화 완료');
+  } catch(e) {
+    console.warn('Firebase 초기화 실패:', e);
+  }
+}
+
+// ── 가족 ID 생성 또는 로드 ──
+function fbGetFamilyId() {
+  let id = localStorage.getItem('fb_family_id');
+  if (!id) {
+    id = 'fam_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
+    localStorage.setItem('fb_family_id', id);
+  }
+  fbFamilyId = id;
+  return id;
+}
+
+// 아빠가 연동 시 엄마와 같은 familyId 사용
+function fbSetFamilyId(id) {
+  localStorage.setItem('fb_family_id', id);
+  fbFamilyId = id;
+}
+
+// ── 데이터 Firebase에 쓰기 ──
+async function fbSave(key, data) {
+  if (!FB_ENABLED || !fbDb || !fbFamilyId || fbIsSyncing) return;
+  try {
+    await fbDb.ref(`families/${fbFamilyId}/${key}`).set(data);
+  } catch(e) { console.warn('Firebase 저장 실패:', e); }
+}
+
+// ── 전체 데이터 Firebase에 업로드 ──
+async function fbPushAll() {
+  if (!FB_ENABLED || !fbDb || !fbFamilyId) return;
+  try {
+    const payload = {
+      records:    JSON.parse(localStorage.getItem('baby_records')    || '[]'),
+      profile:    JSON.parse(localStorage.getItem('baby_profile')    || 'null'),
+      diary:      JSON.parse(localStorage.getItem('diary_entries')   || '[]'),
+      growth:     JSON.parse(localStorage.getItem('growth_records')  || '[]'),
+      dad_checks: JSON.parse(localStorage.getItem('dad_checks')      || '{}'),
+      sessions: {
+        sleeping: localStorage.getItem('baby_sleeping') || '',
+        pumping:  localStorage.getItem('baby_pumping')  || '',
+        feeding:  localStorage.getItem('baby_feeding')  || '',
+      },
+      milestones: JSON.parse(localStorage.getItem('milestone_checks') || '{}'),
+      vaccines:   JSON.parse(localStorage.getItem('vaccine_checks')   || '{}'),
+      updatedAt: Date.now(),
+      updatedBy: localStorage.getItem('fb_user_role') || 'mom',
+    };
+    await fbDb.ref(`families/${fbFamilyId}`).update(payload);
+    fbUpdateSyncStatus('✅ 동기화 완료', 'ok');
+  } catch(e) {
+    fbUpdateSyncStatus('⚠️ 동기화 실패', 'err');
+    console.warn('Firebase 전체 저장 실패:', e);
+  }
+}
+
+// ── Firebase에서 수신한 데이터를 로컬에 적용 ──
+function fbApplyRemoteData(data) {
+  if (!data) return;
+  fbIsSyncing = true; // 루프 방지
+
+  try {
+    if (data.records && Array.isArray(data.records)) {
+      // 로컬 아빠 기록과 원격 기록 병합 (충돌 없이)
+      const local = JSON.parse(localStorage.getItem('baby_records') || '[]');
+      const merged = _mergeRecords(data.records, local);
+      localStorage.setItem('baby_records', JSON.stringify(merged.slice(0, 500)));
+      records = merged.slice(0, 500);
+    }
+    if (data.profile) {
+      localStorage.setItem('baby_profile', JSON.stringify(data.profile));
+    }
+    if (data.diary && Array.isArray(data.diary)) {
+      localStorage.setItem('diary_entries', JSON.stringify(data.diary));
+      diaryEntries = data.diary;
+    }
+    if (data.growth && Array.isArray(data.growth)) {
+      localStorage.setItem('growth_records', JSON.stringify(data.growth));
+    }
+    if (data.dad_checks) {
+      localStorage.setItem('dad_checks', JSON.stringify(data.dad_checks));
+    }
+    if (data.sessions) {
+      if (data.sessions.sleeping !== undefined) localStorage.setItem('baby_sleeping', data.sessions.sleeping);
+      if (data.sessions.pumping  !== undefined) localStorage.setItem('baby_pumping',  data.sessions.pumping);
+      if (data.sessions.feeding  !== undefined) localStorage.setItem('baby_feeding',  data.sessions.feeding);
+    }
+    if (data.milestones) {
+      localStorage.setItem('milestone_checks', JSON.stringify(data.milestones));
+    }
+    if (data.vaccines) {
+      localStorage.setItem('vaccine_checks', JSON.stringify(data.vaccines));
+    }
+
+    // UI 갱신 (앱이 열려 있는 경우)
+    if (sessionStorage.getItem('nuri_in_app') === '1') {
+      renderTimeline();
+      updateStatus();
+      updateQuickBtns();
+      renderActiveSessions();
+      renderAppHeader();
+      renderScoreCard();
+      renderDadTodayRecords();
+      fbShowSyncToast();
+    }
+  } finally {
+    fbIsSyncing = false;
+  }
+}
+
+// 기록 병합 (시간+카테고리 기준 중복 제거)
+function _mergeRecords(remoteArr, localArr) {
+  const all = [...(remoteArr || []), ...(localArr || [])];
+  const seen = new Set();
+  return all
+    .filter(r => {
+      const key = (r.time || '') + '|' + (r.cat || '') + '|' + (r.title || '');
+      if (seen.has(key)) return false;
+      seen.add(key); return true;
+    })
+    .sort((a, b) => new Date(b.time) - new Date(a.time));
+}
+
+// ── 실시간 리스너 시작 ──
+function fbStartListener() {
+  if (!FB_ENABLED || !fbDb || !fbFamilyId || fbSyncActive) return;
+  fbSyncActive = true;
+
+  fbDb.ref(`families/${fbFamilyId}`).on('value', snapshot => {
+    const data = snapshot.val();
+    if (!data) return;
+
+    // 내가 방금 저장한 데이터는 무시 (50ms 이내)
+    const remoteTime = data.updatedAt || 0;
+    if (remoteTime <= fbLastRemoteUpdate + 50) return;
+    fbLastRemoteUpdate = remoteTime;
+
+    const myRole = localStorage.getItem('fb_user_role') || 'mom';
+    // 내가 업데이트한 거면 무시
+    if (data.updatedBy === myRole && Date.now() - remoteTime < 2000) return;
+
+    console.log('🔥 실시간 업데이트 수신:', data.updatedBy);
+    fbApplyRemoteData(data);
+  }, err => {
+    console.warn('Firebase 리스너 오류:', err);
+    fbSyncActive = false;
+  });
+}
+
+// ── 리스너 중지 ──
+function fbStopListener() {
+  if (!fbDb || !fbFamilyId) return;
+  fbDb.ref(`families/${fbFamilyId}`).off();
+  fbSyncActive = false;
+}
+
+// ── 동기화 토스트 ──
+function fbShowSyncToast() {
+  const old = document.getElementById('fb-sync-toast');
+  if (old) old.remove();
+  const el = document.createElement('div');
+  el.id = 'fb-sync-toast';
+  el.style.cssText = `position:fixed;top:70px;right:12px;
+    background:#1d4ed8;color:#fff;padding:7px 12px;border-radius:12px;
+    font-size:11px;font-weight:700;z-index:8888;
+    box-shadow:0 2px 8px rgba(0,0,0,0.2);opacity:0;
+    transition:opacity 0.3s;`;
+  el.textContent = '🔥 실시간 업데이트!';
+  document.body.appendChild(el);
+  setTimeout(() => { el.style.opacity = '1'; }, 10);
+  setTimeout(() => {
+    el.style.opacity = '0';
+    setTimeout(() => el.remove(), 300);
+  }, 2500);
+}
+
+function fbUpdateSyncStatus(msg, type) {
+  const el = document.getElementById('fb-sync-status');
+  if (!el) return;
+  const colors = { ok: '#16a34a', err: '#ef4444', wait: '#9ca3af' };
+  el.innerHTML = `<span style="color:${colors[type] || colors.wait};">${msg}</span>`;
+}
+
+// ── saveData 후킹 — localStorage 저장 후 Firebase에도 push ──
+// saveData hook — 저장 시 Firebase에도 push
+const _origSaveData2 = saveData;
+saveData = function() {
+  _origSaveData2();
+  if (FB_ENABLED && fbFamilyId) {
+    fbLastRemoteUpdate = Date.now();
+    fbPushAll();
+  }
+};
+
+// ── Firebase 연동 시작 (enterApp에서 호출) ──
+function fbConnect() {
+  if (!FB_ENABLED) return;
+  fbInit();
+  const famId = fbGetFamilyId();
+  localStorage.setItem('fb_user_role', localStorage.getItem('dad_linked') ? 'dad' : 'mom');
+  console.log(`🔥 Firebase 연결: ${famId}`);
+  fbPushAll();        // 내 최신 데이터 업로드
+  fbStartListener();  // 상대방 변경 감지 시작
+}
+
+// ── 초대 링크에 familyId 포함 — generateInviteCode 확장 ──
+function generateInviteCodeWithFB() {
+  const result = generateInviteCode();
+  const famId = fbGetFamilyId();
+  // payload에 familyId 추가
+  const code = localStorage.getItem('invite_code');
+  if (code) {
+    try {
+      const raw = localStorage.getItem('invite_payload_' + code);
+      const data = raw ? JSON.parse(decodeURIComponent(escape(atob(raw)))) : {};
+      data.familyId = famId;
+      const newPayload = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+      localStorage.setItem('invite_payload_' + code, newPayload);
+    } catch(e) {}
+  }
+  return result;
+}
+
+// ── 아빠가 초대 코드 적용 시 familyId도 받아옴 ──
+function _applyInvitePayloadFB(code, payloadStr) {
+  _applyInvitePayload(code, payloadStr);
+  try {
+    const data = JSON.parse(decodeURIComponent(escape(atob(payloadStr))));
+    if (data.familyId) {
+      fbSetFamilyId(data.familyId);
+      localStorage.setItem('fb_user_role', 'dad');
+      console.log('🔥 아빠 familyId 설정:', data.familyId);
+    }
+  } catch(e) {}
+}
+
+// ── 설정 화면에 Firebase 상태 표시 ──
+function fbRenderStatus() {
+  const el = document.getElementById('fb-sync-status');
+  if (!el) return;
+  if (!FB_ENABLED) {
+    el.innerHTML = `<span style="color:#9ca3af;">⚪ Firebase 미설정 (로컬 전용)</span>
+      <div style="font-size:10px;color:#9ca3af;margin-top:3px;">
+        설정 방법은 앱 하단 안내를 확인하세요
+      </div>`;
+    return;
+  }
+  const famId = localStorage.getItem('fb_family_id') || '-';
+  const role = localStorage.getItem('fb_user_role') || 'mom';
+  el.innerHTML = `<span style="color:#16a34a;">🔥 Firebase 연결됨 · ${role === 'dad' ? '아빠' : '엄마'} 모드</span>
+    <div style="font-size:10px;color:#9ca3af;margin-top:2px;">가족 ID: ${famId.slice(-8)}</div>`;
 }
 
 appStart(); // 역할 기억 기반 자동 라우팅
