@@ -1518,66 +1518,60 @@ if ('serviceWorker' in navigator) {
           <div class="feature-page-title">⚙️ 설정</div>
           <div class="feature-page-sub">앱 설정과 데이터를 관리해요</div>
 
+          <!-- 동기화 상태 -->
           <div class="feature-section-title">🔥 실시간 동기화</div>
           <div class="chart-wrap" style="padding:14px 16px;">
             <div id="fb-sync-status" style="font-size:13px;line-height:1.6;margin-bottom:10px;">
               <span style="color:#9ca3af;">확인 중...</span>
             </div>
-            <div style="font-size:11px;color:#9ca3af;line-height:1.6;margin-bottom:10px;">
-              Firebase 설정 전: 로컬 전용 (초대 링크로 스냅샷 공유)<br>
-              Firebase 설정 후: 엄마·아빠 실시간 양방향 동기화
-            </div>
-            <button class="export-btn" onclick="fbPushAll && fbPushAll()" style="margin-bottom:0;">
+            <button class="export-btn" onclick="typeof fbPushAll==='function'&&fbPushAll()" style="margin-bottom:0;">
               🔄 지금 동기화
             </button>
           </div>
 
-          <!-- Firebase 설정 안내 -->
-          <div class="chart-wrap" style="padding:14px 16px;background:#fffbeb;border:1px solid #fde68a;margin-top:4px;">
-            <div style="font-size:12px;font-weight:700;color:#92400e;margin-bottom:6px;">⚡ Firebase 설정 방법</div>
-            <div style="font-size:11px;color:#78350f;line-height:1.7;">
-              1. <a href="https://console.firebase.google.com" target="_blank" style="color:#d97706;font-weight:700;">console.firebase.google.com</a> 접속<br>
-              2. 새 프로젝트 만들기 (무료)<br>
-              3. Realtime Database 생성 → 테스트 모드<br>
-              4. 프로젝트 설정 → 웹앱 추가 → 설정 복사<br>
-              5. nuri-care.html의 FIREBASE_CONFIG 부분 교체<br>
-              6. GitHub에 다시 업로드
-            </div>
-          </div>
-
+          <!-- 화면 설정 -->
           <div class="feature-section-title">🌙 화면 설정</div>
           <div class="chart-wrap" style="padding:14px 16px;">
             <div style="display:flex;align-items:center;justify-content:space-between;">
-              <div><div style="font-size:14px;font-weight:600;">다크 모드</div><div style="font-size:12px;color:#9ca3af;margin-top:2px;">야간 수유 시 눈이 편해요</div></div>
+              <div>
+                <div style="font-size:14px;font-weight:600;">다크 모드</div>
+                <div style="font-size:12px;color:#9ca3af;margin-top:2px;">야간 수유 시 눈이 편해요</div>
+              </div>
               <div id="dark-toggle" onclick="toggleDarkMode()" style="width:44px;height:24px;border-radius:12px;background:#d1d5db;cursor:pointer;position:relative;transition:background 0.2s;">
                 <div id="dark-knob" style="width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
               </div>
             </div>
           </div>
+
+          <!-- 데이터 내보내기 -->
           <div class="feature-section-title">📤 데이터 내보내기</div>
           <button class="export-btn" onclick="exportCSV()">📊 기록 데이터 CSV로 내보내기</button>
           <button class="export-btn" onclick="exportGrowthCSV()">📏 성장 기록 CSV로 내보내기</button>
           <button class="export-btn" onclick="exportDiaryTxt()">📔 일기 텍스트로 내보내기</button>
+
+          <!-- 데이터 관리 -->
           <div class="feature-section-title">💾 데이터 관리</div>
           <div class="chart-wrap" style="padding:14px 16px;">
-            <!-- 저장 공간 현황 -->
             <div id="storage-status" style="margin-bottom:12px;"></div>
-            <div style="font-size:12px;color:#9ca3af;margin-bottom:10px;line-height:1.6;">
-              ⚠️ 모든 기록은 <strong>이 기기의 브라우저</strong>에만 저장돼요.<br>
-              폰 교체·브라우저 변경 전 반드시 백업하세요!
-            </div>
             <button class="export-btn" onclick="backupAllData()" style="margin-bottom:8px;">💾 전체 데이터 백업 (JSON)</button>
             <button class="export-btn" onclick="clearTodayRecords()" style="color:#f59e0b;border-color:#fde68a;">🗑️ 오늘 기록만 삭제</button>
           </div>
-          <div class="chart-wrap" style="padding:14px 16px;border:1px solid #fecaca;background:#fff5f5;margin-top:8px;">
-            <div style="font-size:12px;color:#ef4444;font-weight:700;margin-bottom:6px;">⚠️ 위험 구역</div>
-            <div style="font-size:12px;color:#9ca3af;margin-bottom:10px;line-height:1.6;">아래 작업은 되돌릴 수 없어요.<br>반드시 백업 후 진행하세요.</div>
-            <button onclick="confirmReset()" style="width:100%;padding:12px;background:none;border:1.5px solid #fecaca;border-radius:10px;color:#ef4444;font-size:13px;font-weight:600;cursor:pointer;">⛔ 모든 데이터 초기화</button>
+
+          <!-- 위험 구역 -->
+          <div class="chart-wrap" style="padding:14px 16px;border:1.5px solid #fecaca;background:#fff5f5;margin-top:4px;">
+            <div style="font-size:13px;font-weight:700;color:#ef4444;margin-bottom:6px;">⚠️ 위험 구역</div>
+            <div style="font-size:12px;color:#9ca3af;margin-bottom:12px;line-height:1.6;">
+              아래 작업은 되돌릴 수 없어요.<br>반드시 백업 후 진행하세요.
+            </div>
+            <button onclick="confirmReset()" style="width:100%;padding:12px;background:none;border:1.5px solid #fecaca;border-radius:10px;color:#ef4444;font-size:13px;font-weight:700;cursor:pointer;">
+              ⛔ 모든 데이터 초기화
+            </button>
           </div>
+
         </div>
       </div>
 
-    </div><!-- /swipe-container -->
+    </div>
   </div>
 </div>
 
@@ -5709,8 +5703,6 @@ function _uploadLocalToFirebase(db, fid) {
     F.update(F.ref(db, `families/${fid}/records`), recsObj).catch(e => console.warn('records upload:', e));
   }
 }
-
-// _mergeRecords: Firebase 모듈에 정의됨
 
 // Firebase에 기록 저장 (addRecord 호출 시 자동 실행)
 function _pushRecordToFirebase(r) {
