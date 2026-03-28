@@ -424,13 +424,7 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .invite-gen-btn { width: 100%; padding: 12px; background: #eff6ff; color: #1d4ed8; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 4px; }
 .invite-gen-btn:active { background: #2563eb; color: #fff; }
 /* 아빠 초대 코드 입력 */
-.dad-invite-wrap { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.22); }
-.dad-invite-label { font-size: 12px; color: rgba(255,255,255,0.7); margin-bottom: 6px; display: block; }
-.dad-invite-row { display: flex; gap: 8px; }
-.dad-invite-input { flex: 1; padding: 10px 12px; border-radius: 8px; border: none; background: rgba(255,255,255,0.15); color: #fff; font-size: 15px; font-weight: 700; letter-spacing: 0.1em; outline: none; font-family: monospace; }
 .dad-invite-input::placeholder { color: rgba(255,255,255,0.4); font-weight: 400; letter-spacing: 0; }
-.dad-invite-btn { background: #fff; color: #1d4ed8; border: none; border-radius: 8px; padding: 10px 16px; font-size: 13px; font-weight: 700; cursor: pointer; }
-.dad-linked-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.2); border-radius: 12px; padding: 5px 12px; font-size: 12px; color: #fff; margin-top: 10px; }
 /* 아빠 이벤트 섹션 */
 .dad-event-card { background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: none; border: 1px solid #e5e7eb; }
 .dad-event-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #f3f4f6; cursor: pointer; transition: background 0.1s; }
@@ -621,13 +615,7 @@ body.dark .coach-reason { color: #a89880; }
 /* 육아 점수 카드 */
 .score-bar.ok   { background: linear-gradient(90deg,#f59e0b,#d97706); }
 .score-bar.bad  { background: linear-gradient(90deg,#ef4444,#dc2626); }
-body.dark .quick-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 4px; background: #fff; border: 1.5px solid #e8d796; border-radius: 12px; cursor: pointer; transition: all 0.12s; }
-.quick-btn:active { transform: scale(0.93); background: #fff7d6; }
-.quick-btn-icon { font-size: 22px; }
-.quick-btn-label { font-size: 11px; font-weight: 700; color: #7a5600; }
-.quick-btn-time { font-size: 10px; color: #9ca3af; min-height: 14px; }
-body.dark .quick-btn { background: #2a2520; border-color: #3d3628; }
-body.dark .quick-btn-label { color: #c8a870; }
+/* quick-btn 구버전 제거 — 새 스타일은 하단에 정의 */
 
 /* ── 페이지 네비게이션 레이블 ── */
 
@@ -698,13 +686,9 @@ body.dark .active-session-card.sleep { background: #0f1a2a; border-color: #1e3a5
 body.dark .active-session-card.pump  { background: #1a0f2a; border-color: #5b21b6; }
 body.dark .active-session-card.feed  { background: #2a1800; border-color: #92400e; }
 body.dark .active-session-title { color: #f0ead8; }@keyframes micPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
-.voice-status-text { font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
-.voice-hint-text { font-size: 13px; color: #9ca3af; }
-.voice-record-btn { width: 72px; height: 72px; border-radius: 50%; background: #7a5600; border: none; color: #fff; font-size: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(122,86,0,0.35); transition: all 0.15s; margin-bottom: 14px; }
 .voice-record-btn:active { transform: scale(0.93); }
 .voice-record-btn.listening { background: #dc2626; box-shadow: 0 0 0 8px rgba(220,38,38,0.18); animation: btnPulse 1s infinite; }
 @keyframes btnPulse { 0%,100%{box-shadow:0 0 0 8px rgba(220,38,38,0.18)} 50%{box-shadow:0 0 0 16px rgba(220,38,38,0.08)} }
-.voice-commands-row { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; max-width: 320px; }
 .voice-cmd { background: #fff7d6; border: 1px solid #e8d796; border-radius: 16px; padding: 5px 12px; font-size: 12px; color: #7a5600; font-weight: 600; }
 
 /* ── 아빠 기록 섹션 ── */
@@ -742,7 +726,45 @@ body.dark .quick-nav-bar { background: #2a2520; border-top-color: #3d3628; }
 body.dark .qnav-btn.active { background: #3d3628; }
 body.dark .qnav-btn.active::after { background: #c8a870; }
 /* page-dots, page-nav 숨김 (탭바로 대체) */
-.page-dots, </style>
+.page-dots { display:none; }
+.page-nav { display:none; }
+
+/* ── 스플래시 화면 ── */
+#screen-splash {
+  position: fixed; inset: 0; z-index: 9999;
+  background: linear-gradient(160deg, #fffdf2 0%, #fff7d6 50%, #f6e6a8 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: opacity 0.7s ease;
+}
+#screen-splash.fade-out { opacity: 0; pointer-events: none; }
+.splash-icon { margin-bottom: 20px; animation: splashPop 0.6s cubic-bezier(0.34,1.56,0.64,1) both; }
+.splash-logo { font-size: 32px; font-weight: 900; color: #7a5600; letter-spacing: -0.03em; animation: splashFadeUp 0.5s 0.2s ease both; }
+.splash-sub { font-size: 14px; color: #9ca3af; margin-top: 8px; animation: splashFadeUp 0.5s 0.35s ease both; }
+@keyframes splashPop { from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
+@keyframes splashFadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── 퀵버튼 리디자인 ── */
+.quick-log-row { display: flex; gap: 10px; margin-bottom: 16px; padding: 0 4px; }
+.quick-btn {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  gap: 5px; padding: 14px 6px 10px;
+  background: #fff; border: none;
+  border-radius: 18px; cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: 0 2px 8px rgba(122,86,0,0.10), 0 0 0 1.5px rgba(232,215,150,0.5);
+}
+.quick-btn:active { transform: scale(0.94); box-shadow: 0 1px 4px rgba(122,86,0,0.12); }
+.quick-btn.active-session {
+  background: linear-gradient(135deg,#fff7d6,#ffe9a0);
+  box-shadow: 0 2px 8px rgba(122,86,0,0.18), 0 0 0 2px #e8d796;
+}
+.quick-btn-icon { font-size: 26px; line-height: 1; }
+.quick-btn-label { font-size: 11px; font-weight: 700; color: #7a5600; letter-spacing: -0.01em; }
+.quick-btn-time { font-size: 10px; color: #9ca3af; min-height: 13px; font-weight: 500; }
+body.dark .quick-btn { background: #2a2520; box-shadow: 0 2px 8px rgba(0,0,0,0.2), 0 0 0 1.5px #3d3628; }
+body.dark .quick-btn.active-session { background: linear-gradient(135deg,#3d3628,#4d4530); }
+body.dark .quick-btn-label { color: #c8a870; }
+</style>
 </head>
 <script>
 // ── Service Worker 등록 (자동 업데이트) ──
@@ -815,7 +837,39 @@ if ('serviceWorker' in navigator) {
   </div>
 </div>
 
-<!-- ═══════════ 화면: 신생아 케어 가이드 ═══════════ -->
+<!-- ═══════════ 스플래시 화면 ═══════════ -->
+<div id="screen-splash">
+  <div class="splash-icon">
+    <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- 배경 원 -->
+      <circle cx="48" cy="48" r="48" fill="#FFF7D6"/>
+      <!-- 외부 링 -->
+      <circle cx="48" cy="48" r="42" fill="none" stroke="#E8D796" stroke-width="2"/>
+      <!-- 아기 얼굴 -->
+      <circle cx="48" cy="45" r="22" fill="#FFEAA7"/>
+      <!-- 볼터치 -->
+      <ellipse cx="33" cy="50" rx="5" ry="3.5" fill="#FFAB91" opacity="0.5"/>
+      <ellipse cx="63" cy="50" rx="5" ry="3.5" fill="#FFAB91" opacity="0.5"/>
+      <!-- 눈 -->
+      <ellipse cx="41" cy="42" rx="3" ry="3.5" fill="#5D4037"/>
+      <ellipse cx="55" cy="42" rx="3" ry="3.5" fill="#5D4037"/>
+      <circle cx="42" cy="41" r="1" fill="#fff"/>
+      <circle cx="56" cy="41" r="1" fill="#fff"/>
+      <!-- 미소 -->
+      <path d="M40 51 Q48 58 56 51" stroke="#7a5600" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+      <!-- 아기 귀 -->
+      <ellipse cx="26" cy="45" rx="4" ry="5" fill="#FFEAA7"/>
+      <ellipse cx="70" cy="45" rx="4" ry="5" fill="#FFEAA7"/>
+      <!-- 왕관 (누리케어 상징) -->
+      <path d="M34 30 L38 38 L48 32 L58 38 L62 30 L58 36 L48 30 L38 36 Z" fill="#7a5600"/>
+      <!-- 하트 -->
+      <path d="M44 70 Q48 67 52 70 Q56 73 48 78 Q40 73 44 70Z" fill="#FF6B9D"/>
+    </svg>
+  </div>
+  <div class="splash-logo">누리케어</div>
+  <div class="splash-sub">소중한 아기의 하루를 함께해요 🌸</div>
+</div>
+
 <div class="screen" id="screen-guide">
   <div class="guide-header">
     <div class="guide-header-inner">
@@ -839,6 +893,22 @@ if ('serviceWorker' in navigator) {
 <div class="screen" id="screen-login">
   <div class="login-box">
     <div class="login-logo">
+      <svg width="64" height="64" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:8px;">
+        <circle cx="48" cy="48" r="48" fill="#FFF7D6"/>
+        <circle cx="48" cy="48" r="42" fill="none" stroke="#E8D796" stroke-width="2"/>
+        <circle cx="48" cy="45" r="22" fill="#FFEAA7"/>
+        <ellipse cx="33" cy="50" rx="5" ry="3.5" fill="#FFAB91" opacity="0.5"/>
+        <ellipse cx="63" cy="50" rx="5" ry="3.5" fill="#FFAB91" opacity="0.5"/>
+        <ellipse cx="41" cy="42" rx="3" ry="3.5" fill="#5D4037"/>
+        <ellipse cx="55" cy="42" rx="3" ry="3.5" fill="#5D4037"/>
+        <circle cx="42" cy="41" r="1" fill="#fff"/>
+        <circle cx="56" cy="41" r="1" fill="#fff"/>
+        <path d="M40 51 Q48 58 56 51" stroke="#7a5600" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+        <ellipse cx="26" cy="45" rx="4" ry="5" fill="#FFEAA7"/>
+        <ellipse cx="70" cy="45" rx="4" ry="5" fill="#FFEAA7"/>
+        <path d="M34 30 L38 38 L48 32 L58 38 L62 30 L58 36 L48 30 L38 36 Z" fill="#7a5600"/>
+        <path d="M44 70 Q48 67 52 70 Q56 73 48 78 Q40 73 44 70Z" fill="#FF6B9D"/>
+      </svg>
       <div class="logo-icon">누리케어</div>
       <p>소중한 아기의 하루를 기록해요</p>
     </div>
@@ -1457,7 +1527,7 @@ if ('serviceWorker' in navigator) {
         </div>
       </div>
 
-    </div><!-- /swipe-container (아빠탭 추가 후 10페이지) -->
+    </div><!-- /swipe-container -->
   </div>
 </div>
 
@@ -4063,7 +4133,7 @@ function renderScoreCard() {
   const diaperCount = todayRecs.filter(r => r.cat === 'diaper').length;
   const totalRecs = todayRecs.length;
 
-  // 독려 메시지 풀 (점수 없이 항상 긍정적)
+  // 격려 메시지 50개 (날짜별 순환)
   const CHEER_MSGS = [
     { emoji:'🌸', msg:'지금 이 순간 최선을 다하고 있어요. 그것만으로 충분해요.' },
     { emoji:'💛', msg:'아기가 엄마 목소리를 가장 좋아한다는 거 알고 있죠? 엄마는 최고예요.' },
@@ -4073,8 +4143,52 @@ function renderScoreCard() {
     { emoji:'🤱', msg:'힘들어도 계속하는 것 자체가 대단한 일이에요.' },
     { emoji:'💪', msg:'아기는 지금 이 순간 세상에서 가장 사랑받고 있어요.' },
     { emoji:'🌈', msg:'잠 못 자고 힘든 날도 있지만, 그게 엄마의 사랑이에요.' },
+    { emoji:'🫶', msg:'완벽한 엄마는 없어요. 사랑이 넘치는 엄마가 최고예요.' },
+    { emoji:'🌿', msg:'아기의 웃음 하나가 오늘 하루를 다 보상해줘요.' },
+    { emoji:'💫', msg:'엄마가 되는 건 세상에서 가장 용감한 일이에요.' },
+    { emoji:'🌺', msg:'지치고 힘들어도 괜찮아요. 오늘 하루도 정말 잘하셨어요.' },
+    { emoji:'🦋', msg:'아기가 엄마를 보며 배우는 거, 알고 계시죠? 당신은 아기의 세상이에요.' },
+    { emoji:'🌻', msg:'모든 좋은 엄마는 지금 당신처럼 걱정하는 엄마예요.' },
+    { emoji:'✨', msg:'오늘 기록한 것들이 언젠가 소중한 추억이 될 거예요.' },
+    { emoji:'🌟', msg:'아기가 건강하게 자라는 건 엄마 덕분이에요. 정말 감사해요.' },
+    { emoji:'🕊️', msg:'힘든 순간들이 지나면 이 시간이 얼마나 소중했는지 알게 돼요.' },
+    { emoji:'🩷', msg:'자신을 너무 다그치지 마세요. 당신은 이미 충분히 훌륭한 엄마예요.' },
+    { emoji:'🌝', msg:'새벽에 혼자 아기를 달랠 때, 당신은 진짜 영웅이에요.' },
+    { emoji:'🫂', msg:'오늘 울었다면 괜찮아요. 내일의 당신은 오늘보다 더 강해질 거예요.' },
+    { emoji:'🌾', msg:'아기에게 가장 필요한 건 완벽한 돌봄이 아니라 엄마의 따뜻한 품이에요.' },
+    { emoji:'🎀', msg:'엄마가 행복해야 아기도 행복해요. 오늘 자신에게 다정해주세요.' },
+    { emoji:'🌙', msg:'새벽 수유가 힘들어도, 그 시간에 나누는 눈 맞춤이 아기의 뇌를 키워요.' },
+    { emoji:'💎', msg:'모유 한 방울도, 분유 한 스푼도 아기에게 큰 선물이에요.' },
+    { emoji:'🏡', msg:'집이 좀 어질러져도 괜찮아요. 아기에게 집중하는 지금이 가장 잘하는 거예요.' },
+    { emoji:'🌤️', msg:'오늘 힘들었던 만큼, 내일은 더 익숙해져 있을 거예요.' },
+    { emoji:'🤍', msg:'산후 몸이 회복되는 데 시간이 걸려요. 자신에게 너그럽게 대해주세요.' },
+    { emoji:'🌱', msg:'아기와 함께 엄마도 자라는 중이에요. 조급해하지 않아도 돼요.' },
+    { emoji:'🎵', msg:'아기에게 불러주는 자장가, 세상에서 가장 아름다운 음악이에요.' },
+    { emoji:'🦢', msg:'육아에 정답은 없어요. 당신만의 방법으로 하는 게 맞아요.' },
+    { emoji:'🍀', msg:'오늘 쉬지 못했다면, 잠깐이라도 눈을 감고 쉬어도 괜찮아요.' },
+    { emoji:'🐣', msg:'아기가 처음이어도, 아기도 엄마가 처음이에요. 함께 배워가요.' },
+    { emoji:'🌷', msg:'아기 옷을 입히고, 밥 먹이고, 재우는 모든 것이 사랑의 표현이에요.' },
+    { emoji:'🫧', msg:'목욕 시킬 때 아기가 좋아한다면, 오늘 하나 잘한 거예요.' },
+    { emoji:'🌊', msg:'파도처럼 밀려오는 감정들, 다 정상이에요. 엄마라서 그런 거예요.' },
+    { emoji:'🏅', msg:'아무도 몰라줘도, 오늘 하루 최선을 다한 당신이 진짜 챔피언이에요.' },
+    { emoji:'🌮', msg:'밥 먹을 시간도 없을 만큼 바빴다면, 잠깐이라도 뭔가 드세요. 엄마도 중요해요.' },
+    { emoji:'🎈', msg:'아기의 첫 번째 미소는 엄마를 위한 선물이에요.' },
+    { emoji:'🍯', msg:'달콤한 시간이 분명히 올 거예요. 지금은 그 과정 중이에요.' },
+    { emoji:'🦋', msg:'지금 이 힘든 시간도 훗날엔 가장 빛나는 기억이 될 거예요.' },
+    { emoji:'🪐', msg:'우주에서 가장 특별한 아기에게, 우주에서 가장 특별한 엄마가 있어요.' },
+    { emoji:'🌅', msg:'어제보다 오늘이, 오늘보다 내일이 조금씩 나아질 거예요.' },
+    { emoji:'🎐', msg:'바람에 흔들려도 뿌리는 깊은 나무처럼, 엄마는 아기의 든든한 뿌리예요.' },
+    { emoji:'🫁', msg:'깊게 숨 쉬어요. 지금 이 순간도 잘 해내고 있어요.' },
+    { emoji:'🌞', msg:'오늘 아기가 편안했다면, 그건 전적으로 당신 덕분이에요.' },
+    { emoji:'🍃', msg:'자연처럼 자연스럽게. 완벽하지 않아도 엄마는 엄마예요.' },
+    { emoji:'🎯', msg:'오늘의 목표는 하나예요. 아기와 엄마 모두 무사히 하루 보내기.' },
+    { emoji:'🌼', msg:'작은 것에도 감사할 수 있는 당신, 이미 훌륭한 엄마예요.' },
+    { emoji:'🫶', msg:'아기가 자는 동안 쉬는 것, 그것도 훌륭한 육아예요.' },
+    { emoji:'💖', msg:'세상에 당신 같은 엄마가 있어서 아기는 정말 행운이에요.' },
   ];
-  const cheer = CHEER_MSGS[new Date().getDate() % CHEER_MSGS.length];
+  const now2 = new Date();
+  const cheerIdx = (now2.getDate() * 3 + now2.getHours()) % CHEER_MSGS.length;
+  const cheer = CHEER_MSGS[cheerIdx];
 
   // 오늘 활동 요약 (점수 없이 기록 수만)
   let actSummary = '';
@@ -4263,9 +4377,16 @@ function getBestKoreanVoice() {
 function speak(text) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
+  // 모든 이모지·특수기호 완전 제거 (TTS가 "젖병", "꽃" 등으로 읽는 것 방지)
+  const clean = text
+    .replace(/\p{Emoji}/gu, '')   // 모든 이모지 제거 (유니코드 Emoji 카테고리)
+    .replace(/[^\w\s가-힣.,!?()~%\-]/g, '') // 남은 특수문자 제거
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!clean) return;
+  const utter = new SpeechSynthesisUtterance(clean);
   utter.lang = 'ko-KR';
-  utter.rate = 0.92;   // 살짝 천천히 → 더 자연스럽게
+  utter.rate = 0.92;
   utter.pitch = 1.0;
   utter.volume = 1.0;
   const trySpeak = () => {
@@ -4273,7 +4394,6 @@ function speak(text) {
     if (v) utter.voice = v;
     window.speechSynthesis.speak(utter);
   };
-  // 음성 목록이 아직 안 로드된 경우 대기
   if (window.speechSynthesis.getVoices().length === 0) {
     window.speechSynthesis.onvoiceschanged = () => { _bestVoice = null; trySpeak(); };
   } else {
@@ -4649,6 +4769,7 @@ function obNext() {
 // enterApp 통합 (모든 기능 초기화)
 // ══════════════════════════════════════════
 function enterApp() {
+  sessionStorage.setItem('nuri_in_app', '1'); // 새로고침 감지용
   loadData();
   loadGrowthData();
   loadDiary();
@@ -4668,7 +4789,7 @@ function enterApp() {
   startSessionTimer();
   updateSettingsRoleUI();
   renderStorageStatus();
-  renderDadTodayRecords(); // 아빠 탭 오늘 기록
+  renderDadTodayRecords();
   setTimeout(() => {
     renderMainChart();
     renderGrowthChart();
@@ -4716,12 +4837,33 @@ function renderStorageStatus() {
 // 👤 앱 시작 — 역할선택 없이 바로 PIN
 // ══════════════════════════════════════════
 function appStart() {
-  // 역할선택 화면 없이 바로 PIN 로그인으로
-  if (localStorage.getItem('onboarding_done') !== '1') {
-    showOnboarding();
-  } else {
-    initLogin();
+  const splash = document.getElementById('screen-splash');
+
+  // 스플래시 → PIN 디졸브 전환
+  function showSplashThenLogin() {
+    // 1.5초 후 페이드아웃
+    setTimeout(() => {
+      if (splash) splash.classList.add('fade-out');
+      setTimeout(() => {
+        if (splash) splash.style.display = 'none';
+        if (localStorage.getItem('onboarding_done') !== '1') {
+          showOnboarding();
+        } else {
+          initLogin();
+        }
+      }, 750); // 페이드아웃 0.7s 후
+    }, 1500);
   }
+
+  // 새로고침 감지 — 이미 앱에 진입했었으면 바로 앱으로
+  const wasInApp = sessionStorage.getItem('nuri_in_app');
+  if (wasInApp === '1' && localStorage.getItem('baby_profile')) {
+    if (splash) splash.style.display = 'none';
+    enterApp();
+    return;
+  }
+
+  showSplashThenLogin();
 }
 
 // 온보딩 후 PIN으로 (obFinish, obSkip에서 호출)
@@ -5185,8 +5327,6 @@ function showDadToast(msg) {
   document.body.appendChild(el);
   setTimeout(() => { if(el.parentNode) el.remove(); }, 2500);
 }
-
-// renderDadScreen 후 오늘 기록 렌더 — selectRole에서 처리
 
 appStart(); // 역할 기억 기반 자동 라우팅
 </script>
