@@ -713,6 +713,55 @@ body.dark .onboarding-title { color: #f0ead8; }
 /* ── 데이터 백업 토스트 ── */
 .backup-toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 12px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; z-index: 8000; box-shadow: 0 4px 16px rgba(0,0,0,0.25); max-width: 300px; text-align: center; display: flex; align-items: center; gap: 8px; }
 .backup-toast-btn { background: #7a5600; border: none; border-radius: 8px; color: #fff; font-size: 12px; font-weight: 700; padding: 4px 10px; cursor: pointer; white-space: nowrap; }
+
+/* ── 마이크 중심 UI ── */
+/* ══ 음성 히어로 UI ══ */
+.voice-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 0 24px; }
+.voice-hero-mic { margin-bottom: 24px; opacity: 0.92; transition: transform 0.2s; }
+.voice-hero-mic.listening { animation: micPulse 1.2s ease-in-out infinite; }
+.voice-hero-status { font-size: 22px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px; letter-spacing: -0.3px; }
+.voice-hero-hint { font-size: 13px; color: #9ca3af; margin-bottom: 28px; text-align: center; line-height: 1.5; }
+.voice-hero-btn { width: 80px; height: 80px; border-radius: 50%; background: #7a5600; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 24px rgba(122,86,0,0.32), 0 0 0 0 rgba(122,86,0,0.2); transition: all 0.15s; margin-bottom: 20px; position: relative; }
+.voice-hero-btn::after { content:''; position:absolute; inset:-8px; border-radius:50%; border:2px solid rgba(122,86,0,0.2); }
+.voice-hero-btn:active { transform: scale(0.92); }
+.voice-hero-btn.listening { background: #dc2626; box-shadow: 0 6px 24px rgba(220,38,38,0.35), 0 0 0 12px rgba(220,38,38,0.12); animation: btnPulse 1.2s ease-in-out infinite; }
+#voice-btn-inner { width: 28px; height: 28px; border-radius: 50%; background: #fff; display: block; transition: border-radius 0.2s, width 0.2s, height 0.2s; }
+.voice-hero-btn.listening #voice-btn-inner { border-radius: 6px; width: 22px; height: 22px; }
+.voice-hero-cmds { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 0 16px; }
+.voice-cmd { background: #fff7d6; border: 1.5px solid #e8d796; border-radius: 20px; padding: 5px 12px; font-size: 12px; color: #7a5600; font-weight: 600; white-space: nowrap; }
+@keyframes micPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+@keyframes btnPulse { 0%,100%{box-shadow:0 6px 24px rgba(220,38,38,0.35),0 0 0 0 rgba(220,38,38,0.2)} 50%{box-shadow:0 6px 24px rgba(220,38,38,0.35),0 0 0 16px rgba(220,38,38,0)} }
+body.dark .voice-hero-status { color: #f0ead8; }
+body.dark .voice-hero-btn { background: #7a5600; }
+body.dark .voice-hero-btn.listening { background: #dc2626; }
+body.dark .voice-cmd { background: #2a2520; border-color: #3d3628; color: #c8a870; }
+
+/* ══ 진행 중 세션 카드 ══ */
+.active-session-card { border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; border: 2px solid; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.active-session-card.sleep { background: linear-gradient(135deg,#eff6ff,#dbeafe); border-color: #93c5fd; }
+.active-session-card.pump  { background: linear-gradient(135deg,#fdf4ff,#f3e8ff); border-color: #d8b4fe; }
+.active-session-card.feed  { background: linear-gradient(135deg,#fff7ed,#ffedd5); border-color: #fdba74; }
+.active-session-left { display: flex; align-items: center; gap: 10px; }
+.active-session-icon { font-size: 28px; }
+.active-session-title { font-size: 14px; font-weight: 700; color: #1a1a1a; }
+.active-session-dur { font-size: 13px; color: #6b7280; font-weight: 500; }
+.active-session-end-btn { background: #1a1a1a; color: #fff; border: none; border-radius: 20px; padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.active-session-end-btn:active { opacity: 0.8; }
+body.dark .active-session-card.sleep { background: #0f1a2a; border-color: #1e3a5f; }
+body.dark .active-session-card.pump  { background: #1a0f2a; border-color: #5b21b6; }
+body.dark .active-session-card.feed  { background: #2a1800; border-color: #92400e; }
+body.dark .active-session-title { color: #f0ead8; }@keyframes micPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+.voice-status-text { font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+.voice-hint-text { font-size: 13px; color: #9ca3af; }
+.voice-record-btn { width: 72px; height: 72px; border-radius: 50%; background: #7a5600; border: none; color: #fff; font-size: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(122,86,0,0.35); transition: all 0.15s; margin-bottom: 14px; }
+.voice-record-btn:active { transform: scale(0.93); }
+.voice-record-btn.listening { background: #dc2626; box-shadow: 0 0 0 8px rgba(220,38,38,0.18); animation: btnPulse 1s infinite; }
+@keyframes btnPulse { 0%,100%{box-shadow:0 0 0 8px rgba(220,38,38,0.18)} 50%{box-shadow:0 0 0 16px rgba(220,38,38,0.08)} }
+.voice-commands-row { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; max-width: 320px; }
+.voice-cmd { background: #fff7d6; border: 1px solid #e8d796; border-radius: 16px; padding: 5px 12px; font-size: 12px; color: #7a5600; font-weight: 600; }
+
+/* ── 진행 중 세션 카드 ── */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
 </style>
 </head>
 <body>
@@ -1061,91 +1110,83 @@ body.dark .onboarding-title { color: #f0ead8; }
         </div>
       </div>
 
-      <!-- ── 페이지 2: 메인 트래커 (시작 페이지) ── -->
+      <!-- ── 페이지 2: 음성 기록 메인 ── -->
       <div class="swipe-page">
         <div class="app-body">
 
-          <!-- 알림 권한 배너 (필요시 표시) -->
+          <!-- 진행 중 세션 카드 (수면/유축/수유 진행 중일 때만 표시) -->
+          <div id="active-sessions-wrap"></div>
+
+          <!-- 코치 카드 (진행 중 세션 없을 때만) -->
+          <div id="coach-card-wrap"></div>
+
+          <!-- ★ 핵심: 마이크 중심 UI ★ -->
+          <div class="voice-hero">
+            <div class="voice-hero-mic" id="voice-mic-icon">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="28" y="10" width="24" height="36" rx="12" fill="#7a5600"/>
+                <path d="M16 40c0 13.255 10.745 24 24 24s24-10.745 24-24" stroke="#7a5600" stroke-width="4" stroke-linecap="round"/>
+                <line x1="40" y1="64" x2="40" y2="74" stroke="#7a5600" stroke-width="4" stroke-linecap="round"/>
+                <line x1="30" y1="74" x2="50" y2="74" stroke="#7a5600" stroke-width="4" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="voice-hero-status" id="voice-status-text">탭해서 말하기</div>
+            <div class="voice-hero-hint" id="voice-hint-text">수유 시작 · 수면 시작 · 유축 시작 · 기저귀</div>
+            <button class="voice-hero-btn" id="voice-btn" onclick="toggleVoice()">
+              <span id="voice-btn-inner"></span>
+            </button>
+            <div class="voice-hero-cmds">
+              <span class="voice-cmd">수유 시작/종료</span>
+              <span class="voice-cmd">수면 시작/종료</span>
+              <span class="voice-cmd">유축 시작/종료</span>
+              <span class="voice-cmd">기저귀</span>
+            </div>
+          </div>
+
+          <!-- 빠른 탭 버튼 (보조) -->
+          <div class="quick-log-row">
+            <button class="quick-btn" onclick="quickStartAction('feed')" id="qb-feed">
+              <span class="quick-btn-icon">🍼</span>
+              <span class="quick-btn-label" id="ql-feed">수유 시작</span>
+              <span class="quick-btn-time" id="qt-feed">-</span>
+            </button>
+            <button class="quick-btn" onclick="quickStartAction('sleep')" id="qb-sleep">
+              <span class="quick-btn-icon">😴</span>
+              <span class="quick-btn-label" id="ql-sleep">수면 시작</span>
+              <span class="quick-btn-time" id="qt-sleep">-</span>
+            </button>
+            <button class="quick-btn" onclick="quickStartAction('pump')" id="qb-pump">
+              <span class="quick-btn-icon">🤱</span>
+              <span class="quick-btn-label" id="ql-pump">유축 시작</span>
+              <span class="quick-btn-time" id="qt-pump">-</span>
+            </button>
+            <button class="quick-btn" onclick="quickStartAction('diaper')" id="qb-diaper">
+              <span class="quick-btn-icon">🌿</span>
+              <span class="quick-btn-label">기저귀</span>
+              <span class="quick-btn-time" id="qt-diaper">-</span>
+            </button>
+          </div>
+
+          <!-- 알림 배너 -->
           <div class="notif-banner" id="notif-banner" style="display:none;">
             <span class="notif-banner-text">🔔 재울 타이밍을 알림으로 받을 수 있어요</span>
             <button class="notif-banner-btn" onclick="requestNotifPermission()">허용</button>
             <button class="notif-banner-close" onclick="dismissNotifBanner()">✕</button>
           </div>
 
-          <!-- ① 원탭 빠른기록 -->
-          <div class="quick-log-row">
-            <button class="quick-btn" onclick="quickLog('feed')" id="qb-feed">
-              <span class="quick-btn-icon">🍼</span>
-              <span class="quick-btn-label">수유</span>
-              <span class="quick-btn-time" id="qt-feed">-</span>
-            </button>
-            <button class="quick-btn" onclick="quickLog('sleep')" id="qb-sleep">
-              <span class="quick-btn-icon">😴</span>
-              <span class="quick-btn-label">수면</span>
-              <span class="quick-btn-time" id="qt-sleep">-</span>
-            </button>
-            <button class="quick-btn" onclick="quickLog('diaper')" id="qb-diaper">
-              <span class="quick-btn-icon">🌿</span>
-              <span class="quick-btn-label">기저귀</span>
-              <span class="quick-btn-time" id="qt-diaper">-</span>
-            </button>
-            <button class="quick-btn" onclick="quickLog('pump')" id="qb-pump">
-              <span class="quick-btn-icon">🤱</span>
-              <span class="quick-btn-label">유축</span>
-              <span class="quick-btn-time" id="qt-pump">-</span>
-            </button>
-          </div>
-
-          <!-- ② Decision Engine 코치 카드 -->
-          <div id="coach-card-wrap"></div>
-
-          <!-- ③ 오늘의 육아 점수 -->
-          <div id="score-card-wrap"></div>
-
-          <!-- 상태 요약 -->
-          <div class="status-grid">
-            <div class="status-card"><div class="s-icon">🍼</div><div class="s-label">마지막 수유</div><div class="s-time" id="last-feed">-</div></div>
-            <div class="status-card"><div class="s-icon">🤱</div><div class="s-label">마지막 유축</div><div class="s-time" id="last-pump">-</div></div>
-          </div>
-          <div class="status-grid-3">
-            <div class="status-card"><div class="s-icon">😴</div><div class="s-label">마지막 수면</div><div class="s-time" id="last-sleep">-</div></div>
-            <div class="status-card"><div class="s-icon">🌿</div><div class="s-label">마지막 기저귀</div><div class="s-time" id="last-diaper">-</div></div>
-            <div class="status-card"><div class="s-icon">📊</div><div class="s-label">오늘 유축 횟수</div><div class="s-time" id="today-pump-count">0회</div></div>
-          </div>
-          <div class="sleeping-banner" id="sleeping-banner">
-            <span>😴 자는 중 <span id="sleep-dur"></span></span>
-            <button onclick="endSleep()">기상 기록</button>
-          </div>
-          <div class="section-title">기록하기</div>
-          <!-- 음성 기록 버튼 -->
-          <button id="voice-btn" onclick="toggleVoice()" style="
-            width:100%;padding:12px;margin-bottom:10px;
-            background:#7a5600;color:#fff;border:none;border-radius:12px;
-            font-size:14px;font-weight:700;cursor:pointer;
-            display:flex;align-items:center;justify-content:center;gap:8px;">
-            🎙️ 음성 기록
-          </button>
-          <style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}</style>
-          <div class="btn-grid">
-            <button class="btn-main btn-feed" onclick="openModal('feed')"><span class="b-icon">🍼</span><span class="b-label">수유</span></button>
-            <button class="btn-main btn-pump" onclick="openPumpModal()"><span class="b-icon">🤱</span><span class="b-label">유축</span></button>
-            <button class="btn-main btn-sleep" onclick="openModal('sleep')"><span class="b-icon">😴</span><span class="b-label">수면</span></button>
-            <button class="btn-main btn-diaper" onclick="openModal('diaper')"><span class="b-icon">🌿</span><span class="b-label">기저귀</span></button>
-          </div>
-          <div class="section-title-row">
-            <div class="section-title">오늘의 기록</div>
-          </div>
-          <div class="timeline-card">
-            <div id="timeline"><div class="empty">아직 기록이 없어요 🌙<br>위 버튼을 눌러 첫 기록을 남겨보세요!</div></div>
-          </div>
         </div>
       </div>
 
-      <!-- ── 페이지 3: 통계 차트 ── -->
+      <!-- ── 페이지 3: 통계 + 자동 저장 기록 ── -->
       <div class="swipe-page">
         <div class="feature-page">
-          <div class="feature-page-title">📊 통계</div>
-          <div class="feature-page-sub">수유·수면·기저귀 패턴을 확인해요</div>
+          <div class="feature-page-title">📊 통계 & 기록</div>
+          <div class="feature-page-sub">패턴 분석과 오늘의 모든 기록</div>
+
+          <!-- 오늘의 육아 점수 -->
+          <div id="score-card-wrap"></div>
+
+          <!-- 차트 -->
           <div class="chart-tab-row">
             <button class="chart-tab active" id="ctab-feed" onclick="selectChartTab('feed')">🍼 수유</button>
             <button class="chart-tab" id="ctab-sleep" onclick="selectChartTab('sleep')">😴 수면</button>
@@ -1154,14 +1195,21 @@ body.dark .onboarding-title { color: #f0ead8; }
           </div>
           <div class="chart-wrap">
             <div style="font-size:13px;font-weight:600;color:#7a5600;margin-bottom:10px;" id="chart-period-label">최근 7일</div>
-            <canvas id="main-chart" height="180"></canvas>
+            <canvas id="main-chart" height="160"></canvas>
             <div id="chart-empty" class="chart-empty" style="display:none;">아직 기록이 없어요</div>
             <div class="chart-legend" id="chart-legend"></div>
           </div>
-          <div class="chart-wrap" id="chart-summary">
-            <div style="font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:10px;">요약</div>
+          <div class="chart-wrap" id="chart-summary" style="margin-bottom:16px;">
+            <div style="font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:8px;">요약</div>
             <div id="chart-summary-body" style="font-size:13px;color:#555;line-height:2;"></div>
           </div>
+
+          <!-- 자동 저장 기록 타임라인 -->
+          <div class="feature-section-title" style="margin-top:8px;">📋 오늘의 기록</div>
+          <div class="timeline-card">
+            <div id="timeline"><div class="empty">아직 기록이 없어요 🌙<br>음성 또는 버튼으로 첫 기록을 남겨보세요!</div></div>
+          </div>
+
         </div>
       </div>
 
@@ -2421,25 +2469,6 @@ function fmtTime(t) {
   const d = new Date(t);
   const h = d.getHours(), m = d.getMinutes();
   return (h < 12 ? '오전 ' : '오후 ') + (h % 12 || 12) + ':' + (m < 10 ? '0' + m : m);
-}
-
-function updateStatus() {
-  const feed = records.find(r => r.cat === 'feed');
-  const pump = records.find(r => r.cat === 'pump');
-  const sleep = records.find(r => r.cat === 'sleep');
-  const diaper = records.find(r => r.cat === 'diaper');
-  document.getElementById('last-feed').textContent = feed ? timeDiff(feed.time) : '-';
-  document.getElementById('last-pump').textContent = pump ? timeDiff(pump.time) : '-';
-  document.getElementById('last-sleep').textContent = sleep ? timeDiff(sleep.time) : '-';
-  document.getElementById('last-diaper').textContent = diaper ? timeDiff(diaper.time) : '-';
-  // 오늘 유축 횟수
-  const today = new Date().toDateString();
-  const todayPumps = records.filter(r => r.cat === 'pump' && new Date(r.time).toDateString() === today);
-  document.getElementById('today-pump-count').textContent = todayPumps.length + '회';
-  // Decision Engine + Score
-  renderCoachCard();
-  renderScoreCard();
-  updateQuickBtnTimes();
 }
 
 function renderTimeline() {
@@ -4064,78 +4093,7 @@ function toggleVoice() {
   }
 }
 
-function setVoiceBtnState(state) {
-  const btn = document.getElementById('voice-btn');
-  if (!btn) return;
-  if (state === true) {
-    btn.style.background = '#dc2626';
-    btn.innerHTML = '🔴 듣는 중... (탭해서 중지)';
-    btn.style.animation = 'pulse 1s infinite';
-  } else if (state === 'starting') {
-    btn.style.background = '#92400e';
-    btn.innerHTML = '⏳ 준비 중...';
-    btn.style.animation = '';
-  } else {
-    btn.style.background = '#7a5600';
-    btn.innerHTML = '🎙️ 음성 기록';
-    btn.style.animation = '';
-  }
-}
-
 // 하위 호환 (기존 setVoiceBtn 호출 제거됨)
-
-function processVoiceCommand(text) {
-  const t = text.toLowerCase().replace(/\s/g, '');
-  let matched = false;
-
-  // 수유 관련
-  if (t.includes('수유') || t.includes('밥먹') || t.includes('젖') || t.includes('분유')) {
-    quickLog('feed');
-    speak('수유 기록했어요 🍼');
-    matched = true;
-  }
-  // 수면 관련
-  else if (t.includes('잠') || t.includes('수면') || t.includes('재웠') || t.includes('잔다') || t.includes('자기시작')) {
-    quickLog('sleep');
-    speak(sleepingStart ? '기상 기록했어요 ☀️' : '수면 시작 기록했어요 😴');
-    matched = true;
-  }
-  // 기상
-  else if (t.includes('기상') || t.includes('일어났') || t.includes('깼')) {
-    if (sleepingStart) { endSleep(); speak('기상 기록했어요 ☀️'); }
-    else speak('현재 수면 기록이 없어요.');
-    matched = true;
-  }
-  // 기저귀
-  else if (t.includes('기저귀') || t.includes('대변') || t.includes('소변') || t.includes('응가') || t.includes('쉬했')) {
-    quickLog('diaper');
-    speak('기저귀 교체 기록했어요 🌿');
-    matched = true;
-  }
-  // 유축
-  else if (t.includes('유축')) {
-    quickLog('pump');
-    speak('유축 기록했어요 🤱');
-    matched = true;
-  }
-  // 상태 확인
-  else if (t.includes('상태') || t.includes('어때') || t.includes('점수')) {
-    speakStatus();
-    matched = true;
-  }
-  // 재울타이밍
-  else if (t.includes('재워') || t.includes('재울') || t.includes('수면타이밍') || t.includes('언제재워')) {
-    speakSleepTiming();
-    matched = true;
-  }
-
-  if (!matched) {
-    speak('죄송해요, 다시 말씀해주세요. 수유, 수면, 기저귀 등을 말씀해보세요.');
-  }
-  showVoiceToast(text, matched);
-}
-
-function setVoiceBtn(active) { setVoiceBtnState(active); }
 
 function showVoiceToast(text, ok) {
   const old = document.getElementById('voice-toast');
@@ -4532,6 +4490,7 @@ function enterApp() {
   loadData();
   loadGrowthData();
   loadDiary();
+  loadSessions();
   renderAppHeader();
   goToPage(2);
   setTimeout(initSwipe, 100);
@@ -4542,6 +4501,9 @@ function enterApp() {
   renderVaccineList();
   renderMilestoneList();
   loadDarkMode();
+  renderActiveSessions();
+  updateQuickBtns();
+  startSessionTimer();
   setTimeout(() => {
     renderMainChart();
     renderGrowthChart();
@@ -4571,6 +4533,343 @@ function selectRole(role) {
 }
 
 // 앱 시작: 역할 선택 화면부터
+
+// ══════════════════════════════════════════
+// 세션 상태 관리 (수면·유축·수유 시작→종료 쌍)
+// ══════════════════════════════════════════
+let pumpingStart = null;   // 유축 시작 시각
+let feedingStart = null;   // 수유 시작 시각
+let sessionTimer = null;
+
+function loadSessions() {
+  try {
+    const ps = localStorage.getItem('baby_pumping');
+    if (ps) pumpingStart = new Date(ps);
+    const fs = localStorage.getItem('baby_feeding');
+    if (fs) feedingStart = new Date(fs);
+  } catch(e) {}
+}
+
+function saveSessions() {
+  try {
+    localStorage.setItem('baby_pumping', pumpingStart ? pumpingStart.toISOString() : '');
+    localStorage.setItem('baby_feeding', feedingStart ? feedingStart.toISOString() : '');
+  } catch(e) {}
+}
+
+// ── 세션 시작 ──
+function startSession(type) {
+  const now = new Date();
+  if (type === 'sleep') {
+    if (sleepingStart) {
+      speak('이미 수면 중이에요. 수면 종료 또는 기상이라고 말씀해주세요.');
+      showVoiceToast('이미 수면 중 — 종료하려면 "기상"이라고 하세요', false);
+      return;
+    }
+    sleepingStart = now;
+    updateSleepBanner();
+    addRecord({ type:'sleep', time:now.toISOString().slice(0,16), title:'수면 시작', sub:'자는 중', icon:'😴', cat:'sleep' });
+    speak('수면 시작을 기록했어요 😴');
+  } else if (type === 'pump') {
+    if (pumpingStart) {
+      speak('이미 유축 중이에요. 유축 종료라고 말씀해주세요.');
+      showVoiceToast('이미 유축 중 — 종료하려면 "유축 종료"라고 하세요', false);
+      return;
+    }
+    pumpingStart = now;
+    saveSessions();
+    addRecord({ type:'pump', time:now.toISOString().slice(0,16), title:'유축 시작', sub:'유축 중', icon:'🤱', cat:'pump' });
+    speak('유축 시작을 기록했어요 🤱');
+  } else if (type === 'feed') {
+    if (feedingStart) {
+      speak('이미 수유 중이에요. 수유 종료라고 말씀해주세요.');
+      showVoiceToast('이미 수유 중 — 종료하려면 "수유 종료"라고 하세요', false);
+      return;
+    }
+    feedingStart = now;
+    saveSessions();
+    addRecord({ type:'feed', time:now.toISOString().slice(0,16), title:'수유 시작', sub:'수유 중', icon:'🍼', cat:'feed' });
+    speak('수유 시작을 기록했어요 🍼');
+  } else if (type === 'diaper') {
+    addRecord({ type:'diaper', time:now.toISOString().slice(0,16), title:'기저귀 교체', sub:'기저귀', icon:'🌿', cat:'diaper' });
+    speak('기저귀 교체를 기록했어요 🌿');
+  }
+  renderActiveSessions();
+  updateQuickBtns();
+  setVoiceBtnState(false); // 힌트 텍스트 갱신
+}
+
+// ── 세션 종료 (시작 없이 종료 불가) ──
+function endSession(type) {
+  const now = new Date();
+  if (type === 'sleep') {
+    if (!sleepingStart) {
+      speak('수면 시작 기록이 없어요. 먼저 수면 시작이라고 말씀해주세요.');
+      showVoiceToast('수면 시작 기록이 없어요', false);
+      return;
+    }
+    endSleep();
+    speak('기상을 기록했어요 ☀️');
+  } else if (type === 'pump') {
+    if (!pumpingStart) {
+      speak('유축 시작 기록이 없어요. 먼저 유축 시작이라고 말씀해주세요.');
+      showVoiceToast('유축 시작 기록이 없어요', false);
+      return;
+    }
+    const startTime = pumpingStart instanceof Date ? pumpingStart : new Date(pumpingStart);
+    const dur = Math.round((now - startTime) / 60000);
+    const h = Math.floor(dur/60), m = dur%60;
+    const durStr = (h>0 ? h+'시간 ':'')+m+'분';
+    addRecord({ type:'pump', time:now.toISOString().slice(0,16), title:'유축 완료', sub:'총 '+durStr, icon:'🤱', cat:'pump' });
+    pumpingStart = null;
+    saveSessions();
+    speak(`유축 완료! ${durStr} 동안 유축했어요 🤱`);
+  } else if (type === 'feed') {
+    if (!feedingStart) {
+      speak('수유 시작 기록이 없어요. 먼저 수유 시작이라고 말씀해주세요.');
+      showVoiceToast('수유 시작 기록이 없어요', false);
+      return;
+    }
+    const startTime = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
+    const dur = Math.round((now - startTime) / 60000);
+    addRecord({ type:'feed', time:now.toISOString().slice(0,16), title:'수유 완료', sub:dur+'분', icon:'🍼', cat:'feed' });
+    feedingStart = null;
+    saveSessions();
+    speak(`수유 완료! ${dur}분 수유했어요 🍼`);
+  }
+  renderActiveSessions();
+  updateQuickBtns();
+  setVoiceBtnState(false); // 힌트 텍스트 갱신
+}
+
+// ── 원탭 버튼 — 시작/종료 토글 ──
+function quickStartAction(type) {
+  if (type === 'sleep') {
+    sleepingStart ? endSession('sleep') : startSession('sleep');
+  } else if (type === 'pump') {
+    pumpingStart ? endSession('pump') : startSession('pump');
+  } else if (type === 'feed') {
+    feedingStart ? endSession('feed') : startSession('feed');
+  } else if (type === 'diaper') {
+    startSession('diaper');
+  }
+}
+
+// ── 진행 중 세션 카드 렌더 ──
+function renderActiveSessions() {
+  const wrap = document.getElementById('active-sessions-wrap');
+  if (!wrap) return;
+  const now = Date.now();
+  let html = '';
+
+  function durStr(start) {
+    const s = start instanceof Date ? start : new Date(start);
+    const m = Math.round((now - s.getTime()) / 60000);
+    const h = Math.floor(m/60);
+    return (h > 0 ? h+'시간 ' : '') + (m%60) + '분 진행 중';
+  }
+
+  if (sleepingStart) {
+    html += `<div class="active-session-card sleep">
+      <div class="active-session-left">
+        <span class="active-session-icon">😴</span>
+        <div class="active-session-info">
+          <div class="active-session-title">수면 중</div>
+          <div class="active-session-dur" id="sleep-dur-card">${durStr(sleepingStart)}</div>
+        </div>
+      </div>
+      <button class="active-session-end-btn" onclick="endSession('sleep')">기상 기록 ☀️</button>
+    </div>`;
+  }
+  if (pumpingStart) {
+    html += `<div class="active-session-card pump">
+      <div class="active-session-left">
+        <span class="active-session-icon">🤱</span>
+        <div class="active-session-info">
+          <div class="active-session-title">유축 중</div>
+          <div class="active-session-dur" id="pump-dur-card">${durStr(pumpingStart)}</div>
+        </div>
+      </div>
+      <button class="active-session-end-btn" onclick="endSession('pump')">유축 완료 ✅</button>
+    </div>`;
+  }
+  if (feedingStart) {
+    html += `<div class="active-session-card feed">
+      <div class="active-session-left">
+        <span class="active-session-icon">🍼</span>
+        <div class="active-session-info">
+          <div class="active-session-title">수유 중</div>
+          <div class="active-session-dur" id="feed-dur-card">${durStr(feedingStart)}</div>
+        </div>
+      </div>
+      <button class="active-session-end-btn" onclick="endSession('feed')">수유 완료 ✅</button>
+    </div>`;
+  }
+  wrap.innerHTML = html;
+}
+
+// 세션 타이머 (10초마다 갱신)
+function startSessionTimer() {
+  clearInterval(sessionTimer);
+  sessionTimer = setInterval(() => {
+    renderActiveSessions();
+    updateQuickBtns();
+  }, 10000);
+}
+
+// ── 원탭 버튼 레이블 업데이트 ──
+function updateQuickBtns() {
+  const feed = records.find(r => r.cat === 'feed');
+  const sleep = records.find(r => r.cat === 'sleep');
+  const pump = records.find(r => r.cat === 'pump');
+  const diaper = records.find(r => r.cat === 'diaper');
+
+  // 수유
+  const qlFeed = document.getElementById('ql-feed');
+  const qtFeed = document.getElementById('qt-feed');
+  const qbFeed = document.getElementById('qb-feed');
+  if (feedingStart) {
+    if (qlFeed) qlFeed.textContent = '수유 종료';
+    if (qbFeed) { qbFeed.style.background='#fff7ed'; qbFeed.style.borderColor='#fdba74'; }
+    if (qtFeed) { const m=Math.round((Date.now()-new Date(feedingStart).getTime())/60000); qtFeed.textContent=m+'분째'; }
+  } else {
+    if (qlFeed) qlFeed.textContent = '수유 시작';
+    if (qbFeed) { qbFeed.style.background=''; qbFeed.style.borderColor=''; }
+    if (qtFeed) qtFeed.textContent = feed ? timeDiff(feed.time) : '-';
+  }
+
+  // 수면
+  const qlSleep = document.getElementById('ql-sleep');
+  const qtSleep = document.getElementById('qt-sleep');
+  const qbSleep = document.getElementById('qb-sleep');
+  if (sleepingStart) {
+    if (qlSleep) qlSleep.textContent = '기상 기록';
+    if (qbSleep) { qbSleep.style.background='#eff6ff'; qbSleep.style.borderColor='#93c5fd'; }
+    if (qtSleep) { const m=Math.round((Date.now()-new Date(sleepingStart).getTime())/60000); qtSleep.textContent=m+'분째'; }
+  } else {
+    if (qlSleep) qlSleep.textContent = '수면 시작';
+    if (qbSleep) { qbSleep.style.background=''; qbSleep.style.borderColor=''; }
+    if (qtSleep) qtSleep.textContent = sleep ? timeDiff(sleep.time) : '-';
+  }
+
+  // 유축
+  const qlPump = document.getElementById('ql-pump');
+  const qtPump = document.getElementById('qt-pump');
+  const qbPump = document.getElementById('qb-pump');
+  if (pumpingStart) {
+    if (qlPump) qlPump.textContent = '유축 종료';
+    if (qbPump) { qbPump.style.background='#fdf4ff'; qbPump.style.borderColor='#d8b4fe'; }
+    if (qtPump) { const m=Math.round((Date.now()-new Date(pumpingStart).getTime())/60000); qtPump.textContent=m+'분째'; }
+  } else {
+    if (qlPump) qlPump.textContent = '유축 시작';
+    if (qbPump) { qbPump.style.background=''; qbPump.style.borderColor=''; }
+    if (qtPump) qtPump.textContent = pump ? timeDiff(pump.time) : '-';
+  }
+
+  // 기저귀
+  const qtDiaper = document.getElementById('qt-diaper');
+  if (qtDiaper) qtDiaper.textContent = diaper ? timeDiff(diaper.time) : '-';
+}
+
+// ── 음성 명령 처리 업데이트 ──
+function processVoiceCommand(text) {
+  const t = text.toLowerCase().replace(/\s/g,'');
+  let matched = false;
+
+  // 수유
+  if (t.includes('수유시작') || (t.includes('수유') && (t.includes('시작')||t.includes('했어')||t.includes('먹여')))) {
+    startSession('feed'); matched = true;
+  } else if (t.includes('수유종료') || t.includes('수유완료') || t.includes('수유끝') || (t.includes('수유') && t.includes('끝'))) {
+    endSession('feed'); matched = true;
+  } else if (t.includes('수유') || t.includes('밥먹') || t.includes('분유') || t.includes('젖먹')) {
+    // 수유 중이면 종료, 아니면 시작
+    feedingStart ? endSession('feed') : startSession('feed');
+    matched = true;
+  }
+  // 수면
+  else if (t.includes('수면시작') || t.includes('재웠') || t.includes('잠재') || (t.includes('자기')&&t.includes('시작'))) {
+    startSession('sleep'); matched = true;
+  } else if (t.includes('기상') || t.includes('일어났') || t.includes('깼') || t.includes('수면종료') || t.includes('수면끝')) {
+    endSession('sleep'); matched = true;
+  } else if (t.includes('잠') || t.includes('수면')) {
+    sleepingStart ? endSession('sleep') : startSession('sleep');
+    matched = true;
+  }
+  // 유축
+  else if (t.includes('유축시작') || (t.includes('유축') && t.includes('시작'))) {
+    startSession('pump'); matched = true;
+  } else if (t.includes('유축종료') || t.includes('유축완료') || t.includes('유축끝') || (t.includes('유축') && t.includes('끝'))) {
+    endSession('pump'); matched = true;
+  } else if (t.includes('유축')) {
+    pumpingStart ? endSession('pump') : startSession('pump');
+    matched = true;
+  }
+  // 기저귀
+  else if (t.includes('기저귀') || t.includes('응가') || t.includes('쉬했') || t.includes('대변') || t.includes('소변')) {
+    startSession('diaper'); matched = true;
+  }
+  // 상태·타이밍
+  else if (t.includes('상태') || t.includes('점수') || t.includes('어때')) {
+    speakStatus(); matched = true;
+  } else if (t.includes('재워') || t.includes('언제재워') || t.includes('수면타이밍')) {
+    speakSleepTiming(); matched = true;
+  }
+
+  if (!matched) speak('다시 말씀해주세요. 수유 시작, 수면 시작, 유축 시작, 기저귀 등을 말씀해보세요.');
+  showVoiceToast(text, matched);
+}
+
+function setVoiceBtnState(state) {
+  const btn = document.getElementById('voice-btn');
+  const micWrap = document.getElementById('voice-mic-icon');
+  const statusText = document.getElementById('voice-status-text');
+  const hintText = document.getElementById('voice-hint-text');
+  if (!btn) return;
+
+  if (state === true) {
+    btn.classList.add('listening');
+    if (micWrap) micWrap.classList.add('listening');
+    if (statusText) statusText.textContent = '듣는 중... 말씀해주세요';
+    if (hintText) hintText.textContent = '수유 종료 · 수면 종료 · 유축 종료 · 기저귀';
+  } else if (state === 'starting') {
+    btn.classList.remove('listening');
+    if (micWrap) micWrap.classList.remove('listening');
+    if (statusText) statusText.textContent = '마이크 준비 중...';
+  } else {
+    btn.classList.remove('listening');
+    if (micWrap) micWrap.classList.remove('listening');
+    // 상태에 따라 힌트 다르게
+    const hasActive = sleepingStart || pumpingStart || feedingStart;
+    if (statusText) statusText.textContent = hasActive ? '종료하려면 탭하기' : '탭해서 말하기';
+    if (hintText) hintText.textContent = hasActive
+      ? '수유 종료 · 수면 종료 · 유축 종료'
+      : '수유 시작 · 수면 시작 · 유축 시작 · 기저귀';
+  }
+}
+function setVoiceBtn(active) { setVoiceBtnState(active); }
+
+// updateStatus에 세션 상태 포함
+function updateStatus() {
+  const feed = records.find(r => r.cat === 'feed');
+  const pump = records.find(r => r.cat === 'pump');
+  const sleep = records.find(r => r.cat === 'sleep');
+  const diaper = records.find(r => r.cat === 'diaper');
+  const el = (id) => document.getElementById(id);
+  if(el('last-feed')) el('last-feed').textContent = feed ? timeDiff(feed.time) : '-';
+  if(el('last-pump')) el('last-pump').textContent = pump ? timeDiff(pump.time) : '-';
+  if(el('last-sleep')) el('last-sleep').textContent = sleep ? timeDiff(sleep.time) : '-';
+  if(el('last-diaper')) el('last-diaper').textContent = diaper ? timeDiff(diaper.time) : '-';
+  const today = new Date().toDateString();
+  const todayPumps = records.filter(r => r.cat==='pump' && new Date(r.time).toDateString()===today);
+  if(el('today-pump-count')) el('today-pump-count').textContent = todayPumps.length+'회';
+  renderCoachCard();
+  renderScoreCard();
+  renderActiveSessions();
+  updateQuickBtns();
+}
+
+// enterApp에 세션 로드 추가 — 아래 enterApp 본체에 통합됨
+
 showScreen('role');
 </script>
 </body>
