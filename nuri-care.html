@@ -556,21 +556,47 @@ body.dark .vaccine-row { border-color: #3d3628; }
 body.dark .vaccine-name { color: #f0ead8; }
 body.dark .vaccine-age-badge { background: #3d3628; color: #c8a870; }
 
-/* ── 마일스톤 ── */
-.milestone-card { background: #fff; border-radius: 12px; border: 1px solid #e8d796; margin-bottom: 10px; overflow: hidden; }
-.milestone-cat-title { padding: 10px 14px; font-size: 13px; font-weight: 700; color: #7a5600; background: #fff7d6; border-bottom: 1px solid #e8d796; }
-.milestone-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #f3f0e0; cursor: pointer; }
-.milestone-row:last-child { border-bottom: none; }
-.milestone-cb { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #d1d5db; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
-.milestone-cb.checked { background: #f59e0b; border-color: #f59e0b; }
-.milestone-cb.checked::after { content: '★'; color: #fff; font-size: 10px; }
-.milestone-name { font-size: 14px; color: #374151; flex: 1; word-break: keep-all; }
-.milestone-name.done { color: #f59e0b; font-weight: 600; }
-.milestone-date { font-size: 11px; color: #9ca3af; flex-shrink: 0; }
-body.dark .milestone-card { background: #2a2520; border-color: #3d3628; }
-body.dark .milestone-cat-title { background: #2a2520; color: #c8a870; border-color: #3d3628; }
-body.dark .milestone-row { border-color: #3d3628; }
-body.dark .milestone-name { color: #d0c0a8; }
+/* ── 마일스톤 듀오링고 스타일 ── */
+.ms-stage-dot { flex:1; height:6px; border-radius:3px; background:#e8d796; transition:background 0.3s; }
+.ms-stage-dot.active { background:#f59e0b; }
+.ms-stage-dot.done { background:#22c55e; }
+.ms-card {
+  background:#fff; border-radius:20px; padding:20px 16px 18px;
+  margin-bottom:14px; text-align:center;
+  box-shadow:0 3px 12px rgba(122,86,0,0.10), 0 0 0 1.5px rgba(232,215,150,0.6);
+  transition:transform 0.15s, box-shadow 0.15s;
+  cursor:pointer; user-select:none;
+}
+.ms-card:active { transform:scale(0.97); }
+.ms-card.ms-done {
+  background:linear-gradient(135deg,#f0fdf4,#dcfce7);
+  box-shadow:0 3px 12px rgba(34,197,94,0.15), 0 0 0 2px #86efac;
+}
+.ms-card-emoji { font-size:52px; line-height:1; margin-bottom:10px; display:block; }
+.ms-card-title { font-size:16px; font-weight:800; color:#1a1a1a; margin-bottom:5px; word-break:keep-all; }
+.ms-card-desc { font-size:12px; color:#9ca3af; line-height:1.5; word-break:keep-all; margin-bottom:10px; }
+.ms-card-btn {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:8px 18px; border-radius:20px; border:none; cursor:pointer;
+  font-size:13px; font-weight:700; transition:all 0.15s;
+  background:#f59e0b; color:#fff;
+}
+.ms-card.ms-done .ms-card-btn { background:#22c55e; }
+.ms-card-btn:active { opacity:0.8; transform:scale(0.96); }
+.ms-card-date { font-size:11px; color:#22c55e; font-weight:600; margin-top:6px; }
+.ms-month-title {
+  font-size:13px; font-weight:800; color:#7a5600;
+  text-align:center; padding:10px 0 8px;
+  letter-spacing:0.02em;
+}
+.ms-all-done {
+  text-align:center; padding:30px 16px;
+  font-size:15px; font-weight:700; color:#22c55e;
+}
+body.dark .ms-card { background:#2a2520; box-shadow:0 3px 12px rgba(0,0,0,0.2),0 0 0 1.5px #3d3628; }
+body.dark .ms-card.ms-done { background:linear-gradient(135deg,#0f2a1a,#162a1a); box-shadow:0 3px 12px rgba(34,197,94,0.15),0 0 0 2px #166534; }
+body.dark .ms-card-title { color:#f0ead8; }
+body.dark .ms-month-title { color:#c8a870; }
 
 /* ── 데이터 내보내기 버튼 ── */
 .export-btn { display: flex; align-items: center; gap: 6px; width: 100%; padding: 12px 14px; background: #fff; border: 1px solid #e8d796; border-radius: 10px; font-size: 14px; font-weight: 600; color: #7a5600; cursor: pointer; margin-bottom: 8px; }
@@ -1242,10 +1268,15 @@ if ('serviceWorker' in navigator) {
 
       <!-- ── 페이지 5: 발달 마일스톤 ── -->
       <div class="swipe-page">
-        <div class="feature-page">
-          <div class="feature-page-title">⭐ 발달 마일스톤</div>
-          <div class="feature-page-sub">아기의 소중한 첫 순간들을 기록해요</div>
-          <div id="milestone-list"></div>
+        <div class="feature-page" style="padding:0 0 80px;">
+          <!-- 헤더 고정 -->
+          <div style="padding:16px 16px 0;position:sticky;top:0;background:#fff7d6;z-index:10;">
+            <div class="feature-page-title" style="margin-bottom:2px;">⭐ 발달 마일스톤</div>
+            <div id="milestone-age-label" style="font-size:13px;color:#7a5600;font-weight:600;margin-bottom:12px;"></div>
+            <!-- 개월 수 진행 바 -->
+            <div style="display:flex;gap:3px;margin-bottom:14px;" id="milestone-stage-bar"></div>
+          </div>
+          <div id="milestone-list" style="padding:0 16px;"></div>
         </div>
       </div>
 
@@ -2225,61 +2256,72 @@ function renderMomCarePage() {
 
   document.getElementById('mom-care-content').innerHTML = html;
 
-  // 커뮤니티 검색 칩 생성
+  // 커뮤니티 검색 칩 생성 — 내장 KB 키워드 기반
   const communityBox = document.getElementById('community-search-box');
   communityBox.style.display = 'block';
-  const chips = [];
-  if (p.hospital) chips.push(p.hospital + ' 후기');
-  if (p.center) chips.push(p.center + ' 후기');
-  if (p.hospital) chips.push(p.hospital + ' 모유수유');
-  if (p.region) chips.push(p.region + ' 산후조리원 추천');
-  if (p.birthType === 'csection') chips.push('제왕절개 회복 후기');
-  else chips.push('자연분만 회음부 관리');
-  chips.push('신생아 황달 대처');
-
+  const chips = [
+    '신생아 황달', '모유수유', '분유 추천', '수면교육',
+    '영아산통', '이유식', '예방접종', '기저귀 발진',
+    '배앓이', '신생아 목욕'
+  ];
   document.getElementById('community-chips').innerHTML = chips.map(c =>
-    '<span class="community-chip" onclick="setCommunityQuery(\'' + c.replace(/'/g, '') + '\')">' + c + '</span>'
+    '<span class="community-chip" onclick="setCommunityQuery(\'' + c + '\')">' + c + '</span>'
   ).join('');
 }
 
+// ══════════════════════════════════════════
+// 💬 커뮤니티 검색 — 내장 정보 기반
+// ══════════════════════════════════════════
+const COMMUNITY_KB = {
+  '신생아 황달': '• 생후 2~3일부터 시작해 보통 1~2주 내 자연 소실돼요 (생리적 황달)\n• 황달 수치가 높으면 광선치료를 받아요 — 병원에서 모니터링 중요\n• 모유 황달은 2~3개월까지 지속될 수 있어요\n• 흰자위가 노랗거나 대변 색이 이상하면 즉시 병원 방문하세요\n• 맘카페 후기: "빛 좋은 창가에 눕혀줬더니 도움됐어요"',
+  '모유수유': '• 생후 1개월은 수요공급 원칙 — 자주 물릴수록 모유량 늘어요\n• 수유 간격: 신생아 2~3시간, 2개월+ 3~4시간\n• 유두혼동 방지: 생후 4주 전엔 젖병 최대한 자제\n• 유선염 증상(고열+멍울)이면 24시간 내 병원 방문\n• 맘카페 후기: "수유쿠션이 허리 통증에 정말 도움돼요"',
+  '분유 추천': '• 국내: 남양 아이엠마더, 매일 앱솔루트, 일동 후디스 인기\n• 1단계(0~6개월): 초기 면역 성분 중요\n• 분유 바꾸면 2~3일 적응기간 필요 (변 색깔 변화 정상)\n• 소화 안 좋으면 가수분해 분유(HA분유) 고려\n• 맘카페 후기: "아기마다 맞는 분유 달라요 — 샘플로 먼저 테스트"',
+  '수면교육': '• 퍼버법: 울어도 일정 시간 기다렸다 달래기 반복\n• No-cry 방법: 울지 않게 서서히 혼자 자는 습관 형성\n• 생후 4개월부터 수면 패턴 형성 시작\n• 낮잠 3회 → 2회 → 1회로 서서히 줄어들어요\n• 맘카페 후기: "퍼버법 3일이 고비 — 그 이후엔 정말 달라졌어요"',
+  '영아산통': '• 생후 2~4주~3~4개월에 주로 발생해요\n• 하루 3시간 이상, 주 3일 이상 원인 없이 우는 경우\n• 배를 따뜻하게 해주거나 배 마사지가 도움될 수 있어요\n• 가스 배출: 트림 충분히 시키고 눕혀서 다리 자전거 동작\n• 맘카페 후기: "딱 100일 지나니까 거짓말처럼 나아졌어요"',
+  '이유식': '• 시작 시기: 생후 만 6개월 (빠르면 4개월, WHO 권고 6개월)\n• 처음엔 쌀미음부터, 한 가지 재료씩 3일 간격으로 추가\n• 단단함: 미음 → 죽 → 진밥 → 일반식 순서\n• 돌 전: 꿀, 생우유, 견과류, 날 것 금지\n• 맘카페 후기: "직접 만들기 힘들면 냉동큐브 만들어두면 편해요"',
+  '예방접종': '• 출생: B형간염 1차\n• 1개월: B형간염 2차\n• 2개월: DTaP, 폴리오, Hib, 폐렴구균, 로타\n• 4개월: DTaP, 폴리오, Hib, 폐렴구균, 로타\n• 접종 후 15~30분 대기, 당일 목욕 금지\n• 맘카페 후기: "접종 전날 미리 해열제 사두면 안심이에요"',
+  '기저귀 발진': '• 원인: 젖은 기저귀 오래 착용, 대변 접촉, 마찰\n• 치료: 아연크림(판테놀, 수딩크림) 두껍게 발라주기\n• 공기 노출: 기저귀 없이 30분~1시간 바람 쏘이기\n• 이틀 이상 낫지 않거나 빨개지면 칸디다성 의심 → 병원\n• 맘카페 후기: "쥐똥나무 크림이나 아쿠아포 효과 좋다고 많이 추천"',
+  '배앓이': '• 신생아는 위장이 미성숙해 가스가 자주 차요\n• 수유 중간과 후에 충분한 트림이 핵심\n• 트림 자세: 어깨에 올리기, 앉혀서 등 두드리기\n• 배 마사지: 시계방향으로 부드럽게\n• 맘카페 후기: "그라비올 가스 방울이 도움됐어요"',
+  '신생아 목욕': '• 배꼽 떨어지기 전: 스펀지 목욕 (욕조 목욕 X)\n• 온도: 물 37~38도 (손목 안쪽으로 확인)\n• 순서: 얼굴→머리→몸→기저귀 부위\n• 목욕 후 바로 보습 — 태열 있으면 순한 성분 제품으로\n• 맘카페 후기: "아기 전용 보습제는 세타필, 유이노리 추천 많아요"',
+};
+
 let communityQuery = '';
+
 function setCommunityQuery(q) {
   communityQuery = q;
   document.getElementById('community-chips').querySelectorAll('.community-chip').forEach(el => {
-    el.style.background = el.textContent.trim() === q ? '#1a5fa8' : '';
-    el.style.color = el.textContent.trim() === q ? '#fff' : '';
+    const isSelected = el.textContent.trim() === q;
+    el.style.background = isSelected ? '#1d4ed8' : '';
+    el.style.color = isSelected ? '#fff' : '';
   });
 }
 
-async function searchCommunity() {
+function searchCommunity() {
   if (!communityQuery) {
     const chips = document.getElementById('community-chips').querySelectorAll('.community-chip');
     if (chips.length) setCommunityQuery(chips[0].textContent.trim());
     else return;
   }
   const resultEl = document.getElementById('community-result');
-  resultEl.className = 'community-result loading';
-  resultEl.textContent = '맘카페·커뮤니티 정보 검색 중...';
+  resultEl.className = 'community-result';
 
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-        system: '당신은 한국 육아 커뮤니티 정보 전문가입니다. 맘카페, 네이버 카페, 아이사랑, 베이비트리 등 커뮤니티의 실제 후기와 정보를 요약해서 알려주세요. 항상 한국어로, 3~5개 핵심 포인트를 간결하게 알려주세요. 각 포인트는 "• " 로 시작하세요.',
-        messages: [{ role: 'user', content: '"' + communityQuery + '" 에 대해 한국 맘카페·육아 커뮤니티에서 실제로 어떤 이야기가 많이 나오는지 검색해서 핵심 정보 3~5개를 알려주세요.' }]
-      })
-    });
-    const data = await resp.json();
-    const text = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('').trim();
-    resultEl.className = 'community-result';
-    resultEl.innerHTML = text ? text.replace(/\n/g, '<br>') : '검색 결과를 찾지 못했어요. 다른 키워드를 시도해보세요.';
-  } catch (e) {
-    resultEl.className = 'community-result';
-    resultEl.textContent = '검색 중 오류가 발생했어요. 잠시 후 다시 시도해주세요.';
+  // 키워드 매칭 (부분 일치)
+  let found = null;
+  for (const [key, val] of Object.entries(COMMUNITY_KB)) {
+    if (communityQuery.includes(key) || key.includes(communityQuery)) {
+      found = val; break;
+    }
+  }
+
+  if (found) {
+    resultEl.innerHTML = `<div style="font-size:12px;font-weight:700;color:#1d4ed8;margin-bottom:8px;">💬 맘카페·커뮤니티 정보</div>` +
+      found.replace(/\n/g, '<br>');
+  } else {
+    // 기본 안내
+    resultEl.innerHTML = `<div style="font-size:12px;color:#9ca3af;">
+      "${communityQuery}"에 대한 정보를 찾지 못했어요.<br><br>
+      아래 주제들을 클릭해서 검색해보세요 👆
+    </div>`;
   }
 }
 
@@ -4017,47 +4059,241 @@ function toggleVaccine(id) {
 }
 
 // ══════════════════════════════════════════
-// ⭐ 발달 마일스톤
 // ══════════════════════════════════════════
-const MILESTONES = {
-  '0~1개월': ['눈 맞춤', '소리에 반응', '손바닥 잡기 반사'],
-  '2~3개월': ['배로 누워 고개 들기', '소리 나는 쪽 보기', '방긋 웃기 시작'],
-  '4~5개월': ['뒤집기', '물건 잡기', '옹알이 시작'],
-  '6~7개월': ['혼자 앉기 시도', '이름에 반응', '"엄마""아빠" 옹알이'],
-  '8~9개월': ['기어다니기', '낯가림 시작', '잡고 서기'],
-  '10~12개월': ['혼자 서기', '첫 걸음마', '첫 단어 말하기'],
-};
+// ⭐ 발달 마일스톤 — 듀오링고 스타일
+// ══════════════════════════════════════════
+
+// 개월 구간별 상세 마일스톤 (이모지 + 설명 포함)
+const MILESTONE_STAGES = [
+  {
+    label: '0~1개월', minDays: 0, maxDays: 59,
+    items: [
+      { emoji:'👀', title:'눈 맞춤', desc:'엄마 얼굴을 30cm 거리에서 바라봐요' },
+      { emoji:'👂', title:'소리에 반응', desc:'큰 소리에 깜짝 놀라거나 눈을 깜빡여요' },
+      { emoji:'✊', title:'손바닥 잡기', desc:'손가락을 쥐어주면 꽉 잡아요 (파악 반사)' },
+      { emoji:'😴', title:'자다 깨다 반복', desc:'하루 16~18시간 자는 것이 정상이에요' },
+      { emoji:'🍼', title:'빨기 반사', desc:'입 주변을 건드리면 빨려는 동작을 해요' },
+    ]
+  },
+  {
+    label: '2~3개월', minDays: 60, maxDays: 119,
+    items: [
+      { emoji:'😊', title:'사회적 미소', desc:'엄마 얼굴을 보며 방긋 웃어요' },
+      { emoji:'🏋️', title:'고개 들기', desc:'배로 누웠을 때 고개를 45도 들어요' },
+      { emoji:'👂', title:'소리 추적', desc:'소리 나는 쪽으로 고개를 돌려요' },
+      { emoji:'💬', title:'옹알이 시작', desc:'"아~", "우~" 같은 모음 소리를 내요' },
+      { emoji:'🎯', title:'물체 주시', desc:'움직이는 물체를 눈으로 따라가요' },
+    ]
+  },
+  {
+    label: '4~5개월', minDays: 120, maxDays: 179,
+    items: [
+      { emoji:'🔄', title:'뒤집기', desc:'등에서 배로, 또는 배에서 등으로 뒤집어요' },
+      { emoji:'🤲', title:'물건 잡기', desc:'손을 뻗어 장난감을 잡으려 해요' },
+      { emoji:'😂', title:'소리 내어 웃기', desc:'기분 좋으면 "아하하" 웃음소리를 내요' },
+      { emoji:'👅', title:'입에 가져가기', desc:'잡은 물건을 입으로 가져가요' },
+      { emoji:'💪', title:'체중 지지', desc:'세워주면 발로 바닥을 밀어요' },
+    ]
+  },
+  {
+    label: '6~7개월', minDays: 180, maxDays: 239,
+    items: [
+      { emoji:'🪑', title:'혼자 앉기', desc:'손 짚지 않고 잠깐 혼자 앉아요' },
+      { emoji:'📛', title:'이름에 반응', desc:'이름을 부르면 고개를 돌려요' },
+      { emoji:'🗣️', title:'"엄마·아빠" 옹알이', desc:'"마마", "바바" 자음 반복 소리를 내요' },
+      { emoji:'🍎', title:'이유식 시작', desc:'숟가락으로 퓨레 형태 음식을 먹어요' },
+      { emoji:'🫂', title:'낯가림 시작', desc:'낯선 사람을 보면 울거나 경계해요' },
+    ]
+  },
+  {
+    label: '8~9개월', minDays: 240, maxDays: 299,
+    items: [
+      { emoji:'🐛', title:'기어다니기', desc:'배밀이 또는 네 발로 기어요' },
+      { emoji:'🪞', title:'거울 인식', desc:'거울 속 자신을 보고 반응해요' },
+      { emoji:'🧱', title:'잡고 서기', desc:'가구를 잡고 일어서려 해요' },
+      { emoji:'👏', title:'까꿍 놀이', desc:'손으로 얼굴 가렸다 열기 놀이를 좋아해요' },
+      { emoji:'🥄', title:'핑거 푸드', desc:'손가락으로 작은 음식을 집어 먹어요' },
+    ]
+  },
+  {
+    label: '10~12개월', minDays: 300, maxDays: 399,
+    items: [
+      { emoji:'🚶', title:'첫 걸음마', desc:'혼자서 한두 걸음을 떼요' },
+      { emoji:'💬', title:'첫 단어', desc:'"엄마", "아빠" 등 뜻 있는 단어를 말해요' },
+      { emoji:'👋', title:'손 흔들기', desc:'"안녕" 할 때 손을 흔들 수 있어요' },
+      { emoji:'📦', title:'넣고 빼기', desc:'용기에 물건을 넣고 꺼내는 놀이를 해요' },
+      { emoji:'🎨', title:'낙서하기', desc:'크레용을 잡고 종이에 긁어요' },
+    ]
+  },
+];
+
+function getBabyMonths() {
+  try {
+    const p = JSON.parse(localStorage.getItem('baby_profile') || '{}');
+    if (!p.birthDate) return null;
+    const days = Math.floor((new Date() - new Date(p.birthDate)) / 86400000);
+    return { days, months: Math.floor(days / 30) };
+  } catch(e) { return null; }
+}
 
 function renderMilestoneList() {
   const el = document.getElementById('milestone-list');
+  const stageBar = document.getElementById('milestone-stage-bar');
+  const ageLabel = document.getElementById('milestone-age-label');
   if (!el) return;
+
+  const babyAge = getBabyMonths();
   const checks = JSON.parse(localStorage.getItem('milestone_checks') || '{}');
-  el.innerHTML = Object.entries(MILESTONES).map(([cat, items]) =>
-    '<div class="milestone-card">' +
-    '<div class="milestone-cat-title">👶 ' + cat + '</div>' +
-    items.map(item => {
-      const key = 'm-' + item;
-      const done = checks[key];
-      return '<div class="milestone-row" onclick="toggleMilestone(\'' + key + '\')">' +
-        '<div class="milestone-cb' + (done?' checked':'') + '"></div>' +
-        '<div class="milestone-name' + (done?' done':'') + '">' + item + '</div>' +
-        (done ? '<div class="milestone-date">' + (done === true ? '✅' : done) + '</div>' : '') +
-        '</div>';
-    }).join('') +
-    '</div>'
-  ).join('');
+
+  // 현재 아기 나이에 맞는 스테이지 찾기
+  let currentStageIdx = 0;
+  if (babyAge) {
+    for (let i = 0; i < MILESTONE_STAGES.length; i++) {
+      if (babyAge.days >= MILESTONE_STAGES[i].minDays) currentStageIdx = i;
+    }
+  }
+
+  const stage = MILESTONE_STAGES[currentStageIdx];
+
+  // 나이 라벨
+  if (ageLabel) {
+    ageLabel.textContent = babyAge
+      ? `현재 생후 ${babyAge.days}일 · ${stage.label} 마일스톤`
+      : `발달 마일스톤`;
+  }
+
+  // 스테이지 진행 바
+  if (stageBar) {
+    stageBar.innerHTML = MILESTONE_STAGES.map((s, i) => {
+      const allDone = s.items.every(item => checks['m-' + s.label + '-' + item.title]);
+      const cls = allDone ? 'ms-stage-dot done' : i === currentStageIdx ? 'ms-stage-dot active' : 'ms-stage-dot';
+      return `<div class="${cls}" title="${s.label}"></div>`;
+    }).join('');
+  }
+
+  // 현재 스테이지 카드 렌더
+  const completedCount = stage.items.filter(item => checks['m-' + stage.label + '-' + item.title]).length;
+  const allDone = completedCount === stage.items.length;
+
+  let html = `<div class="ms-month-title">${stage.label} · ${completedCount}/${stage.items.length} 달성</div>`;
+
+  if (allDone) {
+    html += `<div class="ms-all-done">🎉 이 단계 마일스톤을 모두 달성했어요!<br><span style="font-size:13px;color:#9ca3af;font-weight:400;">다음 단계도 기대해요 💛</span></div>`;
+  }
+
+  html += stage.items.map(item => {
+    const key = 'm-' + stage.label + '-' + item.title;
+    const done = !!checks[key];
+    const dateStr = checks[key + '_date'] || '';
+    return `
+      <div class="ms-card ${done ? 'ms-done' : ''}" onclick="toggleMilestone('${key}')">
+        <span class="ms-card-emoji">${item.emoji}</span>
+        <div class="ms-card-title">${item.title}</div>
+        <div class="ms-card-desc">${item.desc}</div>
+        <button class="ms-card-btn" onclick="event.stopPropagation();toggleMilestone('${key}')">
+          ${done ? '✅ 달성 완료!' : '🌟 달성하기'}
+        </button>
+        ${done && dateStr ? `<div class="ms-card-date">📅 ${dateStr}</div>` : ''}
+      </div>`;
+  }).join('');
+
+  // 이전/다음 스테이지 이동 버튼
+  html += `<div style="display:flex;gap:10px;margin-top:16px;padding-bottom:16px;">`;
+  if (currentStageIdx > 0) {
+    const prev = MILESTONE_STAGES[currentStageIdx - 1];
+    html += `<button onclick="showMilestoneStage(${currentStageIdx-1})"
+      style="flex:1;padding:12px;border:1.5px solid #e8d796;border-radius:12px;
+             background:#fff;font-size:13px;font-weight:700;color:#7a5600;cursor:pointer;">
+      ← ${prev.label}
+    </button>`;
+  }
+  if (currentStageIdx < MILESTONE_STAGES.length - 1) {
+    const next = MILESTONE_STAGES[currentStageIdx + 1];
+    html += `<button onclick="showMilestoneStage(${currentStageIdx+1})"
+      style="flex:1;padding:12px;border:1.5px solid #e8d796;border-radius:12px;
+             background:#fff7d6;font-size:13px;font-weight:700;color:#7a5600;cursor:pointer;">
+      ${next.label} →
+    </button>`;
+  }
+  html += `</div>`;
+
+  el.innerHTML = html;
+}
+
+let _milestoneStageOverride = null;
+function showMilestoneStage(idx) {
+  _milestoneStageOverride = idx;
+  _renderMilestoneAt(idx);
+}
+
+function _renderMilestoneAt(stageIdx) {
+  const el = document.getElementById('milestone-list');
+  const stageBar = document.getElementById('milestone-stage-bar');
+  const ageLabel = document.getElementById('milestone-age-label');
+  if (!el) return;
+
+  const stage = MILESTONE_STAGES[stageIdx];
+  const checks = JSON.parse(localStorage.getItem('milestone_checks') || '{}');
+  const babyAge = getBabyMonths();
+
+  if (ageLabel) ageLabel.textContent = `${stage.label} 마일스톤`;
+  if (stageBar) {
+    stageBar.innerHTML = MILESTONE_STAGES.map((s, i) => {
+      const allDone = s.items.every(item => checks['m-' + s.label + '-' + item.title]);
+      const cls = allDone ? 'ms-stage-dot done' : i === stageIdx ? 'ms-stage-dot active' : 'ms-stage-dot';
+      return `<div class="${cls}" title="${s.label}" onclick="showMilestoneStage(${i})" style="cursor:pointer;"></div>`;
+    }).join('');
+  }
+
+  const completedCount = stage.items.filter(item => checks['m-' + stage.label + '-' + item.title]).length;
+  const allDone = completedCount === stage.items.length;
+
+  let html = `<div class="ms-month-title">${stage.label} · ${completedCount}/${stage.items.length} 달성</div>`;
+  if (allDone) html += `<div class="ms-all-done">🎉 이 단계 마일스톤을 모두 달성했어요!</div>`;
+
+  html += stage.items.map(item => {
+    const key = 'm-' + stage.label + '-' + item.title;
+    const done = !!checks[key];
+    const dateStr = checks[key + '_date'] || '';
+    return `
+      <div class="ms-card ${done ? 'ms-done' : ''}" onclick="toggleMilestone('${key}')">
+        <span class="ms-card-emoji">${item.emoji}</span>
+        <div class="ms-card-title">${item.title}</div>
+        <div class="ms-card-desc">${item.desc}</div>
+        <button class="ms-card-btn" onclick="event.stopPropagation();toggleMilestone('${key}')">
+          ${done ? '✅ 달성 완료!' : '🌟 달성하기'}
+        </button>
+        ${done && dateStr ? `<div class="ms-card-date">📅 ${dateStr}</div>` : ''}
+      </div>`;
+  }).join('');
+
+  html += `<div style="display:flex;gap:10px;margin-top:16px;">`;
+  if (stageIdx > 0) html += `<button onclick="showMilestoneStage(${stageIdx-1})" style="flex:1;padding:12px;border:1.5px solid #e8d796;border-radius:12px;background:#fff;font-size:13px;font-weight:700;color:#7a5600;cursor:pointer;">← ${MILESTONE_STAGES[stageIdx-1].label}</button>`;
+  if (stageIdx < MILESTONE_STAGES.length - 1) html += `<button onclick="showMilestoneStage(${stageIdx+1})" style="flex:1;padding:12px;border:1.5px solid #e8d796;border-radius:12px;background:#fff7d6;font-size:13px;font-weight:700;color:#7a5600;cursor:pointer;">${MILESTONE_STAGES[stageIdx+1].label} →</button>`;
+  html += `</div>`;
+  el.innerHTML = html;
 }
 
 function toggleMilestone(key) {
   const checks = JSON.parse(localStorage.getItem('milestone_checks') || '{}');
   if (checks[key]) {
     delete checks[key];
+    delete checks[key + '_date'];
   } else {
     const now = new Date();
-    checks[key] = (now.getMonth()+1) + '/' + now.getDate();
+    checks[key] = true;
+    checks[key + '_date'] = `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일`;
   }
   localStorage.setItem('milestone_checks', JSON.stringify(checks));
-  renderMilestoneList();
+  // Firebase 동기화
+  if (typeof fbPushAll === 'function' && typeof fbFamilyId !== 'undefined' && fbFamilyId) {
+    fbPushAll();
+  }
+  if (_milestoneStageOverride !== null) {
+    _renderMilestoneAt(_milestoneStageOverride);
+  } else {
+    renderMilestoneList();
+  }
 }
 
 // ══════════════════════════════════════════
