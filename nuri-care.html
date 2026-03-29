@@ -790,6 +790,77 @@ body.dark .qnav-btn.active::after { background: #c8a870; }
 body.dark .quick-btn { background: #2a2520; box-shadow: 0 2px 8px rgba(0,0,0,0.2), 0 0 0 1.5px #3d3628; }
 body.dark .quick-btn.active-session { background: linear-gradient(135deg,#3d3628,#4d4530); }
 body.dark .quick-btn-label { color: #c8a870; }
+/* ── 가이드 스토리 카드 ── */
+.guide-story-wrap { padding: 12px 16px 80px; display: flex; flex-direction: column; gap: 14px; }
+.guide-story-card {
+  border-radius: 20px; overflow: hidden; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(122,86,0,0.10);
+  transition: transform 0.15s;
+}
+.guide-story-card:active { transform: scale(0.98); }
+.guide-story-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 18px 18px 14px;
+}
+.guide-story-emoji { font-size: 48px; line-height: 1; flex-shrink: 0; }
+.guide-story-title { font-size: 17px; font-weight: 800; color: #1a1a1a; margin-bottom: 3px; word-break: keep-all; }
+.guide-story-sub { font-size: 12px; color: #9ca3af; word-break: keep-all; }
+.guide-story-tag { font-size: 10px; font-weight: 700; border-radius: 8px; padding: 2px 8px; margin-top: 5px; display: inline-block; }
+.guide-story-steps { padding: 0 18px 18px; display: flex; flex-direction: column; gap: 10px; }
+.guide-story-step {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: rgba(255,255,255,0.5); border-radius: 12px; padding: 10px 12px;
+}
+.guide-story-num {
+  width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; color: #fff;
+  flex-shrink: 0;
+}
+.guide-story-step-icon { font-size: 20px; flex-shrink: 0; line-height: 1.3; }
+.guide-story-step-text { font-size: 13px; color: #1a1a1a; line-height: 1.55; word-break: keep-all; flex: 1; font-weight: 500; }
+.guide-story-tip {
+  background: rgba(255,255,255,0.6); border-radius: 12px; padding: 10px 12px;
+  font-size: 12px; color: #7a5600; line-height: 1.6; word-break: keep-all;
+  border-left: 3px solid #f59e0b;
+}
+.guide-story-warn {
+  background: rgba(255,235,235,0.7); border-radius: 12px; padding: 10px 12px;
+  font-size: 12px; color: #c0410f; line-height: 1.6; word-break: keep-all;
+  border-left: 3px solid #ef4444;
+}
+.guide-story-collapsed .guide-story-steps { display: none; }
+.guide-story-toggle {
+  text-align: center; padding: 8px; font-size: 12px;
+  color: rgba(255,255,255,0.7); font-weight: 600;
+}
+body.dark .guide-story-title { color: #f0ead8; }
+body.dark .guide-story-step { background: rgba(0,0,0,0.2); }
+body.dark .guide-story-step-text { color: #f0ead8; }
+
+/* ── 엄마 케어 그리드 카드 ── */
+.mom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px 16px 80px; }
+.mom-grid-card {
+  border-radius: 16px; padding: 16px 14px;
+  text-align: center; cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  transition: transform 0.15s;
+  position: relative;
+}
+.mom-grid-card:active { transform: scale(0.96); }
+.mom-grid-card.warn { grid-column: 1 / -1; text-align: left; }
+.mom-grid-emoji { font-size: 36px; margin-bottom: 8px; line-height: 1; }
+.mom-grid-title { font-size: 13px; font-weight: 800; color: #1a1a1a; margin-bottom: 4px; word-break: keep-all; }
+.mom-grid-count { font-size: 11px; color: #9ca3af; }
+/* 모달 스타일 엄마케어 상세 */
+.mom-detail-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f3f0e0; }
+.mom-detail-item:last-child { border-bottom: none; }
+.mom-detail-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.mom-detail-text { font-size: 13px; color: #374151; line-height: 1.6; word-break: keep-all; }
+body.dark .mom-grid-card { background: #2a2520; }
+body.dark .mom-grid-title { color: #f0ead8; }
+body.dark .mom-detail-text { color: #d0c0a8; }
+body.dark .mom-detail-item { border-color: #3d3628; }
 </style>
 
 <!-- Firebase SDK (compat 버전 — 실시간 동기화용) -->
@@ -1624,6 +1695,15 @@ if ('serviceWorker' in navigator) {
   </div>
 </div>
 
+<!-- ═══════════ 엄마 케어 상세 모달 ═══════════ -->
+<div class="modal-bg" id="modal-mom-detail">
+  <div class="modal" style="max-height:85vh;overflow-y:auto;">
+    <div class="modal-handle"></div>
+    <button class="modal-close-x" onclick="closeModal('mom-detail')">✕</button>
+    <div id="mom-detail-content"></div>
+  </div>
+</div>
+
 <!-- ═══════════ 음성 단축키 안내 모달 ═══════════ -->
 <div class="modal-bg" id="modal-shortcut">
   <div class="modal" style="max-height:90vh;overflow-y:auto;">
@@ -2264,16 +2344,39 @@ const MOM_CARE = {
 
 let momCareOpenId = null;
 
+function openMomDetail(secIdEncoded) {
+  const secTitle = decodeURIComponent(secIdEncoded);
+  const raw = localStorage.getItem('baby_profile');
+  if (!raw) return;
+  const p = JSON.parse(raw);
+  const careData = MOM_CARE[p.birthType];
+  const allSections = [...careData.sections, ...MOM_CARE.common];
+  const sec = allSections.find(s => s.title === secTitle);
+  if (!sec) return;
+
+  const dotColor = sec.warn ? '#dc2626' : (p.birthType === 'csection' ? '#9333ea' : '#db2777');
+  const itemsHtml = sec.items.map(item =>
+    `<div class="mom-detail-item">
+      <div class="mom-detail-dot" style="background:${dotColor};"></div>
+      <div class="mom-detail-text">${item}</div>
+    </div>`
+  ).join('');
+
+  const warnNote = sec.warn
+    ? `<div style="background:#fff1f2;border-radius:10px;padding:12px;margin-top:10px;font-size:13px;color:#dc2626;font-weight:600;line-height:1.6;">
+        ⚠️ 위 증상이 나타나면 지체 없이 병원을 방문하세요.
+      </div>` : '';
+
+  document.getElementById('mom-detail-content').innerHTML = `
+    <h2 style="font-size:18px;font-weight:800;margin-bottom:16px;">${sec.icon} ${sec.title}</h2>
+    ${itemsHtml}
+    ${warnNote}
+  `;
+  document.getElementById('modal-mom-detail').classList.add('open');
+}
+
 function toggleMomCare(id) {
-  momCareOpenId = momCareOpenId === id ? null : id;
-  document.querySelectorAll('.mom-care-card-body').forEach(el => {
-    const open = el.dataset.id === id && momCareOpenId === id;
-    el.classList.toggle('open', open);
-  });
-  document.querySelectorAll('.mom-care-card-arrow').forEach(el => {
-    const open = el.dataset.id === id && momCareOpenId === id;
-    el.classList.toggle('open', open);
-  });
+  // 구버전 호환 — 이제 openMomDetail 사용
 }
 
 function renderMomCarePage() {
@@ -2283,54 +2386,41 @@ function renderMomCarePage() {
   if (!p.birthType) return;
 
   const careData = MOM_CARE[p.birthType];
+  const isCs = p.birthType === 'csection';
   const badgeEl = document.getElementById('mom-birth-type-badge');
   badgeEl.innerHTML = '<span class="mom-birth-badge ' + careData.cls + '">' + careData.label + ' 산모</span>';
 
-  let html = '';
-  let idx = 0;
+  // 그리드 색상 팔레트
+  const cardColors = [
+    { bg:'linear-gradient(135deg,#fff0f6,#fce7f3)', accent:'#db2777', dot:'pink' },
+    { bg:'linear-gradient(135deg,#eff6ff,#dbeafe)', accent:'#2563eb', dot:'blue' },
+    { bg:'linear-gradient(135deg,#f0fdf4,#dcfce7)', accent:'#16a34a', dot:'green' },
+    { bg:'linear-gradient(135deg,#fdf4ff,#f3e8ff)', accent:'#9333ea', dot:'purple' },
+    { bg:'linear-gradient(135deg,#fffbeb,#fef9c3)', accent:'#d97706', dot:'yellow' },
+    { bg:'linear-gradient(135deg,#fff7ed,#ffedd5)', accent:'#ea580c', dot:'orange' },
+    { bg:'linear-gradient(135deg,#fff1f2,#ffe4e6)', accent:'#dc2626', dot:'pink' },
+    { bg:'linear-gradient(135deg,#f0fdfa,#ccfbf1)', accent:'#0d9488', dot:'green' },
+  ];
 
-  // 출산 방법별 섹션
-  careData.sections.forEach(sec => {
-    const id = 'mc-' + idx++;
-    let bodyHtml = '';
-    if (sec.warn) {
-      sec.items.forEach(item => {
-        bodyHtml += '<div class="mom-care-item"><div class="mom-care-dot pink"></div><div class="mom-care-text">' + item + '</div></div>';
-      });
-      bodyHtml += '<div class="mom-care-warn">⚠️ 위 증상이 나타나면 지체 없이 병원을 방문하세요.</div>';
-    } else {
-      sec.items.forEach(item => {
-        bodyHtml += '<div class="mom-care-item"><div class="mom-care-dot ' + (p.birthType === 'csection' ? 'purple' : 'pink') + '"></div><div class="mom-care-text">' + item + '</div></div>';
-      });
-    }
-    html +=
-      '<div class="mom-care-card">' +
-      '<div class="mom-care-card-title" onclick="toggleMomCare(\'' + id + '\')">' +
-        '<span class="mom-care-card-title-left">' + sec.icon + ' ' + sec.title + '</span>' +
-        '<span class="mom-care-card-arrow" data-id="' + id + '">▶</span>' +
-      '</div>' +
-      '<div class="mom-care-card-body" data-id="' + id + '">' + bodyHtml + '</div>' +
-      '</div>';
-  });
+  const allSections = [...careData.sections, ...MOM_CARE.common];
+  let colorIdx = 0;
 
-  // 공통 섹션
-  MOM_CARE.common.forEach(sec => {
-    const id = 'mc-' + idx++;
-    let bodyHtml = '';
-    sec.items.forEach(item => {
-      bodyHtml += '<div class="mom-care-item"><div class="mom-care-dot blue"></div><div class="mom-care-text">' + item + '</div></div>';
-    });
-    html +=
-      '<div class="mom-care-card">' +
-      '<div class="mom-care-card-title" onclick="toggleMomCare(\'' + id + '\')">' +
-        '<span class="mom-care-card-title-left">' + sec.icon + ' ' + sec.title + '</span>' +
-        '<span class="mom-care-card-arrow" data-id="' + id + '">▶</span>' +
-      '</div>' +
-      '<div class="mom-care-card-body" data-id="' + id + '">' + bodyHtml + '</div>' +
-      '</div>';
-  });
+  const gridHtml = allSections.map(sec => {
+    const col = sec.warn
+      ? { bg:'linear-gradient(135deg,#fff1f2,#ffe4e6)', accent:'#dc2626', dot:'pink' }
+      : cardColors[colorIdx++ % cardColors.length];
+    const secId = encodeURIComponent(sec.title);
+    const warnClass = sec.warn ? ' warn' : '';
+    return `<div class="mom-grid-card${warnClass}" style="background:${col.bg};"
+      onclick="openMomDetail('${secId}')">
+      <div class="mom-grid-emoji">${sec.icon}</div>
+      <div class="mom-grid-title">${sec.warn ? '⚠️ ' : ''}${sec.title}</div>
+      <div class="mom-grid-count">${sec.items.length}가지 정보</div>
+    </div>`;
+  }).join('');
 
-  document.getElementById('mom-care-content').innerHTML = html;
+  document.getElementById('mom-care-content').innerHTML =
+    '<div class="mom-grid">' + gridHtml + '</div>';
 
   // 커뮤니티 검색 칩 생성 — 내장 KB 키워드 기반
   const communityBox = document.getElementById('community-search-box');
@@ -3769,6 +3859,17 @@ function filterGuide() {
   renderGuideList();
 }
 
+// 카테고리별 배경 색상
+const GUIDE_CARD_COLORS = {
+  '수유·트림':  { bg: 'linear-gradient(135deg,#fff7ed,#ffedd5)', numBg: '#f97316' },
+  '기저귀':    { bg: 'linear-gradient(135deg,#f0fdf4,#dcfce7)', numBg: '#22c55e' },
+  '목욕·청결': { bg: 'linear-gradient(135deg,#eff6ff,#dbeafe)', numBg: '#3b82f6' },
+  '안기·재우기':{ bg: 'linear-gradient(135deg,#fdf4ff,#f3e8ff)', numBg: '#a855f7' },
+  '건강 체크': { bg: 'linear-gradient(135deg,#fff1f2,#ffe4e6)', numBg: '#ef4444' },
+  '응급 상황': { bg: 'linear-gradient(135deg,#fff1f2,#fecaca)', numBg: '#dc2626' },
+  '발달·놀이': { bg: 'linear-gradient(135deg,#fffbeb,#fef9c3)', numBg: '#f59e0b' },
+};
+
 function renderGuideList() {
   const q = document.getElementById('guide-search').value.toLowerCase();
   const list = GUIDE_DATA.filter(item => {
@@ -3778,22 +3879,50 @@ function renderGuideList() {
   });
   const el = document.getElementById('guide-list');
   if (!list.length) { el.innerHTML = '<div class="guide-empty">검색 결과가 없어요 🔍</div>'; return; }
-  el.innerHTML = list.map(item => {
+
+  // 스토리 카드 렌더
+  el.innerHTML = '<div class="guide-story-wrap">' + list.map(item => {
     const isOpen = guideOpenId === item.id;
+    const col = GUIDE_CARD_COLORS[item.cat] || { bg: 'linear-gradient(135deg,#fff7d6,#fef3c7)', numBg: '#7a5600' };
+
+    // 단계: 번호 원 + 이모지 + 한 줄 요약
+    const stepEmojis = { step:'✅', tip:'💡', warn:'⚠️' };
+    let stepNum = 0;
     const stepsHtml = item.steps.map(s => {
-      if (s.type === 'tip') return '<div class="guide-tip-box">' + s.text + '</div>';
-      if (s.type === 'warn') return '<div class="guide-warn-box">' + s.text + '</div>';
-      return '<div class="guide-step"><div class="guide-step-num">▶</div><div class="guide-step-text">' + s.text + '</div></div>';
+      if (s.type === 'tip') return `<div class="guide-story-tip">${s.text}</div>`;
+      if (s.type === 'warn') return `<div class="guide-story-warn">${s.text}</div>`;
+      stepNum++;
+      // 텍스트에서 【...】 부분을 제목으로 추출
+      const titleMatch = s.text.match(/【(.+?)】/);
+      const title = titleMatch ? titleMatch[1] : '';
+      const body = s.text.replace(/【.+?】\s*/, '');
+      return `<div class="guide-story-step">
+        <div class="guide-story-num" style="background:${col.numBg};">${stepNum}</div>
+        <div style="flex:1;">
+          ${title ? `<div style="font-size:12px;font-weight:800;color:${col.numBg};margin-bottom:3px;">${title}</div>` : ''}
+          <div class="guide-story-step-text">${body}</div>
+        </div>
+      </div>`;
     }).join('');
-    return '<div class="guide-card">' +
-      '<div class="guide-card-header" onclick="toggleGuideCard(\'' + item.id + '\')">' +
-      '<div class="guide-card-icon" style="background:' + item.iconBg + '">' + item.icon + '</div>' +
-      '<div class="guide-card-meta"><div class="guide-card-title">' + item.title + '</div><div class="guide-card-subtitle">' + item.subtitle + '</div></div>' +
-      '<div class="guide-card-arrow' + (isOpen ? ' open' : '') + '">▶</div>' +
-      '</div>' +
-      '<div class="guide-card-body' + (isOpen ? ' open' : '') + '">' + stepsHtml + '</div>' +
-      '</div>';
-  }).join('');
+
+    return `<div class="guide-story-card ${isOpen ? '' : 'guide-story-collapsed'}"
+      style="background:${col.bg};"
+      onclick="toggleGuideCard('${item.id}')">
+      <div class="guide-story-header">
+        <div class="guide-story-emoji">${item.icon}</div>
+        <div style="flex:1;">
+          <div class="guide-story-title">${item.title}</div>
+          <div class="guide-story-sub">${item.subtitle}</div>
+          <span class="guide-story-tag" style="background:${col.numBg}22;color:${col.numBg};">
+            ${item.cat}
+          </span>
+        </div>
+        <div style="font-size:20px;color:${col.numBg};opacity:0.5;flex-shrink:0;transition:transform 0.2s;${isOpen ? 'transform:rotate(90deg)' : ''}">▶</div>
+      </div>
+      <div class="guide-story-steps">${stepsHtml}</div>
+      ${!isOpen ? `<div class="guide-story-toggle" style="color:${col.numBg};opacity:0.6;">탭해서 단계 보기 ▼</div>` : ''}
+    </div>`;
+  }).join('') + '</div>';
 }
 
 function toggleGuideCard(id) {
