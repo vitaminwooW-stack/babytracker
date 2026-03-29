@@ -5973,12 +5973,11 @@ function startSessionTimer() {
 // 아빠 탭 실시간 자동 갱신 (5초마다)
 function startDadRefreshTimer() {
   clearInterval(dadRefreshTimer);
-  dadRefreshTimer = setInterval(() => {
-    // 아빠 탭이 현재 열려 있을 때만 갱신
+  dadRefreshTimer = setInterval(async () => {
     if (currentPage === 8) {
-      // localStorage에서 최신 기록 로드 (다른 기기/탭에서 변경 가능)
       try {
-        const raw = localStorage.getItem('baby_records');
+        // IndexedDB에서 최신 기록 로드
+        const raw = await idbGet('baby_records');
         if (raw) {
           const parsed = JSON.parse(raw);
           if (Array.isArray(parsed) && parsed.length !== records.length) {
@@ -6216,22 +6215,17 @@ function dadRecord(type) {
 }
 
 function _saveDadRecord(rec) {
-  try {
-    const raw = localStorage.getItem('baby_records');
-    const recs = raw ? JSON.parse(raw) : [];
-    recs.unshift(rec);
-    localStorage.setItem('baby_records', JSON.stringify(recs.slice(0, 500)));
-  } catch(e) { alert('기록 저장에 실패했어요.'); }
+  // addRecord: records 배열 업데이트 + IndexedDB 저장 + Firebase 동기화 + 타임라인 갱신 모두 처리
+  addRecord(rec);
 }
 
 function renderDadTodayRecords() {
   const el = document.getElementById('dad-rec-today');
   if (!el) return;
   try {
-    const raw = localStorage.getItem('baby_records');
-    const recs = raw ? JSON.parse(raw) : [];
+    // 전역 records 배열 사용 (항상 최신 상태)
     const today = new Date().toDateString();
-    const todayDad = recs.filter(r => r.byDad && new Date(r.time).toDateString() === today).slice(0, 10);
+    const todayDad = records.filter(r => r.byDad && new Date(r.time).toDateString() === today).slice(0, 10);
     if (!todayDad.length) {
       el.innerHTML = '<div class="dad-rec-empty">오늘 아직 기록이 없어요<br>위 버튼을 눌러 기록해보세요 💪</div>';
       return;
@@ -6306,12 +6300,14 @@ function startFirebaseSync() {
       if (!snap.exists()) return;
       const fbRecs = snap.val();
       if (!fbRecs) return;
-      // 배열로 변환 + 로컬과 병합
       const fbArr = Object.values(fbRecs).sort((a,b) => new Date(b.time) - new Date(a.time));
       const merged = _mergeRecords(records, fbArr);
       if (JSON.stringify(merged) !== JSON.stringify(records)) {
         records = merged;
-        try { localStorage.setItem('baby_records', JSON.stringify(records.slice(0,500))); } catch(e) {}
+        // IndexedDB + localStorage 모두 저장
+        const mergedStr = JSON.stringify(records.slice(0, 2000));
+        idbSet('baby_records', mergedStr).catch(() => {});
+        try { localStorage.setItem('baby_records', JSON.stringify(records.slice(0, 300))); } catch(e) {}
         renderTimeline();
         updateStatus();
         renderDadTodayRecords();
