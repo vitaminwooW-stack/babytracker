@@ -1062,11 +1062,16 @@ if ('serviceWorker' in navigator) {
           <div class="header-date" id="app-date"></div>
         </div>
       </div>
-      <!-- 아래 줄: 기능 버튼 3개 -->
+      <!-- 아래 줄: 기능 버튼 -->
       <div class="app-header-actions">
         <button class="hdr-btn profile" onclick="openProfileEdit()">✏️ 프로필</button>
         <button class="hdr-btn guide"   onclick="openGuide('app')">📚 가이드</button>
         <button class="hdr-btn invite"  onclick="openInviteModal()">💌 초대</button>
+        <button class="hdr-btn" id="wake-lock-btn" onclick="toggleWakeLock()"
+          title="화면 유지 (수유·유축 중 화면 꺼짐 방지)"
+          style="background:#f9fafb;border-color:#e5e7eb;color:#6b7280;">
+          🔆
+        </button>
       </div>
     </div>
     <!-- 빠른 이동 탭바 (클릭 가능) -->
@@ -1159,7 +1164,9 @@ if ('serviceWorker' in navigator) {
               <span class="voice-cmd">수유 시작/종료</span>
               <span class="voice-cmd">수면 시작/종료</span>
               <span class="voice-cmd">유축 시작/종료</span>
-              <span class="voice-cmd">기저귀</span>
+              <span class="voice-cmd">💧 기저귀 소변</span>
+              <span class="voice-cmd">💩 기저귀 대변</span>
+              <span class="voice-cmd">응가했어</span>
             </div>
           </div>
 
@@ -1560,6 +1567,17 @@ if ('serviceWorker' in navigator) {
             </button>
           </div>
 
+          <!-- 화면 유지 & 음성 단축키 -->
+          <div class="feature-section-title">🎙️ 음성 단축키 설정</div>
+          <div class="chart-wrap" style="padding:14px 16px;">
+            <div style="font-size:13px;color:#555;margin-bottom:10px;line-height:1.6;">
+              Siri / Google Assistant로 앱을 열지 않고<br>음성으로 바로 기록할 수 있어요!
+            </div>
+            <button class="export-btn" onclick="openShortcutModal()" style="margin-bottom:0;">
+              🎙️ Siri · Google Assistant 설정하기
+            </button>
+          </div>
+
           <!-- 화면 설정 -->
           <div class="feature-section-title">🌙 화면 설정</div>
           <div class="chart-wrap" style="padding:14px 16px;">
@@ -1603,6 +1621,55 @@ if ('serviceWorker' in navigator) {
       </div>
 
     </div>
+  </div>
+</div>
+
+<!-- ═══════════ 음성 단축키 안내 모달 ═══════════ -->
+<div class="modal-bg" id="modal-shortcut">
+  <div class="modal" style="max-height:90vh;overflow-y:auto;">
+    <div class="modal-handle"></div>
+    <button class="modal-close-x" onclick="closeModal('shortcut')">✕</button>
+    <h2>🎙️ 음성으로 빠른 기록</h2>
+    <p style="font-size:13px;color:#6b7280;margin-bottom:16px;line-height:1.6;">
+      앱을 열지 않고 Siri나 Google Assistant로<br>바로 기록할 수 있어요!
+    </p>
+
+    <!-- iPhone Siri -->
+    <div style="background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:14px;padding:14px;margin-bottom:12px;">
+      <div style="font-size:13px;font-weight:800;color:#0369a1;margin-bottom:10px;">🍎 iPhone — Siri 단축어</div>
+      <div style="font-size:12px;color:#0c4a6e;line-height:1.8;margin-bottom:12px;">
+        1. <strong>단축어</strong> 앱 열기<br>
+        2. <strong>+</strong> → 새 단축어 추가<br>
+        3. <strong>URL 열기</strong> 동작 선택<br>
+        4. 아래 URL 중 하나 붙여넣기<br>
+        5. <strong>Siri에 추가</strong> → 문구 설정
+      </div>
+      <div style="font-size:11px;color:#0369a1;font-weight:700;margin-bottom:6px;">📋 URL 복사해서 사용하세요:</div>
+      <div id="shortcut-url-base" style="display:none;"></div>
+      <div style="display:flex;flex-direction:column;gap:6px;" id="siri-url-list"></div>
+    </div>
+
+    <!-- Android Google Assistant -->
+    <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:14px;padding:14px;margin-bottom:12px;">
+      <div style="font-size:13px;font-weight:800;color:#15803d;margin-bottom:10px;">🤖 Android — Google Assistant 루틴</div>
+      <div style="font-size:12px;color:#14532d;line-height:1.8;margin-bottom:12px;">
+        1. <strong>Google 앱</strong> → 우측 하단 프로필<br>
+        2. <strong>설정</strong> → <strong>Assistant</strong> → <strong>루틴</strong><br>
+        3. <strong>+</strong> → 새 루틴 추가<br>
+        4. 시작 문구: <em>"유축 시작"</em> 입력<br>
+        5. 작업 추가 → <strong>앱 열기</strong> → URL 입력
+      </div>
+      <div style="font-size:11px;color:#15803d;font-weight:700;margin-bottom:6px;">📋 URL 복사해서 사용하세요:</div>
+      <div style="display:flex;flex-direction:column;gap:6px;" id="assistant-url-list"></div>
+    </div>
+
+    <!-- 사용 가능한 액션 목록 -->
+    <div style="background:#fff7d6;border:1.5px solid #e8d796;border-radius:12px;padding:12px;margin-bottom:16px;">
+      <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:8px;">🗣️ 설정 가능한 음성 명령</div>
+      <div style="display:flex;flex-direction:column;gap:4px;" id="action-list"></div>
+    </div>
+
+    <button class="btn-save" style="width:100%;" onclick="closeModal('shortcut')">확인</button>
   </div>
 </div>
 
@@ -2807,84 +2874,116 @@ function renderTimeline() {
 // ══════════════════════════════════════════
 // 💾 데이터 저장·불러오기 (안전 강화)
 // ══════════════════════════════════════════
-function saveData() {
-  // 1. baby_records 저장 (용량 초과 시 오래된 기록 자동 정리)
-  try {
-    localStorage.setItem('baby_records', JSON.stringify(records.slice(0, 500)));
-  } catch(e) {
-    // QuotaExceededError — 최근 200개만 보존
-    try {
-      localStorage.setItem('baby_records', JSON.stringify(records.slice(0, 200)));
-      console.warn('localStorage 용량 부족 — 최근 200개만 저장됨');
-    } catch(e2) { console.error('baby_records 저장 실패:', e2); }
-  }
-  // 2. 수면 시작 저장
-  try {
-    localStorage.setItem('baby_sleeping', sleepingStart ? sleepingStart.toISOString() : '');
-  } catch(e) {}
-  // 3. 마지막 저장 시각 기록
-  try {
-    localStorage.setItem('last_saved', new Date().toISOString());
-  } catch(e) {}
+// ══════════════════════════════════════════
+// 💾 IndexedDB — 대용량 저장소 (수백MB)
+// localStorage(5MB) 한계 극복
+// ══════════════════════════════════════════
+let idbDb = null;
+
+function idbInit() {
+  return new Promise((resolve) => {
+    if (!window.indexedDB) { resolve(false); return; }
+    const req = indexedDB.open('nuricare_db', 1);
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('store')) {
+        db.createObjectStore('store', { keyPath: 'key' });
+      }
+    };
+    req.onsuccess = e => { idbDb = e.target.result; resolve(true); };
+    req.onerror   = () => resolve(false);
+  });
 }
 
-function loadData() {
-  // 1. records 불러오기
+function idbSet(key, value) {
+  if (!idbDb) {
+    try { localStorage.setItem(key, value); } catch(e) {}
+    return Promise.resolve();
+  }
+  return new Promise(resolve => {
+    const tx = idbDb.transaction('store', 'readwrite');
+    tx.objectStore('store').put({ key, value });
+    tx.oncomplete = resolve;
+    tx.onerror = () => {
+      try { localStorage.setItem(key, value); } catch(e) {}
+      resolve();
+    };
+  });
+}
+
+function idbGet(key) {
+  if (!idbDb) {
+    return Promise.resolve(localStorage.getItem(key));
+  }
+  return new Promise(resolve => {
+    const tx = idbDb.transaction('store', 'readonly');
+    const req = tx.objectStore('store').get(key);
+    req.onsuccess = () => {
+      if (req.result) {
+        resolve(req.result.value);
+      } else {
+        // fallback to localStorage
+        resolve(localStorage.getItem(key));
+      }
+    };
+    req.onerror = () => resolve(localStorage.getItem(key));
+  });
+}
+
+// saveData: IndexedDB 우선, localStorage 동기 백업
+function saveData() {
+  const recStr = JSON.stringify(records.slice(0, 2000)); // 2000개까지 저장
+  // IndexedDB (비동기)
+  idbSet('baby_records', recStr).catch(() => {});
+  // localStorage 백업 (최근 300개)
+  try { localStorage.setItem('baby_records', JSON.stringify(records.slice(0, 300))); } catch(e) {}
+  // 수면 세션
+  try { localStorage.setItem('baby_sleeping', sleepingStart ? sleepingStart.toISOString() : ''); } catch(e) {}
+  try { localStorage.setItem('last_saved', new Date().toISOString()); } catch(e) {}
+}
+
+// loadData: IndexedDB 우선 로드
+async function loadData() {
+  await idbInit();
   try {
-    const r = localStorage.getItem('baby_records');
+    const r = await idbGet('baby_records');
     if (r) {
       const parsed = JSON.parse(r);
-      if (Array.isArray(parsed)) {
-        records = parsed;
-      } else {
-        console.warn('baby_records 형식 오류 — 빈 배열로 초기화');
-        records = [];
-      }
+      records = Array.isArray(parsed) ? parsed : [];
     }
-  } catch(e) {
-    console.error('baby_records 파싱 오류:', e);
-    records = [];
-  }
-  // 2. 수면 시작 불러오기
+  } catch(e) { records = []; }
+  // 수면
   try {
     const s = localStorage.getItem('baby_sleeping');
     if (s && s.trim()) {
       const d = new Date(s);
-      if (!isNaN(d.getTime())) {
-        sleepingStart = d;
-        updateSleepBanner();
-      } else {
-        sleepingStart = null;
-        localStorage.removeItem('baby_sleeping');
-      }
+      if (!isNaN(d.getTime())) { sleepingStart = d; updateSleepBanner(); }
+      else { sleepingStart = null; localStorage.removeItem('baby_sleeping'); }
     }
   } catch(e) { sleepingStart = null; }
-  // 3. 마지막 저장 시각 표시
-  try {
-    const ls = localStorage.getItem('last_saved');
-    if (ls) {
-      const d = new Date(ls);
-      const diffH = Math.round((Date.now() - d.getTime()) / 3600000);
-      if (diffH > 24) {
-        console.warn(`마지막 저장: ${diffH}시간 전 — 백업 권장`);
-      }
-    }
-  } catch(e) {}
   renderTimeline();
   updateStatus();
 }
 
-// ── localStorage 사용량 확인 ──
-function checkStorageUsage() {
+// ── 저장 공간 확인 ──
+async function checkStorageUsage() {
   try {
-    let total = 0;
-    for (const key of Object.keys(localStorage)) {
-      total += (localStorage.getItem(key) || '').length;
+    // Storage API로 실제 사용량 확인 (IndexedDB 포함)
+    if (navigator.storage && navigator.storage.estimate) {
+      const est = await navigator.storage.estimate();
+      const kb  = Math.round(est.usage / 1024);
+      const pct = Math.round(est.usage / est.quota * 100);
+      return { kb, pct, quota: Math.round(est.quota / 1024 / 1024) + 'MB' };
     }
-    const kb = Math.round(total / 1024);
-    const pct = Math.round((total / (5 * 1024 * 1024)) * 100);
-    return { kb, pct };
-  } catch(e) { return { kb: 0, pct: 0 }; }
+  } catch(e) {}
+  // fallback
+  let total = 0;
+  for (const key of Object.keys(localStorage)) {
+    total += (localStorage.getItem(key) || '').length;
+  }
+  const kb = Math.round(total / 1024);
+  const pct = Math.round(total / (5 * 1024 * 1024) * 100);
+  return { kb, pct, quota: '5MB' };
 }
 
 // 모달 배경 클릭 닫기
@@ -3724,8 +3823,169 @@ const EVENT_PRAISE = [
 ];
 
 // ══════════════════════════════════════════
-// 💌 초대 코드 & 링크 시스템
+// 🔆 Wake Lock — 화면 유지
 // ══════════════════════════════════════════
+let wakeLock = null;
+
+async function toggleWakeLock() {
+  const btn = document.getElementById('wake-lock-btn');
+  if (wakeLock) {
+    // 해제
+    try { await wakeLock.release(); } catch(e) {}
+    wakeLock = null;
+    if (btn) {
+      btn.textContent = '🔆';
+      btn.style.background = '#f9fafb';
+      btn.style.color = '#6b7280';
+      btn.title = '화면 유지 켜기';
+    }
+    showVoiceToast('화면 유지 해제됨', true);
+  } else {
+    // 활성화
+    if (!('wakeLock' in navigator)) {
+      alert('이 브라우저는 화면 유지 기능을 지원하지 않아요.\n크롬 또는 Safari 최신 버전을 사용해주세요.');
+      return;
+    }
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', () => {
+        wakeLock = null;
+        if (btn) { btn.textContent = '🔆'; btn.style.background = '#f9fafb'; btn.style.color = '#6b7280'; }
+      });
+      if (btn) {
+        btn.textContent = '🔆';
+        btn.style.background = '#fef9c3';
+        btn.style.color = '#854d0e';
+        btn.style.borderColor = '#fde68a';
+        btn.title = '화면 유지 중 — 탭하면 해제';
+      }
+      showVoiceToast('화면 유지 켜짐 ✅ 수유·유축 중 화면이 꺼지지 않아요', true);
+    } catch(e) {
+      alert('화면 유지를 시작할 수 없어요. 잠금 화면을 해제 후 다시 시도해주세요.');
+    }
+  }
+}
+
+// 페이지 다시 보일 때 Wake Lock 자동 재활성화
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'visible' && wakeLock === null) {
+    const btn = document.getElementById('wake-lock-btn');
+    if (btn && btn.style.background === 'rgb(254, 249, 195)') {
+      // 이전에 켜져 있었으면 재활성화
+      try {
+        wakeLock = await navigator.wakeLock.request('screen');
+      } catch(e) {}
+    }
+  }
+});
+
+// ══════════════════════════════════════════
+// 🎙️ URL 액션 — Siri/Google Assistant 연동
+// URL 예: nuri-care.html?action=pump_start
+// ══════════════════════════════════════════
+const URL_ACTIONS = {
+  'pump_start':   () => startSession('pump'),
+  'pump_end':     () => endSession('pump'),
+  'feed_start':   () => startSession('feed'),
+  'feed_end':     () => endSession('feed'),
+  'sleep_start':  () => startSession('sleep'),
+  'sleep_end':    () => endSession('sleep'),
+  'diaper_pee':   () => addRecord({ type:'diaper', time:nowLocal(), title:'기저귀 교체 (소변)', sub:'소변', icon:'💧', cat:'diaper' }),
+  'diaper_poo':   () => addRecord({ type:'diaper', time:nowLocal(), title:'기저귀 교체 (대변)', sub:'대변', icon:'💩', cat:'diaper' }),
+};
+
+const ACTION_LABELS = {
+  'pump_start':  { label:'유축 시작', siri:'유축 시작', voice:'🤱 유축 시작' },
+  'pump_end':    { label:'유축 종료', siri:'유축 종료', voice:'🤱 유축 종료' },
+  'feed_start':  { label:'수유 시작', siri:'수유 시작', voice:'🍼 수유 시작' },
+  'feed_end':    { label:'수유 종료', siri:'수유 종료', voice:'🍼 수유 종료' },
+  'sleep_start': { label:'재웠어요', siri:'아기 재웠어', voice:'😴 수면 시작' },
+  'sleep_end':   { label:'아기 깼어요', siri:'아기 깼어', voice:'☀️ 기상' },
+  'diaper_pee':  { label:'소변 기저귀', siri:'기저귀 소변', voice:'💧 소변 기저귀' },
+  'diaper_poo':  { label:'대변 기저귀', siri:'기저귀 대변', voice:'💩 대변 기저귀' },
+};
+
+function checkURLAction() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const action = params.get('action');
+    if (!action) return;
+    // URL 파라미터 제거
+    window.history.replaceState({}, '', window.location.pathname);
+    // 앱이 준비된 후 실행
+    const fn = URL_ACTIONS[action];
+    if (fn) {
+      setTimeout(() => {
+        fn();
+        const lbl = ACTION_LABELS[action];
+        if (lbl) {
+          showVoiceToast(`${lbl.voice} 자동 기록됐어요!`, true);
+          speak(`${lbl.label} 기록했어요`);
+        }
+      }, 800);
+    }
+  } catch(e) {}
+}
+
+// 단축키 안내 모달 열기
+function openShortcutModal() {
+  const base = window.location.href.split('?')[0].split('#')[0];
+  const urlList = document.getElementById('siri-url-list');
+  const asstList = document.getElementById('assistant-url-list');
+  const actList = document.getElementById('action-list');
+  if (!urlList) return;
+
+  const actionItems = Object.entries(ACTION_LABELS);
+
+  // Siri URL 목록
+  urlList.innerHTML = actionItems.map(([key, info]) => {
+    const url = `${base}?action=${key}`;
+    return `<div style="background:#fff;border:1px solid #bae6fd;border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:13px;flex:1;color:#0c4a6e;">${info.voice}</span>
+      <button onclick="copyText('${url}')" style="font-size:11px;background:#0369a1;color:#fff;border:none;border-radius:6px;padding:4px 8px;cursor:pointer;">복사</button>
+    </div>`;
+  }).join('');
+
+  // Android URL 목록
+  asstList.innerHTML = actionItems.map(([key, info]) => {
+    const url = `${base}?action=${key}`;
+    return `<div style="background:#fff;border:1px solid #86efac;border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:13px;flex:1;color:#14532d;">${info.voice}</span>
+      <button onclick="copyText('${url}')" style="font-size:11px;background:#15803d;color:#fff;border:none;border-radius:6px;padding:4px 8px;cursor:pointer;">복사</button>
+    </div>`;
+  }).join('');
+
+  // 액션 목록
+  actList.innerHTML = actionItems.map(([key, info]) => `
+    <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#7a5600;padding:3px 0;">
+      <span style="min-width:90px;font-weight:600;">"${info.siri}"</span>
+      <span style="color:#9ca3af;">→</span>
+      <span>${info.voice} 자동 기록</span>
+    </div>
+  `).join('');
+
+  document.getElementById('modal-shortcut').classList.add('open');
+}
+
+function copyText(text) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text)
+      .then(() => showVoiceToast('복사됐어요! ✅', true))
+      .catch(() => _fallbackCopyText(text));
+  } else {
+    _fallbackCopyText(text);
+  }
+}
+
+function _fallbackCopyText(text) {
+  const el = document.createElement('textarea');
+  el.value = text;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+  showVoiceToast('복사됐어요! ✅', true);
+}
 
 function generateInviteCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -5234,9 +5494,11 @@ function goToPage(n) {
     if (qn) qn.classList.toggle('active', i === currentPage);
   }
   updatePageLabel(currentPage);
+  // 새로고침 시 복원을 위해 페이지 저장
+  try { sessionStorage.setItem('nuri_last_page', String(currentPage)); } catch(e) {}
   if (currentPage === 3) setTimeout(renderMainChart, 100);
   if (currentPage === 4) setTimeout(() => { renderGrowthChart(); renderGrowthTable(); }, 100);
-  if (currentPage === 8) {  // 아빠 탭 (이제 8번째)
+  if (currentPage === 8) {
     renderDadTabChecklist();
     renderDadTodayRecords();
   }
@@ -5339,14 +5601,17 @@ function obNext() {
 // ══════════════════════════════════════════
 // enterApp 통합 (모든 기능 초기화)
 // ══════════════════════════════════════════
-function enterApp() {
-  sessionStorage.setItem('nuri_in_app', '1'); // 새로고침 감지용
-  loadData();
+async function enterApp() {
+  sessionStorage.setItem('nuri_in_app', '1');
+  await loadData(); // IndexedDB 비동기 로드 대기
   loadGrowthData();
   loadDiary();
   loadSessions();
   renderAppHeader();
-  goToPage(2);
+  // 새로고침 전 페이지 복원
+  const savedPage = parseInt(sessionStorage.getItem('nuri_last_page') || '2');
+  const startPage = (savedPage >= 0 && savedPage <= 9) ? savedPage : 2;
+  goToPage(startPage);
   setTimeout(initSwipe, 100);
   renderPhotoPage();
   renderMomCarePage();
@@ -5358,6 +5623,7 @@ function enterApp() {
   renderActiveSessions();
   updateQuickBtns();
   startSessionTimer();
+  startDadRefreshTimer(); // 아빠 탭 5초마다 자동 갱신
   updateSettingsRoleUI();
   renderStorageStatus();
   renderDadTodayRecords();
@@ -5380,10 +5646,10 @@ function enterApp() {
   showScreen('app');
 }
 
-function renderStorageStatus() {
+async function renderStorageStatus() {
   const el = document.getElementById('storage-status');
   if (!el) return;
-  const { kb, pct } = checkStorageUsage();
+  const { kb, pct, quota } = await checkStorageUsage();
   const recCount = records.length;
   const lastSaved = localStorage.getItem('last_saved');
   const lastSavedStr = lastSaved
@@ -5395,17 +5661,17 @@ function renderStorageStatus() {
         return Math.floor(diffM/1440) + '일 전';
       })()
     : '없음';
-
   const barColor = pct > 80 ? '#ef4444' : pct > 50 ? '#f59e0b' : '#22c55e';
+  const storageType = idbDb ? 'IndexedDB' : 'localStorage';
   el.innerHTML = `
     <div style="font-size:12px;color:#6b7280;margin-bottom:6px;">
-      📊 기록 ${recCount}개 · 저장공간 ${kb}KB 사용 · 마지막 저장 ${lastSavedStr}
+      📊 기록 ${recCount}개 · ${kb}KB 사용 · 마지막 저장 ${lastSavedStr}
     </div>
     <div style="background:#f3f0e0;border-radius:4px;height:6px;overflow:hidden;">
       <div style="background:${barColor};height:100%;width:${Math.min(pct,100)}%;border-radius:4px;transition:width 0.3s;"></div>
     </div>
     <div style="font-size:11px;color:${pct > 80 ? '#ef4444' : '#9ca3af'};margin-top:4px;">
-      ${pct > 80 ? '⚠️ 저장 공간이 부족해요! 지금 백업하세요.' : `용량 ${pct}% 사용 중 (최대 ~5MB)`}
+      ${pct > 80 ? '⚠️ 저장 공간 부족! 백업하세요.' : `${storageType} · 최대 ${quota || '수백MB'} 사용 가능`}
     </div>`;
 }
 
@@ -5418,32 +5684,45 @@ function appStart() {
   // URL에 초대 파라미터 있으면 먼저 처리 (아빠가 링크 클릭)
   const inviteFromUrl = checkInviteFromURL();
   if (inviteFromUrl && inviteFromUrl.data) {
-    // 아기 데이터 미리 저장
     try {
       const decoded = decodeURIComponent(inviteFromUrl.data);
       _applyInvitePayload(inviteFromUrl.code, decoded);
-    if (typeof _applyInvitePayloadFB === 'function') _applyInvitePayloadFB(inviteFromUrl.code, decoded);
+      if (typeof _applyInvitePayloadFB === 'function') _applyInvitePayloadFB(inviteFromUrl.code, decoded);
     } catch(e) {}
   }
 
+  // URL 액션 파라미터 감지 (Siri/Assistant 연동)
+  const hasAction = new URLSearchParams(window.location.search).has('action');
+
   function showSplashThenLogin() {
+    // 액션 URL이면 스플래시 짧게 (0.5초)
+    const delay = hasAction ? 300 : 1500;
     setTimeout(() => {
       if (splash) splash.classList.add('fade-out');
       setTimeout(() => {
         if (splash) splash.style.display = 'none';
         if (localStorage.getItem('onboarding_done') !== '1') {
-          localStorage.setItem('onboarding_done', '1'); // 초대 링크면 온보딩 스킵
+          localStorage.setItem('onboarding_done', '1');
         }
         initLogin();
       }, 750);
-    }, 1500);
+    }, delay);
   }
 
   // 새로고침 감지 — 이미 앱에 진입했었으면 바로 앱으로
   const wasInApp = sessionStorage.getItem('nuri_in_app');
   if (wasInApp === '1' && localStorage.getItem('baby_profile')) {
     if (splash) splash.style.display = 'none';
-    enterApp();
+    enterApp().then(() => {
+      if (hasAction) checkURLAction(); // 액션 실행
+    });
+    return;
+  }
+
+  // PIN 없이 프로필 있으면 (액션 URL) 바로 진입
+  if (hasAction && localStorage.getItem('baby_profile') && localStorage.getItem('baby_pin')) {
+    if (splash) splash.style.display = 'none';
+    enterApp().then(() => checkURLAction());
     return;
   }
 
@@ -5681,12 +5960,37 @@ function renderActiveSessions() {
 }
 
 // 세션 타이머 (10초마다 갱신)
+let dadRefreshTimer = null;
+
 function startSessionTimer() {
   clearInterval(sessionTimer);
   sessionTimer = setInterval(() => {
     renderActiveSessions();
     updateQuickBtns();
   }, 10000);
+}
+
+// 아빠 탭 실시간 자동 갱신 (5초마다)
+function startDadRefreshTimer() {
+  clearInterval(dadRefreshTimer);
+  dadRefreshTimer = setInterval(() => {
+    // 아빠 탭이 현재 열려 있을 때만 갱신
+    if (currentPage === 8) {
+      // localStorage에서 최신 기록 로드 (다른 기기/탭에서 변경 가능)
+      try {
+        const raw = localStorage.getItem('baby_records');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length !== records.length) {
+            records = parsed;
+            renderTimeline();
+            updateStatus();
+          }
+        }
+      } catch(e) {}
+      renderDadTodayRecords();
+    }
+  }, 5000);
 }
 
 // ── 원탭 버튼 레이블 업데이트 ──
@@ -6239,8 +6543,11 @@ async function fbSave(key, data) {
 async function fbPushAll() {
   if (!FB_ENABLED || !fbDb || !fbFamilyId) return;
   try {
+    // IndexedDB에서 전체 기록 읽기 (localStorage 5MB 한계 없음)
+    const recStr = await idbGet('baby_records');
+    const recArr = recStr ? JSON.parse(recStr) : records;
     const payload = {
-      records:    JSON.parse(localStorage.getItem('baby_records')    || '[]'),
+      records:    recArr,
       profile:    JSON.parse(localStorage.getItem('baby_profile')    || 'null'),
       diary:      JSON.parse(localStorage.getItem('diary_entries')   || '[]'),
       growth:     JSON.parse(localStorage.getItem('growth_records')  || '[]'),
@@ -6270,11 +6577,13 @@ function fbApplyRemoteData(data) {
 
   try {
     if (data.records && Array.isArray(data.records)) {
-      // 로컬 아빠 기록과 원격 기록 병합 (충돌 없이)
       const local = JSON.parse(localStorage.getItem('baby_records') || '[]');
       const merged = _mergeRecords(data.records, local);
-      localStorage.setItem('baby_records', JSON.stringify(merged.slice(0, 500)));
-      records = merged.slice(0, 500);
+      const mergedStr = JSON.stringify(merged.slice(0, 2000));
+      // IndexedDB + localStorage 모두 저장
+      idbSet('baby_records', mergedStr).catch(() => {});
+      try { localStorage.setItem('baby_records', JSON.stringify(merged.slice(0, 300))); } catch(e) {}
+      records = merged.slice(0, 2000);
     }
     if (data.profile) {
       localStorage.setItem('baby_profile', JSON.stringify(data.profile));
