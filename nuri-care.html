@@ -839,28 +839,58 @@ body.dark .guide-story-step { background: rgba(0,0,0,0.2); }
 body.dark .guide-story-step-text { color: #f0ead8; }
 
 /* ── 엄마 케어 그리드 카드 ── */
-.mom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px 16px 80px; }
-.mom-grid-card {
-  border-radius: 16px; padding: 16px 14px;
-  text-align: center; cursor: pointer;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-  transition: transform 0.15s;
-  position: relative;
+.mom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 14px 16px 80px;
 }
-.mom-grid-card:active { transform: scale(0.96); }
-.mom-grid-card.warn { grid-column: 1 / -1; text-align: left; }
-.mom-grid-emoji { font-size: 36px; margin-bottom: 8px; line-height: 1; }
-.mom-grid-title { font-size: 13px; font-weight: 800; color: #1a1a1a; margin-bottom: 4px; word-break: keep-all; }
-.mom-grid-count { font-size: 11px; color: #9ca3af; }
-/* 모달 스타일 엄마케어 상세 */
-.mom-detail-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f3f0e0; }
-.mom-detail-item:last-child { border-bottom: none; }
-.mom-detail-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
-.mom-detail-text { font-size: 13px; color: #374151; line-height: 1.6; word-break: keep-all; }
-body.dark .mom-grid-card { background: #2a2520; }
+.mom-grid-card {
+  border-radius: 18px;
+  padding: 18px 12px 14px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.07), 0 0 0 1px rgba(0,0,0,0.04);
+  transition: transform 0.15s, box-shadow 0.15s;
+  position: relative; overflow: hidden;
+}
+.mom-grid-card::before {
+  content: '';
+  position: absolute; top: -20px; right: -20px;
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+}
+.mom-grid-card:active { transform: scale(0.96); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+.mom-grid-card.warn {
+  grid-column: 1 / -1;
+  display: flex; align-items: center; gap: 14px;
+  text-align: left; padding: 16px 18px;
+}
+.mom-grid-card.warn .mom-grid-emoji { font-size: 30px; margin-bottom: 0; flex-shrink: 0; }
+.mom-grid-emoji { font-size: 38px; margin-bottom: 10px; line-height: 1; display: block; }
+.mom-grid-title {
+  font-size: 13px; font-weight: 800;
+  color: #1a1a1a; margin-bottom: 5px;
+  word-break: keep-all; line-height: 1.4;
+}
+.mom-grid-count {
+  font-size: 11px; color: rgba(0,0,0,0.35);
+  font-weight: 600;
+  background: rgba(255,255,255,0.4);
+  border-radius: 8px; padding: 2px 8px;
+  display: inline-block;
+}
+body.dark .mom-grid-card { box-shadow: 0 3px 10px rgba(0,0,0,0.3); }
 body.dark .mom-grid-title { color: #f0ead8; }
-body.dark .mom-detail-text { color: #d0c0a8; }
-body.dark .mom-detail-item { border-color: #3d3628; }
+body.dark .mom-grid-count { color: rgba(255,255,255,0.4); background: rgba(0,0,0,0.2); }
+/* 엄마 케어 상세 모달 */
+.mom-detail-item { display:flex; align-items:flex-start; gap:12px; padding:11px 0; border-bottom:1px solid #f3f0e0; }
+.mom-detail-item:last-child { border-bottom:none; }
+.mom-detail-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:6px; }
+.mom-detail-text { font-size:14px; color:#374151; line-height:1.65; word-break:keep-all; }
+body.dark .mom-detail-text { color:#d0c0a8; }
+body.dark .mom-detail-item { border-color:#3d3628; }
 </style>
 
 <!-- Firebase SDK (compat 버전 — 실시간 동기화용) -->
@@ -2363,12 +2393,18 @@ function openMomDetail(secIdEncoded) {
   ).join('');
 
   const warnNote = sec.warn
-    ? `<div style="background:#fff1f2;border-radius:10px;padding:12px;margin-top:10px;font-size:13px;color:#dc2626;font-weight:600;line-height:1.6;">
+    ? `<div style="background:#fff1f2;border-radius:10px;padding:12px 14px;margin-top:10px;font-size:13px;color:#dc2626;font-weight:600;line-height:1.6;border-left:3px solid #dc2626;">
         ⚠️ 위 증상이 나타나면 지체 없이 병원을 방문하세요.
       </div>` : '';
 
   document.getElementById('mom-detail-content').innerHTML = `
-    <h2 style="font-size:18px;font-weight:800;margin-bottom:16px;">${sec.icon} ${sec.title}</h2>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:14px;border-bottom:2px solid ${dotColor}22;">
+      <div style="font-size:36px;line-height:1;">${sec.icon}</div>
+      <div>
+        <h2 style="font-size:17px;font-weight:800;color:#1a1a1a;margin-bottom:2px;">${sec.title}</h2>
+        <div style="font-size:12px;color:${dotColor};font-weight:600;">${sec.items.length}가지 정보</div>
+      </div>
+    </div>
     ${itemsHtml}
     ${warnNote}
   `;
@@ -2376,8 +2412,7 @@ function openMomDetail(secIdEncoded) {
 }
 
 function toggleMomCare(id) {
-  // 구버전 호환 — 이제 openMomDetail 사용
-}
+  }
 
 function renderMomCarePage() {
   const raw = localStorage.getItem('baby_profile');
@@ -2407,15 +2442,26 @@ function renderMomCarePage() {
 
   const gridHtml = allSections.map(sec => {
     const col = sec.warn
-      ? { bg:'linear-gradient(135deg,#fff1f2,#ffe4e6)', accent:'#dc2626', dot:'pink' }
+      ? { bg:'linear-gradient(135deg,#fff1f2,#ffe4e6)', accent:'#dc2626' }
       : cardColors[colorIdx++ % cardColors.length];
     const secId = encodeURIComponent(sec.title);
     const warnClass = sec.warn ? ' warn' : '';
-    return `<div class="mom-grid-card${warnClass}" style="background:${col.bg};"
+    if (sec.warn) {
+      return `<div class="mom-grid-card${warnClass}" style="background:${col.bg};border-left:4px solid ${col.accent};"
+        onclick="openMomDetail('${secId}')">
+        <div class="mom-grid-emoji">${sec.icon}</div>
+        <div style="flex:1;">
+          <div class="mom-grid-title">⚠️ ${sec.title}</div>
+          <div class="mom-grid-count" style="color:${col.accent};">${sec.items.length}가지 증상 확인</div>
+        </div>
+        <div style="font-size:18px;color:${col.accent};opacity:0.5;">▶</div>
+      </div>`;
+    }
+    return `<div class="mom-grid-card" style="background:${col.bg};border-top:3px solid ${col.accent}22;"
       onclick="openMomDetail('${secId}')">
       <div class="mom-grid-emoji">${sec.icon}</div>
-      <div class="mom-grid-title">${sec.warn ? '⚠️ ' : ''}${sec.title}</div>
-      <div class="mom-grid-count">${sec.items.length}가지 정보</div>
+      <div class="mom-grid-title">${sec.title}</div>
+      <div class="mom-grid-count">${sec.items.length}가지 정보 →</div>
     </div>`;
   }).join('');
 
@@ -2499,17 +2545,17 @@ function renderAppHeader() {
   const avatarMap = { boy: '👦', girl: '👧', unknown: '👶' };
   document.getElementById('app-avatar').textContent = avatarMap[p.gender] || '👶';
   if (p.birthDate) {
-    // 태어난 날을 1일로 계산
-    const days = Math.floor((new Date() - new Date(p.birthDate)) / 86400000) + 1;
-    // 귀여운 표현
-    let ageText;
-    if (days <= 7)        ageText = `태어난 지 ${days}일 🌱`;
-    else if (days <= 14)  ageText = `쑥쑥 자라는 중 ${days}일 🌿`;
-    else if (days <= 30)  ageText = `우리 아기 ${days}일 🍀`;
-    else if (days <= 100) ageText = `${days}일째 함께해요 💛`;
-    else if (days === 100) ageText = `100일 축하해요 🎂`;
-    else                  ageText = `${days}일, 하루하루 소중해요 🌸`;
-    document.getElementById('app-baby-age').textContent = ageText;
+    const days = calcBabyDays(p.birthDate);
+    if (days !== null) {
+      let ageText;
+      if (days === 100)     ageText = `100일 축하해요 🎂`;
+      else if (days <= 7)   ageText = `태어난 지 ${days}일 🌱`;
+      else if (days <= 14)  ageText = `쑥쑥 자라는 중 ${days}일 🌿`;
+      else if (days <= 30)  ageText = `우리 아기 ${days}일 🍀`;
+      else if (days <= 100) ageText = `${days}일째 함께해요 💛`;
+      else                  ageText = `${days}일, 하루하루 소중해요 🌸`;
+      document.getElementById('app-baby-age').textContent = ageText;
+    }
   }
   const t = new Date();
   const month = t.getMonth() + 1;
@@ -3315,13 +3361,15 @@ function renderPhotoPage() {
   let daysText = '';
   let chips = [];
   if (p.birthDate) {
-    const days = Math.floor((new Date() - new Date(p.birthDate)) / 86400000) + 1; // 태어난 날 = 1일
-    const weeks = Math.floor(days / 7);
-    if (days <= 7)        daysText = `태어난 지 ${days}일 🌱`;
-    else if (days <= 14)  daysText = `쑥쑥 자라는 중 ${days}일 🌿`;
-    else if (days === 100) daysText = `100일 축하해요 🎂`;
-    else if (days <= 100) daysText = `우리 아기 ${days}일 🍀`;
-    else                  daysText = `${days}일, 하루하루 소중해요 💛`;
+    const days = calcBabyDays(p.birthDate);
+    if (days !== null) {
+      if (days === 100)      daysText = `100일 축하해요 🎂`;
+      else if (days <= 7)    daysText = `태어난 지 ${days}일 🌱`;
+      else if (days <= 14)   daysText = `쑥쑥 자라는 중 ${days}일 🌿`;
+      else if (days === 100) daysText = `100일 축하해요 🎂`;
+      else if (days <= 100)  daysText = `우리 아기 ${days}일 🍀`;
+      else                   daysText = `${days}일, 하루하루 소중해요 💛`;
+    }
   }
   if (p.weight) chips.push('출생 ' + p.weight + 'kg');
   if (p.height) chips.push(p.height + 'cm');
@@ -4614,15 +4662,6 @@ const MILESTONE_STAGES = [
   },
 ];
 
-function getBabyMonths() {
-  try {
-    const p = JSON.parse(localStorage.getItem('baby_profile') || '{}');
-    if (!p.birthDate) return null;
-    const days = Math.floor((new Date() - new Date(p.birthDate)) / 86400000) + 1;
-    return { days, months: Math.floor(days / 30) };
-  } catch(e) { return null; }
-}
-
 function renderMilestoneList() {
   const el = document.getElementById('milestone-list');
   const stageBar = document.getElementById('milestone-stage-bar');
@@ -4898,11 +4937,33 @@ const SLEEP_RECS = [
   { maxDays: 9999,min: 11, max: 14 },
 ];
 
+// 날짜만 비교해서 일 수 계산 (시간대 무관, 태어난 날 = 1일)
+function calcBabyDays(birthDateStr) {
+  if (!birthDateStr) return null;
+  try {
+    const parts = birthDateStr.split('-');
+    const birth = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+    const today = new Date();
+    const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const diff = Math.floor((todayMidnight - birth) / 86400000);
+    return diff + 1; // 태어난 날 = 1일
+  } catch(e) { return null; }
+}
+
 function getBabyAgeDays() {
   try {
     const p = JSON.parse(localStorage.getItem('baby_profile') || '{}');
     if (!p.birthDate) return null;
-    return Math.floor((Date.now() - new Date(p.birthDate).getTime()) / 86400000) + 1;
+    return calcBabyDays(p.birthDate);
+  } catch(e) { return null; }
+}
+
+function getBabyMonths() {
+  try {
+    const p = JSON.parse(localStorage.getItem('baby_profile') || '{}');
+    if (!p.birthDate) return null;
+    const days = calcBabyDays(p.birthDate);
+    return { days, months: Math.floor((days - 1) / 30) };
   } catch(e) { return null; }
 }
 
