@@ -8,7 +8,8 @@
 <meta name="apple-mobile-web-app-title" content="아기 루틴">
 <title>누리케어 | Nuri Care</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+button, a, [onclick] { touch-action: manipulation; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif; background: #f7f8fa; min-height: 100vh; color: #111827; }
 
 .screen { display: none; min-height: 100vh; }
@@ -18,7 +19,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 #screen-profile.active { overflow-y: auto; overflow-x: hidden; }
 
 /* ── 뒤로가기·닫기 버튼 공통 ── */
-.nav-back-btn:active { opacity: 0.8; }
 .nav-close-btn { width: 34px; height: 34px; border-radius: 50%; background: rgba(0,0,0,0.07); border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #555; cursor: pointer; flex-shrink: 0; line-height: 1; }
 .nav-close-btn:active { background: rgba(0,0,0,0.15); }
 body.dark .nav-close-btn { background: rgba(255,255,255,0.1); color: #c8a870; }
@@ -26,7 +26,6 @@ body.dark .nav-close-btn { background: rgba(255,255,255,0.1); color: #c8a870; }
 .modal-close-x { position: absolute; top: 16px; right: 16px; width: 30px; height: 30px; border-radius: 50%; background: #f3f4f6; border: none; font-size: 16px; color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1; }
 .modal-close-x:active { background: #e5e7eb; }
 body.dark .modal-close-x { background: #3d3628; color: #c8a870; }
-.modal { position: relative; }
 .page-wrap { max-width: 480px; margin: 0 auto; padding: 24px 20px 80px; width: 100%; }
 
 .field-label { font-size: 12px; font-weight: 600; color: #6b7280; margin-bottom: 6px; margin-top: 16px; display: block; letter-spacing: 0.04em; }
@@ -45,9 +44,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 #screen-profile { background: #fffdf2; }
 #screen-guide { background: #fffdf2; }
 #screen-app { background: #fff7d6; }
-.role-logo .logo-icon { font-size: 34px; margin-bottom: 8px; font-weight: 900; letter-spacing: -0.04em; color: #6f4e00; line-height: 1.15; text-shadow: 0 1px 0 rgba(255,255,255,0.45); }
-.role-logo h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; }
-.role-logo p { font-size: 14px; color: #6b7280; margin-top: 6px; }
 .role-card:active { transform: scale(0.96); }
 .role-card .role-card .role-card
 /* ── 아빠 화면 ── */
@@ -79,8 +75,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .dad-progress-text { font-size: 13px; color: #1d4ed8; font-weight: 700; flex-shrink: 0; }
 /* 엄마가 보는 아빠 체크리스트 (읽기전용) */
 .dad-view-modal .dad-view-summary { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-.dad-view-chip.good { background: #dcfce7; color: #16a34a; }
-
+.dad-view-chip
 /* ── 정책 체크 ── */
 .policy-checkbox.checked { background: #1d7a3a; border-color: #1d7a3a; }
 .policy-checkbox.checked::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
@@ -160,9 +155,8 @@ body.dark body.dark .hdr-btn.profile { background: #2a2520; border-color: #4d403
 body.dark .hdr-btn.guide   { background: #2a2218; border-color: #5a4a10; color: #d4a020; }
 body.dark .hdr-btn.invite  { background: #2a1820; border-color: #6a2840; color: #ec4899; }
 body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: #60a5fa; }
-.profile-edit-btn { display: none; }
 
-.app-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 60px; width: 100%; box-sizing: border-box; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.app-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 80px; width: 100%; box-sizing: border-box; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
 .status-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
 .status-card { background: #fff; border-radius: 8px; padding: 12px 8px; text-align: center; box-shadow: none; }
@@ -201,8 +195,6 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .t-actions { display: flex; gap: 4px; flex-shrink: 0; margin-left: 4px; }
 .t-edit-btn { background: #f0f5ff; border: none; border-radius: 8px; padding: 6px 8px; font-size: 13px; cursor: pointer; color: #1d4ed8; }
 .t-del-btn  { background: #fff0f0; border: none; border-radius: 8px; padding: 6px 8px; font-size: 13px; cursor: pointer; color: #e05555; }
-.profile-edit-btn { background: none; border: 1px solid #e0e0e0; border-radius: 12px; font-size: 12px; color: #6b7280; cursor: pointer; padding: 4px 10px; margin-top: 4px; }
-.profile-edit-btn:active { background: #f0f0f0; }
 .section-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .section-title-row .section-title { margin-bottom: 0; }
 
@@ -238,7 +230,6 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .diary-img-upload-btn:active { background: #fff7d6; }
 
 /* ── 각 페이지 빈공간 제거 ── */
-.app-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 40px; width: 100%; }
 .mom-page { padding: 16px 16px 40px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; }
 .policy-page { padding: 16px 16px 40px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; }
 .mom-page-header { margin-bottom: 16px; }
@@ -348,15 +339,17 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .policy-notice { background: #fff7ed; border-radius: 12px; padding: 10px 14px; font-size: 12px; color: #8a6d00; margin-bottom: 16px; line-height: 1.6; }
 .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 300; align-items: flex-end; }
 .modal-bg.open { display: flex; }
-.modal { background: #fff; border-radius: 16px 16px 0 0; padding: 24px 20px 40px; width: 100%; max-height: 92vh; overflow-y: auto; }
+.modal { position: relative; background: #fff; border-radius: 16px 16px 0 0; padding: 24px 20px 40px; width: 100%; max-height: 92vh; overflow-y: auto; }
 .modal-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 20px; }
 .modal h2 { font-size: 18px; font-weight: 700; margin-bottom: 18px; color: #1a1a1a; }
 .opt-row { display: flex; gap: 8px; }
-.opt-btn { flex: 1; padding: 10px 6px; border: 1px solid #d1d5db; border-radius: 8px; background: #fafafa; font-size: 14px; cursor: pointer; color: #555; font-weight: 500; }
+.opt-btn { flex: 1; padding: 10px 6px; border: 1px solid #d1d5db; border-radius: 8px; background: #fafafa; font-size: 14px; cursor: pointer; color: #555; font-weight: 500; touch-action: manipulation; }
+.opt-btn:active { opacity: 0.75; }
 .opt-btn.sel { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; font-weight: 700; }
 .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
-.btn-cancel { flex: 1; padding: 14px; border: 1px solid #d1d5db; border-radius: 12px; background: #fff; font-size: 15px; color: #6b7280; cursor: pointer; }
-.btn-save { flex: 2; padding: 14px; border: none; border-radius: 12px; background: #2563eb; color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; }
+.btn-cancel { flex: 1; padding: 14px; border: 1px solid #d1d5db; border-radius: 12px; background: #fff; font-size: 15px; color: #6b7280; cursor: pointer; touch-action: manipulation; }
+.btn-save { flex: 2; padding: 14px; border: none; border-radius: 12px; background: #2563eb; color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; touch-action: manipulation; }
+.btn-save:active { opacity: 0.85; }
 
 /* ── 유축 모달 전용 ── */
 .pump-side-btns { display: flex; gap: 10px; margin-bottom: 4px; }
@@ -590,10 +583,6 @@ body.dark .feature-section-title { color: #c8a870; }
 .coach-card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
 .coach-urgency { font-size: 20px; }
 .coach-title { font-size: 14px; font-weight: 700; color: #1a1a1a; flex: 1; }
-.coach-level.high   { background: #fee2e2; color: #dc2626; }
-.coach-level.medium { background: #fef9c3; color: #92400e; }
-.coach-level.low    { background: #dcfce7; color: #16a34a; }
-.coach-level.info   { background: #dbeafe; color: #1d4ed8; }
 .coach-reason { font-size: 11px; color: #6b7280; margin-top: 3px; }
 .coach-action-btn.sleep-btn { background: #1d4ed8; color: #fff; }
 .coach-action-btn.feed-btn  { background: #c0410f; color: #fff; }
@@ -604,8 +593,6 @@ body.dark .coach-card.blue   { background: #0f1a2a; border-color: #1e3a5f; }
 body.dark .coach-title, body.dark .coach-reason { color: #a89880; }
 
 /* 육아 점수 카드 */
-.score-bar.ok   { background: linear-gradient(90deg,#f59e0b,#d97706); }
-.score-bar.bad  { background: linear-gradient(90deg,#ef4444,#dc2626); }
 /* quick-btn 구버전 제거 — 새 스타일은 하단에 정의 */
 
 /* ── 페이지 네비게이션 레이블 ── */
@@ -671,7 +658,7 @@ body.dark .voice-cmd { background: #2a2520; border-color: #3d3628; color: #c8a87
 .active-session-icon { font-size: 28px; }
 .active-session-title { font-size: 14px; font-weight: 700; color: #1a1a1a; }
 .active-session-dur { font-size: 13px; color: #6b7280; font-weight: 500; }
-.active-session-end-btn { background: #1a1a1a; color: #fff; border: none; border-radius: 20px; padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.active-session-end-btn { background: #1a1a1a; color: #fff; border: none; border-radius: 20px; padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; touch-action: manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0.1); }
 .active-session-end-btn:active { opacity: 0.8; }
 body.dark .active-session-card.sleep { background: #0f1a2a; border-color: #1e3a5f; }
 body.dark .active-session-card.pump  { background: #1a0f2a; border-color: #5b21b6; }
@@ -929,6 +916,7 @@ body.dark .tl-item { border-color: #2a2520; }
 body.dark .tl-time-col { border-color: #2a2520; }
 body.dark .tl-time-hm { color: #f0ead8; }
 body.dark .tl-content-title { color: #f0ead8; }
+.tag-badge { background:#fff; border:1px solid #e8d796; border-radius:8px; padding:4px 10px; font-size:12px; color:#7a5600; font-weight:600; }
 </style>
 </head>
 <body style="visibility:hidden;">
@@ -994,7 +982,6 @@ body.dark .tl-content-title { color: #f0ead8; }
   <div class="splash-logo">누리케어</div>
   <div class="splash-sub">소중한 아기의 하루를 함께해요 🌸</div>
 </div>
-
 <div class="screen" id="screen-guide">
   <div class="guide-header">
     <div class="guide-header-inner">
@@ -1135,8 +1122,7 @@ body.dark .tl-content-title { color: #f0ead8; }
         </div>
       </div>
     </div>
-
-    <div style="margin-top:20px;">
+<div style="margin-top:20px;">
       <div class="step-badge" style="margin-bottom:10px;">엄마 출산 정보</div>
     </div>
     <div class="profile-card">
@@ -1427,14 +1413,13 @@ body.dark .tl-content-title { color: #f0ead8; }
           <div style="background:#fff7d6;border-radius:12px;padding:12px 14px;margin-bottom:14px;border:1px solid #e8d796;">
             <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:6px;">📋 원스톱으로 신청 가능한 혜택</div>
             <div style="display:flex;flex-wrap:wrap;gap:6px;">
-              <span style="background:#fff;border:1px solid #e8d796;border-radius:8px;padding:4px 10px;font-size:12px;color:#7a5600;font-weight:600;">💰 부모급여</span>
-              <span style="background:#fff;border:1px solid #e8d796;border-radius:8px;padding:4px 10px;font-size:12px;color:#7a5600;font-weight:600;">🎁 첫만남이용권</span>
-              <span style="background:#fff;border:1px solid #e8d796;border-radius:8px;padding:4px 10px;font-size:12px;color:#7a5600;font-weight:600;">👶 아동수당</span>
-              <span style="background:#fff;border:1px solid #e8d796;border-radius:8px;padding:4px 10px;font-size:12px;color:#7a5600;font-weight:600;">🏥 산모·신생아</span>
+              <span class="tag-badge">💰 부모급여</span>
+              <span class="tag-badge">🎁 첫만남이용권</span>
+              <span class="tag-badge">👶 아동수당</span>
+              <span class="tag-badge">🏥 산모·신생아</span>
             </div>
           </div>
-
-          <div class="policy-notice">
+<div class="policy-notice">
             ⚠️ 2026년 기준 정보예요. 개별 신청은 각 기관 앱·웹에서도 가능해요.
           </div>
           <div class="policy-card">
@@ -1556,8 +1541,7 @@ body.dark .tl-content-title { color: #f0ead8; }
               </div>
             </div>
           </div>
-
-          <a class="policy-link" href="https://www.bokjiro.go.kr" target="_blank">🔗 복지로 — 전체 복지 혜택 검색</a>
+<a class="policy-link" href="https://www.bokjiro.go.kr" target="_blank">🔗 복지로 — 전체 복지 혜택 검색</a>
           <a class="policy-link" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank" style="margin-top:8px;">🚀 행복출산 원스톱 서비스</a>
         </div>
       </div>
@@ -1738,8 +1722,7 @@ body.dark .tl-content-title { color: #f0ead8; }
       <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:8px;">🗣️ 설정 가능한 음성 명령</div>
       <div style="display:flex;flex-direction:column;gap:4px;" id="action-list"></div>
     </div>
-
-    <button class="btn-save" style="width:100%;" onclick="closeModal('shortcut')">확인</button>
+<button class="btn-save" style="width:100%;" onclick="closeModal('shortcut')">확인</button>
   </div>
 </div>
 
@@ -1773,8 +1756,7 @@ body.dark .tl-content-title { color: #f0ead8; }
       </div>
       <button class="invite-gen-btn" onclick="generateInviteCode()" style="margin-top:8px;">새 코드 생성</button>
     </div>
-
-    <div class="modal-actions" style="margin-top:14px;">
+<div class="modal-actions" style="margin-top:14px;">
       <button class="btn-save" onclick="closeModal('invite')">닫기</button>
     </div>
   </div>
@@ -1868,8 +1850,7 @@ body.dark .tl-content-title { color: #f0ead8; }
         <span class="side-ml" id="side-R-ml">0 ml</span>
       </div>
     </div>
-
-    <div class="ml-input-row">
+<div class="ml-input-row">
       <input type="number" id="pump-ml-input" placeholder="유축량 입력 (ml)" min="0" max="500">
       <button class="ml-add-btn" onclick="addPumpMl()">추가</button>
     </div>
@@ -1878,8 +1859,7 @@ body.dark .tl-content-title { color: #f0ead8; }
       <span class="pump-total-label">총 유축량</span>
       <span class="pump-total-val" id="pump-total-val">0 ml</span>
     </div>
-
-    <span class="field-label">기록 시각</span>
+<span class="field-label">기록 시각</span>
     <input type="datetime-local" id="pump-time">
 
     <div class="modal-actions">
@@ -2011,7 +1991,6 @@ body.dark .tl-content-title { color: #f0ead8; }
     </div>
   </div>
 </div>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script>
@@ -2041,13 +2020,13 @@ if ('serviceWorker' in navigator) {
   }).catch(() => {});
 }
 
-// ─── 전역 상태 ───
+// ── 전역 상태 ──
 let records = [];
 let sleepingStart = null;
 let selOpts = { 'feed-t': 'breast', 'sleep-t': 'start', 'diaper-t': 'wet' };
 let sleepTimer = null;
 
-// ─── 스톱워치 상태 ───
+// ── 스톱워치 상태 ──
 let swInterval = null;
 let swRunning = false;
 let swSeconds = 0;
@@ -2055,7 +2034,7 @@ let swCurrentSide = 'L'; // 현재 타이머 측
 let pumpSessions = []; // [{side, ml, seconds}]
 let selectedSide = 'L';
 
-// ─── 화면 전환 ───
+// ── 화면 전환 ──
 function showScreen(id) {
   document.body.style.visibility = 'visible';
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -2063,7 +2042,7 @@ function showScreen(id) {
   if (target) target.classList.add('active');
 }
 
-// ─── PIN 로그인 ───
+// ── PIN 로그인 ──
 let pinMode = '';
 let pinBuffer = '';
 let pinFirst = '';
@@ -2091,7 +2070,7 @@ function pinDel() {
   updateDots(m, pinBuffer.length);
 }
 
-// ─── 프로필 ───
+// ── 프로필 ──
 let selectedGender = 'boy';
 let selectedBirthType = 'natural';
 
@@ -2127,7 +2106,7 @@ function saveProfile() {
   enterApp();
 }
 
-// ─── 일기 기능 ───
+// ── 일기 기능 ──
 let diaryEntries = [];
 let diaryImgData = null;
 let editingDiaryIdx = -1;
@@ -2232,7 +2211,7 @@ function loadDiary() {
   try { const d = localStorage.getItem('diary_entries'); if (d) diaryEntries = JSON.parse(d); } catch(e) {}
 }
 
-// ─── 엄마 케어 페이지 ───
+// ── 엄마 케어 페이지 ──
 const MOM_CARE = {
   natural: {
     label: '🌸 자연분만',
@@ -2387,9 +2366,7 @@ function openMomDetail(secIdEncoded) {
   document.getElementById('modal-mom-detail').classList.add('open');
 }
 
-// ══════════════════════════════════════════
-// 🔍 패턴 분석
-// ══════════════════════════════════════════
+// ── 🔍 패턴 분석 ──
 function renderPatternAnalysis() {
   const wrap = document.getElementById('pattern-analysis-wrap');
   if (!wrap) return;
@@ -2618,9 +2595,7 @@ function renderMomCarePage() {
   ).join('');
 }
 
-// ══════════════════════════════════════════
-// 💬 커뮤니티 검색 — 내장 정보 기반
-// ══════════════════════════════════════════
+// ── 💬 커뮤니티 검색 — 내장 정보 기반 ──
 const COMMUNITY_KB = {
   '신생아 황달': '• 생후 2~3일부터 시작해 보통 1~2주 내 자연 소실돼요 (생리적 황달)\n• 황달 수치가 높으면 광선치료를 받아요 — 병원에서 모니터링 중요\n• 모유 황달은 2~3개월까지 지속될 수 있어요\n• 흰자위가 노랗거나 대변 색이 이상하면 즉시 병원 방문하세요\n• 맘카페 후기: "빛 좋은 창가에 눕혀줬더니 도움됐어요"',
   '모유수유': '• 생후 1개월은 수요공급 원칙 — 자주 물릴수록 모유량 늘어요\n• 수유 간격: 신생아 2~3시간, 2개월+ 3~4시간\n• 유두혼동 방지: 생후 4주 전엔 젖병 최대한 자제\n• 유선염 증상(고열+멍울)이면 24시간 내 병원 방문\n• 맘카페 후기: "수유쿠션이 허리 통증에 정말 도움돼요"',
@@ -2705,7 +2680,7 @@ function renderAppHeader() {
   document.getElementById('app-date').textContent = `${month}월 ${day}일 ${dayNames[t.getDay()]}요일 🌸`;
 }
 
-// ─── 스톱워치 ───
+// ── 스톱워치 ──
 function swFmt(s) {
   const m = Math.floor(s / 60), sec = s % 60;
   return (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
@@ -2863,7 +2838,7 @@ function savePump() {
   closePumpModal();
 }
 
-// ─── 공통 모달 ───
+// ── 공통 모달 ──
 function openModal(type) {
   const now = nowLocal();
   if (type === 'feed') { document.getElementById('feed-time').value = now; document.getElementById('feed-min').value = ''; document.getElementById('feed-ml').value = ''; }
@@ -2973,29 +2948,25 @@ function saveDiaper() {
   closeModal('diaper');
 }
 
-// ─── 기록 공통 ───
+// ── 기록 공통 ──
 function addRecord(r) {
   records.unshift(r);
   saveData();
   renderTimeline();
   updateStatus();
-  // Firebase 실시간 동기화
+
   if (typeof _pushRecordToFirebase === 'function') _pushRecordToFirebase(r);
 }
 
 // ── 한국 시간 (KST = UTC+9) ──
 function nowLocal() {
-  // getTimezoneOffset이 0이거나 양수(서버 환경)인 경우에도 KST 보장
   const now = new Date();
-  const kst = new Date(now.getTime() + (9 * 60 * 60 * 1000) - (now.getTimezoneOffset() * 60 * 1000));
-  // 실제 로컬이 KST면 중복 방지
   const offsetMin = now.getTimezoneOffset();
-  if (offsetMin === -540) {
-    // 이미 KST
-    return new Date(now.getTime() - offsetMin * 60000).toISOString().slice(0, 16);
-  }
-  // KST로 강제 변환
-  return new Date(now.getTime() + (9 * 3600000)).toISOString().slice(0, 16);
+  // 이미 KST(UTC+9)이면 그대로, 아니면 KST로 변환
+  const kst = offsetMin === -540
+    ? now
+    : new Date(now.getTime() + (9 * 3600000 + offsetMin * 60000));
+  return kst.toISOString().slice(0, 16);
 }
 
 function timeDiff(t) {
@@ -3126,13 +3097,9 @@ function renderTimeline() {
   }).join('');
 }
 
-// ══════════════════════════════════════════
-// 💾 데이터 저장·불러오기 (안전 강화)
-// ══════════════════════════════════════════
-// ══════════════════════════════════════════
+// ── 💾 데이터 저장·불러오기 (안전 강화) ──
 // 💾 IndexedDB — 대용량 저장소 (수백MB)
 // localStorage(5MB) 한계 극복
-// ══════════════════════════════════════════
 let idbDb = null;
 
 function idbInit() {
@@ -3230,7 +3197,7 @@ document.querySelectorAll('.modal-bg').forEach(bg => {
   });
 });
 
-// ─── 프로필 수정 ───
+// ── 프로필 수정 ──
 let editGender = 'boy';
 let editBirthType = 'natural';
 
@@ -3287,7 +3254,7 @@ function saveProfileEdit() {
   renderMomCarePage();
 }
 
-// ─── 기록 수정 / 삭제 ───
+// ── 기록 수정 / 삭제 ──
 let editingIndex = -1;
 
 function deleteRecord(i) {
@@ -3418,7 +3385,7 @@ function saveEditPump() {
   closeModal('edit-record');
 }
 
-// ─── 스와이프 (5페이지) ───
+// ── 스와이프 (5페이지) ──
 let currentPage = 1;
 let swipeTouchStartX = 0, swipeTouchStartY = 0;
 
@@ -3433,8 +3400,6 @@ function initSwipe() {
     }
   }, { passive: true });
 }
-
-// ─── 사진 업로드 ───
 
 function showBabyPhoto(data) {
   const img = document.getElementById('baby-photo-img');
@@ -3496,9 +3461,7 @@ function renderPhotoPage() {
   if (saved) showBabyPhoto(saved);
 }
 
-// ─── 역할 선택 ───
-
-// ─── 아빠 체크리스트 데이터 ───
+// ── 아빠 체크리스트 데이터 ──
 const DAD_ITEMS = {
   urgent: [
     { id: 'd-birth-cert', title: '출생신고', desc: '출생 후 1개월 이내 주민센터 신고 필수\n복지로에서 행복출산 원스톱 신청도 가능', tag: 'urgent' },
@@ -3678,7 +3641,7 @@ function updateDadProgress() {
   document.getElementById('dad-progress-text').textContent = done + ' / ' + total;
 }
 
-// ─── 정책 체크 ───
+// ── 정책 체크 ──
 const POLICY_KEYS = ['p-bumo','p-first','p-child','p-parental','p-maternity','p-care','p-sanmo'];
 function loadPolicyChecks() {
   const checks = JSON.parse(localStorage.getItem('policy_checks') || '{}');
@@ -3708,7 +3671,7 @@ function togglePolicyCheck(k) {
   loadPolicyChecks();
 }
 
-// ─── 신생아 케어 가이드 데이터 ───
+// ── 신생아 케어 가이드 데이터 ──
 let guideFromScreen = 'role';
 const GUIDE_CATEGORIES = ['전체','수유·트림','기저귀','목욕·청결','안기·재우기','건강 체크','응급 상황','발달·놀이'];
 
@@ -4096,9 +4059,7 @@ const EVENT_PRAISE = [
   '굿! 이런 남편 흔치 않아요 👑',
 ];
 
-// ══════════════════════════════════════════
-// 🔆 Wake Lock — 화면 유지
-// ══════════════════════════════════════════
+// ── 🔆 Wake Lock — 화면 유지 ──
 let wakeLock = null;
 
 async function toggleWakeLock() {
@@ -4153,10 +4114,8 @@ document.addEventListener('visibilitychange', async () => {
   }
 });
 
-// ══════════════════════════════════════════
 // 🎙️ URL 액션 — Siri/Google Assistant 연동
 // URL 예: nuri-care.html?action=pump_start
-// ══════════════════════════════════════════
 const URL_ACTIONS = {
   'pump_start':   () => startSession('pump'),
   'pump_end':     () => endSession('pump'),
@@ -4461,9 +4420,7 @@ function initDadLinkState() {
 function applyInviteCode() { applyDadInviteCode(); }
 function showLinkedBadge(name) { _showDadLinkedState(name ? { name } : null); }
 
-// ══════════════════════════════════════════
-// 📊 차트 & 통계
-// ══════════════════════════════════════════
+// ── 📊 차트 & 통계 ──
 let chartTab = 'feed';
 
 function selectChartTab(tab) {
@@ -4555,9 +4512,7 @@ function renderMainChart() {
     '최다 기록일: <strong>' + labels[data.indexOf(Math.max(...data))] + ' (' + Math.max(...data) + unit + ')</strong>';
 }
 
-// ══════════════════════════════════════════
-// 📏 성장 기록
-// ══════════════════════════════════════════
+// ── 📏 성장 기록 ──
 let growthRecords = [];
 
 function addGrowthRecord() {
@@ -4637,9 +4592,7 @@ function deleteGrowthRecord(i) {
 function saveGrowthData() { try { localStorage.setItem('growth_records', JSON.stringify(growthRecords)); } catch(e) {} }
 function loadGrowthData() { try { const d = localStorage.getItem('growth_records'); if (d) growthRecords = JSON.parse(d); } catch(e) {} }
 
-// ══════════════════════════════════════════
-// 💉 예방접종
-// ══════════════════════════════════════════
+// ── 💉 예방접종 ──
 const VACCINES = [
   { id: 'v-hepb1', name: 'B형간염 1차', age: '출생 직후', desc: '출생 후 12시간 이내' },
   { id: 'v-bcg', name: 'BCG (결핵)', age: '생후 4주 이내', desc: '피내용 또는 경피용' },
@@ -4688,10 +4641,7 @@ function toggleVaccine(id) {
   renderVaccineList();
 }
 
-// ══════════════════════════════════════════
-// ══════════════════════════════════════════
-// ⭐ 발달 마일스톤 — 듀오링고 스타일
-// ══════════════════════════════════════════
+// ── ⭐ 발달 마일스톤 — 듀오링고 스타일 ──
 
 // 개월 구간별 상세 마일스톤 (이모지 + 설명 포함)
 const MILESTONE_STAGES = [
@@ -4917,9 +4867,7 @@ function toggleMilestone(key) {
   }
 }
 
-// ══════════════════════════════════════════
-// 🌙 다크 모드
-// ══════════════════════════════════════════
+// ── 🌙 다크 모드 ──
 function toggleDarkMode() {
   const isDark = document.body.classList.toggle('dark');
   localStorage.setItem('dark_mode', isDark ? '1' : '0');
@@ -4940,9 +4888,7 @@ function loadDarkMode() {
   }
 }
 
-// ══════════════════════════════════════════
-// 📤 데이터 내보내기
-// ══════════════════════════════════════════
+// ── 📤 데이터 내보내기 ──
 function downloadFile(content, filename, type) {
   const blob = new Blob([content], { type });
   const url = URL.createObjectURL(blob);
@@ -4999,9 +4945,7 @@ function backupAllData() {
   downloadFile(JSON.stringify(data, null, 2), '누리케어_백업_' + new Date().toISOString().slice(0,10) + '.json', 'application/json');
 }
 
-// ══════════════════════════════════════════
-// 🧠 Decision Engine — Wake Window & Coach
-// ══════════════════════════════════════════
+// ── 🧠 Decision Engine — Wake Window & Coach ──
 
 // 월령별 권장 wake window (분) — 신생아~12개월
 const WAKE_WINDOWS = [
@@ -5199,9 +5143,7 @@ function renderCoachCard() {
     </div>`;
 }
 
-// ══════════════════════════════════════════
-// 📊 Confidence Layer — 육아 점수
-// ══════════════════════════════════════════
+// ── 📊 Confidence Layer — 육아 점수 ──
 function renderScoreCard() {
   const wrap = document.getElementById('score-card-wrap');
   if (!wrap) return;
@@ -5301,7 +5243,6 @@ function renderScoreCard() {
     </div>`;
 }
 
-// ══════════════════════════════════════════
 // ⚡ 원탭 빠른기록
 
 function updateQuickBtnTimes() {
@@ -5315,9 +5256,7 @@ function updateQuickBtnTimes() {
 
 setInterval(updateStatus, 30000); // 30초마다 코치 카드·점수 갱신
 
-// ══════════════════════════════════════════
-// 🎙️ 음성 인식 (Voice Input)
-// ══════════════════════════════════════════
+// ── 🎙️ 음성 인식 (Voice Input) ──
 let voiceRecognition = null;
 let voiceActive = false;
 let voiceStarting = false; // start() 호출 후 실제 시작까지의 gap 보호
@@ -5411,12 +5350,8 @@ function showVoiceToast(text, ok) {
   setTimeout(() => toast.remove(), 2500);
 }
 
-// ══════════════════════════════════════════
-// 🔊 음성 안내 (Text-to-Speech)
-// ══════════════════════════════════════════
-// ══════════════════════════════════════════
-// 🔊 TTS — 기기 최고품질 한국어 음성 자동 선택
-// ══════════════════════════════════════════
+// ── 🔊 음성 안내 (Text-to-Speech) ──
+// ── 🔊 TTS — 기기 최고품질 한국어 음성 자동 선택 ──
 let _bestVoice = null;
 
 function getBestKoreanVoice() {
@@ -5508,9 +5443,7 @@ function speakSleepTiming() {
   }
 }
 
-// ══════════════════════════════════════════
-// 🔴 즉시1: 사진 리사이즈
-// ══════════════════════════════════════════
+// ── 🔴 즉시1: 사진 리사이즈 ──
 function resizeImage(dataUrl, maxW, maxH, quality) {
   return new Promise(resolve => {
     const img = new Image();
@@ -5562,7 +5495,6 @@ function previewDiaryImg(e) {
   reader.readAsDataURL(file);
 }
 
-// ══════════════════════════════════════════
 // 🔴 즉시2: 삭제 이중 확인
 
 function clearTodayRecords() {
@@ -5583,9 +5515,7 @@ function confirmReset() {
   location.reload();
 }
 
-// ══════════════════════════════════════════
-// 🔴 즉시3: PIN 개선
-// ══════════════════════════════════════════
+// ── 🔴 즉시3: PIN 개선 ──
 let pinFailCount = 0;
 
 function processPIN() {
@@ -5680,9 +5610,7 @@ function initLogin() {
   showScreen('login');
 }
 
-// ══════════════════════════════════════════
-// 🟡 중요1: 백업 토스트
-// ══════════════════════════════════════════
+// ── 🟡 중요1: 백업 토스트 ──
 function showBackupToast(msg) {
   const old = document.getElementById('backup-toast-el');
   if (old) old.remove();
@@ -5714,9 +5642,7 @@ function checkBackupReminder() {
   }
 }
 
-// ══════════════════════════════════════════
-// 🟡 중요2: 페이지 레이블
-// ══════════════════════════════════════════
+// ── 🟡 중요2: 페이지 레이블 ──
 const PAGE_LABELS = [
   '📔 일기','📷 사진','🍼 루틴','📊 통계',
   '📏 성장','⭐ 마일스톤','👩 엄마케어','🇰🇷 복지','👨 아빠탭','⚙️ 설정'
@@ -5752,9 +5678,7 @@ function goToPage(n) {
   }
 }
 
-// ══════════════════════════════════════════
-// 🟢 개선1: Web Notification
-// ══════════════════════════════════════════
+// ── 🟢 개선1: Web Notification ──
 let notifPermission = false;
 let sleepNotifTimer = null;
 let feedNotifTimer = null;
@@ -5826,9 +5750,7 @@ function scheduleNotifications() {
   }
 }
 
-// ══════════════════════════════════════════
-// 🟢 개선2: 온보딩
-// ══════════════════════════════════════════
+// ── 🟢 개선2: 온보딩 ──
 let obStep = 0;
 
 function showOnboarding() {
@@ -5846,9 +5768,7 @@ function obNext() {
   if (btn) btn.textContent = obStep === total-1 ? '시작하기 🍼' : '다음';
 }
 
-// ══════════════════════════════════════════
-// enterApp 통합 (모든 기능 초기화)
-// ══════════════════════════════════════════
+// ── enterApp 통합 (모든 기능 초기화) ──
 // loadData: localStorage 우선 (동기), IndexedDB는 백그라운드에서 보완
 function loadData() {
   // 1. localStorage에서 즉시 로드 (동기 — 화면 전환 막지 않음)
@@ -5889,20 +5809,17 @@ function loadData() {
 function enterApp() {
   sessionStorage.setItem('nuri_in_app', '1');
 
-  // 데이터 로드
   try { loadData(); } catch(e) { console.warn('loadData:', e); }
   try { loadGrowthData(); } catch(e) {}
   try { loadDiary(); } catch(e) {}
   try { loadSessions(); } catch(e) {}
 
-  // 헤더 & 페이지
   try { renderAppHeader(); } catch(e) {}
   const savedPage = parseInt(sessionStorage.getItem('nuri_last_page') || '2');
   const startPage = (savedPage >= 0 && savedPage <= 9) ? savedPage : 2;
   try { goToPage(startPage); } catch(e) {}
   try { setTimeout(initSwipe, 100); } catch(e) {}
 
-  // 각 화면 렌더
   try { renderPhotoPage(); } catch(e) {}
   try { renderMomCarePage(); } catch(e) {}
   try { loadPolicyChecks(); } catch(e) {}
@@ -5922,10 +5839,8 @@ function enterApp() {
   try { renderTimeline(); } catch(e) {}
   try { updateStatus(); } catch(e) {}
 
-  // ★ 무조건 앱 화면으로 전환
   showScreen('app');
 
-  // 무거운 작업은 비동기로
   setTimeout(() => {
     try { renderMainChart(); } catch(e) {}
     try { renderGrowthChart(); } catch(e) {}
@@ -5977,9 +5892,7 @@ async function renderStorageStatus() {
     </div>`;
 }
 
-// ══════════════════════════════════════════
-// 👤 앱 시작 — 역할선택 없이 바로 PIN
-// ══════════════════════════════════════════
+// ── 👤 앱 시작 — 역할선택 없이 바로 PIN ──
 function appStart() {
   document.body.style.visibility = 'visible';
   const splash = document.getElementById('screen-splash');
@@ -6052,9 +5965,7 @@ function updateSettingsRoleUI() {
   if (btn) btn.textContent = '👨 아빠 탭 바로 가기 →';
 }
 
-// ══════════════════════════════════════════
-// 세션 상태 관리 (수면·유축·수유 시작→종료 쌍)
-// ══════════════════════════════════════════
+// ── 세션 상태 관리 (수면·유축·수유 시작→종료 쌍) ──
 let pumpingStart = null;   // 유축 시작 시각
 let feedingStart = null;   // 수유 시작 시각
 let sessionTimer = null;
@@ -6438,9 +6349,7 @@ function updateStatus() {
   updateQuickBtns();
 }
 
-// ══════════════════════════════════════════
-// 👨 아빠 기록 — 엄마 기록과 공유
-// ══════════════════════════════════════════
+// ── 👨 아빠 기록 — 엄마 기록과 공유 ──
 const DAD_RECORD_LABELS = {
   feed:   { title:'아빠가 분유 먹였어요', icon:'🍼', cat:'feed' },
   diaper: { title:'아빠가 기저귀 갈았어요', icon:'🌿', cat:'diaper' },
@@ -6527,9 +6436,7 @@ function showDadToast(msg) {
   setTimeout(() => { if(el.parentNode) el.remove(); }, 2500);
 }
 
-// ══════════════════════════════════════════
-// 🔥 Firebase 실시간 동기화 엔진
-// ══════════════════════════════════════════
+// ── 🔥 Firebase 실시간 동기화 엔진 ──
 
 let _familyId = null;      // Firebase family ID (= 초대 코드)
 let _syncActive = false;   // 동기화 활성화 여부
@@ -6623,9 +6530,7 @@ function _showSyncToast(msg) {
   setTimeout(() => { if (el.parentNode) el.remove(); }, 2500);
 }
 
-// ══════════════════════════════════════════════════════
-// 🔥 Firebase 실시간 동기화 모듈
-// ══════════════════════════════════════════════════════
+// ── 🔥 Firebase 실시간 동기화 모듈 ──
 
 // ⚠️ 아래 firebaseConfig를 본인의 Firebase 프로젝트 설정으로 교체하세요!
 // Firebase 콘솔(console.firebase.google.com) → 프로젝트 설정 → 웹앱 추가 → 설정 복사
@@ -6658,7 +6563,6 @@ function fbInit() {
   try {
     fbApp = firebase.initializeApp(FIREBASE_CONFIG);
     fbDb = firebase.database();
-    console.log('✅ Firebase 초기화 완료');
   } catch(e) {
     console.warn('Firebase 초기화 실패:', e);
   }
@@ -6680,8 +6584,6 @@ function fbSetFamilyId(id) {
   localStorage.setItem('fb_family_id', id);
   fbFamilyId = id;
 }
-
-// ── 데이터 Firebase에 쓰기 ──
 
 // ── 전체 데이터 Firebase에 업로드 ──
 async function fbPushAll() {
@@ -6800,8 +6702,6 @@ function fbStartListener() {
     const myRole = localStorage.getItem('fb_user_role') || 'mom';
     // 내가 업데이트한 거면 무시
     if (data.updatedBy === myRole && Date.now() - remoteTime < 2000) return;
-
-    console.log('🔥 실시간 업데이트 수신:', data.updatedBy);
     fbApplyRemoteData(data);
   }, err => {
     console.warn('Firebase 리스너 오류:', err);
@@ -6853,7 +6753,6 @@ function fbConnect() {
   fbInit();
   const famId = fbGetFamilyId();
   localStorage.setItem('fb_user_role', localStorage.getItem('dad_linked') ? 'dad' : 'mom');
-  console.log(`🔥 Firebase 연결: ${famId}`);
   fbPushAll();        // 내 최신 데이터 업로드
   fbStartListener();  // 상대방 변경 감지 시작
 }
@@ -6884,7 +6783,6 @@ function _applyInvitePayloadFB(code, payloadStr) {
     if (data.familyId) {
       fbSetFamilyId(data.familyId);
       localStorage.setItem('fb_user_role', 'dad');
-      console.log('🔥 아빠 familyId 설정:', data.familyId);
     }
   } catch(e) {}
 }
