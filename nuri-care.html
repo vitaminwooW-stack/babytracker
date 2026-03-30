@@ -3212,8 +3212,7 @@ async function loadData() {
       else { sleepingStart = null; localStorage.removeItem('baby_sleeping'); }
     }
   } catch(e) { sleepingStart = null; }
-  renderTimeline();
-  updateStatus();
+  // 기록 로드 완료 — UI 갱신은 enterApp에서 처리
 }
 
 // ── 저장 공간 확인 ──
@@ -5868,50 +5867,74 @@ function obNext() {
 // enterApp 통합 (모든 기능 초기화)
 // ══════════════════════════════════════════
 async function enterApp() {
-  sessionStorage.setItem('nuri_in_app', '1');
-  await loadData();
-  loadGrowthData();
-  loadDiary();
-  loadSessions();
-  renderAppHeader();
-  // 새로고침 전 페이지 복원
-  const savedPage = parseInt(sessionStorage.getItem('nuri_last_page') || '2');
-  const startPage = (savedPage >= 0 && savedPage <= 9) ? savedPage : 2;
-  goToPage(startPage);
-  setTimeout(initSwipe, 100);
-  renderPhotoPage();
-  renderMomCarePage();
-  loadPolicyChecks();
-  renderDiaryList();
-  renderVaccineList();
-  renderMilestoneList();
-  loadDarkMode();
-  renderMoodSelector();
-  renderActiveSessions();
-  updateQuickBtns();
-  startSessionTimer();
-  startDadRefreshTimer(); // 아빠 탭 5초마다 자동 갱신
-  updateSettingsRoleUI();
-  renderStorageStatus();
-  renderDadTodayRecords();
-  initDadLinkState();
-  setTimeout(() => {
-    renderMainChart();
-    renderGrowthChart();
-    renderGrowthTable();
-    renderPatternAnalysis();
-    checkBackupReminder();
-    checkNotifBanner();
-    if (localStorage.getItem('notif_permission') === '1') {
-      notifPermission = true;
-      scheduleNotifications();
-    }
-    if (typeof fbConnect === 'function') {
-      fbConnect();
-      fbRenderStatus();
-    }
-  }, 500);
-  showScreen('app');
+  try {
+    sessionStorage.setItem('nuri_in_app', '1');
+
+    // 1. 데이터 로드 (IndexedDB, 실패해도 계속)
+    try { await loadData(); } catch(e) { console.warn('loadData 실패:', e); }
+    try { renderTimeline(); } catch(e) {}
+    try { updateStatus(); } catch(e) {}
+
+    // 2. 핵심 UI 렌더
+    try { loadGrowthData(); } catch(e) {}
+    try { loadDiary(); } catch(e) {}
+    try { loadSessions(); } catch(e) {}
+    try { renderAppHeader(); } catch(e) {}
+
+    // 3. 페이지 이동 (저장된 페이지 또는 기본 2번)
+    const savedPage = parseInt(sessionStorage.getItem('nuri_last_page') || '2');
+    const startPage = (savedPage >= 0 && savedPage <= 9) ? savedPage : 2;
+    try { goToPage(startPage); } catch(e) { console.warn('goToPage 실패:', e); }
+    try { setTimeout(initSwipe, 100); } catch(e) {}
+
+    // 4. 나머지 렌더 (실패해도 앱은 열려야 함)
+    try { renderPhotoPage(); } catch(e) {}
+    try { renderMomCarePage(); } catch(e) {}
+    try { loadPolicyChecks(); } catch(e) {}
+    try { renderDiaryList(); } catch(e) {}
+    try { renderVaccineList(); } catch(e) {}
+    try { renderMilestoneList(); } catch(e) {}
+    try { loadDarkMode(); } catch(e) {}
+    try { renderMoodSelector(); } catch(e) {}
+    try { renderActiveSessions(); } catch(e) {}
+    try { updateQuickBtns(); } catch(e) {}
+    try { startSessionTimer(); } catch(e) {}
+    try { startDadRefreshTimer(); } catch(e) {}
+    try { updateSettingsRoleUI(); } catch(e) {}
+    try { renderStorageStatus(); } catch(e) {}
+    try { renderDadTodayRecords(); } catch(e) {}
+    try { initDadLinkState(); } catch(e) {}
+
+    // 5. 화면 전환 (가장 중요!)
+    showScreen('app');
+
+    // 6. 무거운 작업은 나중에
+    setTimeout(() => {
+      try { renderMainChart(); } catch(e) {}
+      try { renderGrowthChart(); } catch(e) {}
+      try { renderGrowthTable(); } catch(e) {}
+      try { renderPatternAnalysis(); } catch(e) {}
+      try { checkBackupReminder(); } catch(e) {}
+      try { checkNotifBanner(); } catch(e) {}
+      try {
+        if (localStorage.getItem('notif_permission') === '1') {
+          notifPermission = true;
+          scheduleNotifications();
+        }
+      } catch(e) {}
+      try {
+        if (typeof fbConnect === 'function') {
+          fbConnect();
+          fbRenderStatus();
+        }
+      } catch(e) {}
+    }, 500);
+
+  } catch(e) {
+    console.error('enterApp 치명적 오류:', e);
+    // 최후 수단 — 무조건 앱 화면 열기
+    showScreen('app');
+  }
 }
 
 async function renderStorageStatus() {
