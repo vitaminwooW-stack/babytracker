@@ -5885,49 +5885,63 @@ function loadData() {
 
 function enterApp() {
   sessionStorage.setItem('nuri_in_app', '1');
-  loadData();
-  loadGrowthData();
-  loadDiary();
-  loadSessions();
-  renderAppHeader();
+
+  // 데이터 로드
+  try { loadData(); } catch(e) { console.warn('loadData:', e); }
+  try { loadGrowthData(); } catch(e) {}
+  try { loadDiary(); } catch(e) {}
+  try { loadSessions(); } catch(e) {}
+
+  // 헤더 & 페이지
+  try { renderAppHeader(); } catch(e) {}
   const savedPage = parseInt(sessionStorage.getItem('nuri_last_page') || '2');
   const startPage = (savedPage >= 0 && savedPage <= 9) ? savedPage : 2;
-  goToPage(startPage);
-  setTimeout(initSwipe, 100);
-  renderPhotoPage();
-  renderMomCarePage();
-  loadPolicyChecks();
-  renderDiaryList();
-  renderVaccineList();
-  renderMilestoneList();
-  loadDarkMode();
-  renderMoodSelector();
-  renderActiveSessions();
-  updateQuickBtns();
-  startSessionTimer();
-  startDadRefreshTimer();
-  updateSettingsRoleUI();
-  renderStorageStatus();
-  renderDadTodayRecords();
-  initDadLinkState();
-  renderTimeline();
-  updateStatus();
+  try { goToPage(startPage); } catch(e) {}
+  try { setTimeout(initSwipe, 100); } catch(e) {}
+
+  // 각 화면 렌더
+  try { renderPhotoPage(); } catch(e) {}
+  try { renderMomCarePage(); } catch(e) {}
+  try { loadPolicyChecks(); } catch(e) {}
+  try { renderDiaryList(); } catch(e) {}
+  try { renderVaccineList(); } catch(e) {}
+  try { renderMilestoneList(); } catch(e) {}
+  try { loadDarkMode(); } catch(e) {}
+  try { renderMoodSelector(); } catch(e) {}
+  try { renderActiveSessions(); } catch(e) {}
+  try { updateQuickBtns(); } catch(e) {}
+  try { startSessionTimer(); } catch(e) {}
+  try { startDadRefreshTimer(); } catch(e) {}
+  try { updateSettingsRoleUI(); } catch(e) {}
+  try { renderStorageStatus(); } catch(e) {}
+  try { renderDadTodayRecords(); } catch(e) {}
+  try { initDadLinkState(); } catch(e) {}
+  try { renderTimeline(); } catch(e) {}
+  try { updateStatus(); } catch(e) {}
+
+  // ★ 무조건 앱 화면으로 전환
   showScreen('app');
+
+  // 무거운 작업은 비동기로
   setTimeout(() => {
-    renderMainChart();
-    renderGrowthChart();
-    renderGrowthTable();
-    renderPatternAnalysis();
-    checkBackupReminder();
-    checkNotifBanner();
-    if (localStorage.getItem('notif_permission') === '1') {
-      notifPermission = true;
-      scheduleNotifications();
-    }
-    if (typeof fbConnect === 'function') {
-      fbConnect();
-      fbRenderStatus();
-    }
+    try { renderMainChart(); } catch(e) {}
+    try { renderGrowthChart(); } catch(e) {}
+    try { renderGrowthTable(); } catch(e) {}
+    try { renderPatternAnalysis(); } catch(e) {}
+    try { checkBackupReminder(); } catch(e) {}
+    try { checkNotifBanner(); } catch(e) {}
+    try {
+      if (localStorage.getItem('notif_permission') === '1') {
+        notifPermission = true;
+        scheduleNotifications();
+      }
+    } catch(e) {}
+    try {
+      if (typeof fbConnect === 'function') {
+        fbConnect();
+        fbRenderStatus();
+      }
+    } catch(e) {}
   }, 500);
 }
 
