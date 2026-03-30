@@ -2237,7 +2237,7 @@ function selBirthType(t) {
   ['natural','csection'].forEach(v => document.getElementById('birth-type-'+v).classList.toggle('sel', v === t));
 }
 
-function saveProfile() {
+async function saveProfile() {
   const name = document.getElementById('p-name').value.trim();
   const date = document.getElementById('p-birth-date').value;
   const err = document.getElementById('profile-error');
@@ -2256,7 +2256,7 @@ function saveProfile() {
   };
   localStorage.setItem('baby_profile', JSON.stringify(profile));
   err.textContent = '';
-  enterApp();
+  await enterApp();
 }
 
 // ─── 일기 기능 ───
@@ -5748,7 +5748,7 @@ function confirmReset() {
 // ══════════════════════════════════════════
 let pinFailCount = 0;
 
-function processPIN() {
+async function processPIN() {
   const err = document.getElementById('pin-error');
   if (pinMode === 'set') {
     pinFirst = pinBuffer; pinBuffer = '';
@@ -5756,17 +5756,15 @@ function processPIN() {
     document.getElementById('pin-ui-set').style.display = 'none';
     document.getElementById('pin-ui-confirm').style.display = '';
     err.textContent = '';
+    updateDots('confirm', 0);
   } else if (pinMode === 'confirm') {
     if (pinBuffer === pinFirst) {
       localStorage.setItem('baby_pin', pinBuffer);
       pinBuffer = ''; err.textContent = '';
       const profile = localStorage.getItem('baby_profile');
       if (profile) {
-        enterApp();
-        // 초대 링크로 들어온 경우 아빠 탭으로 자동 이동
-        if (localStorage.getItem('dad_linked')) {
-          setTimeout(() => goToPage(8), 600);
-        }
+        await enterApp();
+        if (localStorage.getItem('dad_linked')) goToPage(8);
       } else {
         showScreen('profile');
       }
@@ -5782,11 +5780,8 @@ function processPIN() {
       if (fb) fb.style.display = 'none';
       const profile = localStorage.getItem('baby_profile');
       if (profile) {
-        enterApp();
-        // 초대 링크로 들어온 경우 아빠 탭으로 자동 이동
-        if (localStorage.getItem('dad_linked')) {
-          setTimeout(() => goToPage(8), 600);
-        }
+        await enterApp();
+        if (localStorage.getItem('dad_linked')) goToPage(8);
       } else {
         showScreen('profile');
       }
