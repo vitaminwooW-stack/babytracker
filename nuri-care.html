@@ -2101,7 +2101,7 @@ function selBirthType(t) {
   ['natural','csection'].forEach(v => document.getElementById('birth-type-'+v).classList.toggle('sel', v === t));
 }
 
-async function saveProfile() {
+function saveProfile() {
   const name = document.getElementById('p-name').value.trim();
   const date = document.getElementById('p-birth-date').value;
   const err = document.getElementById('profile-error');
@@ -2120,7 +2120,7 @@ async function saveProfile() {
   };
   localStorage.setItem('baby_profile', JSON.stringify(profile));
   err.textContent = '';
-  await enterApp();
+  enterApp();
 }
 
 // ─── 일기 기능 ───
@@ -3194,27 +3194,6 @@ function saveData() {
 }
 
 // loadData: IndexedDB 우선 로드
-async function loadData() {
-  await idbInit();
-  try {
-    const r = await idbGet('baby_records');
-    if (r) {
-      const parsed = JSON.parse(r);
-      records = Array.isArray(parsed) ? parsed : [];
-    }
-  } catch(e) { records = []; }
-  // 수면
-  try {
-    const s = localStorage.getItem('baby_sleeping');
-    if (s && s.trim()) {
-      const d = new Date(s);
-      if (!isNaN(d.getTime())) { sleepingStart = d; updateSleepBanner(); }
-      else { sleepingStart = null; localStorage.removeItem('baby_sleeping'); }
-    }
-  } catch(e) { sleepingStart = null; }
-  // 기록 로드 완료 — UI 갱신은 enterApp에서 처리
-}
-
 // ── 저장 공간 확인 ──
 async function checkStorageUsage() {
   try {
@@ -5605,7 +5584,7 @@ function confirmReset() {
 // ══════════════════════════════════════════
 let pinFailCount = 0;
 
-async function processPIN() {
+function processPIN() {
   const err = document.getElementById('pin-error');
   if (pinMode === 'set') {
     pinFirst = pinBuffer; pinBuffer = '';
@@ -5620,8 +5599,8 @@ async function processPIN() {
       pinBuffer = ''; err.textContent = '';
       const profile = localStorage.getItem('baby_profile');
       if (profile) {
-        try { await enterApp(); } catch(e) { console.error('enterApp 오류:', e); showScreen('app'); }
-        if (localStorage.getItem('dad_linked')) goToPage(8);
+        enterApp();
+        if (localStorage.getItem('dad_linked')) setTimeout(() => goToPage(8), 300);
       } else {
         showScreen('profile');
       }
@@ -5637,8 +5616,8 @@ async function processPIN() {
       if (fb) fb.style.display = 'none';
       const profile = localStorage.getItem('baby_profile');
       if (profile) {
-        try { await enterApp(); } catch(e) { console.error('enterApp 오류:', e); showScreen('app'); }
-        if (localStorage.getItem('dad_linked')) goToPage(8);
+        enterApp();
+        if (localStorage.getItem('dad_linked')) setTimeout(() => goToPage(8), 300);
       } else {
         showScreen('profile');
       }
@@ -5866,75 +5845,89 @@ function obNext() {
 // ══════════════════════════════════════════
 // enterApp 통합 (모든 기능 초기화)
 // ══════════════════════════════════════════
-async function enterApp() {
+// loadData: localStorage 우선 (동기), IndexedDB는 백그라운드에서 보완
+function loadData() {
+  // 1. localStorage에서 즉시 로드 (동기 — 화면 전환 막지 않음)
   try {
-    sessionStorage.setItem('nuri_in_app', '1');
+    const r = localStorage.getItem('baby_records');
+    if (r) {
+      const parsed = JSON.parse(r);
+      records = Array.isArray(parsed) ? parsed : [];
+    }
+  } catch(e) { records = []; }
 
-    // 1. 데이터 로드 (IndexedDB, 실패해도 계속)
-    try { await loadData(); } catch(e) { console.warn('loadData 실패:', e); }
-    try { renderTimeline(); } catch(e) {}
-    try { updateStatus(); } catch(e) {}
+  // 2. 수면 상태
+  try {
+    const s = localStorage.getItem('baby_sleeping');
+    if (s && s.trim()) {
+      const d = new Date(s);
+      if (!isNaN(d.getTime())) { sleepingStart = d; updateSleepBanner(); }
+      else { sleepingStart = null; localStorage.removeItem('baby_sleeping'); }
+    }
+  } catch(e) { sleepingStart = null; }
 
-    // 2. 핵심 UI 렌더
-    try { loadGrowthData(); } catch(e) {}
-    try { loadDiary(); } catch(e) {}
-    try { loadSessions(); } catch(e) {}
-    try { renderAppHeader(); } catch(e) {}
-
-    // 3. 페이지 이동 (저장된 페이지 또는 기본 2번)
-    const savedPage = parseInt(sessionStorage.getItem('nuri_last_page') || '2');
-    const startPage = (savedPage >= 0 && savedPage <= 9) ? savedPage : 2;
-    try { goToPage(startPage); } catch(e) { console.warn('goToPage 실패:', e); }
-    try { setTimeout(initSwipe, 100); } catch(e) {}
-
-    // 4. 나머지 렌더 (실패해도 앱은 열려야 함)
-    try { renderPhotoPage(); } catch(e) {}
-    try { renderMomCarePage(); } catch(e) {}
-    try { loadPolicyChecks(); } catch(e) {}
-    try { renderDiaryList(); } catch(e) {}
-    try { renderVaccineList(); } catch(e) {}
-    try { renderMilestoneList(); } catch(e) {}
-    try { loadDarkMode(); } catch(e) {}
-    try { renderMoodSelector(); } catch(e) {}
-    try { renderActiveSessions(); } catch(e) {}
-    try { updateQuickBtns(); } catch(e) {}
-    try { startSessionTimer(); } catch(e) {}
-    try { startDadRefreshTimer(); } catch(e) {}
-    try { updateSettingsRoleUI(); } catch(e) {}
-    try { renderStorageStatus(); } catch(e) {}
-    try { renderDadTodayRecords(); } catch(e) {}
-    try { initDadLinkState(); } catch(e) {}
-
-    // 5. 화면 전환 (가장 중요!)
-    showScreen('app');
-
-    // 6. 무거운 작업은 나중에
-    setTimeout(() => {
-      try { renderMainChart(); } catch(e) {}
-      try { renderGrowthChart(); } catch(e) {}
-      try { renderGrowthTable(); } catch(e) {}
-      try { renderPatternAnalysis(); } catch(e) {}
-      try { checkBackupReminder(); } catch(e) {}
-      try { checkNotifBanner(); } catch(e) {}
+  // 3. IndexedDB에서 더 많은 기록 백그라운드 보완
+  idbInit().then(() => {
+    idbGet('baby_records').then(r => {
+      if (!r) return;
       try {
-        if (localStorage.getItem('notif_permission') === '1') {
-          notifPermission = true;
-          scheduleNotifications();
+        const parsed = JSON.parse(r);
+        if (Array.isArray(parsed) && parsed.length > records.length) {
+          records = parsed;
+          renderTimeline();
+          updateStatus();
         }
       } catch(e) {}
-      try {
-        if (typeof fbConnect === 'function') {
-          fbConnect();
-          fbRenderStatus();
-        }
-      } catch(e) {}
-    }, 500);
+    });
+  });
+}
 
-  } catch(e) {
-    console.error('enterApp 치명적 오류:', e);
-    // 최후 수단 — 무조건 앱 화면 열기
-    showScreen('app');
-  }
+function enterApp() {
+  sessionStorage.setItem('nuri_in_app', '1');
+  loadData();
+  loadGrowthData();
+  loadDiary();
+  loadSessions();
+  renderAppHeader();
+  const savedPage = parseInt(sessionStorage.getItem('nuri_last_page') || '2');
+  const startPage = (savedPage >= 0 && savedPage <= 9) ? savedPage : 2;
+  goToPage(startPage);
+  setTimeout(initSwipe, 100);
+  renderPhotoPage();
+  renderMomCarePage();
+  loadPolicyChecks();
+  renderDiaryList();
+  renderVaccineList();
+  renderMilestoneList();
+  loadDarkMode();
+  renderMoodSelector();
+  renderActiveSessions();
+  updateQuickBtns();
+  startSessionTimer();
+  startDadRefreshTimer();
+  updateSettingsRoleUI();
+  renderStorageStatus();
+  renderDadTodayRecords();
+  initDadLinkState();
+  renderTimeline();
+  updateStatus();
+  showScreen('app');
+  setTimeout(() => {
+    renderMainChart();
+    renderGrowthChart();
+    renderGrowthTable();
+    renderPatternAnalysis();
+    checkBackupReminder();
+    checkNotifBanner();
+    if (localStorage.getItem('notif_permission') === '1') {
+      notifPermission = true;
+      scheduleNotifications();
+    }
+    if (typeof fbConnect === 'function') {
+      fbConnect();
+      fbRenderStatus();
+    }
+  }, 500);
 }
 
 async function renderStorageStatus() {
@@ -6005,16 +5998,16 @@ function appStart() {
   const wasInApp = sessionStorage.getItem('nuri_in_app');
   if (wasInApp === '1' && localStorage.getItem('baby_profile')) {
     if (splash) splash.style.display = 'none';
-    enterApp().then(() => {
-      if (hasAction) checkURLAction(); // 액션 실행
-    });
+    enterApp();
+    if (hasAction) setTimeout(checkURLAction, 300);
     return;
   }
 
   // PIN 없이 프로필 있으면 (액션 URL) 바로 진입
   if (hasAction && localStorage.getItem('baby_profile') && localStorage.getItem('baby_pin')) {
     if (splash) splash.style.display = 'none';
-    enterApp().then(() => checkURLAction());
+    enterApp();
+    setTimeout(checkURLAction, 300);
     return;
   }
 
