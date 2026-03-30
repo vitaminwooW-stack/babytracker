@@ -50,7 +50,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .role-logo h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; }
 .role-logo p { font-size: 14px; color: #6b7280; margin-top: 6px; }
 .role-card:active { transform: scale(0.96); }
-.role-card .role-card .role-card 
+.role-card .role-card .role-card
 /* ── 아빠 화면 ── */
 
 .dad-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 80px; width: 100%; }
@@ -60,19 +60,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .dad-section-title span { display: none; }
 
 .dad-check-card { background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden; box-shadow: none; }
-.dad-check-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #f3f4f6; cursor: pointer; transition: background 0.1s; }
 .dad-check-item:last-child { border-bottom: none; }
 .dad-check-item:active { background: #f5f8ff; }
 .dad-check-item.done { background: linear-gradient(135deg, #f0fdf4, #e8f8f0); border-bottom-color: #d4f0e0; }
-.dad-checkbox { width: 22px; height: 22px; border-radius: 6px; border: 2px solid #d0d0d0; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: all 0.15s; }
 .dad-checkbox.checked { background: #22c55e; border-color: #22c55e; }
 .dad-checkbox.checked::after { content: '✓'; color: #fff; font-size: 13px; font-weight: 700; }
 .dad-check-info { flex: 1; min-width: 0; }
-.dad-check-title { font-size: 14px; font-weight: 600; color: #1a1a1a; line-height: 1.4; word-break: keep-all; }
-.dad-check-title.done-text { color: #16a34a; font-weight: 700; }
-.dad-check-desc { font-size: 12px; color: #6b7280; margin-top: 3px; line-height: 1.5; word-break: keep-all; white-space: normal; }
-.dad-check-desc.done-desc { display: none; }
-.dad-praise { font-size: 13px; color: #16a34a; font-weight: 600; margin-top: 4px; }
+.dad-check-title.dad-check-desc { font-size: 12px; color: #6b7280; margin-top: 3px; line-height: 1.5; word-break: keep-all; white-space: normal; }
+.dad-check-desc.dad-praise { font-size: 13px; color: #16a34a; font-weight: 600; margin-top: 4px; }
 .dad-check-tag { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 8px; margin-top: 5px; display: inline-block; }
 .dad-check-tag.urgent { background: #eff6ff; color: #c0410f; }
 .dad-check-tag.soon { background: #fff7ed; color: #8a6d00; }
@@ -84,9 +79,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .dad-progress-bar { height: 6px; border-radius: 4px; background: #2563eb; transition: width 0.4s; }
 .dad-progress-text { font-size: 13px; color: #1d4ed8; font-weight: 700; flex-shrink: 0; }
 /* 엄마가 보는 아빠 체크리스트 (읽기전용) */
-.dad-view-modal .dad-check-item { cursor: default; pointer-events: none; }
-.dad-view-summary { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-.dad-view-chip { background: #eff6ff; color: #1d4ed8; border-radius: 12px; padding: 5px 12px; font-size: 13px; font-weight: 600; }
+.dad-view-modal .dad-view-summary { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
 .dad-view-chip.good { background: #dcfce7; color: #16a34a; }
 
 /* ── 정책 체크 ── */
@@ -150,7 +143,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .app-header-left { display: flex; align-items: center; gap: 10px; }
 .baby-avatar { width: 40px; height: 40px; border-radius: 12px; background: #fff7d6; border: 1px solid #e8d796; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
 .baby-name { font-size: 17px; font-weight: 700; color: #1a1a1a; }
-.baby-age { font-size: 11px; color: #6b7280; margin-top: 1px; }
+/* 헤더 D+N 강조 */
+.baby-dday {
+  font-size: 22px; font-weight: 900; color: #7a5600;
+  letter-spacing: -0.03em; line-height: 1;
+}
+.baby-dday-sub { font-size: 11px; color: #9ca3af; margin-top: 1px; font-weight: 500; }
 .app-header-top-right { display: flex; align-items: center; gap: 8px; }
 .header-date { font-size: 11px; color: #9ca3af; }
 .app-header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
@@ -436,8 +434,7 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .dad-event-checkbox.checked::after { content: '♥'; color: #fff; font-size: 11px; }
 .dad-event-info { flex: 1; min-width: 0; }
 .dad-event-title { font-size: 14px; font-weight: 600; color: #1a1a1a; line-height: 1.4; }
-.dad-event-title.done-text { color: #1d4ed8; font-weight: 700; }
-.dad-event-desc { font-size: 12px; color: #6b7280; margin-top: 3px; line-height: 1.5; word-break: keep-all; }
+.dad-event-title.dad-event-desc { font-size: 12px; color: #6b7280; margin-top: 3px; line-height: 1.5; word-break: keep-all; }
 .dad-event-praise { font-size: 13px; color: #1d4ed8; font-weight: 600; margin-top: 4px; }
 .dad-event-tag { font-size: 11px; background: #eff6ff; color: #1d4ed8; padding: 2px 8px; border-radius: 8px; margin-top: 5px; display: inline-block; font-weight: 600; }
 .dad-event-tag.done-tag { background: #dcfce7; color: #16a34a; }
@@ -472,15 +469,9 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .guide-card-arrow.open { transform: rotate(90deg); color: #7a5600; }
 .guide-card-body { display: none; padding: 2px 16px 16px; border-top: 1px solid #f3f0e0; }
 .guide-card-body.open { display: block; }
-.guide-step { display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid #f8f5ee; align-items: flex-start; }
 .guide-step:last-child { border-bottom: none; padding-bottom: 0; }
-.guide-step-num { width: 22px; height: 22px; border-radius: 50%; background: #7a5600; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
 .guide-step-num.tip  { background: #f59e0b; }
 .guide-step-num.warn { background: #ef4444; }
-.guide-step-text { font-size: 13px; color: #374151; line-height: 1.65; flex: 1; word-break: keep-all; }
-.guide-tip-box  { background: #fffbeb; border-radius: 10px; padding: 10px 14px; margin-top: 10px; font-size: 12px; color: #92400e; line-height: 1.65; word-break: keep-all; }
-.guide-warn-box { background: #fef2f2; border-radius: 10px; padding: 10px 14px; margin-top: 10px; font-size: 12px; color: #991b1b; line-height: 1.65; word-break: keep-all; }
-.guide-empty { text-align: center; padding: 40px 0; color: #9ca3af; font-size: 14px; }
 body.dark .guide-header { background: #2a2520; box-shadow: 0 1px 0 #3d3628; }
 body.dark .guide-header-title { color: #f0ead8; }
 body.dark .guide-search-bar { background: #2a2520; }
@@ -490,9 +481,7 @@ body.dark .guide-cat-btn.active { background: #7a5600; color: #fff; }
 body.dark .guide-card { background: #2a2520; border-color: #3d3628; }
 body.dark .guide-card-title { color: #f0ead8; }
 body.dark .guide-card-body { border-top-color: #3d3628; }
-body.dark .guide-step { border-bottom-color: #3d3628; }
-body.dark .guide-step-text { color: #d0c0a8; }
-body.dark .guide-card-subtitle { color: #8a7a6a; }
+body.dark body.dark body.dark .guide-card-subtitle { color: #8a7a6a; }
 /* ══════ 새 기능 CSS ══════ */
 
 /* ── 다크모드 ── */
@@ -891,39 +880,80 @@ body.dark .mom-grid-count { color: rgba(255,255,255,0.4); background: rgba(0,0,0
 .mom-detail-text { font-size:14px; color:#374151; line-height:1.65; word-break:keep-all; }
 body.dark .mom-detail-text { color:#d0c0a8; }
 body.dark .mom-detail-item { border-color:#3d3628; }
+/* 패턴 분석 카드 */
+.pattern-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.pattern-card {
+  background: #fff; border-radius: 14px; padding: 14px 12px;
+  border: 1.5px solid #f0e8d0;
+  box-shadow: 0 2px 8px rgba(122,86,0,0.06);
+}
+.pattern-card-label { font-size: 10px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.pattern-card-value { font-size: 22px; font-weight: 900; color: #1a1a1a; line-height: 1.1; margin-bottom: 2px; }
+.pattern-card-unit { font-size: 11px; color: #9ca3af; }
+.pattern-card-sub { font-size: 11px; color: #6b7280; margin-top: 4px; line-height: 1.4; }
+.pattern-card.wide { grid-column: 1 / -1; }
+.pattern-bar-wrap { margin-top: 8px; }
+.pattern-bar-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.pattern-bar-label { font-size: 10px; color: #9ca3af; width: 24px; text-align: right; flex-shrink: 0; }
+.pattern-bar-bg { flex: 1; height: 6px; border-radius: 3px; background: #f3f0e0; overflow: hidden; }
+.pattern-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+.pattern-insight {
+  background: linear-gradient(135deg,#fffbeb,#fff7d6);
+  border: 1.5px solid #e8d796; border-radius: 14px;
+  padding: 12px 14px; margin-bottom: 12px;
+  font-size: 13px; color: #7a5600; line-height: 1.7;
+  font-weight: 500; word-break: keep-all;
+}
+body.dark .pattern-card { background: #2a2520; border-color: #3d3628; }
+body.dark .pattern-card-value { color: #f0ead8; }
+body.dark .pattern-card-sub { color: #a89880; }
+body.dark .pattern-bar-bg { background: #3d3628; }
+body.dark .pattern-insight { background: #2a2520; border-color: #3d3628; color: #c8a870; }
+</style>
+.mood-btn {
+  font-size: 28px; background: none; border: 2.5px solid transparent;
+  border-radius: 50%; width: 50px; height: 50px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.15s; line-height: 1;
+}
+.mood-btn:active { transform: scale(0.9); }
+.mood-btn.selected { border-color: #f59e0b; background: #fff7d6; transform: scale(1.15); }
+
+/* Babyfolio 스타일 타임라인 */
+.tl-item {
+  display: flex; gap: 0; padding: 0;
+  border-bottom: 1px solid #f3f4f6;
+  align-items: stretch;
+}
+.tl-item:last-child { border-bottom: none; }
+.tl-time-col {
+  min-width: 58px; padding: 12px 8px 12px 14px;
+  display: flex; flex-direction: column; align-items: flex-end;
+  justify-content: center; flex-shrink: 0;
+  border-right: 2px solid #f3f4f6;
+}
+.tl-time-ampm { font-size: 9px; color: #9ca3af; font-weight: 600; text-transform: uppercase; }
+.tl-time-hm { font-size: 15px; font-weight: 800; color: #1a1a1a; line-height: 1; }
+.tl-body { flex: 1; padding: 11px 12px 11px 12px; display: flex; align-items: center; gap: 10px; }
+.tl-icon-circle {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.tl-content { flex: 1; min-width: 0; }
+.tl-content-title { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 1px; }
+.tl-content-sub { font-size: 11px; color: #9ca3af; }
+.tl-actions-col { display: flex; gap: 4px; align-items: center; padding-right: 10px; flex-shrink: 0; }
+body.dark .tl-item { border-color: #2a2520; }
+body.dark .tl-time-col { border-color: #2a2520; }
+body.dark .tl-time-hm { color: #f0ead8; }
+body.dark .tl-content-title { color: #f0ead8; }
 </style>
 
 <!-- Firebase SDK (compat 버전 — 실시간 동기화용) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 </head>
-<script>
-// ── Service Worker 등록 (자동 업데이트) ──
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').then(reg => {
-    // 새 버전 감지 시 사용자에게 알림
-    reg.addEventListener('updatefound', () => {
-      const newWorker = reg.installing;
-      newWorker.addEventListener('statechange', () => {
-        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-          // 업데이트 토스트 표시
-          const el = document.createElement('div');
-          el.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
-            background:#1d4ed8;color:#fff;padding:12px 20px;border-radius:20px;
-            font-size:13px;font-weight:700;z-index:9999;display:flex;align-items:center;gap:10px;
-            box-shadow:0 4px 16px rgba(0,0,0,0.25);white-space:nowrap;`;
-          el.innerHTML = `<span>🆕 새 버전이 있어요!</span>
-            <button onclick="location.reload()" style="background:#fff;color:#1d4ed8;border:none;
-              border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;">
-              업데이트
-            </button>`;
-          document.body.appendChild(el);
-        }
-      });
-    });
-  }).catch(() => {});
-}
-</script>
 <body>
 
 <!-- ═══════════ 온보딩 오버레이 ═══════════ -->
@@ -1194,7 +1224,8 @@ if ('serviceWorker' in navigator) {
           <div class="baby-avatar" id="app-avatar">🍼</div>
           <div>
             <div class="baby-name" id="app-baby-name">아기</div>
-            <div class="baby-age" id="app-baby-age"></div>
+            <div class="baby-dday" id="app-baby-dday"></div>
+            <div class="baby-dday-sub" id="app-baby-age"></div>
           </div>
         </div>
         <div class="app-header-top-right">
@@ -1347,10 +1378,25 @@ if ('serviceWorker' in navigator) {
       <div class="swipe-page">
         <div class="feature-page">
           <div class="feature-page-title">📊 통계 & 기록</div>
-          <div class="feature-page-sub">패턴 분석과 오늘의 모든 기록</div>
+
+          <!-- 오늘 기분 선택 (Babyfolio 스타일) -->
+          <div id="mood-selector-wrap" style="background:linear-gradient(135deg,#fffbeb,#fff7d6);border-radius:14px;padding:14px 16px;margin-bottom:12px;">
+            <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:10px;">오늘 육아는 어땠나요?</div>
+            <div style="display:flex;justify-content:space-around;">
+              <button onclick="setMood('😊')" class="mood-btn" id="mood-😊">😊</button>
+              <button onclick="setMood('🥰')" class="mood-btn" id="mood-🥰">🥰</button>
+              <button onclick="setMood('😴')" class="mood-btn" id="mood-😴">😴</button>
+              <button onclick="setMood('😅')" class="mood-btn" id="mood-😅">😅</button>
+              <button onclick="setMood('😢')" class="mood-btn" id="mood-😢">😢</button>
+            </div>
+          </div>
 
           <!-- 오늘의 육아 점수 -->
           <div id="score-card-wrap"></div>
+
+          <!-- 패턴 분석 -->
+          <div class="feature-section-title" style="margin-top:4px;">🔍 패턴 분석</div>
+          <div id="pattern-analysis-wrap"></div>
 
           <!-- 차트 -->
           <div class="chart-tab-row">
@@ -2103,6 +2149,32 @@ if ('serviceWorker' in navigator) {
 </div>
 
 <script>
+// ── Service Worker 등록 (자동 업데이트) ──
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').then(reg => {
+    // 새 버전 감지 시 사용자에게 알림
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          // 업데이트 토스트 표시
+          const el = document.createElement('div');
+          el.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+            background:#1d4ed8;color:#fff;padding:12px 20px;border-radius:20px;
+            font-size:13px;font-weight:700;z-index:9999;display:flex;align-items:center;gap:10px;
+            box-shadow:0 4px 16px rgba(0,0,0,0.25);white-space:nowrap;`;
+          el.innerHTML = `<span>🆕 새 버전이 있어요!</span>
+            <button onclick="location.reload()" style="background:#fff;color:#1d4ed8;border:none;
+              border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;">
+              업데이트
+            </button>`;
+          document.body.appendChild(el);
+        }
+      });
+    });
+  }).catch(() => {});
+}
+
 // ─── 전역 상태 ───
 let records = [];
 let sleepingStart = null;
@@ -2449,8 +2521,169 @@ function openMomDetail(secIdEncoded) {
   document.getElementById('modal-mom-detail').classList.add('open');
 }
 
-function toggleMomCare(id) {
+// ══════════════════════════════════════════
+// 🔍 패턴 분석
+// ══════════════════════════════════════════
+function renderPatternAnalysis() {
+  const wrap = document.getElementById('pattern-analysis-wrap');
+  if (!wrap) return;
+  if (!records.length) {
+    wrap.innerHTML = '<div class="pattern-insight">기록이 쌓이면 패턴을 분석해드려요 📊<br>수유·수면·기저귀를 기록해보세요!</div>';
+    return;
   }
+
+  const now = new Date();
+  const past7 = Array.from({length:7}, (_, i) => {
+    const d = new Date(now); d.setDate(d.getDate() - i);
+    return d.toDateString();
+  });
+  const recs7 = records.filter(r => past7.includes(new Date(r.time).toDateString()));
+  const activeDays = Math.max(new Set(recs7.map(r => new Date(r.time).toDateString())).size, 1);
+
+  // ── 수유 분석 ──
+  const feedRecs7 = recs7.filter(r => r.cat === 'feed');
+  const avgFeed = (feedRecs7.length / activeDays).toFixed(1);
+  const feedTimes = records.filter(r => r.cat==='feed').map(r => new Date(r.time).getTime()).sort((a,b) => b-a);
+  let avgFeedInterval = '-';
+  if (feedTimes.length >= 2) {
+    const intervals = [];
+    for (let i = 0; i < Math.min(feedTimes.length-1, 10); i++) {
+      const diff = (feedTimes[i] - feedTimes[i+1]) / 60000;
+      if (diff > 30 && diff < 360) intervals.push(diff);
+    }
+    if (intervals.length) {
+      const avg = intervals.reduce((a,b)=>a+b,0) / intervals.length;
+      const h = Math.floor(avg/60), m = Math.round(avg%60);
+      avgFeedInterval = h > 0 ? `${h}시간 ${m}분` : `${m}분`;
+    }
+  }
+  const bucketLabels = ['새벽','아침','오전','오후','저녁','밤'];
+  const feedHourBuckets = new Array(6).fill(0);
+  feedRecs7.forEach(r => {
+    const h = new Date(r.time).getHours();
+    feedHourBuckets[h<4?0:h<8?1:h<12?2:h<17?3:h<21?4:5]++;
+  });
+  const maxFeedBucket = Math.max(...feedHourBuckets, 1);
+  const peakFeedTime = bucketLabels[feedHourBuckets.indexOf(Math.max(...feedHourBuckets))];
+
+  // ── 수면 분석 ──
+  const sleepMins = recs7.filter(r => r.cat==='sleep' && r.sub).map(r => {
+    const hm = r.sub.match(/(\d+)시간\s*(\d+)?분?/);
+    if (hm) return parseInt(hm[1])*60 + (parseInt(hm[2])||0);
+    const m = r.sub.match(/(\d+)분/);
+    return m ? parseInt(m[1]) : 0;
+  }).filter(v => v > 0);
+  const avgSleepH = sleepMins.length ? (sleepMins.reduce((a,b)=>a+b,0)/activeDays/60).toFixed(1) : 0;
+  const longestSleep = sleepMins.length
+    ? (v => `${Math.floor(v/60)}시간 ${v%60}분`)(Math.max(...sleepMins))
+    : '-';
+  const sleepStartTimes = records.filter(r => r.cat==='sleep' && r.title==='수면 시작').slice(0,14);
+  let bedTimeStr = '-';
+  if (sleepStartTimes.length) {
+    const avgH = Math.round(sleepStartTimes.map(r=>new Date(r.time).getHours()).reduce((a,b)=>a+b,0)/sleepStartTimes.length);
+    bedTimeStr = `${avgH<12?'오전':'오후'} ${avgH%12||12}시`;
+  }
+
+  // ── 기저귀 분석 ──
+  const diapers7 = recs7.filter(r => r.cat==='diaper');
+  const avgDiaper = (diapers7.length / activeDays).toFixed(1);
+  const peeCount  = diapers7.filter(r => r.sub==='소변'||r.sub==='소변+대변').length;
+  const poopCount = diapers7.filter(r => r.sub==='대변'||r.sub==='소변+대변').length;
+
+  // ── 인사이트 ──
+  const days = getBabyAgeDays() || 1;
+  const recFeed = days<60?8:days<120?6:5;
+  const recSleep = days<60?16:days<120?15:14;
+  const insights = [];
+  if (parseFloat(avgFeed) > 0) {
+    const diff = parseFloat(avgFeed) - recFeed;
+    if (Math.abs(diff) <= 1) insights.push(`✅ 수유 횟수(${avgFeed}회/일)가 권장량에 맞아요!`);
+    else if (diff < -1) insights.push(`💡 수유가 하루 ${avgFeed}회예요. 권장 ${recFeed}회보다 적어요.`);
+    else insights.push(`💡 수유가 하루 ${avgFeed}회예요. 권장 ${recFeed}회보다 많아요.`);
+  }
+  if (parseFloat(avgSleepH) > 0) {
+    if (parseFloat(avgSleepH) >= recSleep-1) insights.push(`✅ 하루 평균 수면 ${avgSleepH}시간으로 양호해요!`);
+    else insights.push(`💤 하루 평균 수면 ${avgSleepH}시간. 권장 ${recSleep}시간에 조금 부족해요.`);
+  }
+  if (avgFeedInterval !== '-') insights.push(`⏱️ 평균 수유 간격: ${avgFeedInterval}`);
+  if (peakFeedTime && Math.max(...feedHourBuckets) > 0) insights.push(`🍼 ${peakFeedTime}에 수유가 가장 많아요.`);
+  if (!insights.length) insights.push('📊 기록이 쌓이면 더 정확한 패턴을 분석해드려요!');
+
+  const feedBarHtml = feedHourBuckets.map((v,i) =>
+    `<div class="pattern-bar-row">
+      <div class="pattern-bar-label">${bucketLabels[i]}</div>
+      <div class="pattern-bar-bg"><div class="pattern-bar-fill" style="width:${Math.round(v/maxFeedBucket*100)}%;background:#c0410f;"></div></div>
+      <div style="font-size:10px;color:#9ca3af;width:18px;text-align:right;">${v}</div>
+    </div>`
+  ).join('');
+
+  wrap.innerHTML = `
+    <div class="pattern-insight">${insights.map(t=>`<div>${t}</div>`).join('')}</div>
+    <div style="font-size:11px;font-weight:700;color:#9ca3af;letter-spacing:0.05em;margin-bottom:6px;">🍼 수유 패턴 · 최근 7일</div>
+    <div class="pattern-grid">
+      <div class="pattern-card">
+        <div class="pattern-card-label">하루 평균</div>
+        <div class="pattern-card-value">${avgFeed}<span style="font-size:13px;font-weight:600;"> 회</span></div>
+        <div class="pattern-card-sub">권장 ${recFeed}회/일</div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-card-label">평균 간격</div>
+        <div class="pattern-card-value" style="font-size:15px;">${avgFeedInterval}</div>
+        <div class="pattern-card-sub">직전 수유 기준</div>
+      </div>
+      <div class="pattern-card wide">
+        <div class="pattern-card-label">시간대별 수유 빈도</div>
+        <div class="pattern-bar-wrap" style="margin-top:8px;">${feedBarHtml}</div>
+      </div>
+    </div>
+    <div style="font-size:11px;font-weight:700;color:#9ca3af;letter-spacing:0.05em;margin:4px 0 6px;">😴 수면 패턴 · 최근 7일</div>
+    <div class="pattern-grid">
+      <div class="pattern-card">
+        <div class="pattern-card-label">하루 평균 수면</div>
+        <div class="pattern-card-value">${avgSleepH}<span style="font-size:13px;font-weight:600;"> h</span></div>
+        <div class="pattern-card-sub">권장 ${recSleep}시간/일</div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-card-label">최장 수면</div>
+        <div class="pattern-card-value" style="font-size:15px;">${longestSleep}</div>
+        <div class="pattern-card-sub">평균 취침 ${bedTimeStr}</div>
+      </div>
+    </div>
+    <div style="font-size:11px;font-weight:700;color:#9ca3af;letter-spacing:0.05em;margin:4px 0 6px;">🌿 기저귀 패턴 · 최근 7일</div>
+    <div class="pattern-grid">
+      <div class="pattern-card">
+        <div class="pattern-card-label">하루 평균</div>
+        <div class="pattern-card-value">${avgDiaper}<span style="font-size:13px;font-weight:600;"> 회</span></div>
+        <div class="pattern-card-sub">총 ${diapers7.length}회</div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-card-label">소변 / 대변</div>
+        <div class="pattern-card-value" style="font-size:17px;">💧${peeCount} · 💩${poopCount}</div>
+        <div class="pattern-card-sub">7일 합계</div>
+      </div>
+    </div>
+  `;
+}
+
+// ── 오늘의 기분 ──
+function setMood(emoji) {
+  const today = new Date().toDateString();
+  const moodData = JSON.parse(localStorage.getItem('mood_log') || '{}');
+  moodData[today] = emoji;
+  localStorage.setItem('mood_log', JSON.stringify(moodData));
+  renderMoodSelector();
+  showVoiceToast(`오늘의 기분: ${emoji}`, true);
+}
+
+function renderMoodSelector() {
+  const today = new Date().toDateString();
+  const moodData = JSON.parse(localStorage.getItem('mood_log') || '{}');
+  const todayMood = moodData[today];
+  ['😊','🥰','😴','😅','😢'].forEach(em => {
+    const btn = document.getElementById('mood-' + em);
+    if (btn) btn.classList.toggle('selected', em === todayMood);
+  });
+}
 
 function renderMomCarePage() {
   const raw = localStorage.getItem('baby_profile');
@@ -2585,13 +2818,17 @@ function renderAppHeader() {
   if (p.birthDate) {
     const days = calcBabyDays(p.birthDate);
     if (days !== null) {
+      // D+N 크게 표시
+      const ddayEl = document.getElementById('app-baby-dday');
+      if (ddayEl) ddayEl.textContent = `D+${days}`;
+      작게
       let ageText;
       if (days === 100)     ageText = `100일 축하해요 🎂`;
       else if (days <= 7)   ageText = `태어난 지 ${days}일 🌱`;
-      else if (days <= 14)  ageText = `쑥쑥 자라는 중 ${days}일 🌿`;
-      else if (days <= 30)  ageText = `우리 아기 ${days}일 🍀`;
-      else if (days <= 100) ageText = `${days}일째 함께해요 💛`;
-      else                  ageText = `${days}일, 하루하루 소중해요 🌸`;
+      else if (days <= 14)  ageText = `쑥쑥 자라는 중 🌿`;
+      else if (days <= 30)  ageText = `우리 아기 🍀`;
+      else if (days <= 100) ageText = `함께한 ${days}일 💛`;
+      else                  ageText = `하루하루 소중해요 🌸`;
       document.getElementById('app-baby-age').textContent = ageText;
     }
   }
@@ -2600,21 +2837,6 @@ function renderAppHeader() {
   const day = t.getDate();
   const dayNames = ['일','월','화','수','목','금','토'];
   document.getElementById('app-date').textContent = `${month}월 ${day}일 ${dayNames[t.getDay()]}요일 🌸`;
-}
-
-function lockApp() {
-  swReset();
-  showScreen('login');
-  pinBuffer = '';
-  pinFirst = '';
-  document.querySelectorAll('[id^="pin-ui"]').forEach(e => e.style.display = 'none');
-  if (localStorage.getItem('baby_pin')) {
-    pinMode = 'login';
-    document.getElementById('pin-ui-login').style.display = '';
-    updateDots('login', 0);
-    document.getElementById('pin-error').textContent = '';
-    document.getElementById('login-hint').textContent = '설정한 PIN 4자리를 입력해주세요.';
-  }
 }
 
 // ─── 스톱워치 ───
@@ -2754,21 +2976,6 @@ function removePumpSession(i) {
     document.getElementById('side-L-ml').textContent = '0 ml';
     document.getElementById('side-R-ml').textContent = '0 ml';
   }
-}
-
-function openPumpModal() {
-  swReset();
-  pumpSessions = [];
-  selectedSide = 'L';
-  highlightSide('L');
-  document.getElementById('pump-ml-input').value = '';
-  document.getElementById('pump-session-log').innerHTML = '';
-  document.getElementById('pump-total-row').style.display = 'none';
-  document.getElementById('side-L-ml').textContent = '0 ml';
-  document.getElementById('side-R-ml').textContent = '0 ml';
-  document.getElementById('pump-time').value = nowLocal();
-  document.getElementById('sw-side-label').textContent = '';
-  document.getElementById('modal-pump').classList.add('open');
 }
 
 function closePumpModal() {
@@ -2925,17 +3132,6 @@ function nowLocal() {
   return new Date(now.getTime() + (9 * 3600000)).toISOString().slice(0, 16);
 }
 
-function nowDate() {
-  // 현재 KST Date 객체
-  return new Date();
-}
-
-function toKST(date) {
-  // Date 객체 → KST datetime-local 문자열
-  const d = date instanceof Date ? date : new Date(date);
-  return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-}
-
 function timeDiff(t) {
   const diff = Math.round((new Date() - new Date(t)) / 60000);
   if (diff < 1) return '방금';
@@ -3011,40 +3207,59 @@ function renderTimeline() {
   });
 
   el.innerHTML = merged.slice(0, 60).map(r => {
+    // 시간 포맷: 오전/오후 + HH:MM
+    const d = new Date(r.time);
+    const h = d.getHours(), m = d.getMinutes();
+    const ampm = h < 12 ? '오전' : '오후';
+    const hh = (h % 12 || 12);
+    const mm = m < 10 ? '0' + m : m;
+
     const dadBadge = r.byDad
-      ? '<span style="font-size:10px;background:#eff6ff;color:#1d4ed8;border-radius:8px;padding:1px 6px;font-weight:700;margin-left:4px;">👨 아빠</span>'
+      ? '<span style="font-size:9px;background:#eff6ff;color:#1d4ed8;border-radius:6px;padding:1px 5px;font-weight:700;margin-left:4px;">아빠</span>'
       : '';
     const progressBadge = r._inProgress
-      ? '<span style="font-size:10px;background:#fef9c3;color:#854d0e;border-radius:8px;padding:1px 6px;font-weight:700;margin-left:4px;">진행 중</span>'
+      ? '<span style="font-size:9px;background:#fef9c3;color:#854d0e;border-radius:6px;padding:1px 5px;font-weight:700;margin-left:4px;">진행중</span>'
       : '';
 
-    // 기저귀 소변/대변 아이콘
+    // 카테고리별 색상
+    const catColors = {
+      feed:   '#eff6ff', sleep: '#f0f9ff',
+      diaper: '#f0fdf4', pump:  '#fdf4ff', etc: '#fff7ed'
+    };
+    const bgColor = catColors[r.cat] || '#f9fafb';
+
+    // 기저귀 아이콘
     let icon = r.icon;
     let subDisplay = r.sub;
     if (r.cat === 'diaper') {
-      if (r.sub === '소변') { icon = '💧'; subDisplay = '소변 '; }
-      else if (r.sub === '대변') { icon = '💩'; subDisplay = '대변 '; }
+      if (r.sub === '소변') { icon = '💧'; subDisplay = '소변'; }
+      else if (r.sub === '대변') { icon = '💩'; subDisplay = '대변'; }
       else if (r.sub === '소변+대변') { icon = '💩'; subDisplay = '소변 + 대변'; }
     }
 
-    // 수유/수면/유축 합쳐진 경우 시작~종료 시각 표시
-    let timeDisplay = fmtTime(r.time);
+    // 시작~종료 표시
+    let durationBadge = '';
     if (r._merged && r._startTime) {
-      timeDisplay = fmtTime(r._startTime) + '<br><span style="font-size:10px;color:#d1d5db;">↓</span><br>' + fmtTime(r.time);
+      durationBadge = `<span style="font-size:10px;color:#6b7280;margin-left:4px;">${fmtTime(r._startTime)} ~ ${fmtTime(r.time)}</span>`;
     }
 
-    return '<div class="t-item">' +
-      '<div class="t-badge ' + r.cat + '">' + icon + '</div>' +
-      '<div class="t-info">' +
-        '<div class="t-title">' + r.title + dadBadge + progressBadge + '</div>' +
-        '<div class="t-sub">' + subDisplay + '</div>' +
-      '</div>' +
-      '<div class="t-time" style="text-align:right;line-height:1.4;">' + timeDisplay + '</div>' +
-      '<div class="t-actions">' +
-        '<button class="t-edit-btn" onclick="editRecord(' + r._origIdx + ')">✏️</button>' +
-        '<button class="t-del-btn" onclick="deleteRecord(' + r._origIdx + ')">🗑️</button>' +
-      '</div>' +
-    '</div>';
+    return `<div class="tl-item">
+      <div class="tl-time-col">
+        <div class="tl-time-ampm">${ampm}</div>
+        <div class="tl-time-hm">${hh}:${mm}</div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-icon-circle" style="background:${bgColor};">${icon}</div>
+        <div class="tl-content">
+          <div class="tl-content-title">${r.title}${dadBadge}${progressBadge}</div>
+          <div class="tl-content-sub">${subDisplay}${durationBadge}</div>
+        </div>
+      </div>
+      <div class="tl-actions-col">
+        <button class="t-edit-btn" onclick="editRecord(${r._origIdx})">✏️</button>
+        <button class="t-del-btn" onclick="deleteRecord(${r._origIdx})">🗑️</button>
+      </div>
+    </div>`;
   }).join('');
 }
 
@@ -3099,7 +3314,7 @@ function idbGet(key) {
       if (req.result) {
         resolve(req.result.value);
       } else {
-        // fallback to localStorage
+
         resolve(localStorage.getItem(key));
       }
     };
@@ -3109,7 +3324,7 @@ function idbGet(key) {
 
 // saveData: IndexedDB 우선, localStorage 동기 백업
 function saveData() {
-  const recStr = JSON.stringify(records.slice(0, 2000)); // 2000개까지 저장
+  const recStr = JSON.stringify(records.slice(0, 2000));
   // IndexedDB (비동기)
   idbSet('baby_records', recStr).catch(() => {});
   // localStorage 백업 (최근 300개)
@@ -4402,7 +4617,6 @@ function initDadLinkState() {
   }
 }
 
-// 구버전 applyInviteCode 호환성 유지
 function applyInviteCode() { applyDadInviteCode(); }
 function showLinkedBadge(name) { _showDadLinkedState(name ? { name } : null); }
 
@@ -5249,30 +5463,6 @@ function renderScoreCard() {
 
 // ══════════════════════════════════════════
 // ⚡ 원탭 빠른기록
-// ══════════════════════════════════════════
-function quickLog(cat) {
-  const now = nowLocal();
-  const labels = { feed:'수유', sleep:'수면 시작', diaper:'기저귀 교체', pump:'유축' };
-  const icons  = { feed:'🍼', sleep:'😴', diaper:'🌿', pump:'🤱' };
-  const subs   = { feed:'모유 · 빠른기록', sleep:'현재 자는 중', diaper:'빠른기록', pump:'빠른기록' };
-
-  if (cat === 'sleep') {
-    if (sleepingStart) {
-      // 이미 자는 중이면 기상 기록
-      endSleep();
-    } else {
-      sleepingStart = new Date();
-      updateSleepBanner();
-      addRecord({ type:'sleep', time:now, title:'수면 시작', sub:'현재 자는 중', icon:'😴', cat:'sleep' });
-    }
-  } else {
-    addRecord({ type:cat, time:now, title:labels[cat], sub:subs[cat], icon:icons[cat], cat });
-  }
-  updateQuickBtnTimes();
-  // 탭 피드백 애니메이션
-  const btn = document.getElementById('qb-' + cat);
-  if (btn) { btn.style.background = '#fff7d6'; setTimeout(() => btn.style.background = '', 300); }
-}
 
 function updateQuickBtnTimes() {
   ['feed','sleep','diaper','pump'].forEach(cat => {
@@ -5534,14 +5724,6 @@ function previewDiaryImg(e) {
 
 // ══════════════════════════════════════════
 // 🔴 즉시2: 삭제 이중 확인
-// ══════════════════════════════════════════
-function clearAll() {
-  if (!confirm('기록을 삭제할까요?\n이 작업은 되돌릴 수 없어요.')) return;
-  records = []; sleepingStart = null;
-  clearInterval(sleepTimer);
-  document.getElementById('sleeping-banner').style.display = 'none';
-  saveData(); renderTimeline(); updateStatus();
-}
 
 function clearTodayRecords() {
   const today = new Date().toDateString();
@@ -5727,7 +5909,7 @@ function goToPage(n) {
   updatePageLabel(currentPage);
   // 새로고침 시 복원을 위해 페이지 저장
   try { sessionStorage.setItem('nuri_last_page', String(currentPage)); } catch(e) {}
-  if (currentPage === 3) setTimeout(renderMainChart, 100);
+  if (currentPage === 3) setTimeout(() => { renderMainChart(); renderPatternAnalysis(); }, 100);
   if (currentPage === 4) setTimeout(() => { renderGrowthChart(); renderGrowthTable(); }, 100);
   if (currentPage === 8) {
     renderDadTabChecklist();
@@ -5834,7 +6016,7 @@ function obNext() {
 // ══════════════════════════════════════════
 async function enterApp() {
   sessionStorage.setItem('nuri_in_app', '1');
-  await loadData(); // IndexedDB 비동기 로드 대기
+  await loadData();
   loadGrowthData();
   loadDiary();
   loadSessions();
@@ -5851,6 +6033,7 @@ async function enterApp() {
   renderVaccineList();
   renderMilestoneList();
   loadDarkMode();
+  renderMoodSelector();
   renderActiveSessions();
   updateQuickBtns();
   startSessionTimer();
@@ -5863,6 +6046,7 @@ async function enterApp() {
     renderMainChart();
     renderGrowthChart();
     renderGrowthTable();
+    renderPatternAnalysis();
     checkBackupReminder();
     checkNotifBanner();
     if (localStorage.getItem('notif_permission') === '1') {
@@ -5973,37 +6157,11 @@ function obSkip() {
   initLogin();
 }
 
-function setRoleAndContinue(role) {
-  // 역할선택 화면은 더 이상 사용 안 함 — 호환성 유지
-  initLogin();
-}
-
-function selectRole(role) {
-  initLogin();
-}
-
-function switchRole() {
-  goToPage(8);
-  setTimeout(() => {
-    renderDadTabChecklist();
-    renderDadTodayRecords();
-  }, 200);
-}
-
 function updateSettingsRoleUI() {
   const label = document.getElementById('settings-role-label');
   const btn = document.getElementById('settings-role-btn');
   if (label) label.textContent = '👨 아빠 탭은 앱 안 마지막 페이지에 있어요';
   if (btn) btn.textContent = '👨 아빠 탭 바로 가기 →';
-}
-
-// 헤더 아빠 버튼 → 아빠 탭(8번째)으로
-function openDadView() {
-  goToPage(8);
-  setTimeout(() => {
-    renderDadTabChecklist();
-    renderDadTodayRecords();
-  }, 150);
 }
 
 // ══════════════════════════════════════════
@@ -6437,7 +6595,7 @@ function dadRecord(type) {
 }
 
 function _saveDadRecord(rec) {
-  // addRecord: records 배열 업데이트 + IndexedDB 저장 + Firebase 동기화 + 타임라인 갱신 모두 처리
+
   addRecord(rec);
 }
 
@@ -6445,7 +6603,7 @@ function renderDadTodayRecords() {
   const el = document.getElementById('dad-rec-today');
   if (!el) return;
   try {
-    // 전역 records 배열 사용 (항상 최신 상태)
+
     const today = new Date().toDateString();
     const todayDad = records.filter(r => r.byDad && new Date(r.time).toDateString() === today).slice(0, 10);
     if (!todayDad.length) {
@@ -6490,11 +6648,6 @@ let _syncListeners = [];   // 리스너 목록 (정리용)
 let _lastSyncTs = 0;       // 마지막 동기화 타임스탬프
 
 // Firebase 준비될 때까지 대기
-function waitForFirebase(cb, retries = 20) {
-  if (window._nuriDB !== undefined) { cb(window._nuriDB); return; }
-  if (retries <= 0) { cb(null); return; }
-  setTimeout(() => waitForFirebase(cb, retries - 1), 150);
-}
 
 // familyId 결정 (초대 코드 = familyId)
 function getFamilyId() {
@@ -6503,98 +6656,6 @@ function getFamilyId() {
   const own = localStorage.getItem('invite_code');
   _familyId = linked || own || null;
   return _familyId;
-}
-
-// Firebase 동기화 시작
-function startFirebaseSync() {
-  waitForFirebase(db => {
-    if (!db) { console.log('Firebase 없음 — 로컬 모드'); return; }
-    const fid = getFamilyId();
-    if (!fid) { console.log('familyId 없음 — 초대 후 동기화 시작'); return; }
-
-    _syncActive = true;
-    const F = window._nuriFirebase;
-    console.log('🔥 Firebase 동기화 시작:', fid);
-
-    // ── records 실시간 구독 ──
-    const recRef = F.ref(db, `families/${fid}/records`);
-    const recUnsub = F.onValue(recRef, snap => {
-      if (!snap.exists()) return;
-      const fbRecs = snap.val();
-      if (!fbRecs) return;
-      const fbArr = Object.values(fbRecs).sort((a,b) => new Date(b.time) - new Date(a.time));
-      const merged = _mergeRecords(records, fbArr);
-      if (JSON.stringify(merged) !== JSON.stringify(records)) {
-        records = merged;
-        // IndexedDB + localStorage 모두 저장
-        const mergedStr = JSON.stringify(records.slice(0, 2000));
-        idbSet('baby_records', mergedStr).catch(() => {});
-        try { localStorage.setItem('baby_records', JSON.stringify(records.slice(0, 300))); } catch(e) {}
-        renderTimeline();
-        updateStatus();
-        renderDadTodayRecords();
-        _showSyncToast('🔄 기록이 업데이트됐어요');
-      }
-    });
-    _syncListeners.push(recUnsub);
-
-    // ── profile 실시간 구독 ──
-    const profRef = F.ref(db, `families/${fid}/profile`);
-    const profUnsub = F.onValue(profRef, snap => {
-      if (!snap.exists()) return;
-      const fbProf = snap.val();
-      if (!fbProf) return;
-      const local = JSON.parse(localStorage.getItem('baby_profile') || '{}');
-      if (JSON.stringify(fbProf) !== JSON.stringify(local)) {
-        localStorage.setItem('baby_profile', JSON.stringify(fbProf));
-        renderAppHeader();
-      }
-    });
-    _syncListeners.push(profUnsub);
-
-    // ── sessions 실시간 구독 (수면·유축 진행 중 상태) ──
-    const sessRef = F.ref(db, `families/${fid}/sessions`);
-    const sessUnsub = F.onValue(sessRef, snap => {
-      if (!snap.exists()) return;
-      const sess = snap.val();
-      if (!sess) return;
-      let changed = false;
-      if (sess.sleeping && !sleepingStart) {
-        sleepingStart = new Date(sess.sleeping);
-        updateSleepBanner();
-        changed = true;
-      } else if (!sess.sleeping && sleepingStart) {
-        sleepingStart = null;
-        const banner = document.getElementById('sleeping-banner');
-        if (banner) banner.style.display = 'none';
-        changed = true;
-      }
-      if (sess.pumping && !pumpingStart) {
-        pumpingStart = new Date(sess.pumping);
-        changed = true;
-      } else if (!sess.pumping && pumpingStart) {
-        pumpingStart = null;
-        changed = true;
-      }
-      if (changed) { renderActiveSessions(); updateQuickBtns(); }
-    });
-    _syncListeners.push(sessUnsub);
-
-    // ── dad_checks 실시간 구독 ──
-    const dadRef = F.ref(db, `families/${fid}/dad_checks`);
-    const dadUnsub = F.onValue(dadRef, snap => {
-      if (!snap.exists()) return;
-      const fbChecks = snap.val();
-      if (fbChecks) {
-        localStorage.setItem('dad_checks', JSON.stringify(fbChecks));
-        if (document.getElementById('dad-tab-checklist-urgent')) renderDadTabChecklist();
-      }
-    });
-    _syncListeners.push(dadUnsub);
-
-    // ── 초기 업로드: 로컬 데이터 → Firebase (첫 연동 시) ──
-    _uploadLocalToFirebase(db, fid);
-  });
 }
 
 // 로컬 데이터를 Firebase에 업로드 (첫 연동·재연동 시)
@@ -6673,24 +6734,6 @@ function _showSyncToast(msg) {
   setTimeout(() => { if (el.parentNode) el.remove(); }, 2500);
 }
 
-// 동기화 상태 표시 (설정 페이지용)
-function renderSyncStatus() {
-  const el = document.getElementById('firebase-sync-status');
-  if (!el) return;
-  const fid = getFamilyId();
-  if (!fid) {
-    el.innerHTML = `<span style="color:#9ca3af;">💤 초대 코드 연동 전</span>`;
-    return;
-  }
-  if (!window._nuriDB) {
-    el.innerHTML = `<span style="color:#f59e0b;">⚠️ Firebase 설정값 미입력 (로컬 모드)</span>`;
-    return;
-  }
-  el.innerHTML = _syncActive
-    ? `<span style="color:#16a34a;">🔥 실시간 동기화 중 · Family: ${fid}</span>`
-    : `<span style="color:#9ca3af;">⏸️ 동기화 대기 중</span>`;
-}
-
 // ══════════════════════════════════════════════════════
 // 🔥 Firebase 실시간 동기화 모듈
 // ══════════════════════════════════════════════════════
@@ -6750,12 +6793,7 @@ function fbSetFamilyId(id) {
 }
 
 // ── 데이터 Firebase에 쓰기 ──
-async function fbSave(key, data) {
-  if (!FB_ENABLED || !fbDb || !fbFamilyId || fbIsSyncing) return;
-  try {
-    await fbDb.ref(`families/${fbFamilyId}/${key}`).set(data);
-  } catch(e) { console.warn('Firebase 저장 실패:', e); }
-}
+async
 
 // ── 전체 데이터 Firebase에 업로드 ──
 async function fbPushAll() {
@@ -6881,13 +6919,6 @@ function fbStartListener() {
     console.warn('Firebase 리스너 오류:', err);
     fbSyncActive = false;
   });
-}
-
-// ── 리스너 중지 ──
-function fbStopListener() {
-  if (!fbDb || !fbFamilyId) return;
-  fbDb.ref(`families/${fbFamilyId}`).off();
-  fbSyncActive = false;
 }
 
 // ── 동기화 토스트 ──
