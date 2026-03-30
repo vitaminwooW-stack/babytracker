@@ -18,7 +18,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 #screen-profile.active { overflow-y: auto; overflow-x: hidden; }
 
 /* ── 뒤로가기·닫기 버튼 공통 ── */
-.nav-back-btn { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.22); border: none; border-radius: 20px; color: #fff; font-size: 13px; font-weight: 700; padding: 7px 14px; cursor: pointer; white-space: nowrap; }
 .nav-back-btn:active { opacity: 0.8; }
 .nav-close-btn { width: 34px; height: 34px; border-radius: 50%; background: rgba(0,0,0,0.07); border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #555; cursor: pointer; flex-shrink: 0; line-height: 1; }
 .nav-close-btn:active { background: rgba(0,0,0,0.15); }
@@ -83,11 +82,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .dad-view-chip.good { background: #dcfce7; color: #16a34a; }
 
 /* ── 정책 체크 ── */
-.policy-check-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #f3f4f6; cursor: pointer; }
-.policy-checkbox { width: 20px; height: 20px; border-radius: 5px; border: 2px solid #d0d0d0; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
 .policy-checkbox.checked { background: #1d7a3a; border-color: #1d7a3a; }
 .policy-checkbox.checked::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
-.policy-check-label { font-size: 13px; color: #555; font-weight: 500; }
 .policy-check-label.done { color: #1d7a3a; font-weight: 700; }
 /* 신청 버튼 + 완료 체크 행 */
 .policy-apply-row { display: flex; gap: 8px; align-items: stretch; margin-top: 12px; }
@@ -103,7 +99,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .policy-done-label { font-size: 10px; color: #9ca3af; font-weight: 600; }
 .policy-done-label.checked { color: #16a34a; }
 /* 신청 완료 표시하기 — 독립 행 (기존 스타일 유지) */
-.policy-check-small { width: 20px; height: 20px; border-radius: 5px; border: 2px solid #d1d5db; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 .policy-check-small.checked { background: #16a34a; border-color: #16a34a; }
 .policy-check-small.checked::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
 .policy-check-small-label { font-size: 12px; color: #6b7280; }
@@ -169,7 +164,6 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 
 .app-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 60px; width: 100%; box-sizing: border-box; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
-.status-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 8px; }
 .status-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
 .status-card { background: #fff; border-radius: 8px; padding: 12px 8px; text-align: center; box-shadow: none; }
 .s-icon { font-size: 20px; margin-bottom: 4px; }
@@ -185,11 +179,9 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px; }
 .btn-main { border: none; border-radius: 12px; padding: 14px 6px 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; transition: transform 0.1s; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 .btn-main:active { transform: scale(0.94); }
-.b-icon { font-size: 24px; }
 .b-label { font-size: 12px; font-weight: 600; }
 .btn-feed { background: #eff6ff; color: #c0410f; }
 .btn-sleep { background: #eff6ff; color: #1d4ed8; }
-.btn-diaper { background: #f0fdf4; color: #1d7a3a; }
 .btn-pump { background: #f5f3ff; color: #7c3aaf; }
 
 .timeline-card { background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; padding: 4px 0; box-shadow: none; overflow: hidden; }
@@ -255,11 +247,8 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .mom-birth-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 12px; font-size: 13px; font-weight: 700; margin-bottom: 16px; }
 .mom-birth-badge.natural { background: #eff6ff; color: #1d4ed8; }
 .mom-birth-badge.csection { background: #ede9fe; color: #6d28d9; }
-.mom-care-card { background: #fff; border-radius: 12px; border: 1px solid #e8d796; margin-bottom: 10px; overflow: hidden; }
 .mom-care-card-title { font-size: 15px; font-weight: 700; color: #1a1a1a; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; gap: 8px; }
 .mom-care-card-title:active { background: #fffbf0; }
-.mom-care-card-title-left { display: flex; align-items: center; gap: 8px; }
-.mom-care-card-arrow { font-size: 12px; color: #9ca3af; transition: transform 0.2s; flex-shrink: 0; }
 .mom-care-card-arrow.open { transform: rotate(90deg); }
 .mom-care-card-body { display: none; padding: 0 16px 14px; border-top: 1px solid #f3f0e0; }
 .mom-care-card-body.open { display: block; }
@@ -268,7 +257,6 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .mom-care-dot.pink { background: #ec4899; }
 .mom-care-dot.purple { background: #8b5cf6; }
 .mom-care-dot.blue { background: #3b82f6; }
-.mom-care-text { font-size: 13px; color: #444; line-height: 1.6; flex: 1; word-break: keep-all; }
 .mom-care-warn { background: #fef9c3; border-radius: 8px; padding: 10px 12px; font-size: 12px; color: #92400e; margin-top: 10px; line-height: 1.6; word-break: keep-all; }
 .community-search-box { background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; padding: 16px; margin-bottom: 12px; box-shadow: none; }
 .community-search-title { font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; }
@@ -381,8 +369,7 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .side-btn.active-R { border-color: #bfdbfe; background: #EBF4FF; }
 .side-btn.active-R .side-name { color: #1d4ed8; }
 .side-btn.done-L { border-color: #d099f5; background: #f5f3ff; opacity: 0.7; }
-.side-btn.done-R { border-color: #bfdbfe; background: #EBF4FF; opacity: 0.7; }
-
+.side-btn
 .stopwatch-box { background: #fafafa; border-radius: 12px; padding: 16px; margin: 12px 0 4px; text-align: center; border: 1px solid #e5e7eb; }
 .sw-display { font-size: 40px; font-weight: 700; color: #1a1a1a; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
 .sw-side-label { font-size: 13px; margin-top: 6px; font-weight: 600; min-height: 20px; }
@@ -418,7 +405,6 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .invite-code-box { display: flex; align-items: center; gap: 8px; background: #eff6ff; border-radius: 8px; padding: 12px 14px; margin: 8px 0; }
 .invite-code-text { font-size: 22px; font-weight: 700; color: #1d4ed8; letter-spacing: 0.15em; flex: 1; font-family: monospace; }
 .invite-copy-btn { background: #2563eb; color: #fff; border: none; border-radius: 8px; padding: 7px 14px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
-.invite-desc { font-size: 12px; color: #6b7280; line-height: 1.6; }
 .invite-gen-btn { width: 100%; padding: 12px; background: #eff6ff; color: #1d4ed8; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 4px; }
 .invite-gen-btn:active { background: #2563eb; color: #fff; }
 /* 아빠 초대 코드 입력 */
@@ -437,7 +423,7 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .dad-event-title.dad-event-desc { font-size: 12px; color: #6b7280; margin-top: 3px; line-height: 1.5; word-break: keep-all; }
 .dad-event-praise { font-size: 13px; color: #1d4ed8; font-weight: 600; margin-top: 4px; }
 .dad-event-tag { font-size: 11px; background: #eff6ff; color: #1d4ed8; padding: 2px 8px; border-radius: 8px; margin-top: 5px; display: inline-block; font-weight: 600; }
-.dad-event-tag.done-tag { background: #dcfce7; color: #16a34a; }
+.dad-event-tag
 .dad-section-secret { font-size: 11px; color: #1d4ed8; margin-left: 6px; font-weight: 500; }
 
 @keyframes shake {
@@ -462,9 +448,6 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .guide-card { background: #fff; border-radius: 12px; border: 1px solid #e8d796; margin-bottom: 10px; overflow: hidden; }
 .guide-card-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; user-select: none; }
 .guide-card-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-.guide-card-meta { flex: 1; min-width: 0; }
-.guide-card-title { font-size: 15px; font-weight: 700; color: #1a1a1a; }
-.guide-card-subtitle { font-size: 12px; color: #6b7280; margin-top: 2px; }
 .guide-card-arrow { font-size: 12px; color: #bbb; transition: transform 0.2s; flex-shrink: 0; }
 .guide-card-arrow.open { transform: rotate(90deg); color: #7a5600; }
 .guide-card-body { display: none; padding: 2px 16px 16px; border-top: 1px solid #f3f0e0; }
@@ -479,10 +462,8 @@ body.dark .guide-search { background: #2a2520; border-color: #3d3628; color: #f0
 body.dark .guide-cat-btn { background: #2a2520; border-color: #3d3628; color: #c8a870; }
 body.dark .guide-cat-btn.active { background: #7a5600; color: #fff; }
 body.dark .guide-card { background: #2a2520; border-color: #3d3628; }
-body.dark .guide-card-title { color: #f0ead8; }
 body.dark .guide-card-body { border-top-color: #3d3628; }
-body.dark body.dark body.dark .guide-card-subtitle { color: #8a7a6a; }
-/* ══════ 새 기능 CSS ══════ */
+body.dark body.dark /* ══════ 새 기능 CSS ══════ */
 
 /* ── 다크모드 ── */
 body.dark { background: #1a1612; color: #f0ead8; }
@@ -502,7 +483,6 @@ body.dark input, body.dark textarea { background: #2a2520; border-color: #3d3628
 body.dark .opt-btn { background: #2a2520; border-color: #3d3628; color: #f0ead8; }
 body.dark .section-title, body.dark .policy-page-header p, body.dark .mom-page-header p { color: #7a6a5a; }
 body.dark .sleeping-banner { background: #1e2d1a; border-color: #2d4a26; }
-body.dark .guide-card-subtitle { color: #8a7a6a; }
 body.dark .no-photo-info .baby-dname { color: #f0ead8; }
 
 /* ── 차트 탭 ── */
@@ -610,22 +590,18 @@ body.dark .feature-section-title { color: #c8a870; }
 .coach-card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
 .coach-urgency { font-size: 20px; }
 .coach-title { font-size: 14px; font-weight: 700; color: #1a1a1a; flex: 1; }
-.coach-level { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
 .coach-level.high   { background: #fee2e2; color: #dc2626; }
 .coach-level.medium { background: #fef9c3; color: #92400e; }
 .coach-level.low    { background: #dcfce7; color: #16a34a; }
 .coach-level.info   { background: #dbeafe; color: #1d4ed8; }
-.coach-msg { font-size: 13px; color: #374151; line-height: 1.6; word-break: keep-all; }
 .coach-reason { font-size: 11px; color: #6b7280; margin-top: 3px; }
-.coach-action-btn { margin-top: 10px; display: inline-flex; align-items: center; gap: 5px; padding: 8px 16px; border-radius: 20px; border: none; font-size: 13px; font-weight: 700; cursor: pointer; }
 .coach-action-btn.sleep-btn { background: #1d4ed8; color: #fff; }
 .coach-action-btn.feed-btn  { background: #c0410f; color: #fff; }
 body.dark .coach-card.green  { background: #0f2a1a; border-color: #166534; }
 body.dark .coach-card.yellow { background: #1a1500; border-color: #713f12; }
 body.dark .coach-card.red    { background: #2a0f0f; border-color: #991b1b; }
 body.dark .coach-card.blue   { background: #0f1a2a; border-color: #1e3a5f; }
-body.dark .coach-title, body.dark .coach-msg { color: #f0ead8; }
-body.dark .coach-reason { color: #a89880; }
+body.dark .coach-title, body.dark .coach-reason { color: #a89880; }
 
 /* 육아 점수 카드 */
 .score-bar.ok   { background: linear-gradient(90deg,#f59e0b,#d97706); }
@@ -750,6 +726,7 @@ body.dark .qnav-btn.active::after { background: #c8a870; }
   background: linear-gradient(160deg, #fffdf2 0%, #fff7d6 50%, #f6e6a8 100%);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   transition: opacity 0.7s ease;
+  visibility: visible !important;
 }
 #screen-splash.fade-out { opacity: 0; pointer-events: none; }
 .splash-icon { margin-bottom: 20px; animation: splashPop 0.6s cubic-bezier(0.34,1.56,0.64,1) both; }
@@ -949,12 +926,10 @@ body.dark .tl-time-col { border-color: #2a2520; }
 body.dark .tl-time-hm { color: #f0ead8; }
 body.dark .tl-content-title { color: #f0ead8; }
 </style>
-
-<!-- Firebase SDK (compat 버전 — 실시간 동기화용) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 </head>
-<body>
+<body style="visibility:hidden;">
 
 <!-- ═══════════ 온보딩 오버레이 ═══════════ -->
 <div id="onboarding-overlay" style="display:none;">
@@ -965,13 +940,11 @@ body.dark .tl-content-title { color: #f0ead8; }
       <div class="onboarding-dot"></div>
       <div class="onboarding-dot"></div>
     </div>
-    <!-- Step 0 -->
     <div class="onboarding-step active" id="ob-0">
       <div class="onboarding-icon">🍼</div>
       <div class="onboarding-title">누리케어에 오신 것을 환영해요!</div>
       <div class="onboarding-desc">수유·수면·기저귀를 기록하고<br>아기의 패턴을 한눈에 파악해요.<br>아빠와 함께 사용할 수 있어요 💛</div>
     </div>
-    <!-- Step 1 -->
     <div class="onboarding-step" id="ob-1">
       <div class="onboarding-icon">👆</div>
       <div class="onboarding-title">좌우로 스와이프해서 이동해요</div>
@@ -981,13 +954,11 @@ body.dark .tl-content-title { color: #f0ead8; }
         통계 · 성장 · 마일스톤 · 엄마케어 · 복지 · 설정 →
       </div>
     </div>
-    <!-- Step 2 -->
     <div class="onboarding-step" id="ob-2">
       <div class="onboarding-icon">🎙️</div>
       <div class="onboarding-title">음성으로 기록할 수 있어요</div>
       <div class="onboarding-desc">"수유 완료", "기저귀 갈았어"<br>말 한 마디로 자동 기록돼요.<br>새벽 수유할 때 특히 유용해요 🌙</div>
     </div>
-    <!-- Step 3 -->
     <div class="onboarding-step" id="ob-3">
       <div class="onboarding-icon">💾</div>
       <div class="onboarding-title">데이터는 이 기기에 저장돼요</div>
@@ -1002,28 +973,19 @@ body.dark .tl-content-title { color: #f0ead8; }
 <div id="screen-splash">
   <div class="splash-icon">
     <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- 배경 원 -->
       <circle cx="48" cy="48" r="48" fill="#FFF7D6"/>
-      <!-- 외부 링 -->
       <circle cx="48" cy="48" r="42" fill="none" stroke="#E8D796" stroke-width="2"/>
-      <!-- 아기 얼굴 -->
       <circle cx="48" cy="45" r="22" fill="#FFEAA7"/>
-      <!-- 볼터치 -->
       <ellipse cx="33" cy="50" rx="5" ry="3.5" fill="#FFAB91" opacity="0.5"/>
       <ellipse cx="63" cy="50" rx="5" ry="3.5" fill="#FFAB91" opacity="0.5"/>
-      <!-- 눈 -->
       <ellipse cx="41" cy="42" rx="3" ry="3.5" fill="#5D4037"/>
       <ellipse cx="55" cy="42" rx="3" ry="3.5" fill="#5D4037"/>
       <circle cx="42" cy="41" r="1" fill="#fff"/>
       <circle cx="56" cy="41" r="1" fill="#fff"/>
-      <!-- 미소 -->
       <path d="M40 51 Q48 58 56 51" stroke="#7a5600" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-      <!-- 아기 귀 -->
       <ellipse cx="26" cy="45" rx="4" ry="5" fill="#FFEAA7"/>
       <ellipse cx="70" cy="45" rx="4" ry="5" fill="#FFEAA7"/>
-      <!-- 왕관 (누리케어 상징) -->
       <path d="M34 30 L38 38 L48 32 L58 38 L62 30 L58 36 L48 30 L38 36 Z" fill="#7a5600"/>
-      <!-- 하트 -->
       <path d="M44 70 Q48 67 52 70 Q56 73 48 78 Q40 73 44 70Z" fill="#FF6B9D"/>
     </svg>
   </div>
@@ -1037,14 +999,12 @@ body.dark .tl-content-title { color: #f0ead8; }
       <div class="guide-header-title">📚 신생아 케어 가이드</div>
       <button class="nav-close-btn" id="guide-back-btn" onclick="closeGuide()">✕</button>
     </div>
-    <!-- 검색창 헤더 안에 -->
     <div style="max-width:480px;margin:10px auto 0;padding:0 0 10px;">
       <input type="text" class="guide-search" id="guide-search"
         placeholder="🔍 트림, 기저귀, 목욕 등 검색..." oninput="filterGuide()">
       <div class="guide-category-row" id="guide-cat-row"></div>
     </div>
   </div>
-  <!-- 카드 목록만 스크롤 -->
   <div class="guide-body">
     <div id="guide-list"></div>
   </div>
@@ -1054,56 +1014,37 @@ body.dark .tl-content-title { color: #f0ead8; }
 <div class="screen" id="screen-login">
   <div class="login-box">
     <div class="login-logo">
-      <!-- 엄마와 아기 일러스트 -->
       <svg width="120" height="110" viewBox="0 0 120 110" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:4px;">
-        <!-- 배경 원 -->
         <circle cx="60" cy="58" r="50" fill="#FFF7D6" opacity="0.7"/>
-        <!-- 엄마 몸 -->
         <ellipse cx="50" cy="85" rx="18" ry="22" fill="#FFDAB9"/>
-        <!-- 엄마 옷 -->
         <ellipse cx="50" cy="92" rx="18" ry="16" fill="#FFB7C5"/>
-        <!-- 엄마 목 -->
         <rect x="45" y="58" width="10" height="12" rx="5" fill="#FFDAB9"/>
-        <!-- 엄마 머리 -->
         <circle cx="50" cy="50" r="16" fill="#FFDAB9"/>
-        <!-- 엄마 머리카락 -->
         <ellipse cx="50" cy="36" rx="16" ry="10" fill="#5D3A1A"/>
         <ellipse cx="36" cy="48" rx="5" ry="10" fill="#5D3A1A"/>
         <ellipse cx="64" cy="48" rx="5" ry="10" fill="#5D3A1A"/>
         <path d="M34 45 Q33 58 36 65" stroke="#5D3A1A" stroke-width="5" stroke-linecap="round" fill="none"/>
         <path d="M66 45 Q67 58 64 65" stroke="#5D3A1A" stroke-width="5" stroke-linecap="round" fill="none"/>
-        <!-- 엄마 눈 -->
         <ellipse cx="44" cy="50" rx="2.2" ry="2.5" fill="#3E2723"/>
         <ellipse cx="56" cy="50" rx="2.2" ry="2.5" fill="#3E2723"/>
         <circle cx="44.8" cy="49.3" r="0.8" fill="#fff"/>
         <circle cx="56.8" cy="49.3" r="0.8" fill="#fff"/>
-        <!-- 엄마 볼터치 -->
         <ellipse cx="40" cy="54" rx="4" ry="2.5" fill="#FF8FAB" opacity="0.4"/>
         <ellipse cx="60" cy="54" rx="4" ry="2.5" fill="#FF8FAB" opacity="0.4"/>
-        <!-- 엄마 미소 -->
         <path d="M44 57 Q50 63 56 57" stroke="#C2185B" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-        <!-- 엄마 팔 (아기 안기) -->
         <path d="M68 75 Q80 70 82 80 Q84 90 76 93 Q68 96 65 88" fill="#FFDAB9" stroke="#FFDAB9" stroke-width="1"/>
         <path d="M32 75 Q20 72 18 82 Q16 92 26 93 Q36 94 38 85" fill="#FFDAB9" stroke="#FFDAB9" stroke-width="1"/>
-        <!-- 포대기/담요 -->
         <ellipse cx="70" cy="78" rx="16" ry="18" fill="#AED6F1"/>
         <ellipse cx="70" cy="78" rx="13" ry="15" fill="#D6EAF8"/>
-        <!-- 아기 얼굴 -->
         <circle cx="70" cy="66" r="11" fill="#FFEAA7"/>
-        <!-- 아기 귀 -->
         <ellipse cx="59.5" cy="66" rx="3" ry="4" fill="#FFEAA7"/>
         <ellipse cx="80.5" cy="66" rx="3" ry="4" fill="#FFEAA7"/>
-        <!-- 아기 눈 (감긴 눈 — 자는 중) -->
         <path d="M65 65 Q67 63 69 65" stroke="#5D4037" stroke-width="1.5" stroke-linecap="round" fill="none"/>
         <path d="M71 65 Q73 63 75 65" stroke="#5D4037" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-        <!-- 아기 볼터치 -->
         <ellipse cx="63" cy="68" rx="3.5" ry="2" fill="#FFAB91" opacity="0.5"/>
         <ellipse cx="77" cy="68" rx="3.5" ry="2" fill="#FFAB91" opacity="0.5"/>
-        <!-- 아기 입 (옹알이) -->
         <circle cx="70" cy="71" r="1.8" fill="#FF8FAB" opacity="0.6"/>
-        <!-- 하트 -->
         <path d="M88 40 C88 38 86 36 84 38 C82 36 80 38 80 40 C80 43 84 46 84 46 C84 46 88 43 88 40Z" fill="#FF6B9D" opacity="0.8"/>
-        <!-- 별 -->
         <circle cx="30" cy="30" r="2" fill="#F59E0B" opacity="0.7"/>
         <circle cx="95" cy="55" r="1.5" fill="#F59E0B" opacity="0.5"/>
         <circle cx="20" cy="65" r="1.5" fill="#86EFAC" opacity="0.6"/>
@@ -1218,7 +1159,6 @@ body.dark .tl-content-title { color: #f0ead8; }
 <div class="screen" id="screen-app">
   <div class="app-header">
     <div class="app-header-inner">
-      <!-- 위 줄: 아기 정보 + 날짜 -->
       <div class="app-header-top">
         <div class="app-header-left">
           <div class="baby-avatar" id="app-avatar">🍼</div>
@@ -1232,7 +1172,6 @@ body.dark .tl-content-title { color: #f0ead8; }
           <div class="header-date" id="app-date"></div>
         </div>
       </div>
-      <!-- 아래 줄: 기능 버튼 -->
       <div class="app-header-actions">
         <button class="hdr-btn profile" onclick="openProfileEdit()">✏️ 프로필</button>
         <button class="hdr-btn guide"   onclick="openGuide('app')">📚 가이드</button>
@@ -1244,7 +1183,6 @@ body.dark .tl-content-title { color: #f0ead8; }
         </button>
       </div>
     </div>
-    <!-- 빠른 이동 탭바 (클릭 가능) -->
     <div class="quick-nav-bar">
       <button class="qnav-btn" onclick="goToPage(0)" id="qn-0">📔</button>
       <button class="qnav-btn" onclick="goToPage(1)" id="qn-1">📷</button>
@@ -1258,8 +1196,6 @@ body.dark .tl-content-title { color: #f0ead8; }
       <button class="qnav-btn" onclick="goToPage(9)" id="qn-9">⚙️</button>
     </div>
   </div>
-
-  <!-- 스와이프 컨테이너 -->
   <div style="overflow:hidden; flex:1; height:0; min-height:0;">
     <div class="swipe-container" id="swipe-container">
 
@@ -1308,14 +1244,8 @@ body.dark .tl-content-title { color: #f0ead8; }
       <!-- ── 페이지 2: 음성 기록 메인 ── -->
       <div class="swipe-page">
         <div class="app-body">
-
-          <!-- 진행 중 세션 카드 (수면/유축/수유 진행 중일 때만 표시) -->
           <div id="active-sessions-wrap"></div>
-
-          <!-- 코치 카드 (진행 중 세션 없을 때만) -->
           <div id="coach-card-wrap"></div>
-
-          <!-- ★ 핵심: 마이크 중심 UI ★ -->
           <div class="voice-hero">
             <div class="voice-hero-mic" id="voice-mic-icon">
               <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1339,8 +1269,6 @@ body.dark .tl-content-title { color: #f0ead8; }
               <span class="voice-cmd">응가했어</span>
             </div>
           </div>
-
-          <!-- 빠른 탭 버튼 (보조) -->
           <div class="quick-log-row">
             <button class="quick-btn" onclick="quickStartAction('feed')" id="qb-feed">
               <span class="quick-btn-icon">🍼</span>
@@ -1363,8 +1291,6 @@ body.dark .tl-content-title { color: #f0ead8; }
               <span class="quick-btn-time" id="qt-diaper">-</span>
             </button>
           </div>
-
-          <!-- 알림 배너 -->
           <div class="notif-banner" id="notif-banner" style="display:none;">
             <span class="notif-banner-text">🔔 재울 타이밍을 알림으로 받을 수 있어요</span>
             <button class="notif-banner-btn" onclick="requestNotifPermission()">허용</button>
@@ -1378,8 +1304,6 @@ body.dark .tl-content-title { color: #f0ead8; }
       <div class="swipe-page">
         <div class="feature-page">
           <div class="feature-page-title">📊 통계 & 기록</div>
-
-          <!-- 오늘 기분 선택 (Babyfolio 스타일) -->
           <div id="mood-selector-wrap" style="background:linear-gradient(135deg,#fffbeb,#fff7d6);border-radius:14px;padding:14px 16px;margin-bottom:12px;">
             <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:10px;">오늘 육아는 어땠나요?</div>
             <div style="display:flex;justify-content:space-around;">
@@ -1390,15 +1314,9 @@ body.dark .tl-content-title { color: #f0ead8; }
               <button onclick="setMood('😢')" class="mood-btn" id="mood-😢">😢</button>
             </div>
           </div>
-
-          <!-- 오늘의 육아 점수 -->
           <div id="score-card-wrap"></div>
-
-          <!-- 패턴 분석 -->
           <div class="feature-section-title" style="margin-top:4px;">🔍 패턴 분석</div>
           <div id="pattern-analysis-wrap"></div>
-
-          <!-- 차트 -->
           <div class="chart-tab-row">
             <button class="chart-tab active" id="ctab-feed" onclick="selectChartTab('feed')">🍼 수유</button>
             <button class="chart-tab" id="ctab-sleep" onclick="selectChartTab('sleep')">😴 수면</button>
@@ -1415,8 +1333,6 @@ body.dark .tl-content-title { color: #f0ead8; }
             <div style="font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:8px;">요약</div>
             <div id="chart-summary-body" style="font-size:13px;color:#555;line-height:2;"></div>
           </div>
-
-          <!-- 자동 저장 기록 타임라인 -->
           <div class="feature-section-title" style="margin-top:8px;">📋 오늘의 기록</div>
           <div class="timeline-card">
             <div id="timeline"><div class="empty">아직 기록이 없어요 🌙<br>음성 또는 버튼으로 첫 기록을 남겨보세요!</div></div>
@@ -1461,11 +1377,9 @@ body.dark .tl-content-title { color: #f0ead8; }
       <!-- ── 페이지 5: 발달 마일스톤 ── -->
       <div class="swipe-page">
         <div class="feature-page" style="padding:0 0 80px;">
-          <!-- 헤더 고정 -->
           <div style="padding:16px 16px 0;position:sticky;top:0;background:#fff7d6;z-index:10;">
             <div class="feature-page-title" style="margin-bottom:2px;">⭐ 발달 마일스톤</div>
             <div id="milestone-age-label" style="font-size:13px;color:#7a5600;font-weight:600;margin-bottom:12px;"></div>
-            <!-- 개월 수 진행 바 -->
             <div style="display:flex;gap:3px;margin-bottom:14px;" id="milestone-stage-bar"></div>
           </div>
           <div id="milestone-list" style="padding:0 16px;"></div>
@@ -1499,8 +1413,6 @@ body.dark .tl-content-title { color: #f0ead8; }
             <h2>🇰🇷 2026 출산 지원 정책</h2>
             <p>출산 후 받을 수 있는 혜택을 한번에 신청하세요</p>
           </div>
-
-          <!-- ★ 원클릭 한번에 신청 배너 ★ -->
           <div style="background:linear-gradient(135deg,#1d4ed8,#2563eb);border-radius:16px;padding:18px 16px;margin-bottom:16px;color:#fff;">
             <div style="font-size:15px;font-weight:800;margin-bottom:4px;">🚀 행복출산 원스톱 서비스</div>
             <div style="font-size:13px;opacity:0.9;margin-bottom:12px;line-height:1.5;">부모급여·첫만남이용권·아동수당을<br><strong>한 번에 신청</strong>할 수 있어요 (정부24)</div>
@@ -1510,8 +1422,6 @@ body.dark .tl-content-title { color: #f0ead8; }
             </a>
             <div style="font-size:11px;opacity:0.75;text-align:center;margin-top:8px;">정부24 → 행복출산 → 한번에 신청</div>
           </div>
-
-          <!-- 개별 신청 안내 -->
           <div style="background:#fff7d6;border-radius:12px;padding:12px 14px;margin-bottom:14px;border:1px solid #e8d796;">
             <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:6px;">📋 원스톱으로 신청 가능한 혜택</div>
             <div style="display:flex;flex-wrap:wrap;gap:6px;">
@@ -1525,8 +1435,6 @@ body.dark .tl-content-title { color: #f0ead8; }
           <div class="policy-notice">
             ⚠️ 2026년 기준 정보예요. 개별 신청은 각 기관 앱·웹에서도 가능해요.
           </div>
-
-          <!-- 부모급여 -->
           <div class="policy-card">
             <div class="policy-card-header">
               <div class="policy-icon" style="background:#FFF0EB;">💰</div>
@@ -1544,8 +1452,6 @@ body.dark .tl-content-title { color: #f0ead8; }
               </div>
             </div>
           </div>
-
-          <!-- 첫만남이용권 -->
           <div class="policy-card">
             <div class="policy-card-header">
               <div class="policy-icon" style="background:#EDFBF0;">🎁</div>
@@ -1563,8 +1469,6 @@ body.dark .tl-content-title { color: #f0ead8; }
               </div>
             </div>
           </div>
-
-          <!-- 아동수당 -->
           <div class="policy-card">
             <div class="policy-card-header">
               <div class="policy-icon" style="background:#EBF4FF;">👶</div>
@@ -1582,8 +1486,6 @@ body.dark .tl-content-title { color: #f0ead8; }
               </div>
             </div>
           </div>
-
-          <!-- 육아휴직 -->
           <div class="policy-card">
             <div class="policy-card-header">
               <div class="policy-icon" style="background:#F3EEFB;">🏠</div>
@@ -1602,8 +1504,6 @@ body.dark .tl-content-title { color: #f0ead8; }
               </div>
             </div>
           </div>
-
-          <!-- 출산휴가 -->
           <div class="policy-card">
             <div class="policy-card-header">
               <div class="policy-icon" style="background:#FFF8E6;">🌸</div>
@@ -1621,8 +1521,6 @@ body.dark .tl-content-title { color: #f0ead8; }
               </div>
             </div>
           </div>
-
-          <!-- 아이돌봄 -->
           <div class="policy-card">
             <div class="policy-card-header">
               <div class="policy-icon" style="background:#EDFBF0;">🧸</div>
@@ -1640,8 +1538,6 @@ body.dark .tl-content-title { color: #f0ead8; }
               </div>
             </div>
           </div>
-
-          <!-- 산모·신생아 -->
           <div class="policy-card">
             <div class="policy-card-header">
               <div class="policy-icon" style="background:#FFF0EB;">🏥</div>
@@ -1672,8 +1568,6 @@ body.dark .tl-content-title { color: #f0ead8; }
             <div id="dad-linked-status" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;background:#f0fdf4;color:#16a34a;display:none;">🔗 연동됨</div>
           </div>
           <div class="feature-page-sub" id="dad-tab-sub">아빠도 기록하고 함께 육아해요 💛</div>
-
-          <!-- 초대 코드 입력 (미연동 상태에서만 표시) -->
           <div id="dad-invite-section" style="background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:14px;padding:16px;margin-bottom:14px;">
             <div style="font-size:14px;font-weight:700;color:#1d4ed8;margin-bottom:6px;">🔗 엄마 앱과 연동하기</div>
             <div style="font-size:12px;color:#6b7280;margin-bottom:12px;line-height:1.6;">
@@ -1691,8 +1585,6 @@ body.dark .tl-content-title { color: #f0ead8; }
             </div>
             <div id="dad-invite-error" style="font-size:12px;color:#ef4444;margin-top:8px;display:none;"></div>
           </div>
-
-          <!-- 아빠 기록 버튼 -->
           <div class="dad-rec-section">
             <div class="dad-rec-title">📋 아빠 기록 <span class="dad-rec-badge">엄마 타임라인에 공유됨</span></div>
             <div class="dad-rec-btns">
@@ -1705,14 +1597,10 @@ body.dark .tl-content-title { color: #f0ead8; }
               <div class="dad-rec-empty">오늘 아직 기록이 없어요<br>위 버튼을 눌러 기록해보세요 💪</div>
             </div>
           </div>
-
-          <!-- 체크리스트 진행률 -->
           <div class="dad-progress" id="dad-tab-progress-wrap">
             <div class="dad-progress-bar-wrap"><div class="dad-progress-bar" id="dad-tab-progress-bar" style="width:0%"></div></div>
             <div class="dad-progress-text" id="dad-tab-progress-text">0 / 0</div>
           </div>
-
-          <!-- 체크리스트 -->
           <div class="dad-section">
             <div class="dad-section-title"><span>🚨</span> 지금 당장 챙겨요</div>
             <div class="dad-check-card" id="dad-tab-checklist-urgent"></div>
@@ -1740,8 +1628,6 @@ body.dark .tl-content-title { color: #f0ead8; }
         <div class="feature-page">
           <div class="feature-page-title">⚙️ 설정</div>
           <div class="feature-page-sub">앱 설정과 데이터를 관리해요</div>
-
-          <!-- 동기화 상태 -->
           <div class="feature-section-title">🔥 실시간 동기화</div>
           <div class="chart-wrap" style="padding:14px 16px;">
             <div id="fb-sync-status" style="font-size:13px;line-height:1.6;margin-bottom:10px;">
@@ -1776,22 +1662,16 @@ body.dark .tl-content-title { color: #f0ead8; }
               </div>
             </div>
           </div>
-
-          <!-- 데이터 내보내기 -->
           <div class="feature-section-title">📤 데이터 내보내기</div>
           <button class="export-btn" onclick="exportCSV()">📊 기록 데이터 CSV로 내보내기</button>
           <button class="export-btn" onclick="exportGrowthCSV()">📏 성장 기록 CSV로 내보내기</button>
           <button class="export-btn" onclick="exportDiaryTxt()">📔 일기 텍스트로 내보내기</button>
-
-          <!-- 데이터 관리 -->
           <div class="feature-section-title">💾 데이터 관리</div>
           <div class="chart-wrap" style="padding:14px 16px;">
             <div id="storage-status" style="margin-bottom:12px;"></div>
             <button class="export-btn" onclick="backupAllData()" style="margin-bottom:8px;">💾 전체 데이터 백업 (JSON)</button>
             <button class="export-btn" onclick="clearTodayRecords()" style="color:#f59e0b;border-color:#fde68a;">🗑️ 오늘 기록만 삭제</button>
           </div>
-
-          <!-- 위험 구역 -->
           <div class="chart-wrap" style="padding:14px 16px;border:1.5px solid #fecaca;background:#fff5f5;margin-top:4px;">
             <div style="font-size:13px;font-weight:700;color:#ef4444;margin-bottom:6px;">⚠️ 위험 구역</div>
             <div style="font-size:12px;color:#9ca3af;margin-bottom:12px;line-height:1.6;">
@@ -1827,8 +1707,6 @@ body.dark .tl-content-title { color: #f0ead8; }
     <p style="font-size:13px;color:#6b7280;margin-bottom:16px;line-height:1.6;">
       앱을 열지 않고 Siri나 Google Assistant로<br>바로 기록할 수 있어요!
     </p>
-
-    <!-- iPhone Siri -->
     <div style="background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:14px;padding:14px;margin-bottom:12px;">
       <div style="font-size:13px;font-weight:800;color:#0369a1;margin-bottom:10px;">🍎 iPhone — Siri 단축어</div>
       <div style="font-size:12px;color:#0c4a6e;line-height:1.8;margin-bottom:12px;">
@@ -1842,8 +1720,6 @@ body.dark .tl-content-title { color: #f0ead8; }
       <div id="shortcut-url-base" style="display:none;"></div>
       <div style="display:flex;flex-direction:column;gap:6px;" id="siri-url-list"></div>
     </div>
-
-    <!-- Android Google Assistant -->
     <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:14px;padding:14px;margin-bottom:12px;">
       <div style="font-size:13px;font-weight:800;color:#15803d;margin-bottom:10px;">🤖 Android — Google Assistant 루틴</div>
       <div style="font-size:12px;color:#14532d;line-height:1.8;margin-bottom:12px;">
@@ -1856,8 +1732,6 @@ body.dark .tl-content-title { color: #f0ead8; }
       <div style="font-size:11px;color:#15803d;font-weight:700;margin-bottom:6px;">📋 URL 복사해서 사용하세요:</div>
       <div style="display:flex;flex-direction:column;gap:6px;" id="assistant-url-list"></div>
     </div>
-
-    <!-- 사용 가능한 액션 목록 -->
     <div style="background:#fff7d6;border:1.5px solid #e8d796;border-radius:12px;padding:12px;margin-bottom:16px;">
       <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:8px;">🗣️ 설정 가능한 음성 명령</div>
       <div style="display:flex;flex-direction:column;gap:4px;" id="action-list"></div>
@@ -1877,8 +1751,6 @@ body.dark .tl-content-title { color: #f0ead8; }
       링크를 카카오톡으로 보내주세요.<br>
       아빠가 링크를 누르면 바로 연동돼요!
     </p>
-
-    <!-- 초대 링크 방식 (메인) -->
     <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:14px;margin-bottom:12px;">
       <div style="font-size:12px;font-weight:700;color:#16a34a;margin-bottom:8px;">📲 링크로 초대 (추천)</div>
       <div style="font-size:11px;color:#6b7280;margin-bottom:10px;line-height:1.5;">
@@ -1888,8 +1760,6 @@ body.dark .tl-content-title { color: #f0ead8; }
         💬 카카오톡으로 링크 보내기
       </button>
     </div>
-
-    <!-- 코드 직접 공유 방식 -->
     <div style="background:#fff7d6;border:1.5px solid #e8d796;border-radius:12px;padding:14px;">
       <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:8px;">🔢 코드로 초대</div>
       <div class="invite-code-box">
@@ -1973,8 +1843,6 @@ body.dark .tl-content-title { color: #f0ead8; }
     <div class="modal-handle"></div>
     <button class="modal-close-x" onclick="closePumpModal()">✕</button>
     <h2>🤱 유축 기록</h2>
-
-    <!-- 스톱워치 -->
     <div class="stopwatch-box">
       <div class="sw-display" id="sw-display">00:00</div>
       <div class="sw-side-label" id="sw-side-label"></div>
@@ -1985,8 +1853,6 @@ body.dark .tl-content-title { color: #f0ead8; }
         <button class="sw-btn reset" id="sw-reset-btn" onclick="swReset()" style="display:none">초기화</button>
       </div>
     </div>
-
-    <!-- 좌우 유축 입력 -->
     <span class="field-label">유축 기록 (좌/우)</span>
     <div class="pump-side-btns">
       <div class="side-btn" id="side-L" onclick="selectSide('L')">
@@ -2005,11 +1871,7 @@ body.dark .tl-content-title { color: #f0ead8; }
       <input type="number" id="pump-ml-input" placeholder="유축량 입력 (ml)" min="0" max="500">
       <button class="ml-add-btn" onclick="addPumpMl()">추가</button>
     </div>
-
-    <!-- 세션 로그 -->
     <div id="pump-session-log"></div>
-
-    <!-- 합계 -->
     <div class="pump-total-row" id="pump-total-row" style="display:none">
       <span class="pump-total-label">총 유축량</span>
       <span class="pump-total-val" id="pump-total-val">0 ml</span>
@@ -2191,8 +2053,10 @@ let selectedSide = 'L';
 
 // ─── 화면 전환 ───
 function showScreen(id) {
+  document.body.style.visibility = 'visible';
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + id).classList.add('active');
+  const target = document.getElementById('screen-' + id);
+  if (target) target.classList.add('active');
 }
 
 // ─── PIN 로그인 ───
@@ -2481,8 +2345,6 @@ const MOM_CARE = {
     }
   ]
 };
-
-let momCareOpenId = null;
 
 function openMomDetail(secIdEncoded) {
   const secTitle = decodeURIComponent(secIdEncoded);
@@ -3199,7 +3061,7 @@ function renderTimeline() {
         (r.cat === 'sleep' && r.title === '수면 시작') ||
         (r.cat === 'pump' && r.title === '유축 시작')) {
       if (usedIdx.has(i)) return;
-      // 진행 중 배지 추가해서 표시
+
       r = { ...r, _inProgress: true };
     }
 
@@ -3221,14 +3083,12 @@ function renderTimeline() {
       ? '<span style="font-size:9px;background:#fef9c3;color:#854d0e;border-radius:6px;padding:1px 5px;font-weight:700;margin-left:4px;">진행중</span>'
       : '';
 
-    // 카테고리별 색상
     const catColors = {
       feed:   '#eff6ff', sleep: '#f0f9ff',
       diaper: '#f0fdf4', pump:  '#fdf4ff', etc: '#fff7ed'
     };
     const bgColor = catColors[r.cat] || '#f9fafb';
 
-    // 기저귀 아이콘
     let icon = r.icon;
     let subDisplay = r.sub;
     if (r.cat === 'diaper') {
@@ -3237,7 +3097,6 @@ function renderTimeline() {
       else if (r.sub === '소변+대변') { icon = '💩'; subDisplay = '소변 + 대변'; }
     }
 
-    // 시작~종료 표시
     let durationBadge = '';
     if (r._merged && r._startTime) {
       durationBadge = `<span style="font-size:10px;color:#6b7280;margin-left:4px;">${fmtTime(r._startTime)} ~ ${fmtTime(r.time)}</span>`;
@@ -3325,7 +3184,7 @@ function idbGet(key) {
 // saveData: IndexedDB 우선, localStorage 동기 백업
 function saveData() {
   const recStr = JSON.stringify(records.slice(0, 2000));
-  // IndexedDB (비동기)
+
   idbSet('baby_records', recStr).catch(() => {});
   // localStorage 백업 (최근 300개)
   try { localStorage.setItem('baby_records', JSON.stringify(records.slice(0, 300))); } catch(e) {}
@@ -4624,7 +4483,6 @@ function showLinkedBadge(name) { _showDadLinkedState(name ? { name } : null); }
 // 📊 차트 & 통계
 // ══════════════════════════════════════════
 let chartTab = 'feed';
-let chartInstance = null;
 
 function selectChartTab(tab) {
   chartTab = tab;
@@ -5066,7 +4924,7 @@ function toggleMilestone(key) {
     checks[key + '_date'] = `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일`;
   }
   localStorage.setItem('milestone_checks', JSON.stringify(checks));
-  // Firebase 동기화
+
   if (typeof fbPushAll === 'function' && typeof fbFamilyId !== 'undefined' && fbFamilyId) {
     fbPushAll();
   }
@@ -5201,7 +5059,7 @@ function calcBabyDays(birthDateStr) {
     const today = new Date();
     const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const diff = Math.floor((todayMidnight - birth) / 86400000);
-    return diff + 1; // 태어난 날 = 1일
+    return diff + 1;
   } catch(e) { return null; }
 }
 
@@ -5763,7 +5621,7 @@ async function processPIN() {
       pinBuffer = ''; err.textContent = '';
       const profile = localStorage.getItem('baby_profile');
       if (profile) {
-        await enterApp();
+        try { await enterApp(); } catch(e) { console.error('enterApp 오류:', e); showScreen('app'); }
         if (localStorage.getItem('dad_linked')) goToPage(8);
       } else {
         showScreen('profile');
@@ -5780,7 +5638,7 @@ async function processPIN() {
       if (fb) fb.style.display = 'none';
       const profile = localStorage.getItem('baby_profile');
       if (profile) {
-        await enterApp();
+        try { await enterApp(); } catch(e) { console.error('enterApp 오류:', e); showScreen('app'); }
         if (localStorage.getItem('dad_linked')) goToPage(8);
       } else {
         showScreen('profile');
@@ -6089,6 +5947,7 @@ async function renderStorageStatus() {
 // 👤 앱 시작 — 역할선택 없이 바로 PIN
 // ══════════════════════════════════════════
 function appStart() {
+  document.body.style.visibility = 'visible';
   const splash = document.getElementById('screen-splash');
 
   // URL에 초대 파라미터 있으면 먼저 처리 (아빠가 링크 클릭)
@@ -6753,10 +6612,10 @@ const FB_ENABLED = typeof FIREBASE_CONFIG !== 'undefined' &&
 
 let fbApp = null;
 let fbDb = null;
-let fbFamilyId = null;          // 가족 공유 공간 ID
-let fbSyncActive = false;       // 리스너 활성화 여부
-let fbIsSyncing = false;        // 무한루프 방지 플래그
-let fbLastRemoteUpdate = 0;     // 마지막 원격 업데이트 시각
+let fbFamilyId = null;
+let fbSyncActive = false;
+let fbIsSyncing = false;
+let fbLastRemoteUpdate = 0;
 
 // ── Firebase 초기화 ──
 function fbInit() {
@@ -6794,7 +6653,7 @@ async
 async function fbPushAll() {
   if (!FB_ENABLED || !fbDb || !fbFamilyId) return;
   try {
-    // IndexedDB에서 전체 기록 읽기 (localStorage 5MB 한계 없음)
+
     const recStr = await idbGet('baby_records');
     const recArr = recStr ? JSON.parse(recStr) : records;
     const payload = {
@@ -6824,7 +6683,7 @@ async function fbPushAll() {
 // ── Firebase에서 수신한 데이터를 로컬에 적용 ──
 function fbApplyRemoteData(data) {
   if (!data) return;
-  fbIsSyncing = true; // 루프 방지
+  fbIsSyncing = true;
 
   try {
     if (data.records && Array.isArray(data.records)) {
