@@ -3008,28 +3008,24 @@ function renderTimeline() {
   const el = document.getElementById('timeline');
   if (!el) return;
 
-  // KST 기준 오늘 날짜 (UTC+9)
-  const nowKST = new Date(Date.now() + 9*3600*1000);
-  const todayKST = nowKST.toISOString().slice(0,10);
+  // KST 기준 오늘 날짜
+  const todayKST = new Date(Date.now() + 9*3600*1000).toISOString().slice(0,10);
 
-  // 기록 시간이 KST 기준 오늘인지 확인하는 함수
-  function isTodayKST(timeStr) {
-    if (!timeStr) return false;
-    // timeStr은 "YYYY-MM-DDTHH:MM" 형태 (KST로 저장됨)
-    return timeStr.slice(0,10) === todayKST;
-  }
+  // title → cat 매핑 (모달 저장 포함)
+  const endSet   = new Set(['수유 완료','수유','기상','유축 완료','유축']);
+  const startSet = new Set(['수유 시작','수면 시작','유축 시작']);
+  const catOf    = { '수유 완료':'feed','수유':'feed','수유 시작':'feed',
+                     '기상':'sleep','수면':'sleep','수면 시작':'sleep',
+                     '유축 완료':'pump','유축':'pump','유축 시작':'pump' };
+  const dispTitle = { feed:'수유', sleep:'수면', pump:'유축' };
+  const dispIcon  = { feed:'🍼', sleep:'😴', pump:'🤱' };
 
-  const endTitles   = { feed:'수유 완료', sleep:'기상', pump:'유축 완료' };
-  const startTitles = { feed:'수유 시작', sleep:'수면 시작', pump:'유축 시작' };
-  const dispTitles  = { feed:'수유', sleep:'수면', pump:'유축' };
-
-  // 탭에 따라 소스 기록 선택
   let allSorted = records
     .map((r, i) => ({ ...r, _origIdx: i }))
     .sort((a, b) => (b.time || '').localeCompare(a.time || ''));
 
   let sourceRecs = timelineTab === 'today'
-    ? allSorted.filter(r => isTodayKST(r.time))
+    ? allSorted.filter(r => r.time && r.time.slice(0,10) === todayKST)
     : allSorted;
 
   if (!sourceRecs.length) {
@@ -3043,54 +3039,56 @@ function renderTimeline() {
   sourceRecs.forEach((r, i) => {
     if (usedIdx.has(i)) return;
 
-    const isEnd = r.cat in endTitles && r.title === endTitles[r.cat];
-    const isStart = r.cat in startTitles && r.title === startTitles[r.cat];
+    const isEnd   = endSet.has(r.title)   && catOf[r.title] === r.cat;
+    const isStart = startSet.has(r.title) && catOf[r.title] === r.cat;
 
     if (isEnd) {
-      // 같은 날 같은 카테고리 시작 기록 찾기 (시간이 더 이른 것)
+      // 같은 날, 같은 cat의 시작 기록 찾기
       const startIdx = sourceRecs.findIndex((s, si) =>
         si > i &&
         !usedIdx.has(si) &&
-        s.cat === r.cat &&
-        s.title === startTitles[r.cat] &&
-        s.time.slice(0,10) === r.time.slice(0,10) // 같은 날 (KST 문자열 비교)
+        catOf[s.title] === r.cat &&
+        startSet.has(s.title) &&
+        s.time.slice(0,10) === r.time.slice(0,10)
       );
+
       if (startIdx !== -1) {
         usedIdx.add(i);
         usedIdx.add(startIdx);
         const startRec = sourceRecs[startIdx];
-        const startMs = new Date(startRec.time).getTime();
-        const endMs   = new Date(r.time).getTime();
-        const durMin  = Math.max(0, Math.round((endMs - startMs) / 60000));
+        const durMin = Math.max(0, Math.round(
+          (new Date(r.time).getTime() - new Date(startRec.time).getTime()) / 60000
+        ));
         merged.push({
           ...r,
-          icon:  { feed:'🍼', sleep:'😴', pump:'🤱' }[r.cat],
-          title: dispTitles[r.cat],
+          icon: dispIcon[r.cat],
+          title: dispTitle[r.cat],
           _startTime: startRec.time,
           _durMin: durMin,
           _merged: true,
         });
         return;
       }
+
+      // 시작 기록 없는 단독 완료 — sub에서 시간 파싱해서 표시
+      // 그대로 추가 (subText에서 처리)
     }
 
     if (isStart) {
-      // 종료 기록이 이미 처리됐으면 스킵
+      // 같은 날 종료 기록이 이미 처리됐으면 스킵
       const hasEnd = sourceRecs.some((s, si) =>
         si < i &&
-        s.cat === r.cat &&
-        s.title === endTitles[r.cat] &&
+        catOf[s.title] === r.cat &&
+        endSet.has(s.title) &&
         s.time.slice(0,10) === r.time.slice(0,10)
       );
       if (hasEnd) { usedIdx.add(i); return; }
-      // 아직 진행 중
       r = { ...r, _inProgress: true };
     }
 
     if (!usedIdx.has(i)) merged.push(r);
   });
 
-  // 렌더링
   let prevDate = '';
   el.innerHTML = merged.slice(0, 120).map(r => {
     const d = new Date(r.time);
@@ -3100,11 +3098,10 @@ function renderTimeline() {
     const mm = String(m).padStart(2, '0');
     const dateStr = r.time.slice(0,10);
 
-    // 전체 탭: 날짜 구분선
     let dateDivider = '';
     if (timelineTab === 'all' && dateStr !== prevDate) {
       prevDate = dateStr;
-      const dObj = new Date(dateStr + 'T00:00:00');
+      const dObj = new Date(dateStr + 'T12:00:00');
       const days = ['일','월','화','수','목','금','토'];
       const label = (dObj.getMonth()+1) + '/' + dObj.getDate() + ' (' + days[dObj.getDay()] + ')';
       const isToday = dateStr === todayKST;
@@ -3124,7 +3121,6 @@ function renderTimeline() {
     const catColors = { feed:'#eff6ff', sleep:'#f0f9ff', diaper:'#f0fdf4', pump:'#fdf4ff' };
     const bgColor = catColors[r.cat] || '#f9fafb';
 
-    // 표시할 아이콘과 서브 텍스트
     let icon = r.icon;
     let subText = '';
 
@@ -3133,8 +3129,8 @@ function renderTimeline() {
       else if (r.sub === '대변') { icon = '💩'; subText = '대변'; }
       else if (r.sub === '소변+대변') { icon = '💩'; subText = '소변 + 대변'; }
       else subText = r.sub || '';
-    } else if (r._merged && r._startTime) {
-      // 합쳐진 기록: 시작 ~ 종료 · N분
+    } else if (r._merged) {
+      // 시작~종료 · N분
       const durStr = r._durMin >= 60
         ? Math.floor(r._durMin/60) + '시간 ' + (r._durMin%60) + '분'
         : r._durMin + '분';
@@ -3142,7 +3138,11 @@ function renderTimeline() {
     } else if (r._inProgress) {
       subText = fmtTime(r.time) + ' 시작';
     } else {
-      subText = r.sub || '';
+      // 단독 완료 기록 — sub에서 시간 추출해서 표시
+      const sub = r.sub || '';
+      const minMatch = sub.match(/(\d+)분/);
+      const durStr = minMatch ? minMatch[1] + '분' : sub;
+      subText = durStr ? fmtTime(r.time) + ' · ' + durStr : fmtTime(r.time);
     }
 
     return dateDivider +
