@@ -1,5 +1,5 @@
-// ── 누리케어 Service Worker v4.0 ──
-const VERSION = 'nuri-care-v4.0';
+// ── 누리케어 Service Worker v4.1 ──
+const VERSION = 'nuri-care-v4.1';
 const CACHE_NAME = VERSION;
 const CACHE_FILES = ['./nuri-care.html'];
 
@@ -20,12 +20,10 @@ self.addEventListener('activate', e => {
   );
 });
 
-// postMessage로 skipWaiting 요청 처리
 self.addEventListener('message', e => {
   if (e.data && e.data.type === 'SKIP_WAITING') self.skipWaiting();
 });
 
-// 네트워크 우선 (항상 최신 HTML)
 self.addEventListener('fetch', e => {
   if (e.request.mode === 'navigate' || e.request.url.endsWith('.html')) {
     e.respondWith(

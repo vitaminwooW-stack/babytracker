@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="아기 루틴">
 <title>누리케어 | Nuri Care</title>
+<meta name="app-version" content="4.1">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 button, a, [onclick] { touch-action: manipulation; }
@@ -1994,7 +1995,7 @@ body.dark .tl-content-title { color: #f0ead8; }
 <script>
 // ── Service Worker 등록 + 강제 업데이트 ──
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=4').then(reg => {
+  navigator.serviceWorker.register('./sw.js?v=4.1').then(reg => {
     // 새 버전 발견 시 즉시 skipWaiting 호출
     reg.addEventListener('updatefound', () => {
       const newWorker = reg.installing;
