@@ -1232,7 +1232,6 @@ body.dark .tl-content-title { color: #f0ead8; }
       <!-- ── 페이지 2: 음성 기록 메인 ── -->
       <div class="swipe-page">
         <div class="app-body">
-          <div id="active-sessions-wrap"></div>
           <div id="coach-card-wrap"></div>
           <div class="voice-hero">
             <div class="voice-hero-mic" id="voice-mic-icon">
@@ -1259,17 +1258,17 @@ body.dark .tl-content-title { color: #f0ead8; }
           </div>
           <div class="quick-log-row">
             <button class="quick-btn" onclick="quickStartAction('feed')" id="qb-feed">
-              <span class="quick-btn-icon">🍼</span>
+              <span class="quick-btn-icon" id="qi-feed">🍼</span>
               <span class="quick-btn-label" id="ql-feed">수유 시작</span>
               <span class="quick-btn-time" id="qt-feed">-</span>
             </button>
             <button class="quick-btn" onclick="quickStartAction('sleep')" id="qb-sleep">
-              <span class="quick-btn-icon">😴</span>
+              <span class="quick-btn-icon" id="qi-sleep">😴</span>
               <span class="quick-btn-label" id="ql-sleep">수면 시작</span>
               <span class="quick-btn-time" id="qt-sleep">-</span>
             </button>
             <button class="quick-btn" onclick="quickStartAction('pump')" id="qb-pump">
-              <span class="quick-btn-icon">🤱</span>
+              <span class="quick-btn-icon" id="qi-pump">🤱</span>
               <span class="quick-btn-label" id="ql-pump">유축 시작</span>
               <span class="quick-btn-time" id="qt-pump">-</span>
             </button>
@@ -6113,12 +6112,27 @@ function endSession(type) {
 
 // ── 원탭 버튼 — 시작/종료 토글 ──
 function quickStartAction(type) {
-  if (type === 'sleep') {
-    sleepingStart ? endSession('sleep') : startSession('sleep');
+  if (type === 'feed') {
+    if (feedingStart) {
+      endSession('feed');
+    } else {
+      startSession('feed');
+      showCompleteFeedback('🍼', '수유 시작!');
+    }
+  } else if (type === 'sleep') {
+    if (sleepingStart) {
+      endSession('sleep');
+    } else {
+      startSession('sleep');
+      showCompleteFeedback('😴', '수면 시작!');
+    }
   } else if (type === 'pump') {
-    pumpingStart ? endSession('pump') : startSession('pump');
-  } else if (type === 'feed') {
-    feedingStart ? endSession('feed') : startSession('feed');
+    if (pumpingStart) {
+      endSession('pump');
+    } else {
+      startSession('pump');
+      showCompleteFeedback('🤱', '유축 시작!');
+    }
   } else if (type === 'diaper') {
     startSession('diaper');
   }
@@ -6210,66 +6224,70 @@ function startDadRefreshTimer() {
   }, 5000);
 }
 
-// ── 원탭 버튼 레이블 업데이트 ──
+// ── 하단 4버튼 상태 통합 업데이트 ──
 function updateQuickBtns() {
-  const feed = records.find(r => r.cat === 'feed');
+  const feed  = records.find(r => r.cat === 'feed');
   const sleep = records.find(r => r.cat === 'sleep');
-  const pump = records.find(r => r.cat === 'pump');
+  const pump  = records.find(r => r.cat === 'pump');
   const diaper = records.find(r => r.cat === 'diaper');
 
-  // 수유
+  // ── 수유 ──
+  const qbFeed = document.getElementById('qb-feed');
   const qlFeed = document.getElementById('ql-feed');
   const qtFeed = document.getElementById('qt-feed');
-  const qbFeed = document.getElementById('qb-feed');
+  const qiFeed = document.getElementById('qi-feed');
   if (feedingStart) {
-    if (qlFeed) qlFeed.textContent = '수유 종료';
-    if (qbFeed) { qbFeed.style.background='#fff7ed'; qbFeed.style.borderColor='#fdba74'; }
-    if (qtFeed) { const m=Math.round((Date.now()-new Date(feedingStart).getTime())/60000); qtFeed.textContent=m+'분째'; }
+    const m = Math.round((Date.now() - new Date(feedingStart).getTime()) / 60000);
+    if (qlFeed) qlFeed.textContent = '수유 종료 ✅';
+    if (qtFeed) qtFeed.textContent = m + '분째 수유 중';
+    if (qbFeed) { qbFeed.style.background = 'linear-gradient(135deg,#fff7ed,#ffedd5)'; qbFeed.style.outline = '2px solid #fdba74'; }
+    if (qiFeed) qiFeed.textContent = '🍼';
   } else {
     if (qlFeed) qlFeed.textContent = '수유 시작';
-    if (qbFeed) { qbFeed.style.background=''; qbFeed.style.borderColor=''; }
-    if (qtFeed) qtFeed.textContent = feed ? timeDiff(feed.time) : '-';
+    if (qtFeed) qtFeed.textContent = feed ? '마지막 ' + timeDiff(feed.time) : '-';
+    if (qbFeed) { qbFeed.style.background = ''; qbFeed.style.outline = ''; }
+    if (qiFeed) qiFeed.textContent = '🍼';
   }
 
-  // 수면
+  // ── 수면 ──
+  const qbSleep = document.getElementById('qb-sleep');
   const qlSleep = document.getElementById('ql-sleep');
   const qtSleep = document.getElementById('qt-sleep');
-  const qbSleep = document.getElementById('qb-sleep');
+  const qiSleep = document.getElementById('qi-sleep');
   if (sleepingStart) {
-    if (qlSleep) qlSleep.textContent = '기상 기록';
-    if (qbSleep) { qbSleep.style.background='#eff6ff'; qbSleep.style.borderColor='#93c5fd'; }
-    if (qtSleep) { const m=Math.round((Date.now()-new Date(sleepingStart).getTime())/60000); qtSleep.textContent=m+'분째'; }
+    const m = Math.round((Date.now() - new Date(sleepingStart).getTime()) / 60000);
+    if (qlSleep) qlSleep.textContent = '기상 기록 ☀️';
+    if (qtSleep) qtSleep.textContent = m + '분째 수면 중';
+    if (qbSleep) { qbSleep.style.background = 'linear-gradient(135deg,#eff6ff,#dbeafe)'; qbSleep.style.outline = '2px solid #93c5fd'; }
+    if (qiSleep) qiSleep.textContent = '😴';
   } else {
     if (qlSleep) qlSleep.textContent = '수면 시작';
-    if (qbSleep) { qbSleep.style.background=''; qbSleep.style.borderColor=''; }
-    if (qtSleep) qtSleep.textContent = sleep ? timeDiff(sleep.time) : '-';
+    if (qtSleep) qtSleep.textContent = sleep ? '마지막 ' + timeDiff(sleep.time) : '-';
+    if (qbSleep) { qbSleep.style.background = ''; qbSleep.style.outline = ''; }
+    if (qiSleep) qiSleep.textContent = '😴';
   }
 
-  // 유축
+  // ── 유축 ──
+  const qbPump = document.getElementById('qb-pump');
   const qlPump = document.getElementById('ql-pump');
   const qtPump = document.getElementById('qt-pump');
-  const qbPump = document.getElementById('qb-pump');
+  const qiPump = document.getElementById('qi-pump');
   if (pumpingStart) {
-    if (qlPump) qlPump.textContent = '유축 종료';
-    if (qbPump) { qbPump.style.background='#fdf4ff'; qbPump.style.borderColor='#d8b4fe'; }
-    if (qtPump) { const m=Math.round((Date.now()-new Date(pumpingStart).getTime())/60000); qtPump.textContent=m+'분째'; }
+    const m = Math.round((Date.now() - new Date(pumpingStart).getTime()) / 60000);
+    if (qlPump) qlPump.textContent = '유축 종료 ✅';
+    if (qtPump) qtPump.textContent = m + '분째 유축 중';
+    if (qbPump) { qbPump.style.background = 'linear-gradient(135deg,#fdf4ff,#f3e8ff)'; qbPump.style.outline = '2px solid #d8b4fe'; }
+    if (qiPump) qiPump.textContent = '🤱';
   } else {
     if (qlPump) qlPump.textContent = '유축 시작';
-    if (qbPump) { qbPump.style.background=''; qbPump.style.borderColor=''; }
-    if (qtPump) qtPump.textContent = pump ? timeDiff(pump.time) : '-';
+    if (qtPump) qtPump.textContent = pump ? '마지막 ' + timeDiff(pump.time) : '-';
+    if (qbPump) { qbPump.style.background = ''; qbPump.style.outline = ''; }
+    if (qiPump) qiPump.textContent = '🤱';
   }
 
-  // 기저귀
+  // ── 기저귀 ──
   const qtDiaper = document.getElementById('qt-diaper');
-  const qlDiaper = document.getElementById('ql-diaper');
-  if (diaper) {
-    const typeEmoji = diaper.sub === '대변' ? '💩' : diaper.sub === '소변+대변' ? '💧💩' : '💧';
-    if (qtDiaper) qtDiaper.textContent = timeDiff(diaper.time);
-    if (qlDiaper) qlDiaper.textContent = `기저귀 ${typeEmoji}`;
-  } else {
-    if (qtDiaper) qtDiaper.textContent = '-';
-    if (qlDiaper) qlDiaper.textContent = '기저귀';
-  }
+  if (qtDiaper) qtDiaper.textContent = diaper ? '마지막 ' + timeDiff(diaper.time) : '-';
 }
 
 // ── 음성 명령 처리 업데이트 ──
