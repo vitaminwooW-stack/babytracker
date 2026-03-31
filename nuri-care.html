@@ -644,7 +644,7 @@ body.dark .voice-hero-btn.listening { background: #dc2626; }
 body.dark .voice-cmd { background: #2a2520; border-color: #3d3628; color: #c8a870; }
 
 /* ══ 진행 중 세션 카드 ══ */
-.active-session-card { border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; border: 2px solid; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.active-session-card { border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; border: 2px solid; display: flex; align-items: center; justify-content: space-between; gap: 10px; position: relative; z-index: 1; }
 .active-session-card.sleep { background: linear-gradient(135deg,#eff6ff,#dbeafe); border-color: #93c5fd; }
 .active-session-card.pump  { background: linear-gradient(135deg,#fdf4ff,#f3e8ff); border-color: #d8b4fe; }
 .active-session-card.feed  { background: linear-gradient(135deg,#fff7ed,#ffedd5); border-color: #fdba74; }
@@ -652,7 +652,7 @@ body.dark .voice-cmd { background: #2a2520; border-color: #3d3628; color: #c8a87
 .active-session-icon { font-size: 28px; }
 .active-session-title { font-size: 14px; font-weight: 700; color: #1a1a1a; }
 .active-session-dur { font-size: 13px; color: #6b7280; font-weight: 500; }
-.active-session-end-btn { background: #1a1a1a; color: #fff; border: none; border-radius: 20px; padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; touch-action: manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0.1); }
+.active-session-end-btn { background: #1a1a1a; color: #fff; border: none; border-radius: 20px; padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; touch-action: manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0.1); position: relative; z-index: 2; }
 .active-session-end-btn:active { opacity: 0.8; }
 body.dark .active-session-card.sleep { background: #0f1a2a; border-color: #1e3a5f; }
 body.dark .active-session-card.pump  { background: #1a0f2a; border-color: #5b21b6; }
@@ -1223,6 +1223,7 @@ body.dark .tl-content-title { color: #f0ead8; }
       <div class="swipe-page">
         <div class="app-body">
           <div id="coach-card-wrap"></div>
+          <div id="active-sessions-wrap"></div>
           <div class="voice-hero">
             <div class="voice-hero-mic" id="voice-mic-icon">
               <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1247,7 +1248,6 @@ body.dark .tl-content-title { color: #f0ead8; }
             </div>
           </div>
           <!-- 진행 중 세션 카드 (수면·수유·유축 시작 후 이 화면에서 종료 가능) -->
-          <div id="active-sessions-wrap"></div>
           <div class="quick-log-row">
             <button class="quick-btn" onclick="quickStartAction('feed')" id="qb-feed">
               <span class="quick-btn-icon" id="qi-feed">🍼</span>
@@ -2944,8 +2944,12 @@ function saveDiaper() {
   };
   const info = typeMap[t] || typeMap.wet;
   addRecord({ type:'diaper', time: time || nowLocal(), title: info.title, sub: info.sub, icon: info.icon, cat:'diaper' });
-  closeModal('diaper');
-  goToPage(2); // 저장 후 메인(루틴 기록) 탭으로
+  // 모달 닫기
+  const modal = document.getElementById('modal-diaper');
+  if (modal) modal.classList.remove('open');
+  // 메인 탭으로 이동
+  setTimeout(() => goToPage(2), 50);
+  showCompleteFeedback(info.icon, '기저귀\n기록 완료!');
 }
 
 // ── 기록 공통 ──
@@ -3096,17 +3100,29 @@ function renderTimeline() {
     const catColors = { feed:'#eff6ff', sleep:'#f0f9ff', diaper:'#f0fdf4', pump:'#fdf4ff' };
     const bgColor = catColors[r.cat] || '#f9fafb';
 
-    let icon = r.icon, subDisplay = r.sub;
+    let icon = r.icon, subDisplay = '';
     if (r.cat === 'diaper') {
       if (r.sub === '소변') { icon = '💧'; subDisplay = '소변'; }
       else if (r.sub === '대변') { icon = '💩'; subDisplay = '대변'; }
       else if (r.sub === '소변+대변') { icon = '💩'; subDisplay = '소변 + 대변'; }
+      else subDisplay = r.sub;
+    } else if (r._inProgress) {
+      // 진행 중: 시작 시각만 표시
+      subDisplay = fmtTime(r.time) + ' 시작';
+    } else if (r._merged && r._startTime) {
+      // 완료: 04:10 ~ 04:25 · 15분
+      const startMs = new Date(r._startTime).getTime();
+      const endMs   = new Date(r.time).getTime();
+      const durMin  = Math.max(0, Math.round((endMs - startMs) / 60000));
+      const durStr  = durMin >= 60
+        ? Math.floor(durMin/60) + '시간 ' + (durMin%60) + '분'
+        : durMin + '분';
+      subDisplay = fmtTime(r._startTime) + ' ~ ' + fmtTime(r.time) + ' · ' + durStr;
+    } else {
+      subDisplay = r.sub || '';
     }
 
     let durationBadge = '';
-    if (r._merged && r._startTime) {
-      durationBadge = '<span style="font-size:10px;color:#6b7280;margin-left:4px;">' + fmtTime(r._startTime) + ' ~ ' + fmtTime(r.time) + '</span>';
-    }
 
     return dateDivider +
       '<div class="tl-item">' +
@@ -6026,6 +6042,7 @@ function startSession(type) {
   if (type === 'sleep') {
     if (sleepingStart) {
       speak('이미 수면 중이에요.');
+      showCompleteFeedback('😴', '이미\n수면 중이에요!');
       showVoiceToast('이미 수면 중 — 종료하려면 "기상"이라고 하세요', false);
       return;
     }
@@ -6037,6 +6054,7 @@ function startSession(type) {
   } else if (type === 'pump') {
     if (pumpingStart) {
       speak('이미 유축 중이에요.');
+      showCompleteFeedback('🤱', '이미\n유축 중이에요!');
       showVoiceToast('이미 유축 중 — 종료하려면 "유축 종료"라고 하세요', false);
       return;
     }
@@ -6047,6 +6065,7 @@ function startSession(type) {
   } else if (type === 'feed') {
     if (feedingStart) {
       speak('이미 수유 중이에요.');
+      showCompleteFeedback('🍼', '이미\n수유 중이에요!');
       showVoiceToast('이미 수유 중 — 종료하려면 "수유 종료"라고 하세요', false);
       return;
     }
