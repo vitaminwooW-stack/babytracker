@@ -1312,7 +1312,15 @@ body.dark .tl-content-title { color: #f0ead8; }
             <div style="font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:8px;">요약</div>
             <div id="chart-summary-body" style="font-size:13px;color:#555;line-height:2;"></div>
           </div>
-          <div class="feature-section-title" style="margin-top:8px;">📋 오늘의 기록</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;margin-bottom:6px;">
+            <div class="feature-section-title" style="margin:0;">📋 기록</div>
+            <div style="display:flex;gap:6px;">
+              <button id="tl-tab-today" onclick="switchTimelineTab('today')"
+                style="padding:4px 12px;border-radius:20px;border:1px solid #e8d796;font-size:12px;font-weight:700;cursor:pointer;background:#7a5600;color:#fff;">오늘</button>
+              <button id="tl-tab-all" onclick="switchTimelineTab('all')"
+                style="padding:4px 12px;border-radius:20px;border:1px solid #e8d796;font-size:12px;font-weight:700;cursor:pointer;background:#fff;color:#7a5600;">전체</button>
+            </div>
+          </div>
           <div class="timeline-card">
             <div id="timeline"><div class="empty">아직 기록이 없어요 🌙<br>음성 또는 버튼으로 첫 기록을 남겨보세요!</div></div>
           </div>
@@ -2978,18 +2986,37 @@ function fmtTime(t) {
   return (h < 12 ? '오전 ' : '오후 ') + (h % 12 || 12) + ':' + (m < 10 ? '0' + m : m);
 }
 
+let timelineTab = 'today'; // 'today' | 'all'
+
+function switchTimelineTab(tab) {
+  timelineTab = tab;
+  const todayBtn = document.getElementById('tl-tab-today');
+  const allBtn   = document.getElementById('tl-tab-all');
+  if (todayBtn) { todayBtn.style.background = tab === 'today' ? '#7a5600' : '#fff'; todayBtn.style.color = tab === 'today' ? '#fff' : '#7a5600'; }
+  if (allBtn)   { allBtn.style.background   = tab === 'all'   ? '#7a5600' : '#fff'; allBtn.style.color   = tab === 'all'   ? '#fff' : '#7a5600'; }
+  renderTimeline();
+}
+
 function renderTimeline() {
   const el = document.getElementById('timeline');
   if (!el) return;
 
-  // 오늘 KST 날짜 기준 필터
   const todayKST = new Date(Date.now() + 9*3600*1000).toISOString().slice(0,10);
-  const todayRecs = records
-    .map((r, i) => ({ ...r, _origIdx: i }))
-    .filter(r => r.time && r.time.slice(0,10) === todayKST)
-    .sort((a, b) => b.time.localeCompare(a.time));
 
-  if (!todayRecs.length) {
+  // 탭에 따라 필터
+  let sourceRecs;
+  if (timelineTab === 'today') {
+    sourceRecs = records
+      .map((r, i) => ({ ...r, _origIdx: i }))
+      .filter(r => r.time && r.time.slice(0,10) === todayKST)
+      .sort((a, b) => b.time.localeCompare(a.time));
+  } else {
+    sourceRecs = records
+      .map((r, i) => ({ ...r, _origIdx: i }))
+      .sort((a, b) => b.time.localeCompare(a.time));
+  }
+
+  if (!sourceRecs.length) {
     el.innerHTML = '<div class="empty">아직 기록이 없어요 🌙<br>위 버튼을 눌러 첫 기록을 남겨보세요!</div>';
     return;
   }
@@ -3001,13 +3028,15 @@ function renderTimeline() {
   const merged = [];
   const usedIdx = new Set();
 
-  todayRecs.forEach((r, i) => {
+  sourceRecs.forEach((r, i) => {
     if (usedIdx.has(i)) return;
 
-    // 완료 기록 → 짝이 되는 시작 기록 찾기
+    // 완료 기록 → 짝이 되는 시작 기록 찾기 (같은 날)
     if (r.cat in endTitles && r.title === endTitles[r.cat]) {
-      const startIdx = todayRecs.findIndex((s, si) =>
-        si > i && !usedIdx.has(si) && s.cat === r.cat && s.title === startTitles[r.cat]
+      const startIdx = sourceRecs.findIndex((s, si) =>
+        si > i && !usedIdx.has(si) &&
+        s.cat === r.cat && s.title === startTitles[r.cat] &&
+        s.time.slice(0,10) === r.time.slice(0,10)
       );
       if (startIdx !== -1) {
         usedIdx.add(i);
@@ -3016,17 +3045,18 @@ function renderTimeline() {
           ...r,
           icon: {feed:'🍼',sleep:'😴',pump:'🤱'}[r.cat],
           title: dispTitles[r.cat],
-          _startTime: todayRecs[startIdx].time,
+          _startTime: sourceRecs[startIdx].time,
           _merged: true,
         });
         return;
       }
     }
 
-    // 시작 기록 → 종료 기록이 이미 처리됐으면 스킵, 아니면 진행중 표시
+    // 시작 기록 → 같은 날 종료 기록이 있으면 스킵
     if (r.cat in startTitles && r.title === startTitles[r.cat]) {
-      const hasEnd = todayRecs.some((s, si) =>
-        si < i && s.cat === r.cat && s.title === endTitles[r.cat]
+      const hasEnd = sourceRecs.some((s, si) =>
+        si < i && s.cat === r.cat && s.title === endTitles[r.cat] &&
+        s.time.slice(0,10) === r.time.slice(0,10)
       );
       if (hasEnd) { usedIdx.add(i); return; }
       r = { ...r, _inProgress: true };
@@ -3035,12 +3065,26 @@ function renderTimeline() {
     if (!usedIdx.has(i)) merged.push(r);
   });
 
-  el.innerHTML = merged.slice(0, 60).map(r => {
+  // 전체 탭일 때 날짜 구분선 추가
+  let prevDate = '';
+  el.innerHTML = merged.slice(0, 120).map(r => {
     const d = new Date(r.time);
     const h = d.getHours(), m = d.getMinutes();
     const ampm = h < 12 ? '오전' : '오후';
     const hh = (h % 12 || 12);
     const mm = m < 10 ? '0' + m : m;
+    const dateStr = r.time.slice(0,10);
+
+    let dateDivider = '';
+    if (timelineTab === 'all' && dateStr !== prevDate) {
+      prevDate = dateStr;
+      const dObj = new Date(dateStr);
+      const dayNames = ['일','월','화','수','목','금','토'];
+      const dateLabel = (dObj.getMonth()+1) + '/' + dObj.getDate() + ' (' + dayNames[dObj.getDay()] + ')';
+      const isToday = dateStr === todayKST;
+      dateDivider = '<div style="padding:8px 14px 4px;font-size:11px;font-weight:700;color:' + (isToday ? '#7a5600' : '#9ca3af') + ';background:' + (isToday ? '#fffbeb' : '#f9fafb') + ';">' +
+        (isToday ? '📅 오늘 ' : '') + dateLabel + '</div>';
+    }
 
     const dadBadge = r.byDad
       ? '<span style="font-size:9px;background:#eff6ff;color:#1d4ed8;border-radius:6px;padding:1px 5px;font-weight:700;margin-left:4px;">아빠</span>'
@@ -3064,23 +3108,24 @@ function renderTimeline() {
       durationBadge = '<span style="font-size:10px;color:#6b7280;margin-left:4px;">' + fmtTime(r._startTime) + ' ~ ' + fmtTime(r.time) + '</span>';
     }
 
-    return '<div class="tl-item">' +
-      '<div class="tl-time-col">' +
-        '<div class="tl-time-ampm">' + ampm + '</div>' +
-        '<div class="tl-time-hm">' + hh + ':' + mm + '</div>' +
-      '</div>' +
-      '<div class="tl-body">' +
-        '<div class="tl-icon-circle" style="background:' + bgColor + ';">' + icon + '</div>' +
-        '<div class="tl-content">' +
-          '<div class="tl-content-title">' + r.title + dadBadge + progressBadge + '</div>' +
-          '<div class="tl-content-sub">' + subDisplay + durationBadge + '</div>' +
+    return dateDivider +
+      '<div class="tl-item">' +
+        '<div class="tl-time-col">' +
+          '<div class="tl-time-ampm">' + ampm + '</div>' +
+          '<div class="tl-time-hm">' + hh + ':' + mm + '</div>' +
         '</div>' +
-      '</div>' +
-      '<div class="tl-actions-col">' +
-        '<button class="t-edit-btn" onclick="editRecord(' + r._origIdx + ')">✏️</button>' +
-        '<button class="t-del-btn" onclick="deleteRecord(' + r._origIdx + ')">🗑️</button>' +
-      '</div>' +
-    '</div>';
+        '<div class="tl-body">' +
+          '<div class="tl-icon-circle" style="background:' + bgColor + ';">' + icon + '</div>' +
+          '<div class="tl-content">' +
+            '<div class="tl-content-title">' + r.title + dadBadge + progressBadge + '</div>' +
+            '<div class="tl-content-sub">' + subDisplay + durationBadge + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="tl-actions-col">' +
+          '<button class="t-edit-btn" onclick="editRecord(' + r._origIdx + ')">✏️</button>' +
+          '<button class="t-del-btn" onclick="deleteRecord(' + r._origIdx + ')">🗑️</button>' +
+        '</div>' +
+      '</div>';
   }).join('');
 }
 
