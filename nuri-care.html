@@ -38,14 +38,12 @@ input:focus { border-color: #bfdbfe; }
 .btn-primary:active { opacity: 0.85; }
 
 /* ── 전체 배경 컬러 통일 (첫 화면 톤) ── */
-body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif; background: #fff7d6; min-height: 100vh; color: #111827; }
 
 #screen-login { background: radial-gradient(circle at top, #fffdf2 0%, #fff7d6 60%, #f6e6a8 100%); align-items: center; justify-content: center; }
 #screen-profile { background: #fffdf2; }
 #screen-guide { background: #fffdf2; }
 #screen-app { background: #fff7d6; }
 .role-card:active { transform: scale(0.96); }
-.role-card .role-card .role-card
 /* ── 아빠 화면 ── */
 
 .dad-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 80px; width: 100%; }
@@ -61,8 +59,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .dad-checkbox.checked { background: #22c55e; border-color: #22c55e; }
 .dad-checkbox.checked::after { content: '✓'; color: #fff; font-size: 13px; font-weight: 700; }
 .dad-check-info { flex: 1; min-width: 0; }
-.dad-check-title.dad-check-desc { font-size: 12px; color: #6b7280; margin-top: 3px; line-height: 1.5; word-break: keep-all; white-space: normal; }
-.dad-check-desc.dad-praise { font-size: 13px; color: #16a34a; font-weight: 600; margin-top: 4px; }
+.dad-check-desc { font-size: 12px; color: #6b7280; margin-top: 3px; line-height: 1.5; word-break: keep-all; white-space: normal; }
+.dad-praise { font-size: 13px; color: #16a34a; font-weight: 600; margin-top: 4px; }
 .dad-check-tag { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 8px; margin-top: 5px; display: inline-block; }
 .dad-check-tag.urgent { background: #eff6ff; color: #c0410f; }
 .dad-check-tag.soon { background: #fff7ed; color: #8a6d00; }
@@ -75,7 +73,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .dad-progress-text { font-size: 13px; color: #1d4ed8; font-weight: 700; flex-shrink: 0; }
 /* 엄마가 보는 아빠 체크리스트 (읽기전용) */
 .dad-view-modal .dad-view-summary { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-.dad-view-chip
+.dad-view-chip { font-size: 12px; padding: 4px 10px; border-radius: 10px; font-weight: 600; }
 /* ── 정책 체크 ── */
 .policy-checkbox.checked { background: #1d7a3a; border-color: #1d7a3a; }
 .policy-checkbox.checked::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
@@ -118,7 +116,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .login-hint { font-size: 12px; color: #9ca3af; text-align: center; margin-top: 16px; line-height: 1.6; }
 
 /* ── 프로필 ── */
-/* ── 프로필 ── */
 .profile-header { text-align: center; padding: 32px 0 8px; }
 .step-badge { display: inline-block; background: #ffffff; border: 1px solid #dbe3ef; color: #475569; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 8px; margin-bottom: 12px; }
 .profile-header h2 { font-size: 22px; font-weight: 700; color: #1a1a1a; }
@@ -151,7 +148,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-seri
 .hdr-btn.dad     { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
 body.dark .app-header { background: #2a2520; box-shadow: 0 1px 0 #3d3628; }
 body.dark .baby-name { color: #f0ead8; }
-body.dark body.dark .hdr-btn.profile { background: #2a2520; border-color: #4d4030; color: #c8a870; }
+body.dark .hdr-btn.profile { background: #2a2520; border-color: #4d4030; color: #c8a870; }
 body.dark .hdr-btn.guide   { background: #2a2218; border-color: #5a4a10; color: #d4a020; }
 body.dark .hdr-btn.invite  { background: #2a1820; border-color: #6a2840; color: #ec4899; }
 body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: #60a5fa; }
@@ -320,8 +317,7 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
   display: none; /* 사진 있는 경우엔 overlay 사용, 없는 경우는 placeholder 안에서 처리 */
 }
 
-/* ── 정책 페이지 ── */
-/* ── 정책 카드 스타일 ── */
+/* ── 정책 페이지 및 카드 스타일 ── */
 .policy-page-header { margin-bottom: 20px; }
 .policy-page-header h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; }
 .policy-page-header p { font-size: 13px; color: #6b7280; margin-top: 4px; }
@@ -362,7 +358,7 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .side-btn.active-R { border-color: #bfdbfe; background: #EBF4FF; }
 .side-btn.active-R .side-name { color: #1d4ed8; }
 .side-btn.done-L { border-color: #d099f5; background: #f5f3ff; opacity: 0.7; }
-.side-btn
+.side-btn.done-R { border-color: #bfdbfe; background: #EBF4FF; opacity: 0.7; }
 .stopwatch-box { background: #fafafa; border-radius: 12px; padding: 16px; margin: 12px 0 4px; text-align: center; border: 1px solid #e5e7eb; }
 .sw-display { font-size: 40px; font-weight: 700; color: #1a1a1a; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
 .sw-side-label { font-size: 13px; margin-top: 6px; font-weight: 600; min-height: 20px; }
@@ -416,7 +412,6 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .dad-event-title.dad-event-desc { font-size: 12px; color: #6b7280; margin-top: 3px; line-height: 1.5; word-break: keep-all; }
 .dad-event-praise { font-size: 13px; color: #1d4ed8; font-weight: 600; margin-top: 4px; }
 .dad-event-tag { font-size: 11px; background: #eff6ff; color: #1d4ed8; padding: 2px 8px; border-radius: 8px; margin-top: 5px; display: inline-block; font-weight: 600; }
-.dad-event-tag
 .dad-section-secret { font-size: 11px; color: #1d4ed8; margin-left: 6px; font-weight: 500; }
 
 @keyframes shake {
@@ -425,8 +420,7 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
   40%,80% { transform: translateX(8px); }
 }
 
-/* ── 신생아 케어 가이드 ── */
-/* ── 가이드 화면 ── */
+/* ── 신생아 케어 가이드 화면 ── */
 .guide-header { background: #fff; padding: 44px 16px 10px; box-shadow: 0 1px 0 #e5e7eb; flex-shrink: 0; }
 .guide-header-inner { max-width: 480px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
 .guide-header-title { font-size: 18px; font-weight: 700; color: #1a1a1a; }
@@ -456,7 +450,7 @@ body.dark .guide-cat-btn { background: #2a2520; border-color: #3d3628; color: #c
 body.dark .guide-cat-btn.active { background: #7a5600; color: #fff; }
 body.dark .guide-card { background: #2a2520; border-color: #3d3628; }
 body.dark .guide-card-body { border-top-color: #3d3628; }
-body.dark body.dark /* ══════ 새 기능 CSS ══════ */
+/* ══════ 새 기능 CSS ══════ */
 
 /* ── 다크모드 ── */
 body.dark { background: #1a1612; color: #f0ead8; }
@@ -663,11 +657,7 @@ body.dark .voice-cmd { background: #2a2520; border-color: #3d3628; color: #c8a87
 body.dark .active-session-card.sleep { background: #0f1a2a; border-color: #1e3a5f; }
 body.dark .active-session-card.pump  { background: #1a0f2a; border-color: #5b21b6; }
 body.dark .active-session-card.feed  { background: #2a1800; border-color: #92400e; }
-body.dark .active-session-title { color: #f0ead8; }@keyframes micPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
-.voice-record-btn:active { transform: scale(0.93); }
-.voice-record-btn.listening { background: #dc2626; box-shadow: 0 0 0 8px rgba(220,38,38,0.18); animation: btnPulse 1s infinite; }
-@keyframes btnPulse { 0%,100%{box-shadow:0 0 0 8px rgba(220,38,38,0.18)} 50%{box-shadow:0 0 0 16px rgba(220,38,38,0.08)} }
-.voice-cmd { background: #fff7d6; border: 1px solid #e8d796; border-radius: 16px; padding: 5px 12px; font-size: 12px; color: #7a5600; font-weight: 600; }
+body.dark .active-session-title { color: #f0ead8; }
 
 /* ── 아빠 기록 섹션 ── */
 .dad-rec-section { background: #fff; border-radius: 14px; border: 1.5px solid #e8d796; padding: 14px 16px; margin-bottom: 14px; }
