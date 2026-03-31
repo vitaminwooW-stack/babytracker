@@ -1,6 +1,6 @@
 // ── 누리케어 Service Worker ──
 // 버전을 올리면 자동으로 사용자 앱이 업데이트돼요
-const VERSION = 'nuri-care-v2.0';
+const VERSION = 'nuri-care-v3.0';
 const CACHE_NAME = VERSION;
 
 // 캐시할 파일 목록
