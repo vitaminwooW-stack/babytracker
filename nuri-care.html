@@ -2902,13 +2902,16 @@ function endSleep() {
   const dur = Math.round((now - startTime) / 60000);
   const h = Math.floor(dur / 60), m = dur % 60;
   const sub = (h > 0 ? h + '시간 ' : '') + m + '분';
+  const startStr = new Date(startTime.getTime() + 9*3600*1000).toISOString().slice(0,16);
   addRecord({
     type: 'sleep',
     time: nowLocal(),
     title: '기상',
-    sub: '수면 ' + sub,
+    sub: sub,
     icon: '☀️',
-    cat: 'sleep'
+    cat: 'sleep',
+    _startTime: startStr,
+    _durMin: dur,
   });
   sleepingStart = null;
   clearInterval(sleepTimer);
@@ -3043,7 +3046,26 @@ function renderTimeline() {
     const isStart = startSet.has(r.title) && catOf[r.title] === r.cat;
 
     if (isEnd) {
-      // 같은 날, 같은 cat의 시작 기록 찾기
+      // 1. record에 _startTime이 직접 저장된 경우 (endSession/endSleep 저장)
+      if (r._startTime && r._durMin !== undefined) {
+        usedIdx.add(i);
+        // 같은 날의 매칭 시작 기록도 스킵 처리
+        const skipIdx = sourceRecs.findIndex((s, si) =>
+          si > i && !usedIdx.has(si) &&
+          catOf[s.title] === r.cat && startSet.has(s.title) &&
+          s.time.slice(0,10) === r.time.slice(0,10)
+        );
+        if (skipIdx !== -1) usedIdx.add(skipIdx);
+        merged.push({
+          ...r,
+          icon: dispIcon[r.cat],
+          title: dispTitle[r.cat],
+          _merged: true,
+        });
+        return;
+      }
+
+      // 2. 시작 기록을 records에서 찾아서 merge
       const startIdx = sourceRecs.findIndex((s, si) =>
         si > i &&
         !usedIdx.has(si) &&
@@ -3070,8 +3092,7 @@ function renderTimeline() {
         return;
       }
 
-      // 시작 기록 없는 단독 완료 — sub에서 시간 파싱해서 표시
-      // 그대로 추가 (subText에서 처리)
+      // 3. 시작 기록 없는 단독 완료 — sub에서 시간 파싱해서 표시
     }
 
     if (isStart) {
@@ -6042,10 +6063,20 @@ let sessionTimer = null;
 function loadSessions() {
   try {
     const ps = localStorage.getItem('baby_pumping');
-    if (ps) pumpingStart = new Date(ps);
+    if (ps && ps.trim() && ps !== 'null' && ps !== 'undefined') {
+      const d = new Date(ps);
+      pumpingStart = !isNaN(d.getTime()) ? d : null;
+    } else {
+      pumpingStart = null;
+    }
     const fs = localStorage.getItem('baby_feeding');
-    if (fs) feedingStart = new Date(fs);
-  } catch(e) {}
+    if (fs && fs.trim() && fs !== 'null' && fs !== 'undefined') {
+      const d = new Date(fs);
+      feedingStart = !isNaN(d.getTime()) ? d : null;
+    } else {
+      feedingStart = null;
+    }
+  } catch(e) { pumpingStart = null; feedingStart = null; }
 }
 
 function saveSessions() {
@@ -6158,10 +6189,11 @@ function endSession(type) {
       return;
     }
     const startTime = pumpingStart instanceof Date ? pumpingStart : new Date(pumpingStart);
+    const startStr = new Date(startTime.getTime() + 9*3600*1000).toISOString().slice(0,16);
     const dur = Math.round((now - startTime) / 60000);
     const h = Math.floor(dur/60), m = dur%60;
     const durStr = (h>0 ? h+'시간 ':'')+m+'분';
-    addRecord({ type:'pump', time:nowLocal(), title:'유축 완료', sub:'총 '+durStr, icon:'🤱', cat:'pump' });
+    addRecord({ type:'pump', time:nowLocal(), title:'유축 완료', sub:durStr, icon:'🤱', cat:'pump', _startTime: startStr, _durMin: dur });
     pumpingStart = null;
     saveSessions();
     showCompleteFeedback('🤱', `유축 완료\n${durStr}`);
@@ -6173,8 +6205,9 @@ function endSession(type) {
       return;
     }
     const startTime = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
+    const startStr = new Date(startTime.getTime() + 9*3600*1000).toISOString().slice(0,16);
     const dur = Math.round((now - startTime) / 60000);
-    addRecord({ type:'feed', time:nowLocal(), title:'수유 완료', sub:dur+'분', icon:'🍼', cat:'feed' });
+    addRecord({ type:'feed', time:nowLocal(), title:'수유 완료', sub:dur+'분', icon:'🍼', cat:'feed', _startTime: startStr, _durMin: dur });
     feedingStart = null;
     saveSessions();
     showCompleteFeedback('🍼', `수유 완료\n${dur}분`);
@@ -6790,9 +6823,39 @@ function fbApplyRemoteData(data) {
       localStorage.setItem('dad_checks', JSON.stringify(data.dad_checks));
     }
     if (data.sessions) {
-      if (data.sessions.sleeping !== undefined) localStorage.setItem('baby_sleeping', data.sessions.sleeping);
-      if (data.sessions.pumping  !== undefined) localStorage.setItem('baby_pumping',  data.sessions.pumping);
-      if (data.sessions.feeding  !== undefined) localStorage.setItem('baby_feeding',  data.sessions.feeding);
+      if (data.sessions.sleeping !== undefined) {
+        const v = data.sessions.sleeping;
+        localStorage.setItem('baby_sleeping', v);
+        if (v && v.trim() && v !== 'null' && v !== 'undefined') {
+          const d = new Date(v);
+          if (!isNaN(d.getTime())) { sleepingStart = d; updateSleepBanner(); }
+          else sleepingStart = null;
+        } else {
+          sleepingStart = null;
+          const banner = document.getElementById('sleeping-banner');
+          if (banner) banner.style.display = 'none';
+        }
+      }
+      if (data.sessions.pumping !== undefined) {
+        const v = data.sessions.pumping;
+        localStorage.setItem('baby_pumping', v);
+        if (v && v.trim() && v !== 'null' && v !== 'undefined') {
+          const d = new Date(v);
+          pumpingStart = !isNaN(d.getTime()) ? d : null;
+        } else {
+          pumpingStart = null;
+        }
+      }
+      if (data.sessions.feeding !== undefined) {
+        const v = data.sessions.feeding;
+        localStorage.setItem('baby_feeding', v);
+        if (v && v.trim() && v !== 'null' && v !== 'undefined') {
+          const d = new Date(v);
+          feedingStart = !isNaN(d.getTime()) ? d : null;
+        } else {
+          feedingStart = null;
+        }
+      }
     }
     if (data.milestones) {
       localStorage.setItem('milestone_checks', JSON.stringify(data.milestones));
