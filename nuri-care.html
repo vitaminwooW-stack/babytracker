@@ -200,6 +200,8 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .swipe-container { display: flex; width: 1000%; height: 100%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
 .swipe-page { width: calc(100% / 10); height: 100%; flex-shrink: 0; overflow: hidden; }/* 사진 페이지(2번째)는 스크롤 없이 꽉 차게 */
 .swipe-page:nth-child(2) { overflow: hidden; }
+/* 메인 루틴 페이지(3번째)는 세션카드 버튼 클릭 허용 */
+.swipe-page:nth-child(3) { overflow: visible; }
 
 /* ── 일기 페이지 ── */
 .diary-page { padding: 16px 16px 80px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; }
@@ -6061,18 +6063,29 @@ let feedingStart = null;   // 수유 시작 시각
 let sessionTimer = null;
 
 function loadSessions() {
+  const MAX_SESSION_MS = 12 * 60 * 60 * 1000; // 12시간 초과 시 자동 만료
   try {
     const ps = localStorage.getItem('baby_pumping');
     if (ps && ps.trim() && ps !== 'null' && ps !== 'undefined') {
       const d = new Date(ps);
-      pumpingStart = !isNaN(d.getTime()) ? d : null;
+      if (!isNaN(d.getTime()) && (Date.now() - d.getTime()) < MAX_SESSION_MS) {
+        pumpingStart = d;
+      } else {
+        pumpingStart = null;
+        localStorage.removeItem('baby_pumping');
+      }
     } else {
       pumpingStart = null;
     }
     const fs = localStorage.getItem('baby_feeding');
     if (fs && fs.trim() && fs !== 'null' && fs !== 'undefined') {
       const d = new Date(fs);
-      feedingStart = !isNaN(d.getTime()) ? d : null;
+      if (!isNaN(d.getTime()) && (Date.now() - d.getTime()) < MAX_SESSION_MS) {
+        feedingStart = d;
+      } else {
+        feedingStart = null;
+        localStorage.removeItem('baby_feeding');
+      }
     } else {
       feedingStart = null;
     }
@@ -6081,10 +6094,17 @@ function loadSessions() {
 
 function saveSessions() {
   try {
-    localStorage.setItem('baby_pumping', pumpingStart ? pumpingStart.toISOString() : '');
-    localStorage.setItem('baby_feeding', feedingStart ? feedingStart.toISOString() : '');
+    if (pumpingStart) {
+      localStorage.setItem('baby_pumping', pumpingStart.toISOString());
+    } else {
+      localStorage.removeItem('baby_pumping');
+    }
+    if (feedingStart) {
+      localStorage.setItem('baby_feeding', feedingStart.toISOString());
+    } else {
+      localStorage.removeItem('baby_feeding');
+    }
   } catch(e) {}
-  // Firebase 세션 동기화
   if (typeof _syncSessionToFirebase === 'function') _syncSessionToFirebase();
 }
 
@@ -6271,7 +6291,7 @@ function renderActiveSessions() {
           <div class="active-session-dur" id="sleep-dur-card">${durStr(sleepingStart)}</div>
         </div>
       </div>
-      <button class="active-session-end-btn" onclick="endSession('sleep')">기상 기록 ☀️</button>
+      <button class="active-session-end-btn" data-action="end-sleep" style="touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0.1);">기상 기록 ☀️</button>
     </div>`;
   }
   if (pumpingStart) {
@@ -6283,7 +6303,7 @@ function renderActiveSessions() {
           <div class="active-session-dur" id="pump-dur-card">${durStr(pumpingStart)}</div>
         </div>
       </div>
-      <button class="active-session-end-btn" onclick="endSession('pump')">유축 완료 ✅</button>
+      <button class="active-session-end-btn" data-action="end-pump" style="touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0.1);">유축 완료 ✅</button>
     </div>`;
   }
   if (feedingStart) {
@@ -6295,10 +6315,29 @@ function renderActiveSessions() {
           <div class="active-session-dur" id="feed-dur-card">${durStr(feedingStart)}</div>
         </div>
       </div>
-      <button class="active-session-end-btn" onclick="endSession('feed')">수유 완료 ✅</button>
+      <button class="active-session-end-btn" data-action="end-feed" style="touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0.1);">수유 완료 ✅</button>
     </div>`;
   }
   wrap.innerHTML = html;
+
+  // 이벤트 위임 — inline onclick 대신 안정적인 addEventListener
+  wrap.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const action = this.getAttribute('data-action');
+      if (action === 'end-sleep') endSession('sleep');
+      else if (action === 'end-pump') endSession('pump');
+      else if (action === 'end-feed') endSession('feed');
+    });
+    btn.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const action = this.getAttribute('data-action');
+      if (action === 'end-sleep') endSession('sleep');
+      else if (action === 'end-pump') endSession('pump');
+      else if (action === 'end-feed') endSession('feed');
+    }, { passive: false });
+  });
 }
 
 // 세션 타이머 (10초마다 갱신)
