@@ -2005,8 +2005,8 @@ body.dark .tl-content-title { color: #f0ead8; }
     <span class="field-label">기록 시각</span>
     <input type="datetime-local" id="diaper-time">
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('diaper')">취소</button>
-      <button class="btn-save" onclick="saveDiaper()">저장</button>
+      <button class="btn-cancel" id="diaper-cancel-btn">취소</button>
+      <button class="btn-save" id="diaper-save-btn">저장</button>
     </div>
   </div>
 </div>
@@ -5903,13 +5903,21 @@ function loadData() {
     }
   } catch(e) { records = []; }
 
-  // 2. 수면 상태
+  // 2. 수면 상태 (12시간 초과 시 자동 만료)
   try {
     const s = localStorage.getItem('baby_sleeping');
-    if (s && s.trim()) {
+    if (s && s.trim() && s !== 'null' && s !== 'undefined') {
       const d = new Date(s);
-      if (!isNaN(d.getTime())) { sleepingStart = d; updateSleepBanner(); }
-      else { sleepingStart = null; localStorage.removeItem('baby_sleeping'); }
+      const MAX_SLEEP_MS = 12 * 60 * 60 * 1000;
+      if (!isNaN(d.getTime()) && (Date.now() - d.getTime()) < MAX_SLEEP_MS) {
+        sleepingStart = d;
+        updateSleepBanner();
+      } else {
+        sleepingStart = null;
+        localStorage.removeItem('baby_sleeping');
+      }
+    } else {
+      sleepingStart = null;
     }
   } catch(e) { sleepingStart = null; }
 
@@ -5961,6 +5969,16 @@ function enterApp() {
   try { initDadLinkState(); } catch(e) {}
   try { renderTimeline(); } catch(e) {}
   try { updateStatus(); } catch(e) {}
+
+  // ── 모달 버튼 touchend 이벤트 (모바일 클릭 보장) ──
+  function bindBtn(id, fn) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('click', fn);
+    el.addEventListener('touchend', e => { e.preventDefault(); fn(); }, { passive: false });
+  }
+  bindBtn('diaper-save-btn', saveDiaper);
+  bindBtn('diaper-cancel-btn', () => closeModal('diaper'));
 
   showScreen('app');
 
@@ -6125,14 +6143,16 @@ function loadSessions() {
 
 function saveSessions() {
   try {
-    if (pumpingStart) {
+    if (pumpingStart && pumpingStart instanceof Date && !isNaN(pumpingStart.getTime())) {
       localStorage.setItem('baby_pumping', pumpingStart.toISOString());
     } else {
+      pumpingStart = null;
       localStorage.removeItem('baby_pumping');
     }
-    if (feedingStart) {
+    if (feedingStart && feedingStart instanceof Date && !isNaN(feedingStart.getTime())) {
       localStorage.setItem('baby_feeding', feedingStart.toISOString());
     } else {
+      feedingStart = null;
       localStorage.removeItem('baby_feeding');
     }
   } catch(e) {}
@@ -6271,6 +6291,7 @@ function endSession(type) {
   renderTimeline();
   updateStatus();
   setVoiceBtnState(false);
+  setTimeout(() => { renderActiveSessions(); updateQuickBtns(); }, 150);
 }
 
 // ── 원탭 버튼 — 시작/종료 토글 ──
