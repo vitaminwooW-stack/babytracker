@@ -2970,19 +2970,9 @@ function saveDiaper() {
   };
   const info = typeMap[t] || typeMap.wet;
   addRecord({ type:'diaper', time: time || nowLocal(), title: info.title, sub: info.sub, icon: info.icon, cat:'diaper' });
-
-  // 모달 강제 닫기
-  ['modal-diaper'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) { el.classList.remove('open'); el.style.display = 'none'; }
-  });
-
+  closeModal('diaper');
   showCompleteFeedback(info.icon, '기저귀\n기록 완료!');
-  setTimeout(() => {
-    const el = document.getElementById('modal-diaper');
-    if (el) el.style.display = '';
-    goToPage(2);
-  }, 300);
+  goToPage(2);
 }
 
 // ── 기록 공통 ──
@@ -5966,12 +5956,18 @@ function enterApp() {
   try { renderTimeline(); } catch(e) {}
   try { updateStatus(); } catch(e) {}
 
-  // ── 모달 버튼 touchend 이벤트 (모바일 클릭 보장) ──
+  // ── 모달 버튼 이벤트 (touchend 우선, click은 비터치 환경만) ──
   function bindBtn(id, fn) {
     const el = document.getElementById(id);
     if (!el) return;
-    el.addEventListener('click', fn);
-    el.addEventListener('touchend', e => { e.preventDefault(); fn(); }, { passive: false });
+    let touched = false;
+    el.addEventListener('touchend', e => {
+      e.preventDefault();
+      touched = true;
+      fn();
+      setTimeout(() => { touched = false; }, 500);
+    }, { passive: false });
+    el.addEventListener('click', () => { if (!touched) fn(); });
   }
   bindBtn('diaper-save-btn', saveDiaper);
   bindBtn('diaper-cancel-btn', () => closeModal('diaper'));
@@ -6302,21 +6298,21 @@ function endSession(type) {
 function quickStartAction(type) {
   if (type === 'feed') {
     if (feedingStart) {
-      endSession('feed');
+      endSessionSafe('feed');
     } else {
       startSession('feed');
       showCompleteFeedback('🍼', '수유 시작!');
     }
   } else if (type === 'sleep') {
     if (sleepingStart) {
-      endSession('sleep');
+      endSessionSafe('sleep');
     } else {
       startSession('sleep');
       showCompleteFeedback('😴', '수면 시작!');
     }
   } else if (type === 'pump') {
     if (pumpingStart) {
-      endSession('pump');
+      endSessionSafe('pump');
     } else {
       startSession('pump');
       showCompleteFeedback('🤱', '유축 시작!');
@@ -6327,11 +6323,19 @@ function quickStartAction(type) {
 }
 
 // ── 진행 중 세션 카드 렌더 ──
+let _sessionEndLock = false; // 중복 실행 방지
+
+function endSessionSafe(type) {
+  if (_sessionEndLock) return;
+  _sessionEndLock = true;
+  endSession(type);
+  setTimeout(() => { _sessionEndLock = false; }, 1000);
+}
+
 function renderActiveSessions() {
   const wrap = document.getElementById('active-sessions-wrap');
   if (!wrap) return;
   const now = Date.now();
-  let html = '';
 
   function durStr(start) {
     const s = start instanceof Date ? start : new Date(start);
@@ -6340,16 +6344,17 @@ function renderActiveSessions() {
     return (h > 0 ? h+'시간 ' : '') + (m%60) + '분 진행 중';
   }
 
+  let html = '';
   if (sleepingStart) {
     html += `<div class="active-session-card sleep">
       <div class="active-session-left">
         <span class="active-session-icon">😴</span>
         <div class="active-session-info">
           <div class="active-session-title">수면 중</div>
-          <div class="active-session-dur" id="sleep-dur-card">${durStr(sleepingStart)}</div>
+          <div class="active-session-dur">${durStr(sleepingStart)}</div>
         </div>
       </div>
-      <button class="active-session-end-btn" data-action="end-sleep" style="touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0.1);">기상 기록 ☀️</button>
+      <button class="active-session-end-btn" data-sess="sleep">기상 기록 ☀️</button>
     </div>`;
   }
   if (pumpingStart) {
@@ -6358,10 +6363,10 @@ function renderActiveSessions() {
         <span class="active-session-icon">🤱</span>
         <div class="active-session-info">
           <div class="active-session-title">유축 중</div>
-          <div class="active-session-dur" id="pump-dur-card">${durStr(pumpingStart)}</div>
+          <div class="active-session-dur">${durStr(pumpingStart)}</div>
         </div>
       </div>
-      <button class="active-session-end-btn" data-action="end-pump" style="touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0.1);">유축 완료 ✅</button>
+      <button class="active-session-end-btn" data-sess="pump">유축 완료 ✅</button>
     </div>`;
   }
   if (feedingStart) {
@@ -6370,31 +6375,26 @@ function renderActiveSessions() {
         <span class="active-session-icon">🍼</span>
         <div class="active-session-info">
           <div class="active-session-title">수유 중</div>
-          <div class="active-session-dur" id="feed-dur-card">${durStr(feedingStart)}</div>
+          <div class="active-session-dur">${durStr(feedingStart)}</div>
         </div>
       </div>
-      <button class="active-session-end-btn" data-action="end-feed" style="touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0.1);">수유 완료 ✅</button>
+      <button class="active-session-end-btn" data-sess="feed">수유 완료 ✅</button>
     </div>`;
   }
   wrap.innerHTML = html;
 
-  // 이벤트 위임 — inline onclick 대신 안정적인 addEventListener
-  wrap.querySelectorAll('[data-action]').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      const action = this.getAttribute('data-action');
-      if (action === 'end-sleep') endSession('sleep');
-      else if (action === 'end-pump') endSession('pump');
-      else if (action === 'end-feed') endSession('feed');
-    });
+  // 버튼 이벤트: touchend만 사용 (click은 touchend 후 300ms 뒤 오므로 중복 실행 방지)
+  wrap.querySelectorAll('[data-sess]').forEach(btn => {
     btn.addEventListener('touchend', function(e) {
       e.preventDefault();
       e.stopPropagation();
-      const action = this.getAttribute('data-action');
-      if (action === 'end-sleep') endSession('sleep');
-      else if (action === 'end-pump') endSession('pump');
-      else if (action === 'end-feed') endSession('feed');
+      endSessionSafe(this.dataset.sess);
     }, { passive: false });
+    // 터치 없는 환경(PC)은 click 사용
+    btn.addEventListener('click', function(e) {
+      if (e.pointerType === 'touch' || e.sourceCapabilities?.firesTouchEvents) return;
+      endSessionSafe(this.dataset.sess);
+    });
   });
 }
 
@@ -6939,31 +6939,8 @@ function fbApplyRemoteData(data) {
         }
       }
 
-      if (data.sessions.pumping !== undefined) {
-        const v = data.sessions.pumping;
-        const d = (v && v !== 'null' && v !== 'undefined') ? new Date(v) : null;
-        const valid = d && !isNaN(d.getTime()) && (Date.now() - d.getTime()) < MAX_SESSION_MS;
-        if (valid && !pumpingStart) {
-          pumpingStart = d;
-          localStorage.setItem('baby_pumping', d.toISOString());
-        } else if (!valid) {
-          pumpingStart = null;
-          localStorage.removeItem('baby_pumping');
-        }
-      }
-
-      if (data.sessions.feeding !== undefined) {
-        const v = data.sessions.feeding;
-        const d = (v && v !== 'null' && v !== 'undefined') ? new Date(v) : null;
-        const valid = d && !isNaN(d.getTime()) && (Date.now() - d.getTime()) < MAX_SESSION_MS;
-        if (valid && !feedingStart) {
-          feedingStart = d;
-          localStorage.setItem('baby_feeding', d.toISOString());
-        } else if (!valid) {
-          feedingStart = null;
-          localStorage.removeItem('baby_feeding');
-        }
-      }
+      // 유축/수유 세션은 로컬 상태 우선 — Firebase에서 덮어쓰지 않음
+      // (완료 후 Firebase 응답이 늦게 와서 세션이 되살아나는 문제 방지)
     }
     if (data.milestones) {
       localStorage.setItem('milestone_checks', JSON.stringify(data.milestones));
