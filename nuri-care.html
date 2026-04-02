@@ -908,6 +908,8 @@ body.dark .tl-time-col { border-color: #2a2520; }
 body.dark .tl-time-hm { color: #f0ead8; }
 body.dark .tl-content-title { color: #f0ead8; }
 .tag-badge { background:#fff; border:1px solid #e8d796; border-radius:8px; padding:4px 10px; font-size:12px; color:#7a5600; font-weight:600; }
+
+
 </style>
 </head>
 <body style="visibility:hidden;">
@@ -2004,14 +2006,16 @@ body.dark .tl-content-title { color: #f0ead8; }
     <span class="field-label">기록 시각</span>
     <input type="datetime-local" id="diaper-time">
     <div class="modal-actions">
-      <button class="btn-cancel" id="diaper-cancel-btn">취소</button>
-      <button class="btn-save" id="diaper-save-btn">저장</button>
+      <button class="btn-cancel" onclick="closeModal('diaper')">취소</button>
+      <button class="btn-save" onclick="saveDiaper()">저장</button>
     </div>
   </div>
 </div>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script>
+
+
 // ── Service Worker 등록 + 강제 업데이트 ──
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js?v=4.1').then(reg => {
@@ -5956,22 +5960,6 @@ function enterApp() {
   try { renderTimeline(); } catch(e) {}
   try { updateStatus(); } catch(e) {}
 
-  // ── 모달 버튼 이벤트 (touchend 우선, click은 비터치 환경만) ──
-  function bindBtn(id, fn) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    let touched = false;
-    el.addEventListener('touchend', e => {
-      e.preventDefault();
-      touched = true;
-      fn();
-      setTimeout(() => { touched = false; }, 500);
-    }, { passive: false });
-    el.addEventListener('click', () => { if (!touched) fn(); });
-  }
-  bindBtn('diaper-save-btn', saveDiaper);
-  bindBtn('diaper-cancel-btn', () => closeModal('diaper'));
-
   showScreen('app');
 
   setTimeout(() => {
@@ -6267,8 +6255,8 @@ function endSession(type) {
     const durStr = (h>0 ? h+'시간 ':'')+m+'분';
     addRecord({ type:'pump', time:nowLocal(), title:'유축 완료', sub:durStr, icon:'🤱', cat:'pump', _startTime: startStr, _durMin: dur });
     pumpingStart = null;
-    saveSessions();
-    showCompleteFeedback('🤱', `유축 완료\n${durStr}`);
+      saveSessions();
+      showCompleteFeedback('🤱', `유축 완료\n${durStr}`);
     speak(`유축 완료. ${durStr} 유축했어요.`);
   } else if (type === 'feed') {
     if (!feedingStart) {
@@ -6283,8 +6271,8 @@ function endSession(type) {
     const dur = Math.round((now - startTime) / 60000);
     addRecord({ type:'feed', time:nowLocal(), title:'수유 완료', sub:dur+'분', icon:'🍼', cat:'feed', _startTime: startStr, _durMin: dur });
     feedingStart = null;
-    saveSessions();
-    showCompleteFeedback('🍼', `수유 완료\n${dur}분`);
+      saveSessions();
+      showCompleteFeedback('🍼', `수유 완료\n${dur}분`);
     speak(`수유 완료. ${dur}분 수유했어요.`);
   }
   renderActiveSessions();
@@ -6323,79 +6311,64 @@ function quickStartAction(type) {
 }
 
 // ── 진행 중 세션 카드 렌더 ──
-let _sessionEndLock = false; // 중복 실행 방지
-
 function endSessionSafe(type) {
-  if (_sessionEndLock) return;
-  _sessionEndLock = true;
+  // 단순 래퍼 - endSession 직접 호출
   endSession(type);
-  setTimeout(() => { _sessionEndLock = false; }, 1000);
 }
 
 function renderActiveSessions() {
   const wrap = document.getElementById('active-sessions-wrap');
   if (!wrap) return;
-  const now = Date.now();
 
-  function durStr(start) {
-    const s = start instanceof Date ? start : new Date(start);
-    const m = Math.round((now - s.getTime()) / 60000);
-    const h = Math.floor(m/60);
-    return (h > 0 ? h+'시간 ' : '') + (m%60) + '분 진행 중';
+  const now = Date.now();
+  function dur(start) {
+    const d = (start instanceof Date ? start : new Date(start));
+    const m = Math.round((now - d.getTime()) / 60000);
+    const h = Math.floor(m / 60);
+    return (h > 0 ? h + '시간 ' : '') + (m % 60) + '분 진행 중';
+  }
+
+  // 카드 없으면 숨김
+  if (!sleepingStart && !pumpingStart && !feedingStart) {
+    wrap.innerHTML = '';
+    return;
   }
 
   let html = '';
-  if (sleepingStart) {
-    html += `<div class="active-session-card sleep">
+  if (sleepingStart) html += `
+    <div class="active-session-card sleep">
       <div class="active-session-left">
         <span class="active-session-icon">😴</span>
         <div class="active-session-info">
           <div class="active-session-title">수면 중</div>
-          <div class="active-session-dur">${durStr(sleepingStart)}</div>
+          <div class="active-session-dur">${dur(sleepingStart)}</div>
         </div>
       </div>
-      <button class="active-session-end-btn" data-sess="sleep">기상 기록 ☀️</button>
+      <button class="active-session-end-btn" onclick="endSession('sleep')">기상 기록 ☀️</button>
     </div>`;
-  }
-  if (pumpingStart) {
-    html += `<div class="active-session-card pump">
+  if (pumpingStart) html += `
+    <div class="active-session-card pump">
       <div class="active-session-left">
         <span class="active-session-icon">🤱</span>
         <div class="active-session-info">
           <div class="active-session-title">유축 중</div>
-          <div class="active-session-dur">${durStr(pumpingStart)}</div>
+          <div class="active-session-dur">${dur(pumpingStart)}</div>
         </div>
       </div>
-      <button class="active-session-end-btn" data-sess="pump">유축 완료 ✅</button>
+      <button class="active-session-end-btn" onclick="endSession('pump')">유축 완료 ✅</button>
     </div>`;
-  }
-  if (feedingStart) {
-    html += `<div class="active-session-card feed">
+  if (feedingStart) html += `
+    <div class="active-session-card feed">
       <div class="active-session-left">
         <span class="active-session-icon">🍼</span>
         <div class="active-session-info">
           <div class="active-session-title">수유 중</div>
-          <div class="active-session-dur">${durStr(feedingStart)}</div>
+          <div class="active-session-dur">${dur(feedingStart)}</div>
         </div>
       </div>
-      <button class="active-session-end-btn" data-sess="feed">수유 완료 ✅</button>
+      <button class="active-session-end-btn" onclick="endSession('feed')">수유 완료 ✅</button>
     </div>`;
-  }
   wrap.innerHTML = html;
-
-  // 버튼 이벤트: touchend만 사용 (click은 touchend 후 300ms 뒤 오므로 중복 실행 방지)
-  wrap.querySelectorAll('[data-sess]').forEach(btn => {
-    btn.addEventListener('touchend', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      endSessionSafe(this.dataset.sess);
-    }, { passive: false });
-    // 터치 없는 환경(PC)은 click 사용
-    btn.addEventListener('click', function(e) {
-      if (e.pointerType === 'touch' || e.sourceCapabilities?.firesTouchEvents) return;
-      endSessionSafe(this.dataset.sess);
-    });
-  });
 }
 
 // 세션 타이머 (10초마다 갱신)
@@ -7099,5 +7072,6 @@ function fbRenderStatus() {
 
 appStart(); // 역할 기억 기반 자동 라우팅
 </script>
+
 </body>
 </html>
