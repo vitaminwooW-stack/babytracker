@@ -360,8 +360,7 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .side-btn.active-R { border-color: #bfdbfe; background: #EBF4FF; }
 .side-btn.active-R .side-name { color: #1d4ed8; }
 .side-btn.done-L { border-color: #d099f5; background: #f5f3ff; opacity: 0.7; }
-.side-btn.done-R { border-color: #bfdbfe; background: #EBF4FF; opacity: 0.7; }
-.stopwatch-box { background: #fafafa; border-radius: 12px; padding: 16px; margin: 12px 0 4px; text-align: center; border: 1px solid #e5e7eb; }
+.side-btn.stopwatch-box { background: #fafafa; border-radius: 12px; padding: 16px; margin: 12px 0 4px; text-align: center; border: 1px solid #e5e7eb; }
 .sw-display { font-size: 40px; font-weight: 700; color: #1a1a1a; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
 .sw-side-label { font-size: 13px; margin-top: 6px; font-weight: 600; min-height: 20px; }
 .sw-side-label.left { color: #7c3aaf; }
@@ -2971,12 +2970,19 @@ function saveDiaper() {
   };
   const info = typeMap[t] || typeMap.wet;
   addRecord({ type:'diaper', time: time || nowLocal(), title: info.title, sub: info.sub, icon: info.icon, cat:'diaper' });
-  // 모달 닫기
-  const modal = document.getElementById('modal-diaper');
-  if (modal) modal.classList.remove('open');
-  // 메인 탭으로 이동
-  setTimeout(() => goToPage(2), 50);
+
+  // 모달 강제 닫기
+  ['modal-diaper'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.classList.remove('open'); el.style.display = 'none'; }
+  });
+
   showCompleteFeedback(info.icon, '기저귀\n기록 완료!');
+  setTimeout(() => {
+    const el = document.getElementById('modal-diaper');
+    if (el) el.style.display = '';
+    goToPage(2);
+  }, 300);
 }
 
 // ── 기록 공통 ──
@@ -3283,7 +3289,13 @@ function saveData() {
   // localStorage 백업 (최근 300개)
   try { localStorage.setItem('baby_records', JSON.stringify(records.slice(0, 300))); } catch(e) {}
   // 수면 세션
-  try { localStorage.setItem('baby_sleeping', sleepingStart ? sleepingStart.toISOString() : ''); } catch(e) {}
+  try {
+    if (sleepingStart instanceof Date && !isNaN(sleepingStart.getTime())) {
+      localStorage.setItem('baby_sleeping', sleepingStart.toISOString());
+    } else {
+      localStorage.removeItem('baby_sleeping');
+    }
+  } catch(e) {}
   try { localStorage.setItem('last_saved', new Date().toISOString()); } catch(e) {}
 }
 
@@ -5780,18 +5792,18 @@ function goToPage(n) {
   currentPage = Math.max(0, Math.min(9, n));
   document.getElementById('swipe-container').style.transform =
     'translateX(-' + (currentPage * 100 / 10) + '%)';
-  // dots (숨겨져 있지만 호환성 유지)
+
   for (let i = 0; i < 10; i++) {
     const dot = document.getElementById('dot-' + i);
     if (dot) dot.classList.toggle('active', i === currentPage);
   }
-  // 탭바 active 업데이트
+
   for (let i = 0; i < 10; i++) {
     const qn = document.getElementById('qn-' + i);
     if (qn) qn.classList.toggle('active', i === currentPage);
   }
   updatePageLabel(currentPage);
-  // 새로고침 시 복원을 위해 페이지 저장
+
   try { sessionStorage.setItem('nuri_last_page', String(currentPage)); } catch(e) {}
   if (currentPage === 3) setTimeout(() => { renderMainChart(); renderPatternAnalysis(); }, 100);
   if (currentPage === 4) setTimeout(() => { renderGrowthChart(); renderGrowthTable(); }, 100);
@@ -5903,23 +5915,7 @@ function loadData() {
     }
   } catch(e) { records = []; }
 
-  // 2. 수면 상태 (12시간 초과 시 자동 만료)
-  try {
-    const s = localStorage.getItem('baby_sleeping');
-    if (s && s.trim() && s !== 'null' && s !== 'undefined') {
-      const d = new Date(s);
-      const MAX_SLEEP_MS = 12 * 60 * 60 * 1000;
-      if (!isNaN(d.getTime()) && (Date.now() - d.getTime()) < MAX_SLEEP_MS) {
-        sleepingStart = d;
-        updateSleepBanner();
-      } else {
-        sleepingStart = null;
-        localStorage.removeItem('baby_sleeping');
-      }
-    } else {
-      sleepingStart = null;
-    }
-  } catch(e) { sleepingStart = null; }
+  // 2. 수면/유축/수유 세션은 loadSessions()에서 통합 처리
 
   // 3. IndexedDB에서 더 많은 기록 백그라운드 보완
   idbInit().then(() => {
@@ -6107,49 +6103,55 @@ function updateSettingsRoleUI() {
 }
 
 // ── 세션 상태 관리 (수면·유축·수유 시작→종료 쌍) ──
-let pumpingStart = null;   // 유축 시작 시각
-let feedingStart = null;   // 수유 시작 시각
+let pumpingStart = null;
+let feedingStart = null;
 let sessionTimer = null;
 
 function loadSessions() {
-  const MAX_SESSION_MS = 12 * 60 * 60 * 1000; // 12시간 초과 시 자동 만료
-  try {
-    const ps = localStorage.getItem('baby_pumping');
-    if (ps && ps.trim() && ps !== 'null' && ps !== 'undefined') {
-      const d = new Date(ps);
-      if (!isNaN(d.getTime()) && (Date.now() - d.getTime()) < MAX_SESSION_MS) {
-        pumpingStart = d;
-      } else {
-        pumpingStart = null;
-        localStorage.removeItem('baby_pumping');
+  const MAX_SESSION_MS = 12 * 60 * 60 * 1000;
+
+  function loadSession(key) {
+    try {
+      const v = localStorage.getItem(key);
+      if (!v || v === 'null' || v === 'undefined' || !v.trim()) return null;
+      const d = new Date(v);
+      if (isNaN(d.getTime()) || (Date.now() - d.getTime()) >= MAX_SESSION_MS) {
+        localStorage.removeItem(key);
+        return null;
       }
-    } else {
-      pumpingStart = null;
-    }
-    const fs = localStorage.getItem('baby_feeding');
-    if (fs && fs.trim() && fs !== 'null' && fs !== 'undefined') {
-      const d = new Date(fs);
-      if (!isNaN(d.getTime()) && (Date.now() - d.getTime()) < MAX_SESSION_MS) {
-        feedingStart = d;
-      } else {
-        feedingStart = null;
-        localStorage.removeItem('baby_feeding');
-      }
-    } else {
-      feedingStart = null;
-    }
-  } catch(e) { pumpingStart = null; feedingStart = null; }
+      return d;
+    } catch(e) { return null; }
+  }
+
+  sleepingStart = loadSession('baby_sleeping');
+  pumpingStart  = loadSession('baby_pumping');
+  feedingStart  = loadSession('baby_feeding');
+
+  if (sleepingStart) updateSleepBanner();
+  else {
+    const banner = document.getElementById('sleeping-banner');
+    if (banner) banner.style.display = 'none';
+  }
 }
 
 function saveSessions() {
   try {
-    if (pumpingStart && pumpingStart instanceof Date && !isNaN(pumpingStart.getTime())) {
+    // 수면
+    if (sleepingStart instanceof Date && !isNaN(sleepingStart.getTime())) {
+      localStorage.setItem('baby_sleeping', sleepingStart.toISOString());
+    } else {
+      sleepingStart = null;
+      localStorage.removeItem('baby_sleeping');
+    }
+    // 유축
+    if (pumpingStart instanceof Date && !isNaN(pumpingStart.getTime())) {
       localStorage.setItem('baby_pumping', pumpingStart.toISOString());
     } else {
       pumpingStart = null;
       localStorage.removeItem('baby_pumping');
     }
-    if (feedingStart && feedingStart instanceof Date && !isNaN(feedingStart.getTime())) {
+    // 수유
+    if (feedingStart instanceof Date && !isNaN(feedingStart.getTime())) {
       localStorage.setItem('baby_feeding', feedingStart.toISOString());
     } else {
       feedingStart = null;
@@ -6171,6 +6173,7 @@ function startSession(type) {
     }
     sleepingStart = now;
     saveSessions();
+    saveData();
     updateSleepBanner();
     addRecord({ type:'sleep', time:nowLocal(), title:'수면 시작', sub:'자는 중', icon:'😴', cat:'sleep' });
     speak('수면 시작을 기록했어요 😴');
@@ -6246,8 +6249,8 @@ function endSession(type) {
   const now = new Date();
   if (type === 'sleep') {
     if (!sleepingStart) {
+      showCompleteFeedback('😴', '이미\n수면 종료됨');
       speak('수면 시작 기록이 없어요.');
-      showVoiceToast('수면 시작 기록이 없어요', false);
       return;
     }
     endSleep();
@@ -6255,8 +6258,9 @@ function endSession(type) {
     speak('기상을 기록했어요.');
   } else if (type === 'pump') {
     if (!pumpingStart) {
+      showCompleteFeedback('🤱', '이미\n유축 완료됨');
       speak('유축 시작 기록이 없어요.');
-      showVoiceToast('유축 시작 기록이 없어요', false);
+      showVoiceToast('이미 유축이 완료됐어요', false);
       return;
     }
     const startTime = pumpingStart instanceof Date ? pumpingStart : new Date(pumpingStart);
@@ -6272,8 +6276,9 @@ function endSession(type) {
     speak(`유축 완료. ${durStr} 유축했어요.`);
   } else if (type === 'feed') {
     if (!feedingStart) {
+      showCompleteFeedback('🍼', '이미\n수유 완료됨');
       speak('수유 시작 기록이 없어요.');
-      showVoiceToast('수유 시작 기록이 없어요', false);
+      showVoiceToast('이미 수유가 완료됐어요', false);
       return;
     }
     const startTime = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
@@ -6291,7 +6296,6 @@ function endSession(type) {
   renderTimeline();
   updateStatus();
   setVoiceBtnState(false);
-  setTimeout(() => { renderActiveSessions(); updateQuickBtns(); }, 150);
 }
 
 // ── 원탭 버튼 — 시작/종료 토글 ──
@@ -6916,37 +6920,48 @@ function fbApplyRemoteData(data) {
       localStorage.setItem('dad_checks', JSON.stringify(data.dad_checks));
     }
     if (data.sessions) {
+      const MAX_SESSION_MS = 12 * 60 * 60 * 1000;
+
       if (data.sessions.sleeping !== undefined) {
         const v = data.sessions.sleeping;
-        localStorage.setItem('baby_sleeping', v);
-        if (v && v.trim() && v !== 'null' && v !== 'undefined') {
-          const d = new Date(v);
-          if (!isNaN(d.getTime())) { sleepingStart = d; updateSleepBanner(); }
-          else sleepingStart = null;
-        } else {
+        const d = (v && v !== 'null' && v !== 'undefined') ? new Date(v) : null;
+        const valid = d && !isNaN(d.getTime()) && (Date.now() - d.getTime()) < MAX_SESSION_MS;
+        if (valid && !sleepingStart) {
+          // 로컬에서 이미 종료됐으면 Firebase 값 무시
+          sleepingStart = d;
+          localStorage.setItem('baby_sleeping', d.toISOString());
+          updateSleepBanner();
+        } else if (!valid) {
           sleepingStart = null;
+          localStorage.removeItem('baby_sleeping');
           const banner = document.getElementById('sleeping-banner');
           if (banner) banner.style.display = 'none';
         }
       }
+
       if (data.sessions.pumping !== undefined) {
         const v = data.sessions.pumping;
-        localStorage.setItem('baby_pumping', v);
-        if (v && v.trim() && v !== 'null' && v !== 'undefined') {
-          const d = new Date(v);
-          pumpingStart = !isNaN(d.getTime()) ? d : null;
-        } else {
+        const d = (v && v !== 'null' && v !== 'undefined') ? new Date(v) : null;
+        const valid = d && !isNaN(d.getTime()) && (Date.now() - d.getTime()) < MAX_SESSION_MS;
+        if (valid && !pumpingStart) {
+          pumpingStart = d;
+          localStorage.setItem('baby_pumping', d.toISOString());
+        } else if (!valid) {
           pumpingStart = null;
+          localStorage.removeItem('baby_pumping');
         }
       }
+
       if (data.sessions.feeding !== undefined) {
         const v = data.sessions.feeding;
-        localStorage.setItem('baby_feeding', v);
-        if (v && v.trim() && v !== 'null' && v !== 'undefined') {
-          const d = new Date(v);
-          feedingStart = !isNaN(d.getTime()) ? d : null;
-        } else {
+        const d = (v && v !== 'null' && v !== 'undefined') ? new Date(v) : null;
+        const valid = d && !isNaN(d.getTime()) && (Date.now() - d.getTime()) < MAX_SESSION_MS;
+        if (valid && !feedingStart) {
+          feedingStart = d;
+          localStorage.setItem('baby_feeding', d.toISOString());
+        } else if (!valid) {
           feedingStart = null;
+          localStorage.removeItem('baby_feeding');
         }
       }
     }
