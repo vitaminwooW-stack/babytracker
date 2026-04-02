@@ -2922,7 +2922,8 @@ function endSleep() {
   const dur = Math.round((now - startTime) / 60000);
   const h = Math.floor(dur / 60), m = dur % 60;
   const sub = (h > 0 ? h + '시간 ' : '') + m + '분';
-  const startStr = new Date(startTime.getTime() + 9*3600*1000).toISOString().slice(0,16);
+  const startKST = new Date(startTime.getTime() + 9*3600*1000);
+  const startStr = startKST.toISOString().slice(0,16);
   addRecord({
     type: 'sleep',
     time: nowLocal(),
@@ -2984,7 +2985,8 @@ function addRecord(r) {
   saveData();
   renderTimeline();
   updateStatus();
-
+  renderActiveSessions();
+  updateQuickBtns();
   if (typeof _pushRecordToFirebase === 'function') _pushRecordToFirebase(r);
 }
 
@@ -3130,8 +3132,19 @@ function renderTimeline() {
     if (!usedIdx.has(i)) merged.push(r);
   });
 
+  // 같은 _startTime 중복 제거 (잘못 저장된 기록 방어)
+  const seenKeys = new Set();
+  const deduped = merged.filter(r => {
+    if (r._merged && r._startTime) {
+      const key = r.cat + '_' + r._startTime;
+      if (seenKeys.has(key)) return false;
+      seenKeys.add(key);
+    }
+    return true;
+  });
+
   let prevDate = '';
-  el.innerHTML = merged.slice(0, 120).map(r => {
+  el.innerHTML = deduped.slice(0, 120).map(r => {
     const d = new Date(r.time);
     const h = d.getHours(), m = d.getMinutes();
     const ampm = h < 12 ? '오전' : '오후';
@@ -6227,7 +6240,8 @@ function endSession(type) {
       return;
     }
     const startTime = pumpingStart instanceof Date ? pumpingStart : new Date(pumpingStart);
-    const startStr = new Date(startTime.getTime() + 9*3600*1000).toISOString().slice(0,16);
+    const startKST = new Date(startTime.getTime() + 9*3600*1000);
+    const startStr = startKST.toISOString().slice(0,16);
     const dur = Math.round((now - startTime) / 60000);
     const h = Math.floor(dur/60), m = dur%60;
     const durStr = (h>0 ? h+'시간 ':'')+m+'분';
@@ -6243,7 +6257,8 @@ function endSession(type) {
       return;
     }
     const startTime = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
-    const startStr = new Date(startTime.getTime() + 9*3600*1000).toISOString().slice(0,16);
+    const startKST = new Date(startTime.getTime() + 9*3600*1000);
+    const startStr = startKST.toISOString().slice(0,16);
     const dur = Math.round((now - startTime) / 60000);
     addRecord({ type:'feed', time:nowLocal(), title:'수유 완료', sub:dur+'분', icon:'🍼', cat:'feed', _startTime: startStr, _durMin: dur });
     feedingStart = null;
@@ -6370,7 +6385,7 @@ function startSessionTimer() {
     if (sleepingStart || feedingStart || pumpingStart) {
       renderTimeline();
     }
-  }, 3000); // 3초마다 갱신
+  }, 1000); // 1초마다 갱신
 }
 
 // 아빠 탭 실시간 자동 갱신 (5초마다)
