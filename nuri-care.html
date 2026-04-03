@@ -54,11 +54,14 @@ input:focus { border-color: #bfdbfe; }
 .dad-section-title span { display: none; }
 
 .dad-check-card { background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden; box-shadow: none; }
+.dad-check-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: background 0.15s; }
 .dad-check-item:last-child { border-bottom: none; }
 .dad-check-item:active { background: #f5f8ff; }
 .dad-check-item.done { background: linear-gradient(135deg, #f0fdf4, #e8f8f0); border-bottom-color: #d4f0e0; }
+.dad-checkbox { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #cbd5e1; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: all 0.15s; }
 .dad-checkbox.checked { background: #22c55e; border-color: #22c55e; }
 .dad-checkbox.checked::after { content: '✓'; color: #fff; font-size: 13px; font-weight: 700; }
+.dad-check-title { font-size: 14px; font-weight: 600; color: #1e293b; }
 .dad-check-info { flex: 1; min-width: 0; }
 .dad-check-desc { font-size: 12px; color: #6b7280; margin-top: 3px; line-height: 1.5; word-break: keep-all; white-space: normal; }
 .dad-praise { font-size: 13px; color: #16a34a; font-weight: 600; margin-top: 4px; }
