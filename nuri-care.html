@@ -2920,6 +2920,10 @@ function endSleep() {
   const sub = (h > 0 ? h + '시간 ' : '') + m + '분';
   const startKST = new Date(startTime.getTime() + 9*3600*1000);
   const startStr = startKST.toISOString().slice(0,16);
+  sleepingStart = null; // ← addRecord 전에 null 처리
+  clearInterval(sleepTimer);
+  const banner = document.getElementById('sleeping-banner');
+  if (banner) banner.style.display = 'none';
   addRecord({
     type: 'sleep',
     time: nowLocal(),
@@ -2930,14 +2934,7 @@ function endSleep() {
     _startTime: startStr,
     _durMin: dur,
   });
-  sleepingStart = null;
-  clearInterval(sleepTimer);
-  const banner = document.getElementById('sleeping-banner');
-  if (banner) banner.style.display = 'none';
   saveData();
-  renderTimeline();
-  updateStatus();
-  updateQuickBtns();
   setVoiceBtnState(false);
 }
 
@@ -6261,10 +6258,10 @@ function endSession(type) {
     const dur = Math.round((now - startTime) / 60000);
     const h = Math.floor(dur/60), m = dur%60;
     const durStr = (h>0 ? h+'시간 ':'')+m+'분';
+    pumpingStart = null; // ← addRecord 전에 null 처리
+    saveSessions();
     addRecord({ type:'pump', time:nowLocal(), title:'유축 완료', sub:durStr, icon:'🤱', cat:'pump', _startTime: startStr, _durMin: dur });
-    pumpingStart = null;
-      saveSessions();
-      showCompleteFeedback('🤱', `유축 완료\n${durStr}`);
+    showCompleteFeedback('🤱', `유축 완료\n${durStr}`);
     speak(`유축 완료. ${durStr} 유축했어요.`);
   } else if (type === 'feed') {
     if (!feedingStart) {
@@ -6277,10 +6274,10 @@ function endSession(type) {
     const startKST = new Date(startTime.getTime() + 9*3600*1000);
     const startStr = startKST.toISOString().slice(0,16);
     const dur = Math.round((now - startTime) / 60000);
+    feedingStart = null; // ← addRecord 전에 null 처리
+    saveSessions();
     addRecord({ type:'feed', time:nowLocal(), title:'수유 완료', sub:dur+'분', icon:'🍼', cat:'feed', _startTime: startStr, _durMin: dur });
-    feedingStart = null;
-      saveSessions();
-      showCompleteFeedback('🍼', `수유 완료\n${dur}분`);
+    showCompleteFeedback('🍼', `수유 완료\n${dur}분`);
     speak(`수유 완료. ${dur}분 수유했어요.`);
   }
   updateQuickBtns();
