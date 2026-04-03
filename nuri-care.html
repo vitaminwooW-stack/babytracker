@@ -627,7 +627,7 @@ body.dark .onboarding-title { color: #f0ead8; }
 
 /* ── 마이크 중심 UI ── */
 /* ══ 음성 히어로 UI ══ */
-.voice-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 0 24px; pointer-events: none; }
+.voice-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px 0 12px; pointer-events: none; }
 .voice-hero * { pointer-events: auto; }
 .voice-hero-mic { margin-bottom: 24px; opacity: 0.92; transition: transform 0.2s; }
 .voice-hero-mic.listening { animation: micPulse 1.2s ease-in-out infinite; }
@@ -6002,22 +6002,25 @@ function enterApp() {
 
   showScreen('app');
 
-  // ── 모달 버튼 이벤트 바인딩 (터치/클릭 모두 안정적으로) ──
+  // ── 모달 버튼 이벤트 바인딩 ──
   (function bindModalBtns() {
     function bindBtn(id, fn) {
       const el = document.getElementById(id);
       if (!el) return;
-      let busy = false;
-      function handler(e) {
-        if (busy) return;
-        busy = true;
+      let _t = 0;
+      el.addEventListener('touchend', function(e) {
         e.preventDefault();
-        e.stopPropagation();
-        try { fn(); } catch(err) { console.warn(id, err); }
-        setTimeout(() => { busy = false; }, 800);
-      }
-      el.addEventListener('touchend', handler, { passive: false });
-      el.addEventListener('click', handler);
+        const now = Date.now();
+        if (now - _t < 600) return; // 600ms 내 중복 방지
+        _t = now;
+        fn();
+      }, { passive: false });
+      el.addEventListener('click', function() {
+        const now = Date.now();
+        if (now - _t < 600) return;
+        _t = now;
+        fn();
+      });
     }
     bindBtn('diaper-save-btn',   saveDiaper);
     bindBtn('diaper-cancel-btn', () => closeModal('diaper'));
@@ -6512,7 +6515,7 @@ function updateQuickBtns() {
     if (qiFeed) qiFeed.textContent = '🍼';
   } else {
     if (qlFeed) qlFeed.textContent = '수유 시작';
-    if (qtFeed) qtFeed.textContent = feed ? '마지막 ' + timeDiff(feed.time) : '-';
+    if (qtFeed) qtFeed.textContent = feed ? timeDiff(feed.time) : '-';
     if (qbFeed) { qbFeed.style.background = ''; qbFeed.style.outline = ''; }
     if (qiFeed) qiFeed.textContent = '🍼';
   }
@@ -6531,7 +6534,7 @@ function updateQuickBtns() {
     if (qiSleep) qiSleep.textContent = '😴';
   } else {
     if (qlSleep) qlSleep.textContent = '수면 시작';
-    if (qtSleep) qtSleep.textContent = sleep ? '마지막 ' + timeDiff(sleep.time) : '-';
+    if (qtSleep) qtSleep.textContent = sleep ? timeDiff(sleep.time) : '-';
     if (qbSleep) { qbSleep.style.background = ''; qbSleep.style.outline = ''; }
     if (qiSleep) qiSleep.textContent = '😴';
   }
@@ -6550,14 +6553,14 @@ function updateQuickBtns() {
     if (qiPump) qiPump.textContent = '🤱';
   } else {
     if (qlPump) qlPump.textContent = '유축 시작';
-    if (qtPump) qtPump.textContent = pump ? '마지막 ' + timeDiff(pump.time) : '-';
+    if (qtPump) qtPump.textContent = pump ? timeDiff(pump.time) : '-';
     if (qbPump) { qbPump.style.background = ''; qbPump.style.outline = ''; }
     if (qiPump) qiPump.textContent = '🤱';
   }
 
   // ── 기저귀 ──
   const qtDiaper = document.getElementById('qt-diaper');
-  if (qtDiaper) qtDiaper.textContent = diaper ? '마지막 ' + timeDiff(diaper.time) : '-';
+  if (qtDiaper) qtDiaper.textContent = diaper ? timeDiff(diaper.time) : '-';
 }
 
 // ── 음성 명령 처리 업데이트 ──
