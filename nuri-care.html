@@ -1975,6 +1975,32 @@ body.dark .tl-content-title { color: #f0ead8; }
   </div>
 </div>
 
+
+<!-- ═══════════ 수유 종료 모달 (분유 ml 입력) ═══════════ -->
+<div class="modal-bg" id="modal-feed-end">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close-x" onclick="closeModal('feed-end')">✕</button>
+    <h2>🍼 수유 완료</h2>
+    <div id="feed-end-type-row" style="margin-bottom:16px;">
+      <span class="field-label">수유 방법</span>
+      <div class="opt-row">
+        <button class="opt-btn" id="fe-breast" onclick="setFeedEndType('breast')">모유</button>
+        <button class="opt-btn" id="fe-bottle" onclick="setFeedEndType('bottle')">분유</button>
+        <button class="opt-btn" id="fe-both"   onclick="setFeedEndType('both')">혼합</button>
+      </div>
+    </div>
+    <div id="feed-end-ml-row" style="display:none;">
+      <span class="field-label">분유량 (ml)</span>
+      <input type="number" id="feed-end-ml" placeholder="예: 80" min="0" max="300" style="margin-bottom:12px;">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeFeedEndModal()">취소</button>
+      <button class="btn-save" onclick="saveFeedEnd()">완료</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════ 기저귀 모달 ═══════════ -->
 <div class="modal-bg" id="modal-diaper">
   <div class="modal">
@@ -3042,12 +3068,21 @@ function renderTimeline() {
   const todayKST = new Date(Date.now() + 9*3600*1000).toISOString().slice(0,10);
 
   // title → cat 매핑 (모달 저장 포함)
-  const endSet   = new Set(['수유 완료','수유','기상','유축 완료','유축']);
+  const endSet   = new Set(['수유 완료','수유','모유 수유 완료','분유 수유 완료','혼합 수유 완료','기상','유축 완료','유축']);
   const startSet = new Set(['수유 시작','수면 시작','유축 시작']);
   const catOf    = { '수유 완료':'feed','수유':'feed','수유 시작':'feed',
+                     '모유 수유 완료':'feed','분유 수유 완료':'feed','혼합 수유 완료':'feed',
                      '기상':'sleep','수면':'sleep','수면 시작':'sleep',
                      '유축 완료':'pump','유축':'pump','유축 시작':'pump' };
-  const dispTitle = { feed:'수유', sleep:'수면', pump:'유축' };
+  const dispTitle = r => {
+    if (r.cat === 'feed') {
+      if (r.title === '모유 수유 완료' || r.feedType === 'breast') return '모유 수유';
+      if (r.title === '분유 수유 완료' || r.feedType === 'bottle') return '분유 수유';
+      if (r.title === '혼합 수유 완료' || r.feedType === 'both')   return '혼합 수유';
+      return '수유';
+    }
+    return { sleep:'수면', pump:'유축' }[r.cat] || r.title;
+  };
   const dispIcon  = { feed:'🍼', sleep:'😴', pump:'🤱' };
 
   let allSorted = records
@@ -3086,7 +3121,7 @@ function renderTimeline() {
         merged.push({
           ...r,
           icon: dispIcon[r.cat],
-          title: dispTitle[r.cat],
+          title: dispTitle(r),
           _merged: true,
         });
         return;
@@ -3111,7 +3146,7 @@ function renderTimeline() {
         merged.push({
           ...r,
           icon: dispIcon[r.cat],
-          title: dispTitle[r.cat],
+          title: dispTitle(r),
           _startTime: startRec.time,
           _durMin: durMin,
           _merged: true,
@@ -6093,6 +6128,7 @@ function updateSettingsRoleUI() {
 // ── 세션 상태 관리 (수면·유축·수유 시작→종료 쌍) ──
 let pumpingStart = null;
 let feedingStart = null;
+let feedingType  = 'breast'; // 'breast'(모유) | 'bottle'(분유) | 'both'(혼합)
 let sessionTimer = null;
 
 function loadSessions() {
@@ -6183,7 +6219,9 @@ function startSession(type) {
       showVoiceToast('이미 수유 중 — 종료하려면 "수유 종료"라고 하세요', false);
       return;
     }
+    // 시작 시 타입 선택 (기본: 모유)
     feedingStart = now;
+    feedingType = 'breast'; // 기본값, 종료 시 선택
     saveSessions();
     addRecord({ type:'feed', time:nowLocal(), title:'수유 시작', sub:'수유 중', icon:'🍼', cat:'feed' });
     speak('수유 시작을 기록했어요 🍼');
@@ -6270,15 +6308,11 @@ function endSession(type) {
       showVoiceToast('이미 수유가 완료됐어요', false);
       return;
     }
-    const startTime = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
-    const startKST = new Date(startTime.getTime() + 9*3600*1000);
-    const startStr = startKST.toISOString().slice(0,16);
-    const dur = Math.round((now - startTime) / 60000);
-    feedingStart = null; // ← addRecord 전에 null 처리
-    saveSessions();
-    addRecord({ type:'feed', time:nowLocal(), title:'수유 완료', sub:dur+'분', icon:'🍼', cat:'feed', _startTime: startStr, _durMin: dur });
-    showCompleteFeedback('🍼', `수유 완료\n${dur}분`);
-    speak(`수유 완료. ${dur}분 수유했어요.`);
+    // 수유 종료 모달 표시 (모유/분유 선택 + 분유 ml 입력)
+    _feedEndDur = Math.round((now - (feedingStart instanceof Date ? feedingStart : new Date(feedingStart))) / 60000);
+    _feedEndStartTime = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
+    openFeedEndModal();
+    return;
   }
   updateQuickBtns();
   renderTimeline();
@@ -6286,7 +6320,80 @@ function endSession(type) {
   setVoiceBtnState(false);
 }
 
-// ── 원탭 버튼 — 시작/종료 토글 ──
+// ── 수유 시작 시 타입 선택 ──
+let _feedEndDur = 0;
+let _feedEndStartTime = null;
+let _feedEndType = 'breast';
+
+function openFeedEndModal() {
+  _feedEndType = feedingType || 'breast';
+  // 버튼 선택 상태 초기화
+  ['breast','bottle','both'].forEach(t => {
+    const btn = document.getElementById('fe-' + t);
+    if (btn) btn.classList.toggle('sel', t === _feedEndType);
+  });
+  // 분유 ml 입력란 표시 여부
+  const mlRow = document.getElementById('feed-end-ml-row');
+  if (mlRow) mlRow.style.display = _feedEndType === 'bottle' || _feedEndType === 'both' ? 'block' : 'none';
+  const mlInput = document.getElementById('feed-end-ml');
+  if (mlInput) mlInput.value = '';
+  document.getElementById('modal-feed-end').classList.add('open');
+}
+
+function setFeedEndType(t) {
+  _feedEndType = t;
+  ['breast','bottle','both'].forEach(v => {
+    const btn = document.getElementById('fe-' + v);
+    if (btn) btn.classList.toggle('sel', v === t);
+  });
+  const mlRow = document.getElementById('feed-end-ml-row');
+  if (mlRow) mlRow.style.display = (t === 'bottle' || t === 'both') ? 'block' : 'none';
+}
+
+function closeFeedEndModal() {
+  document.getElementById('modal-feed-end').classList.remove('open');
+}
+
+function saveFeedEnd() {
+  // 모달 닫기
+  const modal = document.getElementById('modal-feed-end');
+  if (modal) { modal.classList.remove('open'); modal.style.display = 'none'; }
+
+  const startTime = _feedEndStartTime;
+  const dur = _feedEndDur;
+  const type = _feedEndType;
+  const mlInput = document.getElementById('feed-end-ml');
+  const ml = (type === 'bottle' || type === 'both') && mlInput && mlInput.value ? parseInt(mlInput.value) : null;
+
+  const typeLabel = { breast:'모유', bottle:'분유', both:'혼합' }[type] || '수유';
+  const h = Math.floor(dur/60), m = dur%60;
+  const durStr = (h>0 ? h+'시간 ':'')+m+'분';
+  let sub = typeLabel + ' · ' + durStr;
+  if (ml) sub += ' · ' + ml + 'ml';
+  let title = type === 'breast' ? '모유 수유 완료' : type === 'bottle' ? '분유 수유 완료' : '혼합 수유 완료';
+
+  const startKST = new Date(startTime.getTime() + 9*3600*1000);
+  const startStr = startKST.toISOString().slice(0,16);
+
+  feedingStart = null;
+  feedingType = 'breast';
+  saveSessions();
+
+  addRecord({
+    type:'feed', time:nowLocal(), title, sub, icon:'🍼', cat:'feed',
+    _startTime: startStr, _durMin: dur, feedType: type, ml: ml || undefined
+  });
+
+  showCompleteFeedback('🍼', title.replace(' 완료','') + '\n' + durStr + (ml ? ' · '+ml+'ml' : ''));
+  speak(`${typeLabel} 수유 완료. ${durStr} 수유했어요.`);
+
+  setTimeout(() => { if (modal) modal.style.display = ''; }, 400);
+  updateQuickBtns();
+  renderTimeline();
+  updateStatus();
+}
+
+
 function quickStartAction(type) {
   if (type === 'feed') {
     if (feedingStart) {
