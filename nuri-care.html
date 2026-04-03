@@ -708,17 +708,18 @@ body.dark .qnav-btn.active::after { background: #c8a870; }
 @keyframes splashFadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
 /* ── 퀵버튼 리디자인 ── */
-.quick-log-row { display: flex; gap: 10px; margin-bottom: 16px; padding: 0 4px; }
+.quick-log-row { display: flex; gap: 10px; margin-bottom: 16px; padding: 0 4px; flex-shrink: 0; min-height: 90px; }
 .quick-btn {
   flex: 1; display: flex; flex-direction: column; align-items: center;
   gap: 5px; padding: 14px 6px 10px;
   background: #fff; border: none;
   border-radius: 18px; cursor: pointer;
-  transition: all 0.15s;
+  transition: background 0.15s, box-shadow 0.15s, outline 0.15s;
   box-shadow: 0 2px 8px rgba(122,86,0,0.10), 0 0 0 1.5px rgba(232,215,150,0.5);
   position: relative; z-index: 1;
   -webkit-tap-highlight-color: rgba(122,86,0,0.1);
   touch-action: manipulation;
+  min-height: 80px;
 }
 .quick-btn:active { transform: scale(0.94); box-shadow: 0 1px 4px rgba(122,86,0,0.12); }
 .quick-btn.active-session {
@@ -726,8 +727,8 @@ body.dark .qnav-btn.active::after { background: #c8a870; }
   box-shadow: 0 2px 8px rgba(122,86,0,0.18), 0 0 0 2px #e8d796;
 }
 .quick-btn-icon { font-size: 26px; line-height: 1; }
-.quick-btn-label { font-size: 11px; font-weight: 700; color: #7a5600; letter-spacing: -0.01em; }
-.quick-btn-time { font-size: 10px; color: #9ca3af; min-height: 13px; font-weight: 500; }
+.quick-btn-label { font-size: 11px; font-weight: 700; color: #7a5600; letter-spacing: -0.01em; min-height: 14px; }
+.quick-btn-time { font-size: 10px; color: #9ca3af; min-height: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 body.dark .quick-btn { background: #2a2520; box-shadow: 0 2px 8px rgba(0,0,0,0.2), 0 0 0 1.5px #3d3628; }
 body.dark .quick-btn.active-session { background: linear-gradient(135deg,#3d3628,#4d4530); }
 body.dark .quick-btn-label { color: #c8a870; }
@@ -1672,7 +1673,7 @@ body.dark .tl-content-title { color: #f0ead8; }
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
               <span style="font-size:14px;color:#6b7280;">제작</span>
-              <span style="font-size:13px;font-weight:600;color:#1a1a1a;">개인 제작 웹앱 🍼</span>
+              <span style="font-size:13px;font-weight:600;color:#1a1a1a;">vitaminwoo_app</span>
             </div>
             <a href="./privacy.html" target="_blank"
               style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid #f3f4f6;text-decoration:none;">
@@ -1996,7 +1997,7 @@ body.dark .tl-content-title { color: #f0ead8; }
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeFeedEndModal()">취소</button>
-      <button class="btn-save" onclick="saveFeedEnd()">완료</button>
+      <button class="btn-save" id="feed-end-save-btn">완료</button>
     </div>
   </div>
 </div>
@@ -2025,8 +2026,8 @@ body.dark .tl-content-title { color: #f0ead8; }
     <span class="field-label">기록 시각</span>
     <input type="datetime-local" id="diaper-time">
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('diaper')">취소</button>
-      <button class="btn-save" onclick="saveDiaper()">저장</button>
+      <button class="btn-cancel" id="diaper-cancel-btn">취소</button>
+      <button class="btn-save" id="diaper-save-btn">저장</button>
     </div>
   </div>
 </div>
@@ -6001,6 +6002,28 @@ function enterApp() {
 
   showScreen('app');
 
+  // ── 모달 버튼 이벤트 바인딩 (터치/클릭 모두 안정적으로) ──
+  (function bindModalBtns() {
+    function bindBtn(id, fn) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      let busy = false;
+      function handler(e) {
+        if (busy) return;
+        busy = true;
+        e.preventDefault();
+        e.stopPropagation();
+        try { fn(); } catch(err) { console.warn(id, err); }
+        setTimeout(() => { busy = false; }, 800);
+      }
+      el.addEventListener('touchend', handler, { passive: false });
+      el.addEventListener('click', handler);
+    }
+    bindBtn('diaper-save-btn',   saveDiaper);
+    bindBtn('diaper-cancel-btn', () => closeModal('diaper'));
+    bindBtn('feed-end-save-btn', saveFeedEnd);
+  })();
+
   setTimeout(() => {
     try { renderMainChart(); } catch(e) {}
     try { renderGrowthChart(); } catch(e) {}
@@ -6130,6 +6153,9 @@ let pumpingStart = null;
 let feedingStart = null;
 let feedingType  = 'breast'; // 'breast'(모유) | 'bottle'(분유) | 'both'(혼합)
 let sessionTimer = null;
+let _feedEndDur = 0;
+let _feedEndStartTime = null;
+let _feedEndType = 'breast';
 
 function loadSessions() {
   const MAX_SESSION_MS = 12 * 60 * 60 * 1000;
@@ -6320,10 +6346,6 @@ function endSession(type) {
   setVoiceBtnState(false);
 }
 
-// ── 수유 시작 시 타입 선택 ──
-let _feedEndDur = 0;
-let _feedEndStartTime = null;
-let _feedEndType = 'breast';
 
 function openFeedEndModal() {
   _feedEndType = feedingType || 'breast';
@@ -6355,37 +6377,48 @@ function closeFeedEndModal() {
 }
 
 function saveFeedEnd() {
-  // 모달 닫기
+  // 모달 닫기 (맨 먼저)
   const modal = document.getElementById('modal-feed-end');
   if (modal) { modal.classList.remove('open'); modal.style.display = 'none'; }
 
-  const startTime = _feedEndStartTime;
-  const dur = _feedEndDur;
-  const type = _feedEndType;
-  const mlInput = document.getElementById('feed-end-ml');
-  const ml = (type === 'bottle' || type === 'both') && mlInput && mlInput.value ? parseInt(mlInput.value) : null;
+  try {
+    const startTime = _feedEndStartTime || feedingStart || new Date();
+    const dur = _feedEndDur || 0;
+    const type = _feedEndType || 'breast';
+    const mlInput = document.getElementById('feed-end-ml');
+    const ml = (type === 'bottle' || type === 'both') && mlInput && mlInput.value
+      ? parseInt(mlInput.value) : null;
 
-  const typeLabel = { breast:'모유', bottle:'분유', both:'혼합' }[type] || '수유';
-  const h = Math.floor(dur/60), m = dur%60;
-  const durStr = (h>0 ? h+'시간 ':'')+m+'분';
-  let sub = typeLabel + ' · ' + durStr;
-  if (ml) sub += ' · ' + ml + 'ml';
-  let title = type === 'breast' ? '모유 수유 완료' : type === 'bottle' ? '분유 수유 완료' : '혼합 수유 완료';
+    const typeLabel = { breast:'모유', bottle:'분유', both:'혼합' }[type] || '수유';
+    const h = Math.floor(dur/60), m2 = dur%60;
+    const durStr = (h>0 ? h+'시간 ':'')+m2+'분';
+    let sub = typeLabel + ' · ' + durStr;
+    if (ml) sub += ' · ' + ml + 'ml';
+    const title = type === 'breast' ? '모유 수유 완료'
+                : type === 'bottle' ? '분유 수유 완료' : '혼합 수유 완료';
 
-  const startKST = new Date(startTime.getTime() + 9*3600*1000);
-  const startStr = startKST.toISOString().slice(0,16);
+    const st = startTime instanceof Date ? startTime : new Date(startTime);
+    const startKST = new Date(st.getTime() + 9*3600*1000);
+    const startStr = startKST.toISOString().slice(0,16);
 
-  feedingStart = null;
-  feedingType = 'breast';
-  saveSessions();
+    feedingStart = null;
+    feedingType  = 'breast';
+    saveSessions();
 
-  addRecord({
-    type:'feed', time:nowLocal(), title, sub, icon:'🍼', cat:'feed',
-    _startTime: startStr, _durMin: dur, feedType: type, ml: ml || undefined
-  });
+    addRecord({
+      type:'feed', time:nowLocal(), title, sub, icon:'🍼', cat:'feed',
+      _startTime: startStr, _durMin: dur,
+      feedType: type, ml: ml || undefined
+    });
 
-  showCompleteFeedback('🍼', title.replace(' 완료','') + '\n' + durStr + (ml ? ' · '+ml+'ml' : ''));
-  speak(`${typeLabel} 수유 완료. ${durStr} 수유했어요.`);
+    showCompleteFeedback('🍼',
+      title.replace(' 완료','') + '\n' + durStr + (ml ? ' · '+ml+'ml' : ''));
+    speak(`${typeLabel} 수유 완료. ${durStr} 수유했어요.`);
+  } catch(e) {
+    console.warn('saveFeedEnd error:', e);
+    feedingStart = null;
+    saveSessions();
+  }
 
   setTimeout(() => { if (modal) modal.style.display = ''; }, 400);
   updateQuickBtns();
