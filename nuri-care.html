@@ -649,21 +649,11 @@ body.dark .voice-hero-btn.listening { background: #dc2626; }
 body.dark .voice-cmd { background: #2a2520; border-color: #3d3628; color: #c8a870; }
 
 /* ══ 진행 중 세션 카드 ══ */
-.active-session-card { border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; border: 2px solid; display: flex; align-items: center; justify-content: space-between; gap: 10px; position: relative; z-index: 1; pointer-events: none; }
-.active-session-card.sleep { background: linear-gradient(135deg,#eff6ff,#dbeafe); border-color: #93c5fd; }
 .active-session-card.pump  { background: linear-gradient(135deg,#fdf4ff,#f3e8ff); border-color: #d8b4fe; }
 .active-session-card.feed  { background: linear-gradient(135deg,#fff7ed,#ffedd5); border-color: #fdba74; }
-.active-session-left { display: flex; align-items: center; gap: 10px; }
-.active-session-icon { font-size: 28px; }
-.active-session-title { font-size: 14px; font-weight: 700; color: #1a1a1a; }
-.active-session-dur { font-size: 13px; color: #6b7280; font-weight: 500; }
-.active-session-end-btn { background: #1a1a1a; color: #fff; border: none; border-radius: 20px; padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; touch-action: manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0.1); position: relative; z-index: 2; pointer-events: auto; }
-.active-session-end-btn:active { opacity: 0.8; }
-body.dark .active-session-card.sleep { background: #0f1a2a; border-color: #1e3a5f; }
-body.dark .active-session-card.pump  { background: #1a0f2a; border-color: #5b21b6; }
+body.dark body.dark .active-session-card.pump  { background: #1a0f2a; border-color: #5b21b6; }
 body.dark .active-session-card.feed  { background: #2a1800; border-color: #92400e; }
-body.dark .active-session-title { color: #f0ead8; }
-
+body.dark 
 /* ── 아빠 기록 섹션 ── */
 .dad-rec-section { background: #fff; border-radius: 14px; border: 1.5px solid #e8d796; padding: 14px 16px; margin-bottom: 14px; }
 .dad-rec-title { font-size: 13px; font-weight: 700; color: #7a5600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
@@ -1276,7 +1266,6 @@ body.dark .tl-content-title { color: #f0ead8; }
               <span class="quick-btn-time" id="qt-diaper">-</span>
             </button>
           </div>
-          <div id="active-sessions-wrap"></div>
           <div class="notif-banner" id="notif-banner" style="display:none;">
             <span class="notif-banner-text">🔔 재울 타이밍을 알림으로 받을 수 있어요</span>
             <button class="notif-banner-btn" onclick="requestNotifPermission()">허용</button>
@@ -2948,7 +2937,6 @@ function endSleep() {
   saveData();
   renderTimeline();
   updateStatus();
-  renderActiveSessions();
   updateQuickBtns();
   setVoiceBtnState(false);
 }
@@ -3006,7 +2994,6 @@ function addRecord(r) {
   saveData();
   renderTimeline();
   updateStatus();
-  renderActiveSessions();
   updateQuickBtns();
   if (typeof _pushRecordToFirebase === 'function') _pushRecordToFirebase(r);
 }
@@ -5970,7 +5957,6 @@ function enterApp() {
   try { renderMilestoneList(); } catch(e) {}
   try { loadDarkMode(); } catch(e) {}
   try { renderMoodSelector(); } catch(e) {}
-  try { renderActiveSessions(); } catch(e) {}
   try { updateQuickBtns(); } catch(e) {}
   try { startSessionTimer(); } catch(e) {}
   try { startDadRefreshTimer(); } catch(e) {}
@@ -6215,7 +6201,6 @@ function startSession(type) {
     document.getElementById('modal-diaper').classList.add('open');
     return;
   }
-  renderActiveSessions();
   updateQuickBtns();
   renderTimeline();
   updateStatus();
@@ -6253,14 +6238,6 @@ function showCompleteFeedback(emoji, msg) {
 function endSession(type) {
   const now = new Date();
 
-  // 카드 즉시 숨기기 (변수 null 전에 먼저 UI 처리)
-  if (type === 'pump') {
-    document.querySelectorAll('.active-session-card.pump').forEach(el => el.remove());
-  } else if (type === 'feed') {
-    document.querySelectorAll('.active-session-card.feed').forEach(el => el.remove());
-  } else if (type === 'sleep') {
-    document.querySelectorAll('.active-session-card.sleep').forEach(el => el.remove());
-  }
 
   if (type === 'sleep') {
     if (!sleepingStart) {
@@ -6306,7 +6283,6 @@ function endSession(type) {
       showCompleteFeedback('🍼', `수유 완료\n${dur}분`);
     speak(`수유 완료. ${dur}분 수유했어요.`);
   }
-  renderActiveSessions();
   updateQuickBtns();
   renderTimeline();
   updateStatus();
@@ -6317,21 +6293,21 @@ function endSession(type) {
 function quickStartAction(type) {
   if (type === 'feed') {
     if (feedingStart) {
-      endSessionSafe('feed');
+      endSession('feed');
     } else {
       startSession('feed');
       showCompleteFeedback('🍼', '수유 시작!');
     }
   } else if (type === 'sleep') {
     if (sleepingStart) {
-      endSessionSafe('sleep');
+      endSession('sleep');
     } else {
       startSession('sleep');
       showCompleteFeedback('😴', '수면 시작!');
     }
   } else if (type === 'pump') {
     if (pumpingStart) {
-      endSessionSafe('pump');
+      endSession('pump');
     } else {
       startSession('pump');
       showCompleteFeedback('🤱', '유축 시작!');
@@ -6342,74 +6318,13 @@ function quickStartAction(type) {
 }
 
 // ── 진행 중 세션 카드 렌더 ──
-function endSessionSafe(type) {
-  // 단순 래퍼 - endSession 직접 호출
-  endSession(type);
-}
-
-function renderActiveSessions() {
-  const wrap = document.getElementById('active-sessions-wrap');
-  if (!wrap) return;
-
-  const now = Date.now();
-  function dur(start) {
-    const d = (start instanceof Date ? start : new Date(start));
-    const m = Math.round((now - d.getTime()) / 60000);
-    const h = Math.floor(m / 60);
-    return (h > 0 ? h + '시간 ' : '') + (m % 60) + '분 진행 중';
-  }
-
-  // 카드 없으면 숨김
-  if (!sleepingStart && !pumpingStart && !feedingStart) {
-    wrap.innerHTML = '';
-    return;
-  }
-
-  let html = '';
-  if (sleepingStart) html += `
-    <div class="active-session-card sleep">
-      <div class="active-session-left">
-        <span class="active-session-icon">😴</span>
-        <div class="active-session-info">
-          <div class="active-session-title">수면 중</div>
-          <div class="active-session-dur">${dur(sleepingStart)}</div>
-        </div>
-      </div>
-      <button class="active-session-end-btn" onclick="endSession('sleep')">기상 기록 ☀️</button>
-    </div>`;
-  if (pumpingStart) html += `
-    <div class="active-session-card pump">
-      <div class="active-session-left">
-        <span class="active-session-icon">🤱</span>
-        <div class="active-session-info">
-          <div class="active-session-title">유축 중</div>
-          <div class="active-session-dur">${dur(pumpingStart)}</div>
-        </div>
-      </div>
-      <button class="active-session-end-btn" onclick="endSession('pump')">유축 완료 ✅</button>
-    </div>`;
-  if (feedingStart) html += `
-    <div class="active-session-card feed">
-      <div class="active-session-left">
-        <span class="active-session-icon">🍼</span>
-        <div class="active-session-info">
-          <div class="active-session-title">수유 중</div>
-          <div class="active-session-dur">${dur(feedingStart)}</div>
-        </div>
-      </div>
-      <button class="active-session-end-btn" onclick="endSession('feed')">수유 완료 ✅</button>
-    </div>`;
-  wrap.innerHTML = html;
-}
-
 // 세션 타이머 (10초마다 갱신)
 let dadRefreshTimer = null;
 
 function startSessionTimer() {
   clearInterval(sessionTimer);
   sessionTimer = setInterval(() => {
-    renderActiveSessions();
-    updateQuickBtns();
+      updateQuickBtns();
     // 진행 중 세션이 있으면 타임라인도 갱신 (진행중 시간 업데이트)
     if (sleepingStart || feedingStart || pumpingStart) {
       renderTimeline();
@@ -6453,8 +6368,9 @@ function updateQuickBtns() {
   const qiFeed = document.getElementById('qi-feed');
   if (feedingStart) {
     const m = Math.round((Date.now() - new Date(feedingStart).getTime()) / 60000);
+    const dur = m >= 60 ? Math.floor(m/60) + '시간 ' + (m%60) + '분째' : m + '분째';
     if (qlFeed) qlFeed.textContent = '수유 종료 ✅';
-    if (qtFeed) qtFeed.textContent = m + '분째 수유 중';
+    if (qtFeed) qtFeed.textContent = dur + ' 수유 중';
     if (qbFeed) { qbFeed.style.background = 'linear-gradient(135deg,#fff7ed,#ffedd5)'; qbFeed.style.outline = '2px solid #fdba74'; }
     if (qiFeed) qiFeed.textContent = '🍼';
   } else {
@@ -6471,8 +6387,9 @@ function updateQuickBtns() {
   const qiSleep = document.getElementById('qi-sleep');
   if (sleepingStart) {
     const m = Math.round((Date.now() - new Date(sleepingStart).getTime()) / 60000);
+    const dur = m >= 60 ? Math.floor(m/60) + '시간 ' + (m%60) + '분째' : m + '분째';
     if (qlSleep) qlSleep.textContent = '기상 기록 ☀️';
-    if (qtSleep) qtSleep.textContent = m + '분째 수면 중';
+    if (qtSleep) qtSleep.textContent = dur + ' 수면 중';
     if (qbSleep) { qbSleep.style.background = 'linear-gradient(135deg,#eff6ff,#dbeafe)'; qbSleep.style.outline = '2px solid #93c5fd'; }
     if (qiSleep) qiSleep.textContent = '😴';
   } else {
@@ -6489,8 +6406,9 @@ function updateQuickBtns() {
   const qiPump = document.getElementById('qi-pump');
   if (pumpingStart) {
     const m = Math.round((Date.now() - new Date(pumpingStart).getTime()) / 60000);
+    const dur = m >= 60 ? Math.floor(m/60) + '시간 ' + (m%60) + '분째' : m + '분째';
     if (qlPump) qlPump.textContent = '유축 종료 ✅';
-    if (qtPump) qtPump.textContent = m + '분째 유축 중';
+    if (qtPump) qtPump.textContent = dur + ' 유축 중';
     if (qbPump) { qbPump.style.background = 'linear-gradient(135deg,#fdf4ff,#f3e8ff)'; qbPump.style.outline = '2px solid #d8b4fe'; }
     if (qiPump) qiPump.textContent = '🤱';
   } else {
@@ -6621,7 +6539,6 @@ function updateStatus() {
   if(el('today-pump-count')) el('today-pump-count').textContent = todayPumps.length+'회';
   renderCoachCard();
   renderScoreCard();
-  renderActiveSessions();
   updateQuickBtns();
 }
 
@@ -6958,8 +6875,7 @@ function fbApplyRemoteData(data) {
       renderTimeline();
       updateStatus();
       updateQuickBtns();
-      renderActiveSessions();
-      renderAppHeader();
+          renderAppHeader();
       renderScoreCard();
       renderDadTodayRecords();
       fbShowSyncToast();
