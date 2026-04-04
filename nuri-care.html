@@ -1968,6 +1968,43 @@ body.dark .tl-content-title { color: #f0ead8; }
 </div>
 
 <!-- ═══════════ 기저귀 모달 ═══════════ -->
+<div class="modal-bg" id="modal-feed-end">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>🍼 수유 완료</h2>
+    <span class="field-label">수유 방법</span>
+    <div class="opt-row" style="gap:8px;margin-bottom:16px;">
+      <button class="opt-btn sel" id="fe-breast" onclick="feSel('breast')" style="flex:1;padding:12px 6px;font-size:14px;">모유</button>
+      <button class="opt-btn" id="fe-bottle" onclick="feSel('bottle')" style="flex:1;padding:12px 6px;font-size:14px;">분유</button>
+      <button class="opt-btn" id="fe-both" onclick="feSel('both')" style="flex:1;padding:12px 6px;font-size:14px;">혼합</button>
+    </div>
+    <div id="fe-ml-wrap" style="display:none;">
+      <span class="field-label">분유량 (ml)</span>
+      <input type="number" id="fe-ml" placeholder="예: 80" min="0" max="500" style="margin-bottom:12px;">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeFeedEndModal()">취소</button>
+      <button class="btn-save" onclick="saveFeedEnd()">완료</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-pump-end">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>🤱 유축 완료</h2>
+    <span class="field-label">유축량 (선택)</span>
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <input type="number" id="pe-L" placeholder="왼쪽 (ml)" min="0" max="500" style="flex:1;">
+      <input type="number" id="pe-R" placeholder="오른쪽 (ml)" min="0" max="500" style="flex:1;">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closePumpEndModal()">취소</button>
+      <button class="btn-save" onclick="savePumpEnd()">완료</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-bg" id="modal-diaper">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -6077,46 +6114,103 @@ function showCompleteFeedback(emoji, msg) {
 }
 
 // ── 세션 종료 ──
+var _feedEndData = {};
+var _pumpEndData = {};
+var _feType = 'breast';
+
 function endSession(type) {
   const now = new Date();
   if (type === 'sleep') {
     if (!sleepingStart) { showCompleteFeedback('😴','이미\n수면 종료됨'); return; }
     endSleep(); showCompleteFeedback('☀️','기상 기록 완료!'); speak('기상을 기록했어요.');
+    updateQuickBtns(); renderTimeline(); updateStatus(); setVoiceBtnState(false);
   } else if (type === 'pump') {
     if (!pumpingStart) { showCompleteFeedback('🤱','이미\n유축 완료됨'); return; }
     var pSt = pumpingStart instanceof Date ? pumpingStart : new Date(pumpingStart);
-    var pStStr = new Date(pSt.getTime()+9*3600*1000).toISOString().slice(0,16);
-    var pDur = Math.round((now-pSt)/60000);
-    var pDurStr = (Math.floor(pDur/60)>0?Math.floor(pDur/60)+'시간 ':'')+pDur%60+'분';
-    pumpingStart = null; saveSessions();
-    var pMlRaw = prompt('유축량 (ml)\n건너뛰려면 취소 또는 빈칸','');
-    var pMl = pMlRaw && pMlRaw.trim() ? parseInt(pMlRaw) : null;
-    var pSub = pDurStr + (pMl ? ' · '+pMl+'ml' : '');
-    addRecord({type:'pump',time:nowLocal(),title:'유축 완료',sub:pSub,icon:'🤱',cat:'pump',_startTime:pStStr,_durMin:pDur,ml:pMl||undefined});
-    showCompleteFeedback('🤱','유축 완료\n'+pSub);
-    speak('유축 완료. '+pDurStr+(pMl?' '+pMl+'ml':'')+' 유축했어요.');
+    _pumpEndData = {
+      st: pSt,
+      stStr: new Date(pSt.getTime()+9*3600*1000).toISOString().slice(0,16),
+      dur: Math.round((now-pSt)/60000)
+    };
+    document.getElementById('pe-L').value = '';
+    document.getElementById('pe-R').value = '';
+    document.getElementById('modal-pump-end').classList.add('open');
   } else if (type === 'feed') {
     if (!feedingStart) { showCompleteFeedback('🍼','이미\n수유 완료됨'); return; }
     var fSt = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
-    var fStStr = new Date(fSt.getTime()+9*3600*1000).toISOString().slice(0,16);
-    var fDur = Math.round((now-fSt)/60000);
-    var fDurStr = (Math.floor(fDur/60)>0?Math.floor(fDur/60)+'시간 ':'')+fDur%60+'분';
-    var ftChoice = prompt('수유 방법\n1=모유  2=분유  3=혼합','1');
-    if (ftChoice === null) { feedingStart=null; saveSessions(); updateQuickBtns(); renderTimeline(); updateStatus(); return; }
-    var ft = ftChoice==='2'?'bottle':ftChoice==='3'?'both':'breast';
-    var ftLabel = {breast:'모유',bottle:'분유',both:'혼합'}[ft];
-    var ftTitle = ft==='bottle'?'분유 수유 완료':ft==='both'?'혼합 수유 완료':'모유 수유 완료';
-    var fMl = null;
-    if (ft==='bottle'||ft==='both') {
-      var fMlRaw = prompt('분유량 (ml)\n건너뛰려면 취소 또는 빈칸','');
-      fMl = fMlRaw && fMlRaw.trim() ? parseInt(fMlRaw) : null;
-    }
-    var fSub = ftLabel+' · '+fDurStr+(fMl?' · '+fMl+'ml':'');
-    feedingStart = null; feedingType = 'breast'; saveSessions();
-    addRecord({type:'feed',time:nowLocal(),title:ftTitle,sub:fSub,icon:'🍼',cat:'feed',_startTime:fStStr,_durMin:fDur,feedType:ft,ml:fMl||undefined});
-    showCompleteFeedback('🍼',ftTitle.replace(' 완료','')+'\n'+fDurStr);
-    speak(ftLabel+' 수유 완료. '+fDurStr+' 수유했어요.');
+    _feedEndData = {
+      st: fSt,
+      stStr: new Date(fSt.getTime()+9*3600*1000).toISOString().slice(0,16),
+      dur: Math.round((now-fSt)/60000)
+    };
+    _feType = 'breast';
+    ['breast','bottle','both'].forEach(function(t){
+      var btn = document.getElementById('fe-'+t);
+      if(btn) btn.classList.toggle('sel', t==='breast');
+    });
+    document.getElementById('fe-ml-wrap').style.display = 'none';
+    if(document.getElementById('fe-ml')) document.getElementById('fe-ml').value = '';
+    document.getElementById('modal-feed-end').classList.add('open');
   }
+}
+
+function feSel(t) {
+  _feType = t;
+  ['breast','bottle','both'].forEach(function(v){
+    var btn = document.getElementById('fe-'+v);
+    if(btn) btn.classList.toggle('sel', v===t);
+  });
+  document.getElementById('fe-ml-wrap').style.display = (t==='bottle'||t==='both') ? 'block' : 'none';
+}
+
+function closeFeedEndModal() {
+  document.getElementById('modal-feed-end').classList.remove('open');
+  feedingStart = null;
+  if(typeof feedingType !== 'undefined') feedingType = 'breast';
+  saveSessions(); updateQuickBtns(); renderTimeline(); updateStatus();
+}
+
+function saveFeedEnd() {
+  document.getElementById('modal-feed-end').classList.remove('open');
+  var d = _feedEndData;
+  var dur = d.dur || 0;
+  var H = Math.floor(dur/60), M = dur%60;
+  var durStr = (H>0?H+'시간 ':'')+M+'분';
+  var ft = _feType || 'breast';
+  var ftLabel = {breast:'모유',bottle:'분유',both:'혼합'}[ft] || '모유';
+  var ftTitle = ft==='bottle'?'분유 수유 완료':ft==='both'?'혼합 수유 완료':'모유 수유 완료';
+  var mlEl = document.getElementById('fe-ml');
+  var ml = (ft==='bottle'||ft==='both') && mlEl && mlEl.value ? parseInt(mlEl.value)||null : null;
+  var sub = ftLabel+' · '+durStr+(ml?' · '+ml+'ml':'');
+  feedingStart = null;
+  if(typeof feedingType !== 'undefined') feedingType = 'breast';
+  saveSessions();
+  addRecord({type:'feed',time:nowLocal(),title:ftTitle,sub:sub,icon:'🍼',cat:'feed',_startTime:d.stStr,_durMin:dur,feedType:ft,ml:ml||undefined});
+  showCompleteFeedback('🍼', ftTitle.replace(' 완료','')+'\n'+durStr);
+  speak(ftLabel+' 수유 완료. '+durStr+' 수유했어요.');
+  updateQuickBtns(); renderTimeline(); updateStatus(); setVoiceBtnState(false);
+}
+
+function closePumpEndModal() {
+  document.getElementById('modal-pump-end').classList.remove('open');
+  pumpingStart = null; saveSessions();
+  updateQuickBtns(); renderTimeline(); updateStatus();
+}
+
+function savePumpEnd() {
+  document.getElementById('modal-pump-end').classList.remove('open');
+  var d = _pumpEndData;
+  var dur = d.dur || 0;
+  var H = Math.floor(dur/60), M = dur%60;
+  var durStr = (H>0?H+'시간 ':'')+M+'분';
+  var Lv = parseInt(document.getElementById('pe-L').value||'0')||0;
+  var Rv = parseInt(document.getElementById('pe-R').value||'0')||0;
+  var total = Lv+Rv;
+  var sub = durStr+(total?' · '+total+'ml':'')+(Lv&&Rv?' (L:'+Lv+' R:'+Rv+')':'');
+  pumpingStart = null; saveSessions();
+  addRecord({type:'pump',time:nowLocal(),title:'유축 완료',sub:sub,icon:'🤱',cat:'pump',_startTime:d.stStr,_durMin:dur,Lml:Lv||undefined,Rml:Rv||undefined,total:total||undefined});
+  showCompleteFeedback('🤱','유축 완료\n'+sub);
+  speak('유축 완료. '+durStr+(total?' '+total+'ml':'')+' 유축했어요.');
   updateQuickBtns(); renderTimeline(); updateStatus(); setVoiceBtnState(false);
 }
 
