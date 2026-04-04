@@ -627,14 +627,14 @@ body.dark .onboarding-title { color: #f0ead8; }
 
 /* ── 마이크 중심 UI ── */
 /* ══ 음성 히어로 UI ══ */
-.voice-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px 0 12px; pointer-events: none; }
+.voice-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 0; pointer-events: none; }
 .voice-hero * { pointer-events: auto; }
 .voice-hero-mic { margin-bottom: 24px; opacity: 0.92; transition: transform 0.2s; }
 .voice-hero-mic.listening { animation: micPulse 1.2s ease-in-out infinite; }
 .voice-hero-status { font-size: 22px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px; letter-spacing: -0.3px; }
 .voice-hero-hint { font-size: 13px; color: #9ca3af; margin-bottom: 28px; text-align: center; line-height: 1.5; }
-.voice-hero-btn { width: 80px; height: 80px; border-radius: 50%; background: #7a5600; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 24px rgba(122,86,0,0.32), 0 0 0 0 rgba(122,86,0,0.2); transition: all 0.15s; margin-bottom: 20px; position: relative; }
-.voice-hero-btn::after { content:''; position:absolute; inset:-8px; border-radius:50%; border:2px solid rgba(122,86,0,0.2); pointer-events:none; }
+.voice-hero-btn { width: 80px; height: 80px; border-radius: 50%; background: #16a34a; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 24px rgba(22,163,74,0.35), 0 0 0 0 rgba(22,163,74,0.2); transition: all 0.15s; margin-bottom: 0; position: relative; }
+.voice-hero-btn::after { content:''; position:absolute; inset:-8px; border-radius:50%; border:2px solid rgba(22,163,74,0.2); pointer-events:none; }
 .voice-hero-btn:active { transform: scale(0.92); }
 .voice-hero-btn.listening { background: #dc2626; box-shadow: 0 6px 24px rgba(220,38,38,0.35), 0 0 0 12px rgba(220,38,38,0.12); animation: btnPulse 1.2s ease-in-out infinite; }
 #voice-btn-inner { width: 28px; height: 28px; border-radius: 50%; background: #fff; display: block; transition: border-radius 0.2s, width 0.2s, height 0.2s; }
@@ -960,10 +960,10 @@ body.dark .tl-content-title { color: #f0ead8; }
       <ellipse cx="55" cy="42" rx="3" ry="3.5" fill="#5D4037"/>
       <circle cx="42" cy="41" r="1" fill="#fff"/>
       <circle cx="56" cy="41" r="1" fill="#fff"/>
-      <path d="M40 51 Q48 58 56 51" stroke="#7a5600" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+      <path d="M40 51 Q48 58 56 51" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" fill="none"/>
       <ellipse cx="26" cy="45" rx="4" ry="5" fill="#FFEAA7"/>
       <ellipse cx="70" cy="45" rx="4" ry="5" fill="#FFEAA7"/>
-      <path d="M34 30 L38 38 L48 32 L58 38 L62 30 L58 36 L48 30 L38 36 Z" fill="#7a5600"/>
+      <path d="M34 30 L38 38 L48 32 L58 38 L62 30 L58 36 L48 30 L38 36 Z" fill="#16a34a"/>
       <path d="M44 70 Q48 67 52 70 Q56 73 48 78 Q40 73 44 70Z" fill="#FF6B9D"/>
     </svg>
   </div>
@@ -1224,10 +1224,10 @@ body.dark .tl-content-title { color: #f0ead8; }
           <div class="voice-hero">
             <div class="voice-hero-mic" id="voice-mic-icon">
               <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="28" y="10" width="24" height="36" rx="12" fill="#7a5600"/>
-                <path d="M16 40c0 13.255 10.745 24 24 24s24-10.745 24-24" stroke="#7a5600" stroke-width="4" stroke-linecap="round"/>
-                <line x1="40" y1="64" x2="40" y2="74" stroke="#7a5600" stroke-width="4" stroke-linecap="round"/>
-                <line x1="30" y1="74" x2="50" y2="74" stroke="#7a5600" stroke-width="4" stroke-linecap="round"/>
+                <rect x="28" y="10" width="24" height="36" rx="12" fill="#16a34a"/>
+                <path d="M16 40c0 13.255 10.745 24 24 24s24-10.745 24-24" stroke="#16a34a" stroke-width="4" stroke-linecap="round"/>
+                <line x1="40" y1="64" x2="40" y2="74" stroke="#16a34a" stroke-width="4" stroke-linecap="round"/>
+                <line x1="30" y1="74" x2="50" y2="74" stroke="#16a34a" stroke-width="4" stroke-linecap="round"/>
               </svg>
             </div>
             <div class="voice-hero-status" id="voice-status-text">탭해서 말하기</div>
@@ -1997,7 +1997,25 @@ body.dark .tl-content-title { color: #f0ead8; }
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeFeedEndModal()">취소</button>
-      <button class="btn-save" id="feed-end-save-btn">완료</button>
+      <button class="btn-save" id="feed-end-save-btn" onclick="saveFeedEnd()">완료</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 유축 완료 모달 ═══════════ -->
+<div class="modal-bg" id="modal-pump-end">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <button class="modal-close-x" onclick="closeModal('pump-end')">✕</button>
+    <h2>🤱 유축 완료</h2>
+    <span class="field-label">유축량 (ml)</span>
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <input type="number" id="pump-end-L" placeholder="왼쪽 (ml)" min="0" max="500" style="flex:1;">
+      <input type="number" id="pump-end-R" placeholder="오른쪽 (ml)" min="0" max="500" style="flex:1;">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('pump-end')">취소</button>
+      <button class="btn-save" onclick="savePumpEnd()">완료</button>
     </div>
   </div>
 </div>
@@ -2026,8 +2044,8 @@ body.dark .tl-content-title { color: #f0ead8; }
     <span class="field-label">기록 시각</span>
     <input type="datetime-local" id="diaper-time">
     <div class="modal-actions">
-      <button class="btn-cancel" id="diaper-cancel-btn">취소</button>
-      <button class="btn-save" id="diaper-save-btn">저장</button>
+      <button class="btn-cancel" id="diaper-cancel-btn" onclick="closeModal('diaper')">취소</button>
+      <button class="btn-save" id="diaper-save-btn" onclick="saveDiaper()">저장</button>
     </div>
   </div>
 </div>
@@ -6316,20 +6334,18 @@ function endSession(type) {
     if (!pumpingStart) {
       showCompleteFeedback('🤱', '이미\n유축 완료됨');
       speak('유축 시작 기록이 없어요.');
-      showVoiceToast('이미 유축이 완료됐어요', false);
       return;
     }
-    const startTime = pumpingStart instanceof Date ? pumpingStart : new Date(pumpingStart);
-    const startKST = new Date(startTime.getTime() + 9*3600*1000);
-    const startStr = startKST.toISOString().slice(0,16);
-    const dur = Math.round((now - startTime) / 60000);
-    const h = Math.floor(dur/60), m = dur%60;
-    const durStr = (h>0 ? h+'시간 ':'')+m+'분';
-    pumpingStart = null; // ← addRecord 전에 null 처리
-    saveSessions();
-    addRecord({ type:'pump', time:nowLocal(), title:'유축 완료', sub:durStr, icon:'🤱', cat:'pump', _startTime: startStr, _durMin: dur });
-    showCompleteFeedback('🤱', `유축 완료\n${durStr}`);
-    speak(`유축 완료. ${durStr} 유축했어요.`);
+    const now2 = new Date();
+    _pumpEndDur = Math.round((now2 - (pumpingStart instanceof Date ? pumpingStart : new Date(pumpingStart))) / 60000);
+    _pumpEndStartTime = pumpingStart instanceof Date ? pumpingStart : new Date(pumpingStart);
+    // 입력란 초기화
+    const L = document.getElementById('pump-end-L');
+    const R = document.getElementById('pump-end-R');
+    if (L) L.value = '';
+    if (R) R.value = '';
+    document.getElementById('modal-pump-end').classList.add('open');
+    return;
   } else if (type === 'feed') {
     if (!feedingStart) {
       showCompleteFeedback('🍼', '이미\n수유 완료됨');
@@ -6347,6 +6363,55 @@ function endSession(type) {
   renderTimeline();
   updateStatus();
   setVoiceBtnState(false);
+}
+
+
+let _pumpEndDur = 0;
+let _pumpEndStartTime = null;
+
+function savePumpEnd() {
+  const modal = document.getElementById('modal-pump-end');
+  if (modal) { modal.classList.remove('open'); modal.style.display = 'none'; }
+
+  try {
+    const startTime = _pumpEndStartTime || new Date();
+    const dur = _pumpEndDur || 0;
+    const Lval = parseInt(document.getElementById('pump-end-L')?.value || '0') || 0;
+    const Rval = parseInt(document.getElementById('pump-end-R')?.value || '0') || 0;
+    const total = Lval + Rval;
+
+    const h = Math.floor(dur/60), m = dur%60;
+    const durStr = (h>0 ? h+'시간 ':'')+m+'분';
+    let sub = durStr;
+    if (total > 0) sub += ' · ' + total + 'ml';
+    if (Lval && Rval) sub += ' (L:' + Lval + ' R:' + Rval + ')';
+
+    const st = startTime instanceof Date ? startTime : new Date(startTime);
+    const startKST = new Date(st.getTime() + 9*3600*1000);
+    const startStr = startKST.toISOString().slice(0,16);
+
+    pumpingStart = null;
+    saveSessions();
+
+    addRecord({
+      type:'pump', time:nowLocal(), title:'유축 완료', sub, icon:'🤱', cat:'pump',
+      _startTime: startStr, _durMin: dur,
+      Lml: Lval || undefined, Rml: Rval || undefined, total: total || undefined
+    });
+
+    const feedbackMsg = '유축 완료\n' + durStr + (total > 0 ? ' · ' + total + 'ml' : '');
+    showCompleteFeedback('🤱', feedbackMsg);
+    speak(`유축 완료. ${durStr}${total > 0 ? ` ${total}ml` : ''} 유축했어요.`);
+  } catch(e) {
+    console.warn('savePumpEnd:', e);
+    pumpingStart = null;
+    saveSessions();
+  }
+
+  setTimeout(() => { if (modal) modal.style.display = ''; }, 300);
+  updateQuickBtns();
+  renderTimeline();
+  updateStatus();
 }
 
 
