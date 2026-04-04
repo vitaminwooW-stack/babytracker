@@ -3052,7 +3052,8 @@ function nowLocal() {
 }
 
 function timeDiff(t) {
-  const diff = Math.round((new Date() - new Date(t)) / 60000);
+  if (!t) return '-';
+  const diff = Math.round((Date.now() - new Date(t).getTime()) / 60000);
   if (diff < 1) return '방금';
   if (diff < 60) return diff + '분 전';
   const h = Math.floor(diff / 60), m = diff % 60;
@@ -6554,11 +6555,11 @@ function startDadRefreshTimer() {
 
 // ── 하단 4버튼 상태 통합 업데이트 ──
 function updateQuickBtns() {
-  // 완료 기록 중 가장 최신 (시작 기록 제외)
-  const endTitles = new Set(['수유 완료','수유','모유 수유 완료','분유 수유 완료','혼합 수유 완료','기상','유축 완료','유축','기저귀 교체 (소변)','기저귀 교체 (대변)','기저귀 교체 (소변+대변)']);
-  const feed   = records.find(r => r.cat === 'feed'  && endTitles.has(r.title));
-  const sleep  = records.find(r => r.cat === 'sleep' && endTitles.has(r.title));
-  const pump   = records.find(r => r.cat === 'pump'  && endTitles.has(r.title));
+  // 시작 기록 제외하고 가장 최신 완료 기록 찾기
+  const startTitles = new Set(['수유 시작', '수면 시작', '유축 시작']);
+  const feed   = records.find(r => r.cat === 'feed'   && !startTitles.has(r.title));
+  const sleep  = records.find(r => r.cat === 'sleep'  && !startTitles.has(r.title));
+  const pump   = records.find(r => r.cat === 'pump'   && !startTitles.has(r.title));
   const diaper = records.find(r => r.cat === 'diaper');
 
   function durStr(start) {
