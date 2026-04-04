@@ -53,6 +53,14 @@ input:focus { border-color: #bfdbfe; }
 .dad-section-title span { display: none; }
 
 .dad-check-card { background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden; box-shadow: none; }
+.dad-check-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: background 0.15s; }
+.dad-check-item:last-child { border-bottom: none; }
+.dad-check-item:active { background: #f5f8ff; }
+.dad-check-item.done { background: linear-gradient(135deg, #f0fdf4, #e8f8f0); border-bottom-color: #d4f0e0; }
+.dad-checkbox { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #cbd5e1; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: all 0.15s; }
+.dad-checkbox.checked { background: #22c55e; border-color: #22c55e; }
+.dad-checkbox.checked::after { content: '✓'; color: #fff; font-size: 13px; font-weight: 700; }
+.dad-check-title { font-size: 14px; font-weight: 600; color: #1e293b; }
 .dad-check-item:last-child { border-bottom: none; }
 .dad-check-item:active { background: #f5f8ff; }
 .dad-check-item.done { background: linear-gradient(135deg, #f0fdf4, #e8f8f0); border-bottom-color: #d4f0e0; }
@@ -644,21 +652,7 @@ body.dark .voice-hero-btn.listening { background: #dc2626; }
 body.dark .voice-cmd { background: #2a2520; border-color: #3d3628; color: #c8a870; }
 
 /* ══ 진행 중 세션 카드 ══ */
-.active-session-card { border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; border: 2px solid; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.active-session-card.sleep { background: linear-gradient(135deg,#eff6ff,#dbeafe); border-color: #93c5fd; }
-.active-session-card.pump  { background: linear-gradient(135deg,#fdf4ff,#f3e8ff); border-color: #d8b4fe; }
-.active-session-card.feed  { background: linear-gradient(135deg,#fff7ed,#ffedd5); border-color: #fdba74; }
-.active-session-left { display: flex; align-items: center; gap: 10px; }
-.active-session-icon { font-size: 28px; }
-.active-session-title { font-size: 14px; font-weight: 700; color: #1a1a1a; }
-.active-session-dur { font-size: 13px; color: #6b7280; font-weight: 500; }
-.active-session-end-btn { background: #1a1a1a; color: #fff; border: none; border-radius: 20px; padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; touch-action: manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0.1); }
-.active-session-end-btn:active { opacity: 0.8; }
-body.dark .active-session-card.sleep { background: #0f1a2a; border-color: #1e3a5f; }
-body.dark .active-session-card.pump  { background: #1a0f2a; border-color: #5b21b6; }
-body.dark .active-session-card.feed  { background: #2a1800; border-color: #92400e; }
-body.dark .active-session-title { color: #f0ead8; }
-
+body.dark body.dark body.dark body.dark 
 /* ── 아빠 기록 섹션 ── */
 .dad-rec-section { background: #fff; border-radius: 14px; border: 1.5px solid #e8d796; padding: 14px 16px; margin-bottom: 14px; }
 .dad-rec-title { font-size: 13px; font-weight: 700; color: #7a5600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
@@ -1247,7 +1241,6 @@ body.dark .tl-content-title { color: #f0ead8; }
             </div>
           </div>
           <!-- 진행 중 세션 카드 (수면·수유·유축 시작 후 이 화면에서 종료 가능) -->
-          <div id="active-sessions-wrap"></div>
           <div class="quick-log-row">
             <button class="quick-btn" onclick="quickStartAction('feed')" id="qb-feed">
               <span class="quick-btn-icon" id="qi-feed">🍼</span>
@@ -1312,7 +1305,13 @@ body.dark .tl-content-title { color: #f0ead8; }
             <div style="font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:8px;">요약</div>
             <div id="chart-summary-body" style="font-size:13px;color:#555;line-height:2;"></div>
           </div>
-          <div class="feature-section-title" style="margin-top:8px;">📋 오늘의 기록</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;margin-bottom:6px;">
+            <div class="feature-section-title" style="margin:0;">📋 기록</div>
+            <div style="display:flex;gap:6px;">
+              <button id="tl-tab-today" onclick="switchTimelineTab('today')" style="padding:4px 12px;border-radius:20px;border:1px solid #e8d796;font-size:12px;font-weight:700;cursor:pointer;background:#7a5600;color:#fff;">오늘</button>
+              <button id="tl-tab-all" onclick="switchTimelineTab('all')" style="padding:4px 12px;border-radius:20px;border:1px solid #e8d796;font-size:12px;font-weight:700;cursor:pointer;background:#fff;color:#7a5600;">전체</button>
+            </div>
+          </div>
           <div class="timeline-card">
             <div id="timeline"><div class="empty">아직 기록이 없어요 🌙<br>음성 또는 버튼으로 첫 기록을 남겨보세요!</div></div>
           </div>
@@ -1657,6 +1656,21 @@ body.dark .tl-content-title { color: #f0ead8; }
             <button onclick="confirmReset()" style="width:100%;padding:12px;background:none;border:1.5px solid #fecaca;border-radius:10px;color:#ef4444;font-size:13px;font-weight:700;cursor:pointer;">
               ⛔ 모든 데이터 초기화
             </button>
+          </div>
+          <div class="feature-section-title" style="margin-top:16px;">ℹ️ 앱 정보</div>
+          <div class="chart-wrap" style="padding:14px 16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+              <span style="font-size:14px;color:#6b7280;">버전</span>
+              <span style="font-size:13px;font-weight:600;color:#1a1a1a;">누리케어 v4.1</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+              <span style="font-size:14px;color:#6b7280;">제작</span>
+              <span style="font-size:13px;font-weight:600;color:#1a1a1a;">vitaminwoo_app 🍼</span>
+            </div>
+            <a href="./privacy.html" target="_blank" style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid #f3f4f6;text-decoration:none;">
+              <span style="font-size:14px;color:#374151;">🔐 개인정보처리방침</span>
+              <span style="font-size:13px;color:#9ca3af;">보기 →</span>
+            </a>
           </div>
 
         </div>
@@ -2124,11 +2138,11 @@ function saveDiaryEntry() {
   const rawP = localStorage.getItem('baby_profile');
   let days = '';
   if (rawP) {
-    try {
-      const p = JSON.parse(rawP);
+    const p = JSON.parse(rawP);
+    if (p.birthDate) {
       const d = calcBabyDays(p.birthDate);
       if (d) days = d + '일째';
-    } catch(e) {}
+    }
   }
   if (editingDiaryIdx >= 0) {
     const existing = diaryEntries[editingDiaryIdx];
@@ -2906,7 +2920,6 @@ function endSleep() {
   saveData();
   renderTimeline();
   updateStatus();
-  renderActiveSessions();
   updateQuickBtns();
   setVoiceBtnState(false);
 }
@@ -2976,6 +2989,16 @@ function fmtTime(t) {
   const d = new Date(t);
   const h = d.getHours(), m = d.getMinutes();
   return (h < 12 ? '오전 ' : '오후 ') + (h % 12 || 12) + ':' + (m < 10 ? '0' + m : m);
+}
+
+let timelineTab = 'today';
+function switchTimelineTab(tab) {
+  timelineTab = tab;
+  const t = document.getElementById('tl-tab-today');
+  const a = document.getElementById('tl-tab-all');
+  if(t){t.style.background=tab==='today'?'#7a5600':'#fff';t.style.color=tab==='today'?'#fff':'#7a5600';}
+  if(a){a.style.background=tab==='all'?'#7a5600':'#fff';a.style.color=tab==='all'?'#fff':'#7a5600';}
+  renderTimeline();
 }
 
 function renderTimeline() {
@@ -5815,7 +5838,6 @@ function enterApp() {
   try { renderMilestoneList(); } catch(e) {}
   try { loadDarkMode(); } catch(e) {}
   try { renderMoodSelector(); } catch(e) {}
-  try { renderActiveSessions(); } catch(e) {}
   try { updateQuickBtns(); } catch(e) {}
   try { startSessionTimer(); } catch(e) {}
   try { startDadRefreshTimer(); } catch(e) {}
@@ -5954,7 +5976,7 @@ function updateSettingsRoleUI() {
 
 // ── 세션 상태 관리 (수면·유축·수유 시작→종료 쌍) ──
 let pumpingStart = null;
-let feedingType = 'breast'; // breast | bottle | both   // 유축 시작 시각
+let feedingType = 'breast';   // 유축 시작 시각
 let feedingStart = null;   // 수유 시작 시각
 let sessionTimer = null;
 
@@ -6021,7 +6043,6 @@ function startSession(type) {
     document.getElementById('modal-diaper').classList.add('open');
     return;
   }
-  renderActiveSessions();
   updateQuickBtns();
   renderTimeline();
   updateStatus();
@@ -6058,67 +6079,45 @@ function showCompleteFeedback(emoji, msg) {
 // ── 세션 종료 ──
 function endSession(type) {
   const now = new Date();
-
   if (type === 'sleep') {
-    if (!sleepingStart) {
-      showCompleteFeedback('😴', '이미\n수면 종료됨');
-      return;
-    }
-    endSleep();
-    showCompleteFeedback('☀️', '기상 기록 완료!');
-    speak('기상을 기록했어요.');
-
+    if (!sleepingStart) { showCompleteFeedback('😴','이미\n수면 종료됨'); return; }
+    endSleep(); showCompleteFeedback('☀️','기상 기록 완료!'); speak('기상을 기록했어요.');
   } else if (type === 'pump') {
-    if (!pumpingStart) {
-      showCompleteFeedback('🤱', '이미\n유축 완료됨');
-      return;
-    }
+    if (!pumpingStart) { showCompleteFeedback('🤱','이미\n유축 완료됨'); return; }
     var pSt = pumpingStart instanceof Date ? pumpingStart : new Date(pumpingStart);
-    var pStStr = new Date(pSt.getTime() + 9*3600*1000).toISOString().slice(0,16);
-    var pDur = Math.round((now - pSt) / 60000);
-    var pH = Math.floor(pDur/60), pM = pDur % 60;
-    var pDurStr = (pH > 0 ? pH + '시간 ' : '') + pM + '분';
-    pumpingStart = null;
-    saveSessions();
-    var pMlInput = prompt('유축량을 입력하세요 (ml)\n비워두면 ml 없이 저장', '');
-    var pMl = pMlInput && pMlInput.trim() ? parseInt(pMlInput) : null;
-    var pSub = pDurStr + (pMl ? ' · ' + pMl + 'ml' : '');
-    addRecord({ type:'pump', time:nowLocal(), title:'유축 완료', sub:pSub, icon:'🤱', cat:'pump', _startTime:pStStr, _durMin:pDur, ml:pMl||undefined });
-    showCompleteFeedback('🤱', '유축 완료\n' + pSub);
-    speak('유축 완료. ' + pDurStr + (pMl ? ' ' + pMl + 'ml' : '') + ' 유축했어요.');
-
+    var pStStr = new Date(pSt.getTime()+9*3600*1000).toISOString().slice(0,16);
+    var pDur = Math.round((now-pSt)/60000);
+    var pDurStr = (Math.floor(pDur/60)>0?Math.floor(pDur/60)+'시간 ':'')+pDur%60+'분';
+    pumpingStart = null; saveSessions();
+    var pMlRaw = prompt('유축량 (ml)\n건너뛰려면 취소 또는 빈칸','');
+    var pMl = pMlRaw && pMlRaw.trim() ? parseInt(pMlRaw) : null;
+    var pSub = pDurStr + (pMl ? ' · '+pMl+'ml' : '');
+    addRecord({type:'pump',time:nowLocal(),title:'유축 완료',sub:pSub,icon:'🤱',cat:'pump',_startTime:pStStr,_durMin:pDur,ml:pMl||undefined});
+    showCompleteFeedback('🤱','유축 완료\n'+pSub);
+    speak('유축 완료. '+pDurStr+(pMl?' '+pMl+'ml':'')+' 유축했어요.');
   } else if (type === 'feed') {
-    if (!feedingStart) {
-      showCompleteFeedback('🍼', '이미\n수유 완료됨');
-      return;
-    }
+    if (!feedingStart) { showCompleteFeedback('🍼','이미\n수유 완료됨'); return; }
     var fSt = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
-    var fStStr = new Date(fSt.getTime() + 9*3600*1000).toISOString().slice(0,16);
-    var fDur = Math.round((now - fSt) / 60000);
-    var fH = Math.floor(fDur/60), fM = fDur % 60;
-    var fDurStr = (fH > 0 ? fH + '시간 ' : '') + fM + '분';
-    var ftChoice = prompt('수유 방법을 선택하세요:\n1 = 모유\n2 = 분유\n3 = 혼합', '1');
-    var ft = ftChoice === '2' ? 'bottle' : ftChoice === '3' ? 'both' : 'breast';
-    var ftLabel = { breast:'모유', bottle:'분유', both:'혼합' }[ft];
-    var ftTitle = ft === 'bottle' ? '분유 수유 완료' : ft === 'both' ? '혼합 수유 완료' : '모유 수유 완료';
+    var fStStr = new Date(fSt.getTime()+9*3600*1000).toISOString().slice(0,16);
+    var fDur = Math.round((now-fSt)/60000);
+    var fDurStr = (Math.floor(fDur/60)>0?Math.floor(fDur/60)+'시간 ':'')+fDur%60+'분';
+    var ftChoice = prompt('수유 방법\n1=모유  2=분유  3=혼합','1');
+    if (ftChoice === null) { feedingStart=null; saveSessions(); updateQuickBtns(); renderTimeline(); updateStatus(); return; }
+    var ft = ftChoice==='2'?'bottle':ftChoice==='3'?'both':'breast';
+    var ftLabel = {breast:'모유',bottle:'분유',both:'혼합'}[ft];
+    var ftTitle = ft==='bottle'?'분유 수유 완료':ft==='both'?'혼합 수유 완료':'모유 수유 완료';
     var fMl = null;
-    if (ft === 'bottle' || ft === 'both') {
-      var fMlInput = prompt('분유량 (ml)\n비워두면 ml 없이 저장', '');
-      fMl = fMlInput && fMlInput.trim() ? parseInt(fMlInput) : null;
+    if (ft==='bottle'||ft==='both') {
+      var fMlRaw = prompt('분유량 (ml)\n건너뛰려면 취소 또는 빈칸','');
+      fMl = fMlRaw && fMlRaw.trim() ? parseInt(fMlRaw) : null;
     }
-    var fSub = ftLabel + ' · ' + fDurStr + (fMl ? ' · ' + fMl + 'ml' : '');
-    feedingStart = null;
-    feedingType = 'breast';
-    saveSessions();
-    addRecord({ type:'feed', time:nowLocal(), title:ftTitle, sub:fSub, icon:'🍼', cat:'feed', _startTime:fStStr, _durMin:fDur, feedType:ft, ml:fMl||undefined });
-    showCompleteFeedback('🍼', ftTitle.replace(' 완료','') + '\n' + fDurStr);
-    speak(ftLabel + ' 수유 완료. ' + fDurStr + ' 수유했어요.');
+    var fSub = ftLabel+' · '+fDurStr+(fMl?' · '+fMl+'ml':'');
+    feedingStart = null; feedingType = 'breast'; saveSessions();
+    addRecord({type:'feed',time:nowLocal(),title:ftTitle,sub:fSub,icon:'🍼',cat:'feed',_startTime:fStStr,_durMin:fDur,feedType:ft,ml:fMl||undefined});
+    showCompleteFeedback('🍼',ftTitle.replace(' 완료','')+'\n'+fDurStr);
+    speak(ftLabel+' 수유 완료. '+fDurStr+' 수유했어요.');
   }
-
-  updateQuickBtns();
-  renderTimeline();
-  updateStatus();
-  setVoiceBtnState(false);
+  updateQuickBtns(); renderTimeline(); updateStatus(); setVoiceBtnState(false);
 }
 
 // ── 원탭 버튼 — 시작/종료 토글 ──
@@ -6150,57 +6149,6 @@ function quickStartAction(type) {
 }
 
 // ── 진행 중 세션 카드 렌더 ──
-function renderActiveSessions() {
-  const wrap = document.getElementById('active-sessions-wrap');
-  if (!wrap) return;
-  const now = Date.now();
-  let html = '';
-
-  function durStr(start) {
-    const s = start instanceof Date ? start : new Date(start);
-    const m = Math.round((now - s.getTime()) / 60000);
-    const h = Math.floor(m/60);
-    return (h > 0 ? h+'시간 ' : '') + (m%60) + '분 진행 중';
-  }
-
-  if (sleepingStart) {
-    html += `<div class="active-session-card sleep">
-      <div class="active-session-left">
-        <span class="active-session-icon">😴</span>
-        <div class="active-session-info">
-          <div class="active-session-title">수면 중</div>
-          <div class="active-session-dur" id="sleep-dur-card">${durStr(sleepingStart)}</div>
-        </div>
-      </div>
-      <button class="active-session-end-btn" onclick="endSession('sleep')">기상 기록 ☀️</button>
-    </div>`;
-  }
-  if (pumpingStart) {
-    html += `<div class="active-session-card pump">
-      <div class="active-session-left">
-        <span class="active-session-icon">🤱</span>
-        <div class="active-session-info">
-          <div class="active-session-title">유축 중</div>
-          <div class="active-session-dur" id="pump-dur-card">${durStr(pumpingStart)}</div>
-        </div>
-      </div>
-      <button class="active-session-end-btn" onclick="endSession('pump')">유축 완료 ✅</button>
-    </div>`;
-  }
-  if (feedingStart) {
-    html += `<div class="active-session-card feed">
-      <div class="active-session-left">
-        <span class="active-session-icon">🍼</span>
-        <div class="active-session-info">
-          <div class="active-session-title">수유 중</div>
-          <div class="active-session-dur" id="feed-dur-card">${durStr(feedingStart)}</div>
-        </div>
-      </div>
-      <button class="active-session-end-btn" onclick="endSession('feed')">수유 완료 ✅</button>
-    </div>`;
-  }
-  wrap.innerHTML = html;
-}
 
 // 세션 타이머 (10초마다 갱신)
 let dadRefreshTimer = null;
@@ -6208,8 +6156,7 @@ let dadRefreshTimer = null;
 function startSessionTimer() {
   clearInterval(sessionTimer);
   sessionTimer = setInterval(() => {
-    renderActiveSessions();
-    updateQuickBtns();
+      updateQuickBtns();
   }, 10000);
 }
 
@@ -6237,10 +6184,11 @@ function startDadRefreshTimer() {
 
 // ── 하단 4버튼 상태 통합 업데이트 ──
 function updateQuickBtns() {
-  const feed  = records.find(r => r.cat === 'feed');
-  const sleep = records.find(r => r.cat === 'sleep');
-  const pump  = records.find(r => r.cat === 'pump');
-  const diaper = records.find(r => r.cat === 'diaper');
+  const _startT = new Set(['수유 시작','수면 시작','유축 시작']);
+  const feed  = records.find(r => r.cat==='feed'   && !_startT.has(r.title));
+  const sleep = records.find(r => r.cat==='sleep'  && !_startT.has(r.title));
+  const pump  = records.find(r => r.cat==='pump'   && !_startT.has(r.title));
+  const diaper = records.find(r => r.cat==='diaper');
 
   // ── 수유 ──
   const qbFeed = document.getElementById('qb-feed');
@@ -6255,7 +6203,7 @@ function updateQuickBtns() {
     if (qiFeed) qiFeed.textContent = '🍼';
   } else {
     if (qlFeed) qlFeed.textContent = '수유 시작';
-    if (qtFeed) qtFeed.textContent = feed ? '마지막 ' + timeDiff(feed.time) : '-';
+    if (qtFeed) qtFeed.textContent = feed ? timeDiff(feed.time) : '-';
     if (qbFeed) { qbFeed.style.background = ''; qbFeed.style.outline = ''; }
     if (qiFeed) qiFeed.textContent = '🍼';
   }
@@ -6273,7 +6221,7 @@ function updateQuickBtns() {
     if (qiSleep) qiSleep.textContent = '😴';
   } else {
     if (qlSleep) qlSleep.textContent = '수면 시작';
-    if (qtSleep) qtSleep.textContent = sleep ? '마지막 ' + timeDiff(sleep.time) : '-';
+    if (qtSleep) qtSleep.textContent = sleep ? timeDiff(sleep.time) : '-';
     if (qbSleep) { qbSleep.style.background = ''; qbSleep.style.outline = ''; }
     if (qiSleep) qiSleep.textContent = '😴';
   }
@@ -6291,14 +6239,14 @@ function updateQuickBtns() {
     if (qiPump) qiPump.textContent = '🤱';
   } else {
     if (qlPump) qlPump.textContent = '유축 시작';
-    if (qtPump) qtPump.textContent = pump ? '마지막 ' + timeDiff(pump.time) : '-';
+    if (qtPump) qtPump.textContent = pump ? timeDiff(pump.time) : '-';
     if (qbPump) { qbPump.style.background = ''; qbPump.style.outline = ''; }
     if (qiPump) qiPump.textContent = '🤱';
   }
 
   // ── 기저귀 ──
   const qtDiaper = document.getElementById('qt-diaper');
-  if (qtDiaper) qtDiaper.textContent = diaper ? '마지막 ' + timeDiff(diaper.time) : '-';
+  if (qtDiaper) qtDiaper.textContent = diaper ? timeDiff(diaper.time) : '-';
 }
 
 // ── 음성 명령 처리 업데이트 ──
@@ -6417,7 +6365,6 @@ function updateStatus() {
   if(el('today-pump-count')) el('today-pump-count').textContent = todayPumps.length+'회';
   renderCoachCard();
   renderScoreCard();
-  renderActiveSessions();
   updateQuickBtns();
 }
 
@@ -6736,8 +6683,7 @@ function fbApplyRemoteData(data) {
       renderTimeline();
       updateStatus();
       updateQuickBtns();
-      renderActiveSessions();
-      renderAppHeader();
+          renderAppHeader();
       renderScoreCard();
       renderDadTodayRecords();
       fbShowSyncToast();
