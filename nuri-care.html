@@ -653,7 +653,7 @@ body.dark .voice-cmd { background: #2a2520; border-color: #3d3628; color: #c8a87
 .active-session-card.feed  { background: linear-gradient(135deg,#fff7ed,#ffedd5); border-color: #fdba74; }
 body.dark body.dark .active-session-card.pump  { background: #1a0f2a; border-color: #5b21b6; }
 body.dark .active-session-card.feed  { background: #2a1800; border-color: #92400e; }
-body.dark 
+body.dark
 /* ── 아빠 기록 섹션 ── */
 .dad-rec-section { background: #fff; border-radius: 14px; border: 1.5px solid #e8d796; padding: 14px 16px; margin-bottom: 14px; }
 .dad-rec-title { font-size: 13px; font-weight: 700; color: #7a5600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
@@ -903,7 +903,6 @@ body.dark .tl-time-col { border-color: #2a2520; }
 body.dark .tl-time-hm { color: #f0ead8; }
 body.dark .tl-content-title { color: #f0ead8; }
 .tag-badge { background:#fff; border:1px solid #e8d796; border-radius:8px; padding:4px 10px; font-size:12px; color:#7a5600; font-weight:600; }
-
 
 </style>
 </head>
@@ -1976,7 +1975,6 @@ body.dark .tl-content-title { color: #f0ead8; }
   </div>
 </div>
 
-
 <!-- ═══════════ 수유 종료 모달 (분유 ml 입력) ═══════════ -->
 <div class="modal-bg" id="modal-feed-end">
   <div class="modal">
@@ -2052,7 +2050,6 @@ body.dark .tl-content-title { color: #f0ead8; }
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script>
-
 
 // ── Service Worker 등록 + 강제 업데이트 ──
 if ('serviceWorker' in navigator) {
@@ -2965,7 +2962,7 @@ function endSleep() {
   const sub = (h > 0 ? h + '시간 ' : '') + m + '분';
   const startKST = new Date(startTime.getTime() + 9*3600*1000);
   const startStr = startKST.toISOString().slice(0,16);
-  sleepingStart = null; // ← addRecord 전에 null 처리
+  sleepingStart = null;
   clearInterval(sleepTimer);
   const banner = document.getElementById('sleeping-banner');
   if (banner) banner.style.display = 'none';
@@ -6320,7 +6317,6 @@ function showCompleteFeedback(emoji, msg) {
 function endSession(type) {
   const now = new Date();
 
-
   if (type === 'sleep') {
     if (!sleepingStart) {
       showCompleteFeedback('😴', '이미\n수면 종료됨');
@@ -6364,7 +6360,6 @@ function endSession(type) {
   updateStatus();
   setVoiceBtnState(false);
 }
-
 
 let _pumpEndDur = 0;
 let _pumpEndStartTime = null;
@@ -6413,7 +6408,6 @@ function savePumpEnd() {
   renderTimeline();
   updateStatus();
 }
-
 
 function openFeedEndModal() {
   _feedEndType = feedingType || 'breast';
@@ -6494,7 +6488,6 @@ function saveFeedEnd() {
   updateStatus();
 }
 
-
 function quickStartAction(type) {
   if (type === 'feed') {
     if (feedingStart) {
@@ -6534,7 +6527,7 @@ function startSessionTimer() {
     if (sleepingStart || feedingStart || pumpingStart) {
       renderTimeline();
     }
-  }, 1000); // 1초마다 갱신
+  }, 1000);
 }
 
 // 아빠 탭 실시간 자동 갱신 (5초마다)
@@ -6561,66 +6554,58 @@ function startDadRefreshTimer() {
 
 // ── 하단 4버튼 상태 통합 업데이트 ──
 function updateQuickBtns() {
-  const feed  = records.find(r => r.cat === 'feed');
-  const sleep = records.find(r => r.cat === 'sleep');
-  const pump  = records.find(r => r.cat === 'pump');
+  // 완료 기록 중 가장 최신 (시작 기록 제외)
+  const endTitles = new Set(['수유 완료','수유','모유 수유 완료','분유 수유 완료','혼합 수유 완료','기상','유축 완료','유축','기저귀 교체 (소변)','기저귀 교체 (대변)','기저귀 교체 (소변+대변)']);
+  const feed   = records.find(r => r.cat === 'feed'  && endTitles.has(r.title));
+  const sleep  = records.find(r => r.cat === 'sleep' && endTitles.has(r.title));
+  const pump   = records.find(r => r.cat === 'pump'  && endTitles.has(r.title));
   const diaper = records.find(r => r.cat === 'diaper');
+
+  function durStr(start) {
+    const m = Math.round((Date.now() - new Date(start).getTime()) / 60000);
+    return m >= 60 ? Math.floor(m/60) + '시간 ' + (m%60) + '분째' : m + '분째';
+  }
 
   // ── 수유 ──
   const qbFeed = document.getElementById('qb-feed');
   const qlFeed = document.getElementById('ql-feed');
   const qtFeed = document.getElementById('qt-feed');
-  const qiFeed = document.getElementById('qi-feed');
   if (feedingStart) {
-    const m = Math.round((Date.now() - new Date(feedingStart).getTime()) / 60000);
-    const dur = m >= 60 ? Math.floor(m/60) + '시간 ' + (m%60) + '분째' : m + '분째';
     if (qlFeed) qlFeed.textContent = '수유 종료 ✅';
-    if (qtFeed) qtFeed.textContent = dur + ' 수유 중';
+    if (qtFeed) qtFeed.textContent = durStr(feedingStart) + ' 수유 중';
     if (qbFeed) { qbFeed.style.background = 'linear-gradient(135deg,#fff7ed,#ffedd5)'; qbFeed.style.outline = '2px solid #fdba74'; }
-    if (qiFeed) qiFeed.textContent = '🍼';
   } else {
     if (qlFeed) qlFeed.textContent = '수유 시작';
     if (qtFeed) qtFeed.textContent = feed ? timeDiff(feed.time) : '-';
     if (qbFeed) { qbFeed.style.background = ''; qbFeed.style.outline = ''; }
-    if (qiFeed) qiFeed.textContent = '🍼';
   }
 
   // ── 수면 ──
   const qbSleep = document.getElementById('qb-sleep');
   const qlSleep = document.getElementById('ql-sleep');
   const qtSleep = document.getElementById('qt-sleep');
-  const qiSleep = document.getElementById('qi-sleep');
   if (sleepingStart) {
-    const m = Math.round((Date.now() - new Date(sleepingStart).getTime()) / 60000);
-    const dur = m >= 60 ? Math.floor(m/60) + '시간 ' + (m%60) + '분째' : m + '분째';
     if (qlSleep) qlSleep.textContent = '기상 기록 ☀️';
-    if (qtSleep) qtSleep.textContent = dur + ' 수면 중';
+    if (qtSleep) qtSleep.textContent = durStr(sleepingStart) + ' 수면 중';
     if (qbSleep) { qbSleep.style.background = 'linear-gradient(135deg,#eff6ff,#dbeafe)'; qbSleep.style.outline = '2px solid #93c5fd'; }
-    if (qiSleep) qiSleep.textContent = '😴';
   } else {
     if (qlSleep) qlSleep.textContent = '수면 시작';
     if (qtSleep) qtSleep.textContent = sleep ? timeDiff(sleep.time) : '-';
     if (qbSleep) { qbSleep.style.background = ''; qbSleep.style.outline = ''; }
-    if (qiSleep) qiSleep.textContent = '😴';
   }
 
   // ── 유축 ──
   const qbPump = document.getElementById('qb-pump');
   const qlPump = document.getElementById('ql-pump');
   const qtPump = document.getElementById('qt-pump');
-  const qiPump = document.getElementById('qi-pump');
   if (pumpingStart) {
-    const m = Math.round((Date.now() - new Date(pumpingStart).getTime()) / 60000);
-    const dur = m >= 60 ? Math.floor(m/60) + '시간 ' + (m%60) + '분째' : m + '분째';
     if (qlPump) qlPump.textContent = '유축 종료 ✅';
-    if (qtPump) qtPump.textContent = dur + ' 유축 중';
+    if (qtPump) qtPump.textContent = durStr(pumpingStart) + ' 유축 중';
     if (qbPump) { qbPump.style.background = 'linear-gradient(135deg,#fdf4ff,#f3e8ff)'; qbPump.style.outline = '2px solid #d8b4fe'; }
-    if (qiPump) qiPump.textContent = '🤱';
   } else {
     if (qlPump) qlPump.textContent = '유축 시작';
     if (qtPump) qtPump.textContent = pump ? timeDiff(pump.time) : '-';
     if (qbPump) { qbPump.style.background = ''; qbPump.style.outline = ''; }
-    if (qiPump) qiPump.textContent = '🤱';
   }
 
   // ── 기저귀 ──
