@@ -86,17 +86,17 @@ input:focus { border-color: #bfdbfe; }
 .policy-apply-row { display: flex; gap: 8px; align-items: stretch; margin-top: 12px; }
 .policy-apply-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 11px 12px; background: #7a5600; color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; transition: opacity 0.15s; }
 .policy-apply-btn:active { opacity: 0.8; }
-.policy-apply-btn.done-btn { background: #16a34a; }
+.policy-apply-btn.done-btn { background: #7a5600; }
 /* 완료 체크 버튼 */
 .policy-done-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 8px 12px; background: #f9fafb; border: 1.5px solid #e5e7eb; border-radius: 10px; cursor: pointer; min-width: 60px; flex-shrink: 0; transition: all 0.15s; }
 .policy-done-btn.checked { background: #f0fdf4; border-color: #86efac; }
 .policy-done-icon { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #d1d5db; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
-.policy-done-icon.checked { background: #16a34a; border-color: #16a34a; }
+.policy-done-icon.checked { background: #7a5600; border-color: #16a34a; }
 .policy-done-icon.checked::after { content: '✓'; color: #fff; font-size: 12px; font-weight: 700; }
 .policy-done-label { font-size: 10px; color: #9ca3af; font-weight: 600; }
 .policy-done-label.checked { color: #16a34a; }
 /* 신청 완료 표시하기 — 독립 행 (기존 스타일 유지) */
-.policy-check-small.checked { background: #16a34a; border-color: #16a34a; }
+.policy-check-small.checked { background: #7a5600; border-color: #16a34a; }
 .policy-check-small.checked::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
 .policy-check-small-label { font-size: 12px; color: #6b7280; }
 .policy-check-small-label.checked { color: #16a34a; font-weight: 700; }
@@ -506,7 +506,7 @@ body.dark .growth-table td { border-color: #3d3628; color: #d0c0a8; }
 .vaccine-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f3f0e0; cursor: pointer; }
 .vaccine-row:last-child { border-bottom: none; }
 .vaccine-checkbox { width: 20px; height: 20px; border-radius: 5px; border: 2px solid #d1d5db; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-.vaccine-checkbox.checked { background: #16a34a; border-color: #16a34a; }
+.vaccine-checkbox.checked { background: #7a5600; border-color: #16a34a; }
 .vaccine-checkbox.checked::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
 .vaccine-name { font-size: 14px; font-weight: 600; color: #1a1a1a; flex: 1; }
 .vaccine-age-badge { font-size: 11px; background: #fff7d6; color: #7a5600; border-radius: 8px; padding: 2px 8px; font-weight: 700; flex-shrink: 0; }
@@ -627,14 +627,14 @@ body.dark .onboarding-title { color: #f0ead8; }
 
 /* ── 마이크 중심 UI ── */
 /* ══ 음성 히어로 UI ══ */
-.voice-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 0; pointer-events: none; }
+.voice-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px 0 8px; pointer-events: none; }
 .voice-hero * { pointer-events: auto; }
 .voice-hero-mic { margin-bottom: 24px; opacity: 0.92; transition: transform 0.2s; }
 .voice-hero-mic.listening { animation: micPulse 1.2s ease-in-out infinite; }
 .voice-hero-status { font-size: 22px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px; letter-spacing: -0.3px; }
-.voice-hero-hint { font-size: 13px; color: #9ca3af; margin-bottom: 28px; text-align: center; line-height: 1.5; }
-.voice-hero-btn { width: 80px; height: 80px; border-radius: 50%; background: #16a34a; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 24px rgba(22,163,74,0.35), 0 0 0 0 rgba(22,163,74,0.2); transition: all 0.15s; margin-bottom: 0; position: relative; }
-.voice-hero-btn::after { content:''; position:absolute; inset:-8px; border-radius:50%; border:2px solid rgba(22,163,74,0.2); pointer-events:none; }
+.voice-hero-hint { font-size: 13px; color: #9ca3af; margin-bottom: 16px; text-align: center; line-height: 1.5; }
+.voice-hero-btn { width: 80px; height: 80px; border-radius: 50%; background: #7a5600; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 24px rgba(122,86,0,0.32), 0 0 0 0 rgba(122,86,0,0.2); transition: all 0.15s; margin-bottom: 16px; position: relative; }
+.voice-hero-btn::after { content:''; position:absolute; inset:-8px; border-radius:50%; border:2px solid rgba(122,86,0,0.2); pointer-events:none; }
 .voice-hero-btn:active { transform: scale(0.92); }
 .voice-hero-btn.listening { background: #dc2626; box-shadow: 0 6px 24px rgba(220,38,38,0.35), 0 0 0 12px rgba(220,38,38,0.12); animation: btnPulse 1.2s ease-in-out infinite; }
 #voice-btn-inner { width: 28px; height: 28px; border-radius: 50%; background: #fff; display: block; transition: border-radius 0.2s, width 0.2s, height 0.2s; }
@@ -708,7 +708,7 @@ body.dark .qnav-btn.active::after { background: #c8a870; }
 @keyframes splashFadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
 /* ── 퀵버튼 리디자인 ── */
-.quick-log-row { display: flex; gap: 10px; margin-bottom: 16px; padding: 0 4px; flex-shrink: 0; min-height: 90px; }
+.quick-log-row { display: flex; gap: 10px; margin-bottom: 8px; padding: 0 4px; flex-shrink: 0; }
 .quick-btn {
   flex: 1; display: flex; flex-direction: column; align-items: center;
   gap: 5px; padding: 14px 6px 10px;
@@ -960,10 +960,10 @@ body.dark .tl-content-title { color: #f0ead8; }
       <ellipse cx="55" cy="42" rx="3" ry="3.5" fill="#5D4037"/>
       <circle cx="42" cy="41" r="1" fill="#fff"/>
       <circle cx="56" cy="41" r="1" fill="#fff"/>
-      <path d="M40 51 Q48 58 56 51" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+      <path d="M40 51 Q48 58 56 51" stroke="#7a5600" stroke-width="2.2" stroke-linecap="round" fill="none"/>
       <ellipse cx="26" cy="45" rx="4" ry="5" fill="#FFEAA7"/>
       <ellipse cx="70" cy="45" rx="4" ry="5" fill="#FFEAA7"/>
-      <path d="M34 30 L38 38 L48 32 L58 38 L62 30 L58 36 L48 30 L38 36 Z" fill="#16a34a"/>
+      <path d="M34 30 L38 38 L48 32 L58 38 L62 30 L58 36 L48 30 L38 36 Z" fill="#7a5600"/>
       <path d="M44 70 Q48 67 52 70 Q56 73 48 78 Q40 73 44 70Z" fill="#FF6B9D"/>
     </svg>
   </div>
@@ -1224,10 +1224,10 @@ body.dark .tl-content-title { color: #f0ead8; }
           <div class="voice-hero">
             <div class="voice-hero-mic" id="voice-mic-icon">
               <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="28" y="10" width="24" height="36" rx="12" fill="#16a34a"/>
-                <path d="M16 40c0 13.255 10.745 24 24 24s24-10.745 24-24" stroke="#16a34a" stroke-width="4" stroke-linecap="round"/>
-                <line x1="40" y1="64" x2="40" y2="74" stroke="#16a34a" stroke-width="4" stroke-linecap="round"/>
-                <line x1="30" y1="74" x2="50" y2="74" stroke="#16a34a" stroke-width="4" stroke-linecap="round"/>
+                <rect x="28" y="10" width="24" height="36" rx="12" fill="#7a5600"/>
+                <path d="M16 40c0 13.255 10.745 24 24 24s24-10.745 24-24" stroke="#7a5600" stroke-width="4" stroke-linecap="round"/>
+                <line x1="40" y1="64" x2="40" y2="74" stroke="#7a5600" stroke-width="4" stroke-linecap="round"/>
+                <line x1="30" y1="74" x2="50" y2="74" stroke="#7a5600" stroke-width="4" stroke-linecap="round"/>
               </svg>
             </div>
             <div class="voice-hero-status" id="voice-status-text">탭해서 말하기</div>
@@ -3089,7 +3089,7 @@ function renderTimeline() {
   // title → cat 매핑 (모달 저장 포함)
   const endSet   = new Set(['수유 완료','수유','모유 수유 완료','분유 수유 완료','혼합 수유 완료','기상','유축 완료','유축']);
   const startSet = new Set(['수유 시작','수면 시작','유축 시작']);
-  const catOf    = { '수유 완료':'feed','수유':'feed','수유 시작':'feed',
+  const catOf    = { '수유 완료':'feed','수유':'feed','모유 수유 완료':'feed','분유 수유 완료':'feed','혼합 수유 완료':'feed','수유 시작':'feed',
                      '모유 수유 완료':'feed','분유 수유 완료':'feed','혼합 수유 완료':'feed',
                      '기상':'sleep','수면':'sleep','수면 시작':'sleep',
                      '유축 완료':'pump','유축':'pump','유축 시작':'pump' };
@@ -6179,7 +6179,7 @@ let _feedEndStartTime = null;
 let _feedEndType = 'breast';
 
 function loadSessions() {
-  const MAX_SESSION_MS = 12 * 60 * 60 * 1000;
+  const MAX_SESSION_MS = 24 * 60 * 60 * 1000;
 
   function loadSession(key) {
     try {
@@ -7046,7 +7046,7 @@ function fbApplyRemoteData(data) {
       localStorage.setItem('dad_checks', JSON.stringify(data.dad_checks));
     }
     if (data.sessions) {
-      const MAX_SESSION_MS = 12 * 60 * 60 * 1000;
+      const MAX_SESSION_MS = 24 * 60 * 60 * 1000;
 
       if (data.sessions.sleeping !== undefined) {
         const v = data.sessions.sleeping;
