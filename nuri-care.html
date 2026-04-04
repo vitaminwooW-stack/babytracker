@@ -6320,42 +6320,53 @@ function endSession(type) {
 
   if (type === 'sleep') {
     if (!sleepingStart) {
-      showCompleteFeedback('😴', '이미\n수면 종료됨');
+      showCompleteFeedback('\u{1F634}', '이미\n수면 종료됨');
       speak('수면 시작 기록이 없어요.');
       return;
     }
     endSleep();
-    showCompleteFeedback('☀️', '기상 기록 완료!');
+    showCompleteFeedback('\u{2600}\uFE0F', '기상 기록 완료!');
     speak('기상을 기록했어요.');
+
   } else if (type === 'pump') {
     if (!pumpingStart) {
-      showCompleteFeedback('🤱', '이미\n유축 완료됨');
+      showCompleteFeedback('\u{1F931}', '이미\n유축 완료됨');
       speak('유축 시작 기록이 없어요.');
       return;
     }
-    const now2 = new Date();
-    _pumpEndDur = Math.round((now2 - (pumpingStart instanceof Date ? pumpingStart : new Date(pumpingStart))) / 60000);
-    _pumpEndStartTime = pumpingStart instanceof Date ? pumpingStart : new Date(pumpingStart);
-    // 입력란 초기화
-    const L = document.getElementById('pump-end-L');
-    const R = document.getElementById('pump-end-R');
-    if (L) L.value = '';
-    if (R) R.value = '';
-    document.getElementById('modal-pump-end').classList.add('open');
-    return;
+    var pSt = pumpingStart instanceof Date ? pumpingStart : new Date(pumpingStart);
+    var pStStr = new Date(pSt.getTime() + 9*3600*1000).toISOString().slice(0,16);
+    var pDur = Math.round((now - pSt) / 60000);
+    var pH = Math.floor(pDur/60), pM = pDur%60;
+    var pDurStr = (pH>0 ? pH+'시간 ':'')+pM+'분';
+    pumpingStart = null;
+    saveSessions();
+    addRecord({ type:'pump', time:nowLocal(), title:'유축 완료', sub:pDurStr, icon:'\u{1F931}', cat:'pump', _startTime:pStStr, _durMin:pDur });
+    showCompleteFeedback('\u{1F931}', '유축 완료\n'+pDurStr);
+    speak('유축 완료. '+pDurStr+' 유축했어요.');
+
   } else if (type === 'feed') {
     if (!feedingStart) {
-      showCompleteFeedback('🍼', '이미\n수유 완료됨');
+      showCompleteFeedback('\u{1F37C}', '이미\n수유 완료됨');
       speak('수유 시작 기록이 없어요.');
-      showVoiceToast('이미 수유가 완료됐어요', false);
       return;
     }
-    // 수유 종료 모달 표시 (모유/분유 선택 + 분유 ml 입력)
-    _feedEndDur = Math.round((now - (feedingStart instanceof Date ? feedingStart : new Date(feedingStart))) / 60000);
-    _feedEndStartTime = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
-    openFeedEndModal();
-    return;
+    var fSt = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
+    var fStStr = new Date(fSt.getTime() + 9*3600*1000).toISOString().slice(0,16);
+    var fDur = Math.round((now - fSt) / 60000);
+    var fH = Math.floor(fDur/60), fM = fDur%60;
+    var fDurStr = (fH>0 ? fH+'시간 ':'')+fM+'분';
+    var ft = feedingType || 'breast';
+    var ftLabel = {breast:'모유',bottle:'분유',both:'혼합'}[ft] || '모유';
+    var ftTitle = ft==='bottle' ? '분유 수유 완료' : ft==='both' ? '혼합 수유 완료' : '모유 수유 완료';
+    feedingStart = null;
+    feedingType = 'breast';
+    saveSessions();
+    addRecord({ type:'feed', time:nowLocal(), title:ftTitle, sub:ftLabel+' \u00B7 '+fDurStr, icon:'\u{1F37C}', cat:'feed', _startTime:fStStr, _durMin:fDur });
+    showCompleteFeedback('\u{1F37C}', ftTitle.replace(' 완료','')+'\n'+fDurStr);
+    speak(ftLabel+' 수유 완료. '+fDurStr+' 수유했어요.');
   }
+
   updateQuickBtns();
   renderTimeline();
   updateStatus();
