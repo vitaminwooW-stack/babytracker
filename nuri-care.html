@@ -6520,8 +6520,8 @@ function processVoiceCommand(text) {
     startSession('feed');
     showCompleteFeedback('🍼', '수유 시작!');
     matched = true;
-  } else if (t.includes('수유종료')||t.includes('수유완료')||t.includes('수유끝')||(t.includes('수유')&&t.includes('끝'))) {
-    if (feedingStart) { openFeedEndModal(); } else { showVoiceToast('수유 시작 기록이 없어요', false); }
+  } else if (t.includes('수유종료')||t.includes('수유완료')||t.includes('수유끝')||(t.includes('수유')&&(t.includes('끝')||t.includes('종료')||t.includes('완료')||t.includes('그만')))) {
+    openFeedEndModal();
     matched = true;
   } else if (t.includes('수유')||t.includes('밥먹')||t.includes('분유')||t.includes('젖먹')) {
     if (feedingStart) { endSession('feed'); }
