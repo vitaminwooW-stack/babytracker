@@ -169,9 +169,6 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .s-label { font-size: 11px; color: #6b7280; }
 .s-time { font-size: 13px; font-weight: 600; color: #333; margin-top: 3px; }
 
-.sleeping-banner { background: #EBF4FF; border: 1px solid #b3d4f5; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: none; align-items: center; justify-content: space-between; }
-.sleeping-banner span { font-size: 14px; color: #1d4ed8; font-weight: 500; }
-.sleeping-banner button { background: #2563eb; color: #fff; border: none; border-radius: 12px; padding: 6px 14px; font-size: 13px; cursor: pointer; }
 
 .section-title { font-size: 12px; font-weight: 600; color: #9ca3af; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
 
@@ -477,8 +474,7 @@ body.dark .dad-check-title, body.dark .diary-entry-text { color: #f0ead8; }
 body.dark input, body.dark textarea { background: #2a2520; border-color: #3d3628; color: #f0ead8; }
 body.dark .opt-btn { background: #2a2520; border-color: #3d3628; color: #f0ead8; }
 body.dark .section-title, body.dark .policy-page-header p, body.dark .mom-page-header p { color: #7a6a5a; }
-body.dark .sleeping-banner { background: #1e2d1a; border-color: #2d4a26; }
-body.dark .no-photo-info .baby-dname { color: #f0ead8; }
+body.dark body.dark .no-photo-info .baby-dname { color: #f0ead8; }
 
 /* ── 차트 탭 ── */
 .chart-tab-row { display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
@@ -1216,17 +1212,6 @@ body.dark .tl-content-title { color: #f0ead8; }
       <!-- ── 페이지 2: 음성 기록 메인 ── -->
       <div class="swipe-page">
         <div class="app-body">
-          <div id="coach-card-wrap"></div>
-          <div id="sleeping-banner" style="display:none;background:linear-gradient(135deg,#eff6ff,#dbeafe);border:2px solid #93c5fd;border-radius:14px;padding:14px 16px;margin-bottom:12px;align-items:center;justify-content:space-between;gap:8px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-size:22px;">😴</span>
-              <div>
-                <div style="font-size:13px;font-weight:700;color:#1d4ed8;">수면 중</div>
-                <div style="font-size:12px;color:#3b82f6;" id="sleep-dur"></div>
-              </div>
-            </div>
-            <button id="wake-btn" style="background:#1d4ed8;color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;" onclick="endSession('sleep')">기상 기록</button>
-          </div>
           <div class="voice-hero">
             <div class="voice-hero-mic" id="voice-mic-icon">
               <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1273,6 +1258,7 @@ body.dark .tl-content-title { color: #f0ead8; }
               <span class="quick-btn-time" id="qt-diaper">-</span>
             </button>
           </div>
+          <div id="coach-card-wrap" style="margin-top:12px;"></div>
           <div class="notif-banner" id="notif-banner" style="display:none;">
             <span class="notif-banner-text">🔔 재울 타이밍을 알림으로 받을 수 있어요</span>
             <button class="notif-banner-btn" onclick="requestNotifPermission()">허용</button>
@@ -2962,8 +2948,6 @@ function endSleep() {
   });
   sleepingStart = null;
   clearInterval(sleepTimer);
-  const banner = document.getElementById('sleeping-banner');
-  if (banner) banner.style.display = 'none';
   saveData();
   renderTimeline();
   updateStatus();
@@ -2971,21 +2955,7 @@ function endSleep() {
   setVoiceBtnState(false);
 }
 
-function updateSleepBanner() {
-  const banner = document.getElementById('sleeping-banner');
-  if (!banner) return;
-  banner.style.display = 'flex';
-  clearInterval(sleepTimer);
-  function upd() {
-    if (!sleepingStart) return;
-    const startTime = sleepingStart instanceof Date ? sleepingStart : new Date(sleepingStart);
-    const dur = Math.round((new Date() - startTime) / 60000);
-    const h = Math.floor(dur / 60), m = dur % 60;
-    document.getElementById('sleep-dur').textContent = '(' + (h > 0 ? h + '시간 ' : '') + m + '분)';
-  }
-  upd();
-  sleepTimer = setInterval(upd, 10000); // 10초마다 갱신 (30초보다 빠르게)
-}
+function updateSleepBanner() { /* sleeping-banner 삭제됨 */ }
 
 function saveDiaper() {
   // 모달 먼저 닫기
@@ -6147,9 +6117,6 @@ function endSession(type) {
   if (type === 'sleep') {
     if (!sleepingStart) { showCompleteFeedback('😴','이미 수면 종료됨'); return; }
     endSleep();
-    // sleeping-banner 숨기기
-    const sb = document.getElementById('sleeping-banner');
-    if (sb) sb.style.display = 'none';
     showCompleteFeedback('☀️','기상 기록 완료!');
     speak('기상을 기록했어요.');
 
@@ -6270,7 +6237,6 @@ function quickStartAction(type) {
       sleepingStart = now;
       localStorage.setItem('baby_sleeping', now.toISOString());
       updateQuickBtns(); // 즉시 버튼 상태 변경
-      updateSleepBanner(); // 즉시 배너 표시
       showCompleteFeedback('😴', '수면 시작!');
       setTimeout(() => {
         addRecord({ type:'sleep', time:nowLocal(), title:'수면 시작', sub:'자는 중', icon:'😴', cat:'sleep' });
