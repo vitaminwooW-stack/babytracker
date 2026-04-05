@@ -1828,16 +1828,30 @@ body.dark .tl-content-title { color: #f0ead8; }
     <div class="modal-handle"></div>
     <button class="modal-close-x" onclick="closePumpModal()">✕</button>
     <h2>🤱 유축 기록</h2>
-    <span class="field-label">유축량 입력</span>
-    <div style="display:flex;gap:12px;margin-bottom:16px;">
+    <div style="text-align:center;margin-bottom:16px;">
+      <div id="pump-timer-display" style="font-size:36px;font-weight:800;color:#7c3aaf;letter-spacing:2px;font-variant-numeric:tabular-nums;">00:00</div>
+      <div style="display:flex;justify-content:center;gap:8px;margin-top:8px;">
+        <button id="pump-timer-btn" onclick="pumpTimerToggle()" style="padding:6px 16px;border-radius:20px;border:none;background:#7c3aaf;color:#fff;font-size:13px;font-weight:700;cursor:pointer;touch-action:manipulation;">시작</button>
+        <button onclick="pumpTimerReset()" style="padding:6px 16px;border-radius:20px;border:1px solid #d8b4fe;background:#fff;color:#7c3aaf;font-size:13px;font-weight:700;cursor:pointer;touch-action:manipulation;">초기화</button>
+      </div>
+    </div>
+    <span class="field-label">유축량</span>
+    <div style="display:flex;gap:10px;margin-bottom:12px;">
       <div style="flex:1;">
-        <div style="font-size:12px;font-weight:600;color:#7c3aaf;margin-bottom:6px;">⬅️ 왼쪽 (ml)</div>
-        <input type="number" id="pump-L-ml" placeholder="예: 80" min="0" max="500" style="width:100%;box-sizing:border-box;">
+        <div style="font-size:11px;font-weight:700;color:#7c3aaf;margin-bottom:4px;">⬅️ 왼쪽 (ml)</div>
+        <input type="number" id="pump-L-ml" placeholder="예: 80" min="0" max="500" oninput="pumpCalcTotal()" style="width:100%;box-sizing:border-box;">
       </div>
       <div style="flex:1;">
-        <div style="font-size:12px;font-weight:600;color:#7c3aaf;margin-bottom:6px;">➡️ 오른쪽 (ml)</div>
-        <input type="number" id="pump-R-ml" placeholder="예: 70" min="0" max="500" style="width:100%;box-sizing:border-box;">
+        <div style="font-size:11px;font-weight:700;color:#7c3aaf;margin-bottom:4px;">➡️ 오른쪽 (ml)</div>
+        <input type="number" id="pump-R-ml" placeholder="예: 70" min="0" max="500" oninput="pumpCalcTotal()" style="width:100%;box-sizing:border-box;">
       </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <div style="flex:1;">
+        <div style="font-size:11px;font-weight:700;color:#7c3aaf;margin-bottom:4px;">📊 총합 (ml)</div>
+        <input type="number" id="pump-total-ml" placeholder="또는 총합만 입력" min="0" max="1000" oninput="pumpSetTotal()" style="width:100%;box-sizing:border-box;">
+      </div>
+      <div style="padding-top:20px;font-size:20px;font-weight:800;color:#7c3aaf;" id="pump-total-display">= 0 ml</div>
     </div>
     <span class="field-label">기록 시각</span>
     <input type="datetime-local" id="pump-time">
@@ -2835,29 +2849,7 @@ function removePumpSession(i) {
   }
 }
 
-function savePumpSimple() {
-  const Lml = parseInt(document.getElementById('pump-L-ml')?.value || '0') || 0;
-  const Rml = parseInt(document.getElementById('pump-R-ml')?.value || '0') || 0;
-  const total = Lml + Rml;
-  const t = document.getElementById('pump-time')?.value || nowLocal();
-  let sub = '';
-  if (total > 0) {
-    sub = '총 ' + total + 'ml';
-    if (Lml > 0) sub += ' · 왼쪽 ' + Lml + 'ml';
-    if (Rml > 0) sub += ' · 오른쪽 ' + Rml + 'ml';
-  } else {
-    sub = '기록 완료';
-  }
-  addRecord({ type:'pump', time:t, title:'유축', sub, icon:'🤱', cat:'pump', Lml:Lml||undefined, Rml:Rml||undefined, total:total||undefined });
-  const modal = document.getElementById('modal-pump');
-  if (modal) modal.classList.remove('open');
-  updateQuickBtns(); renderTimeline(); updateStatus();
-}
 
-function closePumpModal() {
-  swReset();
-  document.getElementById('modal-pump').classList.remove('open');
-}
 
 function savePump() {
   if (!pumpSessions.length) { alert('유축 기록을 최소 하나 추가해주세요.'); return; }
@@ -2913,16 +2905,16 @@ function selOpt(group, val) {
 }
 
 function saveFeed() {
-  const m = selOpts['feed-t'];
-  const min = document.getElementById('feed-min').value;
+  const m = selOpts['feed-t'] || 'breast';
+  const min = document.getElementById('feed-min')?.value || '';
   const mlEl = document.getElementById('feed-ml');
-  const ml = (mlEl && !mlEl.disabled) ? mlEl.value : '';
-  const t = document.getElementById('feed-time').value;
-  const labels = { breast: '모유', bottle: '분유', both: '혼합' };
+  const ml = (mlEl && !mlEl.disabled && mlEl.value) ? mlEl.value : '';
+  const t = document.getElementById('feed-time')?.value || nowLocal();
+  const labels = { breast:'모유', bottle:'분유', both:'혼합' };
   let sub = labels[m] || '모유';
   if (min) sub += ' · ' + min + '분';
   if (ml) sub += ' · ' + ml + 'ml';
-  addRecord({ type: 'feed', time: t || nowLocal(), title: '수유', sub, icon: '🍼', cat: 'feed' });
+  addRecord({ type:'feed', time:t, title:'수유', sub, icon:'🍼', cat:'feed' });
   // 모달 닫기
   const modal = document.getElementById('modal-feed');
   if (modal) modal.classList.remove('open');
@@ -6123,6 +6115,92 @@ var _feedEndData = {};
 var _pumpEndData = {};
 var _feType = 'breast';
 
+// ── 유축 타이머 ──
+let _pumpTimerInterval = null;
+let _pumpTimerSec = 0;
+let _pumpTimerRunning = false;
+
+function pumpTimerToggle() {
+  const btn = document.getElementById('pump-timer-btn');
+  if (_pumpTimerRunning) {
+    clearInterval(_pumpTimerInterval);
+    _pumpTimerRunning = false;
+    if (btn) btn.textContent = '재개';
+  } else {
+    _pumpTimerRunning = true;
+    if (btn) btn.textContent = '정지';
+    _pumpTimerInterval = setInterval(() => {
+      _pumpTimerSec++;
+      const h = Math.floor(_pumpTimerSec/3600);
+      const m = Math.floor((_pumpTimerSec%3600)/60);
+      const s = _pumpTimerSec%60;
+      const el = document.getElementById('pump-timer-display');
+      if (el) el.textContent = (h>0?String(h).padStart(2,'0')+':':'')+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    }, 1000);
+  }
+}
+
+function pumpTimerReset() {
+  clearInterval(_pumpTimerInterval);
+  _pumpTimerRunning = false;
+  _pumpTimerSec = 0;
+  const el = document.getElementById('pump-timer-display');
+  if (el) el.textContent = '00:00';
+  const btn = document.getElementById('pump-timer-btn');
+  if (btn) btn.textContent = '시작';
+}
+
+function pumpCalcTotal() {
+  const L = parseInt(document.getElementById('pump-L-ml')?.value||'0')||0;
+  const R = parseInt(document.getElementById('pump-R-ml')?.value||'0')||0;
+  const total = L + R;
+  const td = document.getElementById('pump-total-display');
+  const ti = document.getElementById('pump-total-ml');
+  if (td) td.textContent = '= '+total+' ml';
+  if (ti && (L>0||R>0)) { ti.value = total; }
+}
+
+function pumpSetTotal() {
+  const total = parseInt(document.getElementById('pump-total-ml')?.value||'0')||0;
+  const td = document.getElementById('pump-total-display');
+  if (td) td.textContent = '= '+total+' ml';
+  // L/R 초기화
+  const lEl = document.getElementById('pump-L-ml');
+  const rEl = document.getElementById('pump-R-ml');
+  if (lEl) lEl.value = '';
+  if (rEl) rEl.value = '';
+}
+
+function closePumpModal() {
+  pumpTimerReset();
+  const modal = document.getElementById('modal-pump');
+  if (modal) modal.classList.remove('open');
+}
+
+function savePumpSimple() {
+  const L = parseInt(document.getElementById('pump-L-ml')?.value||'0')||0;
+  const R = parseInt(document.getElementById('pump-R-ml')?.value||'0')||0;
+  const totalInput = parseInt(document.getElementById('pump-total-ml')?.value||'0')||0;
+  const total = (L>0||R>0) ? L+R : totalInput;
+  const t = document.getElementById('pump-time')?.value || nowLocal();
+  const timerSec = _pumpTimerSec;
+  let sub = '';
+  if (total > 0) {
+    sub = '총 '+total+'ml';
+    if (L>0) sub += ' · 왼쪽 '+L+'ml';
+    if (R>0) sub += ' · 오른쪽 '+R+'ml';
+  } else {
+    sub = '유축 완료';
+  }
+  if (timerSec > 0) {
+    const h=Math.floor(timerSec/3600),m=Math.floor((timerSec%3600)/60);
+    sub += ' · '+(h>0?h+'시간 ':'')+m+'분';
+  }
+  addRecord({ type:'pump', time:t, title:'유축', sub, icon:'🤱', cat:'pump',
+    Lml:L||undefined, Rml:R||undefined, total:total||undefined });
+  closePumpModal();
+  updateQuickBtns(); renderTimeline(); updateStatus();
+}
 function endSession(type) {
   const now = new Date();
   if (type === 'sleep') {
