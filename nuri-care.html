@@ -631,18 +631,18 @@ body.dark .onboarding-title { color: #f0ead8; }
 
 /* ── 마이크 중심 UI ── */
 /* ══ 음성 히어로 UI ══ */
-.voice-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 0; }
-.voice-hero-mic { margin-bottom: 24px; opacity: 0.92; transition: transform 0.2s; }
+.voice-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px 0; }
+.voice-hero-mic { margin-bottom: 16px; opacity: 0.92; transition: transform 0.2s; }
 .voice-hero-mic.listening { animation: micPulse 1.2s ease-in-out infinite; }
 .voice-hero-status { font-size: 22px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px; letter-spacing: -0.3px; }
-.voice-hero-hint { font-size: 13px; color: #9ca3af; margin-bottom: 20px; text-align: center; line-height: 1.5; }
-.voice-hero-btn { width: 80px; height: 80px; border-radius: 50%; background: #7a5600; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 24px rgba(122,86,0,0.32), 0 0 0 0 rgba(122,86,0,0.2); transition: all 0.15s; margin-bottom: 0; position: relative; }
+.voice-hero-hint { font-size: 13px; color: #9ca3af; margin-bottom: 16px; text-align: center; line-height: 1.5; }
+.voice-hero-btn { width: 80px; height: 80px; border-radius: 50%; background: #7a5600; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 24px rgba(122,86,0,0.32), 0 0 0 0 rgba(122,86,0,0.2); transition: all 0.15s; margin-bottom: 0; position: relative; touch-action: manipulation; }
 .voice-hero-btn::after { content:''; position:absolute; inset:-8px; border-radius:50%; border:2px solid rgba(122,86,0,0.2); }
 .voice-hero-btn:active { transform: scale(0.92); }
 .voice-hero-btn.listening { background: #dc2626; box-shadow: 0 6px 24px rgba(220,38,38,0.35), 0 0 0 12px rgba(220,38,38,0.12); animation: btnPulse 1.2s ease-in-out infinite; }
 #voice-btn-inner { width: 28px; height: 28px; border-radius: 50%; background: #fff; display: block; transition: border-radius 0.2s, width 0.2s, height 0.2s; }
 .voice-hero-btn.listening #voice-btn-inner { border-radius: 6px; width: 22px; height: 22px; }
-.voice-hero-cmds { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 0 16px; }
+.voice-hero-cmds { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 0 16px 16px; }
 .voice-cmd { background: #fff7d6; border: 1.5px solid #e8d796; border-radius: 20px; padding: 5px 12px; font-size: 12px; color: #7a5600; font-weight: 600; white-space: nowrap; }
 @keyframes micPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
 @keyframes btnPulse { 0%,100%{box-shadow:0 6px 24px rgba(220,38,38,0.35),0 0 0 0 rgba(220,38,38,0.2)} 50%{box-shadow:0 6px 24px rgba(220,38,38,0.35),0 0 0 16px rgba(220,38,38,0)} }
@@ -5867,6 +5867,7 @@ function enterApp() {
   try { loadGrowthData(); } catch(e) {}
   try { loadDiary(); } catch(e) {}
   try { loadSessions(); } catch(e) {}
+  try { updateSleepBanner(); } catch(e) {}
 
   try { renderAppHeader(); } catch(e) {}
   const savedPage = parseInt(sessionStorage.getItem('nuri_last_page') || '2');
@@ -6026,10 +6027,21 @@ let sessionTimer = null;
 
 function loadSessions() {
   try {
+    const ss = localStorage.getItem('baby_sleeping');
+    if (ss) {
+      const d = new Date(ss);
+      if (!isNaN(d.getTime())) sleepingStart = d;
+    }
     const ps = localStorage.getItem('baby_pumping');
-    if (ps) pumpingStart = new Date(ps);
+    if (ps) {
+      const d = new Date(ps);
+      if (!isNaN(d.getTime())) pumpingStart = d;
+    }
     const fs = localStorage.getItem('baby_feeding');
-    if (fs) feedingStart = new Date(fs);
+    if (fs) {
+      const d = new Date(fs);
+      if (!isNaN(d.getTime())) feedingStart = d;
+    }
   } catch(e) {}
 }
 
@@ -6126,44 +6138,43 @@ var _pumpEndData = {};
 var _feType = 'breast';
 
 function endSession(type) {
-  var now = new Date();
+  const now = new Date();
+
   if (type === 'sleep') {
-    if (!sleepingStart) { showCompleteFeedback('😴','이미\n수면 종료됨'); return; }
+    if (!sleepingStart) { showCompleteFeedback('😴','이미 수면 종료됨'); return; }
     endSleep();
     showCompleteFeedback('☀️','기상 기록 완료!');
     speak('기상을 기록했어요.');
-    updateQuickBtns(); renderTimeline(); updateStatus(); setVoiceBtnState(false);
 
   } else if (type === 'pump') {
-    if (!pumpingStart) { showCompleteFeedback('🤱','이미\n유축 완료됨'); return; }
-    try {
-      var pSt = pumpingStart instanceof Date ? pumpingStart : new Date(pumpingStart);
-      var pDur = Math.round((now - pSt) / 60000);
-      var pH = Math.floor(pDur/60), pM = pDur % 60;
-      var pDurStr = (pH>0 ? pH+'시간 ':'') + pM + '분';
-      var pStStr = new Date(pSt.getTime()+9*3600*1000).toISOString().slice(0,16);
-      pumpingStart = null; saveSessions();
-      addRecord({ type:'pump', time:nowLocal(), title:'유축 완료', sub:pDurStr, icon:'🤱', cat:'pump', _startTime:pStStr, _durMin:pDur });
-      showCompleteFeedback('🤱','유축 완료\n'+pDurStr);
-      speak('유축 완료. '+pDurStr+' 유축했어요.');
-    } catch(e) { console.warn('pump end:', e); pumpingStart=null; saveSessions(); }
-    updateQuickBtns(); renderTimeline(); updateStatus(); setVoiceBtnState(false);
+    if (!pumpingStart) { showCompleteFeedback('🤱','이미 유축 완료됨'); return; }
+    const pSt = pumpingStart instanceof Date ? pumpingStart : new Date(pumpingStart);
+    const pDur = Math.round((now - pSt) / 60000);
+    const pDurStr = (Math.floor(pDur/60) > 0 ? Math.floor(pDur/60)+'시간 ' : '') + (pDur%60) + '분';
+    const pStStr = new Date(pSt.getTime() + 9*3600*1000).toISOString().slice(0,16);
+    pumpingStart = null;
+    localStorage.setItem('baby_pumping', '');
+    addRecord({ type:'pump', time:nowLocal(), title:'유축 완료', sub:pDurStr, icon:'🤱', cat:'pump', _startTime:pStStr, _durMin:pDur });
+    showCompleteFeedback('🤱','유축 완료\n'+pDurStr);
+    speak('유축 완료. '+pDurStr+' 유축했어요.');
 
   } else if (type === 'feed') {
-    if (!feedingStart) { showCompleteFeedback('🍼','이미\n수유 완료됨'); return; }
-    try {
-      var fSt = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
-      var fDur = Math.round((now - fSt) / 60000);
-      var fH = Math.floor(fDur/60), fM = fDur % 60;
-      var fDurStr = (fH>0 ? fH+'시간 ':'') + fM + '분';
-      var fStStr = new Date(fSt.getTime()+9*3600*1000).toISOString().slice(0,16);
-      feedingStart = null; saveSessions();
-      addRecord({ type:'feed', time:nowLocal(), title:'수유 완료', sub:fDurStr, icon:'🍼', cat:'feed', _startTime:fStStr, _durMin:fDur });
-      showCompleteFeedback('🍼','수유 완료\n'+fDurStr);
-      speak('수유 완료. '+fDurStr+' 수유했어요.');
-    } catch(e) { console.warn('feed end:', e); feedingStart=null; saveSessions(); }
-    updateQuickBtns(); renderTimeline(); updateStatus(); setVoiceBtnState(false);
+    if (!feedingStart) { showCompleteFeedback('🍼','이미 수유 완료됨'); return; }
+    const fSt = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
+    const fDur = Math.round((now - fSt) / 60000);
+    const fDurStr = (Math.floor(fDur/60) > 0 ? Math.floor(fDur/60)+'시간 ' : '') + (fDur%60) + '분';
+    const fStStr = new Date(fSt.getTime() + 9*3600*1000).toISOString().slice(0,16);
+    feedingStart = null;
+    localStorage.setItem('baby_feeding', '');
+    addRecord({ type:'feed', time:nowLocal(), title:'수유 완료', sub:fDurStr, icon:'🍼', cat:'feed', _startTime:fStStr, _durMin:fDur });
+    showCompleteFeedback('🍼','수유 완료\n'+fDurStr);
+    speak('수유 완료. '+fDurStr+' 수유했어요.');
   }
+
+  updateQuickBtns();
+  renderTimeline();
+  updateStatus();
+  setVoiceBtnState(false);
 }
 
 function feSel(t) {
