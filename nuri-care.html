@@ -631,7 +631,7 @@ body.dark .onboarding-title { color: #f0ead8; }
 
 /* ── 마이크 중심 UI ── */
 /* ══ 음성 히어로 UI ══ */
-.voice-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 0 0; pointer-events: none; }
+.voice-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 0 0; }
 .voice-hero-mic { margin-bottom: 12px; opacity: 0.92; transition: transform 0.2s; }
 .voice-hero-mic.listening { animation: micPulse 1.2s ease-in-out infinite; }
 .voice-hero-status { font-size: 22px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px; letter-spacing: -0.3px; }
@@ -1217,6 +1217,16 @@ body.dark .tl-content-title { color: #f0ead8; }
       <div class="swipe-page">
         <div class="app-body">
           <div id="coach-card-wrap"></div>
+          <div id="sleeping-banner" style="display:none;background:linear-gradient(135deg,#eff6ff,#dbeafe);border:2px solid #93c5fd;border-radius:14px;padding:14px 16px;margin-bottom:12px;align-items:center;justify-content:space-between;gap:8px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:22px;">😴</span>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:#1d4ed8;">수면 중</div>
+                <div style="font-size:12px;color:#3b82f6;" id="sleep-dur"></div>
+              </div>
+            </div>
+            <button id="wake-btn" style="background:#1d4ed8;color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;" onclick="endSession('sleep')">기상 기록</button>
+          </div>
           <div class="voice-hero">
             <div class="voice-hero-mic" id="voice-mic-icon">
               <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1241,16 +1251,6 @@ body.dark .tl-content-title { color: #f0ead8; }
             </div>
           </div>
           <!-- 진행 중 세션 카드 (수면·수유·유축 시작 후 이 화면에서 종료 가능) -->
-          <div id="sleeping-banner" style="display:none;background:linear-gradient(135deg,#eff6ff,#dbeafe);border:2px solid #93c5fd;border-radius:14px;padding:14px 16px;margin-bottom:12px;align-items:center;justify-content:space-between;gap:8px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-size:22px;">😴</span>
-              <div>
-                <div style="font-size:13px;font-weight:700;color:#1d4ed8;">수면 중</div>
-                <div style="font-size:12px;color:#3b82f6;" id="sleep-dur"></div>
-              </div>
-            </div>
-            <button onclick="endSession('sleep')" style="background:#1d4ed8;color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;touch-action:manipulation;">기상 기록</button>
-          </div>
           <div class="quick-log-row">
             <button class="quick-btn" onclick="quickStartAction('feed')" id="qb-feed">
               <span class="quick-btn-icon" id="qi-feed">🍼</span>
@@ -2973,6 +2973,7 @@ function endSleep() {
 
 function updateSleepBanner() {
   const banner = document.getElementById('sleeping-banner');
+  if (!banner) return;
   banner.style.display = 'flex';
   clearInterval(sleepTimer);
   function upd() {
@@ -5886,6 +5887,7 @@ function enterApp() {
   try { loadDarkMode(); } catch(e) {}
   try { renderMoodSelector(); } catch(e) {}
   try { updateQuickBtns(); } catch(e) {}
+  try { renderCoachCard(); } catch(e) {}
   try { startSessionTimer(); } catch(e) {}
   try { startDadRefreshTimer(); } catch(e) {}
   try { updateSettingsRoleUI(); } catch(e) {}
@@ -6145,6 +6147,9 @@ function endSession(type) {
   if (type === 'sleep') {
     if (!sleepingStart) { showCompleteFeedback('😴','이미 수면 종료됨'); return; }
     endSleep();
+    // sleeping-banner 숨기기
+    const sb = document.getElementById('sleeping-banner');
+    if (sb) sb.style.display = 'none';
     showCompleteFeedback('☀️','기상 기록 완료!');
     speak('기상을 기록했어요.');
 
@@ -6359,7 +6364,7 @@ function updateQuickBtns() {
   if (sleepingStart) {
     const m = Math.round((Date.now() - new Date(sleepingStart).getTime()) / 60000);
     if (qlSleep) qlSleep.textContent = '기상 기록 ☀️';
-    if (qtSleep) qtSleep.textContent = m + '분째 수면 중';
+    if (qtSleep) { const h=Math.floor(m/60),mn=m%60; qtSleep.textContent=(h>0?h+'시간 ':'')+mn+'분째 수면 중'; }
     if (qbSleep) { qbSleep.style.background = 'linear-gradient(135deg,#eff6ff,#dbeafe)'; qbSleep.style.outline = '2px solid #93c5fd'; }
     if (qiSleep) qiSleep.textContent = '😴';
   } else {
