@@ -1841,9 +1841,6 @@ body.dark .tl-content-title { color: #f0ead8; }
         <div style="font-size:11px;font-weight:700;color:#7c3aaf;margin-bottom:4px;">⬅️ 왼쪽 (ml)</div>
         <input type="number" id="pump-L-ml" placeholder="예: 80" min="0" max="500" oninput="pumpCalcTotal()" style="width:100%;box-sizing:border-box;">
       </div>
-      <div style="display:flex;flex-direction:column;gap:4px;padding-bottom:2px;">
-        <button onclick="pumpSwapSides()" title="좌우 바꾸기" style="width:36px;height:36px;border-radius:50%;border:2px solid #d8b4fe;background:#f3e8ff;color:#7c3aaf;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;">⇄</button>
-      </div>
       <div style="flex:1;">
         <div style="font-size:11px;font-weight:700;color:#7c3aaf;margin-bottom:4px;">➡️ 오른쪽 (ml)</div>
         <input type="number" id="pump-R-ml" placeholder="예: 70" min="0" max="500" oninput="pumpCalcTotal()" style="width:100%;box-sizing:border-box;">
@@ -6278,6 +6275,32 @@ function endSession(type) {
   setVoiceBtnState(false);
 }
 
+function openFeedEndModal() {
+  // feedingStart 기반으로 경과시간 계산
+  if (feedingStart) {
+    const now = new Date();
+    const fSt = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
+    const dur = Math.round((now - fSt) / 60000);
+    const stStr = new Date(fSt.getTime()+9*3600*1000).toISOString().slice(0,16);
+    _feedEndData = { dur, stStr };
+  } else {
+    _feedEndData = { dur: 0, stStr: nowLocal() };
+  }
+  _feType = 'breast';
+  // 기본 선택: 모유
+  ['breast','bottle','both'].forEach(v => {
+    const btn = document.getElementById('fe-'+v);
+    if (btn) btn.classList.toggle('sel', v==='breast');
+  });
+  const mlWrap = document.getElementById('fe-ml-wrap');
+  if (mlWrap) mlWrap.style.display = 'none';
+  const mlInput = document.getElementById('fe-ml');
+  if (mlInput) mlInput.value = '';
+  const modal = document.getElementById('modal-feed-end');
+  if (modal) modal.classList.add('open');
+}
+
+
 function feSel(t) {
   _feType = t;
   ['breast','bottle','both'].forEach(function(v){
@@ -6342,11 +6365,12 @@ function savePumpEnd() {
 function quickStartAction(type) {
   if (type === 'feed') {
     if (feedingStart) {
-      // 종료
-      endSession('feed');
+      // 종료 - 수유 기록 모달 열기
+      openFeedEndModal();
     } else {
-      // 시작 - 기존 모유/분유/혼합 모달 열기
-      openModal('feed');
+      // 시작 - 바로 기록
+      startSession('feed');
+      showCompleteFeedback('🍼', '수유 시작!');
     }
   } else if (type === 'sleep') {
     if (sleepingStart) {
@@ -6471,7 +6495,7 @@ function processVoiceCommand(text) {
     showCompleteFeedback('🍼', '수유 시작!');
     matched = true;
   } else if (t.includes('수유종료')||t.includes('수유완료')||t.includes('수유끝')||(t.includes('수유')&&t.includes('끝'))) {
-    endSession('feed'); matched = true;
+    openFeedEndModal(); matched = true;
   } else if (t.includes('수유')||t.includes('밥먹')||t.includes('분유')||t.includes('젖먹')) {
     if (feedingStart) { endSession('feed'); }
     else { startSession('feed'); showCompleteFeedback('🍼', '수유 시작!'); }
@@ -6493,8 +6517,7 @@ function processVoiceCommand(text) {
   }
   // ── 유축 ──
   else if (t.includes('유축시작')||(t.includes('유축')&&t.includes('시작'))) {
-    startSession('pump');
-    showCompleteFeedback('🤱', '유축 시작!');
+    openModal('pump');
     matched = true;
   } else if (t.includes('유축종료')||t.includes('유축완료')||t.includes('유축끝')||(t.includes('유축')&&t.includes('끝'))) {
     endSession('pump'); matched = true;
