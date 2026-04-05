@@ -1811,8 +1811,8 @@ body.dark .tl-content-title { color: #f0ead8; }
     </div>
     <span class="field-label">수유 시간 (분)</span>
     <input type="number" id="feed-min" placeholder="예: 15" min="1" max="60">
-    <span class="field-label">분유량 (ml, 선택)</span>
-    <input type="number" id="feed-ml" placeholder="예: 80">
+    <span class="field-label" id="feed-ml-label" style="opacity:0.35;">분유량 (ml, 선택)</span>
+    <input type="number" id="feed-ml" placeholder="예: 80" disabled style="opacity:0.35;cursor:not-allowed;">
     <span class="field-label">기록 시각</span>
     <input type="datetime-local" id="feed-time">
     <div class="modal-actions">
@@ -1828,44 +1828,22 @@ body.dark .tl-content-title { color: #f0ead8; }
     <div class="modal-handle"></div>
     <button class="modal-close-x" onclick="closePumpModal()">✕</button>
     <h2>🤱 유축 기록</h2>
-    <div class="stopwatch-box">
-      <div class="sw-display" id="sw-display">00:00</div>
-      <div class="sw-side-label" id="sw-side-label"></div>
-      <div class="sw-btns">
-        <button class="sw-btn start" id="sw-start-btn" onclick="swStart()">시작</button>
-        <button class="sw-btn stop" id="sw-stop-btn" onclick="swStop()" style="display:none">정지</button>
-        <button class="sw-btn switch" id="sw-switch-btn" onclick="swSwitch()" style="display:none">방향 전환</button>
-        <button class="sw-btn reset" id="sw-reset-btn" onclick="swReset()" style="display:none">초기화</button>
+    <span class="field-label">유축량 입력</span>
+    <div style="display:flex;gap:12px;margin-bottom:16px;">
+      <div style="flex:1;">
+        <div style="font-size:12px;font-weight:600;color:#7c3aaf;margin-bottom:6px;">⬅️ 왼쪽 (ml)</div>
+        <input type="number" id="pump-L-ml" placeholder="예: 80" min="0" max="500" style="width:100%;box-sizing:border-box;">
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:12px;font-weight:600;color:#7c3aaf;margin-bottom:6px;">➡️ 오른쪽 (ml)</div>
+        <input type="number" id="pump-R-ml" placeholder="예: 70" min="0" max="500" style="width:100%;box-sizing:border-box;">
       </div>
     </div>
-    <span class="field-label">유축 기록 (좌/우)</span>
-    <div class="pump-side-btns">
-      <div class="side-btn" id="side-L" onclick="selectSide('L')">
-        <span class="side-icon">⬅️</span>
-        <span class="side-name">왼쪽</span>
-        <span class="side-ml" id="side-L-ml">0 ml</span>
-      </div>
-      <div class="side-btn" id="side-R" onclick="selectSide('R')">
-        <span class="side-icon">➡️</span>
-        <span class="side-name">오른쪽</span>
-        <span class="side-ml" id="side-R-ml">0 ml</span>
-      </div>
-    </div>
-<div class="ml-input-row">
-      <input type="number" id="pump-ml-input" placeholder="유축량 입력 (ml)" min="0" max="500">
-      <button class="ml-add-btn" onclick="addPumpMl()">추가</button>
-    </div>
-    <div id="pump-session-log"></div>
-    <div class="pump-total-row" id="pump-total-row" style="display:none">
-      <span class="pump-total-label">총 유축량</span>
-      <span class="pump-total-val" id="pump-total-val">0 ml</span>
-    </div>
-<span class="field-label">기록 시각</span>
+    <span class="field-label">기록 시각</span>
     <input type="datetime-local" id="pump-time">
-
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closePumpModal()">취소</button>
-      <button class="btn-save" style="background:#7c3aaf;" onclick="savePump()">저장</button>
+      <button class="btn-save" style="background:#7c3aaf;" onclick="savePumpSimple()">저장</button>
     </div>
   </div>
 </div>
@@ -2857,6 +2835,25 @@ function removePumpSession(i) {
   }
 }
 
+function savePumpSimple() {
+  const Lml = parseInt(document.getElementById('pump-L-ml')?.value || '0') || 0;
+  const Rml = parseInt(document.getElementById('pump-R-ml')?.value || '0') || 0;
+  const total = Lml + Rml;
+  const t = document.getElementById('pump-time')?.value || nowLocal();
+  let sub = '';
+  if (total > 0) {
+    sub = '총 ' + total + 'ml';
+    if (Lml > 0) sub += ' · 왼쪽 ' + Lml + 'ml';
+    if (Rml > 0) sub += ' · 오른쪽 ' + Rml + 'ml';
+  } else {
+    sub = '기록 완료';
+  }
+  addRecord({ type:'pump', time:t, title:'유축', sub, icon:'🤱', cat:'pump', Lml:Lml||undefined, Rml:Rml||undefined, total:total||undefined });
+  const modal = document.getElementById('modal-pump');
+  if (modal) modal.classList.remove('open');
+  updateQuickBtns(); renderTimeline(); updateStatus();
+}
+
 function closePumpModal() {
   swReset();
   document.getElementById('modal-pump').classList.remove('open');
@@ -2879,9 +2876,24 @@ function savePump() {
 // ── 공통 모달 ──
 function openModal(type) {
   const now = nowLocal();
-  if (type === 'feed') { document.getElementById('feed-time').value = now; document.getElementById('feed-min').value = ''; document.getElementById('feed-ml').value = ''; }
+  if (type === 'feed') {
+    document.getElementById('feed-time').value = now;
+    document.getElementById('feed-min').value = '';
+    document.getElementById('feed-ml').value = '';
+    // 모유 기본선택, 분유량 비활성화
+    selOpt('feed-t', 'breast');
+  }
   if (type === 'sleep') { document.getElementById('sleep-start').value = now; document.getElementById('sleep-end').value = now; selOpt('sleep-t', 'start'); }
   if (type === 'diaper') { document.getElementById('diaper-time').value = now; }
+  if (type === 'pump') {
+    // 왼쪽/오른쪽 초기화 + 현재시간 설정
+    const lEl = document.getElementById('pump-L-ml');
+    const rEl = document.getElementById('pump-R-ml');
+    const tEl = document.getElementById('pump-time');
+    if (lEl) lEl.value = '';
+    if (rEl) rEl.value = '';
+    if (tEl) tEl.value = now;
+  }
   document.getElementById('modal-' + type).classList.add('open');
 }
 function closeModal(type) { document.getElementById('modal-' + type).classList.remove('open'); }
@@ -2891,19 +2903,30 @@ function selOpt(group, val) {
   document.querySelectorAll('[id^="' + group + '-"]').forEach(b => b.classList.remove('sel'));
   document.getElementById(group + '-' + val).classList.add('sel');
   if (group === 'sleep-t') document.getElementById('sleep-end-wrap').style.display = val === 'manual' ? '' : 'none';
+  if (group === 'feed-t') {
+    const mlInput = document.getElementById('feed-ml');
+    const mlLabel = document.getElementById('feed-ml-label');
+    const isMilk = (val === 'bottle' || val === 'both');
+    if (mlInput) { mlInput.disabled = !isMilk; mlInput.style.opacity = isMilk ? '1' : '0.35'; mlInput.style.cursor = isMilk ? '' : 'not-allowed'; if (!isMilk) mlInput.value = ''; }
+    if (mlLabel) mlLabel.style.opacity = isMilk ? '1' : '0.35';
+  }
 }
 
 function saveFeed() {
   const m = selOpts['feed-t'];
   const min = document.getElementById('feed-min').value;
-  const ml = document.getElementById('feed-ml').value;
+  const mlEl = document.getElementById('feed-ml');
+  const ml = (mlEl && !mlEl.disabled) ? mlEl.value : '';
   const t = document.getElementById('feed-time').value;
   const labels = { breast: '모유', bottle: '분유', both: '혼합' };
-  let sub = labels[m];
+  let sub = labels[m] || '모유';
   if (min) sub += ' · ' + min + '분';
   if (ml) sub += ' · ' + ml + 'ml';
   addRecord({ type: 'feed', time: t || nowLocal(), title: '수유', sub, icon: '🍼', cat: 'feed' });
-  closeModal('feed');
+  // 모달 닫기
+  const modal = document.getElementById('modal-feed');
+  if (modal) modal.classList.remove('open');
+  updateQuickBtns(); renderTimeline(); updateStatus();
 }
 
 function saveSleep() {
