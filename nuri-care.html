@@ -1836,10 +1836,13 @@ body.dark .tl-content-title { color: #f0ead8; }
       </div>
     </div>
     <span class="field-label">유축량</span>
-    <div style="display:flex;gap:10px;margin-bottom:12px;">
+    <div style="display:flex;gap:8px;align-items:flex-end;margin-bottom:12px;">
       <div style="flex:1;">
         <div style="font-size:11px;font-weight:700;color:#7c3aaf;margin-bottom:4px;">⬅️ 왼쪽 (ml)</div>
         <input type="number" id="pump-L-ml" placeholder="예: 80" min="0" max="500" oninput="pumpCalcTotal()" style="width:100%;box-sizing:border-box;">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;padding-bottom:2px;">
+        <button onclick="pumpSwapSides()" title="좌우 바꾸기" style="width:36px;height:36px;border-radius:50%;border:2px solid #d8b4fe;background:#f3e8ff;color:#7c3aaf;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;">⇄</button>
       </div>
       <div style="flex:1;">
         <div style="font-size:11px;font-weight:700;color:#7c3aaf;margin-bottom:4px;">➡️ 오른쪽 (ml)</div>
@@ -2905,19 +2908,21 @@ function selOpt(group, val) {
 }
 
 function saveFeed() {
-  const m = selOpts['feed-t'] || 'breast';
-  const min = document.getElementById('feed-min')?.value || '';
-  const mlEl = document.getElementById('feed-ml');
-  const ml = (mlEl && !mlEl.disabled && mlEl.value) ? mlEl.value : '';
-  const t = document.getElementById('feed-time')?.value || nowLocal();
-  const labels = { breast:'모유', bottle:'분유', both:'혼합' };
-  let sub = labels[m] || '모유';
-  if (min) sub += ' · ' + min + '분';
-  if (ml) sub += ' · ' + ml + 'ml';
-  addRecord({ type:'feed', time:t, title:'수유', sub, icon:'🍼', cat:'feed' });
-  // 모달 닫기
+  // 모달 먼저 닫기 (에러 관계없이)
   const modal = document.getElementById('modal-feed');
   if (modal) modal.classList.remove('open');
+  try {
+    const m = selOpts['feed-t'] || 'breast';
+    const min = document.getElementById('feed-min')?.value || '';
+    const mlEl = document.getElementById('feed-ml');
+    const ml = (mlEl && !mlEl.disabled && mlEl.value) ? mlEl.value : '';
+    const t = document.getElementById('feed-time')?.value || nowLocal();
+    const labels = { breast:'모유', bottle:'분유', both:'혼합' };
+    let sub = labels[m] || '모유';
+    if (min) sub += ' · ' + min + '분';
+    if (ml) sub += ' · ' + ml + 'ml';
+    addRecord({ type:'feed', time:t, title:'수유', sub, icon:'🍼', cat:'feed' });
+  } catch(e) { console.warn('saveFeed:', e); }
   updateQuickBtns(); renderTimeline(); updateStatus();
 }
 
@@ -5125,6 +5130,27 @@ function renderCoachCard() {
     }
   }
 
+  // ── 수면 중 코치카드 ──
+  if (sleepingStart) {
+    const st = sleepingStart instanceof Date ? sleepingStart : new Date(sleepingStart);
+    const sleepMin = Math.round((now - st.getTime()) / 60000);
+    const sleepH = Math.floor(sleepMin/60), sleepM = sleepMin%60;
+    const sleepStr = (sleepH>0?sleepH+'시간 ':'')+sleepM+'분';
+    const tips = [
+      '💡 수면 중 방 온도는 20~22°C가 이상적이에요.',
+      '💡 수면 중엔 화이트 노이즈가 도움이 돼요.',
+      '💡 아기가 잘 때 엄마도 쉬어요 — 집안일은 나중에!',
+      '💡 이번 수면은 최소 45분 이상이 좋아요.',
+    ];
+    const tip = tips[Math.floor(sleepMin/10) % tips.length];
+    cards.push({ color:'blue', urgency:'😴', level:'info', levelText:'수면중',
+      title: `자는 중 · ${sleepStr}`,
+      msg: tip,
+      reason: '기상 버튼을 누르면 수면 시간이 자동으로 기록돼요.',
+      action: null
+    });
+  }
+
   // ── 수유 타이밍 판단 ──
   const lastFeed = records.find(r => r.cat === 'feed');
   if (lastFeed && days !== null) {
@@ -6150,6 +6176,16 @@ function pumpTimerReset() {
   if (btn) btn.textContent = '시작';
 }
 
+function pumpSwapSides() {
+  const lEl = document.getElementById('pump-L-ml');
+  const rEl = document.getElementById('pump-R-ml');
+  if (!lEl || !rEl) return;
+  const tmp = lEl.value;
+  lEl.value = rEl.value;
+  rEl.value = tmp;
+  pumpCalcTotal();
+}
+
 function pumpCalcTotal() {
   const L = parseInt(document.getElementById('pump-L-ml')?.value||'0')||0;
   const R = parseInt(document.getElementById('pump-R-ml')?.value||'0')||0;
@@ -6178,27 +6214,25 @@ function closePumpModal() {
 }
 
 function savePumpSimple() {
-  const L = parseInt(document.getElementById('pump-L-ml')?.value||'0')||0;
-  const R = parseInt(document.getElementById('pump-R-ml')?.value||'0')||0;
-  const totalInput = parseInt(document.getElementById('pump-total-ml')?.value||'0')||0;
-  const total = (L>0||R>0) ? L+R : totalInput;
-  const t = document.getElementById('pump-time')?.value || nowLocal();
-  const timerSec = _pumpTimerSec;
-  let sub = '';
-  if (total > 0) {
-    sub = '총 '+total+'ml';
-    if (L>0) sub += ' · 왼쪽 '+L+'ml';
-    if (R>0) sub += ' · 오른쪽 '+R+'ml';
-  } else {
-    sub = '유축 완료';
-  }
-  if (timerSec > 0) {
-    const h=Math.floor(timerSec/3600),m=Math.floor((timerSec%3600)/60);
-    sub += ' · '+(h>0?h+'시간 ':'')+m+'분';
-  }
-  addRecord({ type:'pump', time:t, title:'유축', sub, icon:'🤱', cat:'pump',
-    Lml:L||undefined, Rml:R||undefined, total:total||undefined });
+  // 모달 먼저 닫기 (에러 관계없이)
   closePumpModal();
+  try {
+    const L = parseInt(document.getElementById('pump-L-ml')?.value||'0')||0;
+    const R = parseInt(document.getElementById('pump-R-ml')?.value||'0')||0;
+    const totalInput = parseInt(document.getElementById('pump-total-ml')?.value||'0')||0;
+    const total = (L>0||R>0) ? L+R : totalInput;
+    const t = document.getElementById('pump-time')?.value || nowLocal();
+    const timerSec = _pumpTimerSec;
+    let sub = total > 0 ? '총 '+total+'ml' : '유축 완료';
+    if (total > 0 && L>0) sub += ' · 왼쪽 '+L+'ml';
+    if (total > 0 && R>0) sub += ' · 오른쪽 '+R+'ml';
+    if (timerSec > 0) {
+      const h=Math.floor(timerSec/3600), m2=Math.floor((timerSec%3600)/60);
+      sub += ' · '+(h>0?h+'시간 ':'')+m2+'분';
+    }
+    addRecord({ type:'pump', time:t, title:'유축', sub, icon:'🤱', cat:'pump',
+      Lml:L||undefined, Rml:R||undefined, total:total||undefined });
+  } catch(e) { console.warn('savePump:', e); }
   updateQuickBtns(); renderTimeline(); updateStatus();
 }
 function endSession(type) {
