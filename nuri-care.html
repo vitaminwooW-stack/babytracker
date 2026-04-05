@@ -6206,14 +6206,28 @@ function savePumpEnd() {
 // ── 원탭 버튼 — 시작/종료 토글 ──
 function quickStartAction(type) {
   if (type === 'feed') {
-    if (feedingStart) { endSession('feed'); }
-    else { startSession('feed'); showCompleteFeedback('🍼', '수유 시작!'); }
+    if (feedingStart) {
+      // 종료
+      endSession('feed');
+    } else {
+      // 시작 - 기존 모유/분유/혼합 모달 열기
+      openModal('feed');
+    }
   } else if (type === 'sleep') {
-    if (sleepingStart) { endSession('sleep'); }
-    else { startSession('sleep'); showCompleteFeedback('😴', '수면 시작!'); }
+    if (sleepingStart) {
+      endSession('sleep');
+    } else {
+      startSession('sleep');
+      showCompleteFeedback('😴', '수면 시작!');
+    }
   } else if (type === 'pump') {
-    if (pumpingStart) { endSession('pump'); }
-    else { startSession('pump'); showCompleteFeedback('🤱', '유축 시작!'); }
+    if (pumpingStart) {
+      // 종료
+      endSession('pump');
+    } else {
+      // 시작 - 기존 유축 모달 열기
+      openModal('pump');
+    }
   } else if (type === 'diaper') {
     startSession('diaper');
   }
@@ -6261,16 +6275,15 @@ function updateQuickBtns() {
   const pump   = records.find(r => r.cat==='pump'   && !_startT.has(r.title));
   const diaper = records.find(r => r.cat==='diaper');
 
-  // 진행중 시간 계산 헬퍼
   function elapsedStr(start) {
     const ms = Date.now() - new Date(start).getTime();
     const h = Math.floor(ms/3600000), m = Math.floor((ms%3600000)/60000);
-    return (h>0?h+'시간\n':'')+m+'분';
+    return (h>0?h+'시간 ':'')+m+'분';
   }
 
   // ── 수유 ──
   const qbFeed=document.getElementById('qb-feed'), qlFeed=document.getElementById('ql-feed'),
-        qtFeed=document.getElementById('qt-feed'), qiFeed=document.getElementById('qi-feed');
+        qtFeed=document.getElementById('qt-feed');
   if (feedingStart) {
     if (qlFeed) qlFeed.textContent='수유 종료 ✅';
     if (qtFeed) qtFeed.innerHTML=elapsedStr(feedingStart)+'<br>수유 중';
@@ -6283,7 +6296,7 @@ function updateQuickBtns() {
 
   // ── 수면 ──
   const qbSleep=document.getElementById('qb-sleep'), qlSleep=document.getElementById('ql-sleep'),
-        qtSleep=document.getElementById('qt-sleep'), qiSleep=document.getElementById('qi-sleep');
+        qtSleep=document.getElementById('qt-sleep');
   if (sleepingStart) {
     if (qlSleep) qlSleep.textContent='기상 기록 ☀️';
     if (qtSleep) qtSleep.innerHTML=elapsedStr(sleepingStart)+'<br>수면 중';
@@ -6296,7 +6309,7 @@ function updateQuickBtns() {
 
   // ── 유축 ──
   const qbPump=document.getElementById('qb-pump'), qlPump=document.getElementById('ql-pump'),
-        qtPump=document.getElementById('qt-pump'), qiPump=document.getElementById('qi-pump');
+        qtPump=document.getElementById('qt-pump');
   if (pumpingStart) {
     if (qlPump) qlPump.textContent='유축 종료 ✅';
     if (qtPump) qtPump.innerHTML=elapsedStr(pumpingStart)+'<br>유축 중';
