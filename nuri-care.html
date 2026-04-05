@@ -631,7 +631,7 @@ body.dark .onboarding-title { color: #f0ead8; }
 
 /* ── 마이크 중심 UI ── */
 /* ══ 음성 히어로 UI ══ */
-.voice-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px 0; }
+.voice-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px 0;  pointer-events: none; }
 .voice-hero-mic { margin-bottom: 16px; opacity: 0.92; transition: transform 0.2s; }
 .voice-hero-mic.listening { animation: micPulse 1.2s ease-in-out infinite; }
 .voice-hero-status { font-size: 22px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px; letter-spacing: -0.3px; }
@@ -642,7 +642,7 @@ body.dark .onboarding-title { color: #f0ead8; }
 .voice-hero-btn.listening { background: #dc2626; box-shadow: 0 6px 24px rgba(220,38,38,0.35), 0 0 0 12px rgba(220,38,38,0.12); animation: btnPulse 1.2s ease-in-out infinite; }
 #voice-btn-inner { width: 28px; height: 28px; border-radius: 50%; background: #fff; display: block; transition: border-radius 0.2s, width 0.2s, height 0.2s; }
 .voice-hero-btn.listening #voice-btn-inner { border-radius: 6px; width: 22px; height: 22px; }
-.voice-hero-cmds { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 0 16px 16px; }
+.voice-hero-cmds { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 0 16px 16px; pointer-events: none; }
 .voice-cmd { background: #fff7d6; border: 1.5px solid #e8d796; border-radius: 20px; padding: 5px 12px; font-size: 12px; color: #7a5600; font-weight: 600; white-space: nowrap; }
 @keyframes micPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
 @keyframes btnPulse { 0%,100%{box-shadow:0 6px 24px rgba(220,38,38,0.35),0 0 0 0 rgba(220,38,38,0.2)} 50%{box-shadow:0 6px 24px rgba(220,38,38,0.35),0 0 0 16px rgba(220,38,38,0)} }
@@ -707,7 +707,7 @@ body.dark .qnav-btn.active::after { background: #c8a870; }
 @keyframes splashFadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
 /* ── 퀵버튼 리디자인 ── */
-.quick-log-row { display: flex; gap: 10px; margin-bottom: 0; padding: 0 4px; }
+.quick-log-row { display: flex; gap: 10px; margin-bottom: 0; padding: 0 4px;  z-index: 5; position: relative; }
 .quick-btn {
   flex: 1; display: flex; flex-direction: column; align-items: center;
   gap: 5px; padding: 14px 6px 10px;
@@ -6154,7 +6154,7 @@ function endSession(type) {
     const pStStr = new Date(pSt.getTime() + 9*3600*1000).toISOString().slice(0,16);
     pumpingStart = null;
     localStorage.setItem('baby_pumping', '');
-    addRecord({ type:'pump', time:nowLocal(), title:'유축 완료', sub:pDurStr, icon:'🤱', cat:'pump', _startTime:pStStr, _durMin:pDur });
+    addRecord({ type:'pump', time:nowLocal(), title:'유축', sub:pDurStr, icon:'🤱', cat:'pump', _startTime:pStStr, _durMin:pDur });
     showCompleteFeedback('🤱','유축 완료\n'+pDurStr);
     speak('유축 완료. '+pDurStr+' 유축했어요.');
 
@@ -6166,7 +6166,7 @@ function endSession(type) {
     const fStStr = new Date(fSt.getTime() + 9*3600*1000).toISOString().slice(0,16);
     feedingStart = null;
     localStorage.setItem('baby_feeding', '');
-    addRecord({ type:'feed', time:nowLocal(), title:'수유 완료', sub:fDurStr, icon:'🍼', cat:'feed', _startTime:fStStr, _durMin:fDur });
+    addRecord({ type:'feed', time:nowLocal(), title:'수유', sub:fDurStr, icon:'🍼', cat:'feed', _startTime:fStStr, _durMin:fDur });
     showCompleteFeedback('🍼','수유 완료\n'+fDurStr);
     speak('수유 완료. '+fDurStr+' 수유했어요.');
   }
