@@ -642,7 +642,7 @@ body.dark .onboarding-title { color: #f0ead8; }
 .voice-hero-btn.listening { background: #dc2626; box-shadow: 0 6px 24px rgba(220,38,38,0.35), 0 0 0 12px rgba(220,38,38,0.12); animation: btnPulse 1.2s ease-in-out infinite; }
 #voice-btn-inner { width: 28px; height: 28px; border-radius: 50%; background: #fff; display: block; transition: border-radius 0.2s, width 0.2s, height 0.2s; }
 .voice-hero-btn.listening #voice-btn-inner { border-radius: 6px; width: 22px; height: 22px; }
-.voice-hero-cmds { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 0 16px 16px; pointer-events: none; }
+.voice-hero-cmds { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 0 16px; pointer-events: none; margin-bottom: 24px; }
 .voice-cmd { background: #fff7d6; border: 1.5px solid #e8d796; border-radius: 20px; padding: 5px 12px; font-size: 12px; color: #7a5600; font-weight: 600; white-space: nowrap; }
 @keyframes micPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
 @keyframes btnPulse { 0%,100%{box-shadow:0 6px 24px rgba(220,38,38,0.35),0 0 0 0 rgba(220,38,38,0.2)} 50%{box-shadow:0 6px 24px rgba(220,38,38,0.35),0 0 0 16px rgba(220,38,38,0)} }
@@ -1217,6 +1217,16 @@ body.dark .tl-content-title { color: #f0ead8; }
       <div class="swipe-page">
         <div class="app-body">
           <div id="coach-card-wrap"></div>
+          <div id="sleeping-banner" style="display:none;background:linear-gradient(135deg,#eff6ff,#dbeafe);border:2px solid #93c5fd;border-radius:14px;padding:14px 16px;margin-bottom:12px;align-items:center;justify-content:space-between;gap:8px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:22px;">😴</span>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:#1d4ed8;">수면 중</div>
+                <div style="font-size:12px;color:#3b82f6;" id="sleep-dur"></div>
+              </div>
+            </div>
+            <button onclick="endSession('sleep')" style="background:#1d4ed8;color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;touch-action:manipulation;">기상 기록</button>
+          </div>
           <div class="voice-hero">
             <div class="voice-hero-mic" id="voice-mic-icon">
               <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -6239,26 +6249,50 @@ function savePumpEnd() {
 
 // ── 원탭 버튼 — 시작/종료 토글 ──
 function quickStartAction(type) {
+  // 즉시 시각적 피드백 (딜레이 없이)
   if (type === 'feed') {
     if (feedingStart) {
       endSession('feed');
     } else {
-      startSession('feed');
+      const now = new Date();
+      feedingStart = now;
+      localStorage.setItem('baby_feeding', now.toISOString());
+      updateQuickBtns(); // 즉시 버튼 상태 변경
       showCompleteFeedback('🍼', '수유 시작!');
+      // 무거운 작업은 비동기로
+      setTimeout(() => {
+        addRecord({ type:'feed', time:nowLocal(), title:'수유 시작', sub:'수유 중', icon:'🍼', cat:'feed' });
+        speak('수유 시작을 기록했어요 🍼');
+      }, 0);
     }
   } else if (type === 'sleep') {
     if (sleepingStart) {
       endSession('sleep');
     } else {
-      startSession('sleep');
+      const now = new Date();
+      sleepingStart = now;
+      localStorage.setItem('baby_sleeping', now.toISOString());
+      updateQuickBtns(); // 즉시 버튼 상태 변경
+      updateSleepBanner(); // 즉시 배너 표시
       showCompleteFeedback('😴', '수면 시작!');
+      setTimeout(() => {
+        addRecord({ type:'sleep', time:nowLocal(), title:'수면 시작', sub:'자는 중', icon:'😴', cat:'sleep' });
+        speak('수면 시작을 기록했어요 😴');
+      }, 0);
     }
   } else if (type === 'pump') {
     if (pumpingStart) {
       endSession('pump');
     } else {
-      startSession('pump');
+      const now = new Date();
+      pumpingStart = now;
+      localStorage.setItem('baby_pumping', now.toISOString());
+      updateQuickBtns(); // 즉시 버튼 상태 변경
       showCompleteFeedback('🤱', '유축 시작!');
+      setTimeout(() => {
+        addRecord({ type:'pump', time:nowLocal(), title:'유축 시작', sub:'유축 중', icon:'🤱', cat:'pump' });
+        speak('유축 시작을 기록했어요 🤱');
+      }, 0);
     }
   } else if (type === 'diaper') {
     startSession('diaper');
