@@ -642,7 +642,7 @@ body.dark .onboarding-title { color: #f0ead8; }
 .voice-hero-btn.listening { background: #dc2626; box-shadow: 0 6px 24px rgba(220,38,38,0.35), 0 0 0 12px rgba(220,38,38,0.12); animation: btnPulse 1.2s ease-in-out infinite; }
 #voice-btn-inner { width: 28px; height: 28px; border-radius: 50%; background: #fff; display: block; transition: border-radius 0.2s, width 0.2s, height 0.2s; }
 .voice-hero-btn.listening #voice-btn-inner { border-radius: 6px; width: 22px; height: 22px; }
-.voice-hero-cmds { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 0 16px; pointer-events: none; margin-bottom: 24px; }
+.voice-hero-cmds { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 0 16px; pointer-events: none; margin-bottom: 0; }
 .voice-cmd { background: #fff7d6; border: 1.5px solid #e8d796; border-radius: 20px; padding: 5px 12px; font-size: 12px; color: #7a5600; font-weight: 600; white-space: nowrap; }
 @keyframes micPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
 @keyframes btnPulse { 0%,100%{box-shadow:0 6px 24px rgba(220,38,38,0.35),0 0 0 0 rgba(220,38,38,0.2)} 50%{box-shadow:0 6px 24px rgba(220,38,38,0.35),0 0 0 16px rgba(220,38,38,0)} }
@@ -707,7 +707,7 @@ body.dark .qnav-btn.active::after { background: #c8a870; }
 @keyframes splashFadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
 /* ── 퀵버튼 리디자인 ── */
-.quick-log-row { display: flex; gap: 10px; margin-bottom: 0; padding: 0 4px;  z-index: 5; position: relative; }
+.quick-log-row { display: flex; gap: 10px; margin-bottom: 0; padding: 0 4px; z-index: 5; position: relative; margin-top: 20px; }
 .quick-btn {
   flex: 1; display: flex; flex-direction: column; align-items: center;
   gap: 5px; padding: 14px 6px 10px;
@@ -1217,16 +1217,6 @@ body.dark .tl-content-title { color: #f0ead8; }
       <div class="swipe-page">
         <div class="app-body">
           <div id="coach-card-wrap"></div>
-          <div id="sleeping-banner" style="display:none;background:linear-gradient(135deg,#eff6ff,#dbeafe);border:2px solid #93c5fd;border-radius:14px;padding:14px 16px;margin-bottom:12px;align-items:center;justify-content:space-between;gap:8px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-size:22px;">😴</span>
-              <div>
-                <div style="font-size:13px;font-weight:700;color:#1d4ed8;">수면 중</div>
-                <div style="font-size:12px;color:#3b82f6;" id="sleep-dur"></div>
-              </div>
-            </div>
-            <button onclick="endSession('sleep')" style="background:#1d4ed8;color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;touch-action:manipulation;">기상 기록</button>
-          </div>
           <div class="voice-hero">
             <div class="voice-hero-mic" id="voice-mic-icon">
               <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1251,6 +1241,16 @@ body.dark .tl-content-title { color: #f0ead8; }
             </div>
           </div>
           <!-- 진행 중 세션 카드 (수면·수유·유축 시작 후 이 화면에서 종료 가능) -->
+          <div id="sleeping-banner" style="display:none;background:linear-gradient(135deg,#eff6ff,#dbeafe);border:2px solid #93c5fd;border-radius:14px;padding:14px 16px;margin-bottom:12px;margin-top:20px;align-items:center;justify-content:space-between;gap:8px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:22px;">😴</span>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:#1d4ed8;">수면 중</div>
+                <div style="font-size:12px;color:#3b82f6;" id="sleep-dur"></div>
+              </div>
+            </div>
+            <button onclick="endSession('sleep')" style="background:#1d4ed8;color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;touch-action:manipulation;">기상 기록</button>
+          </div>
           <div class="quick-log-row">
             <button class="quick-btn" onclick="quickStartAction('feed')" id="qb-feed">
               <span class="quick-btn-icon" id="qi-feed">🍼</span>
@@ -3071,7 +3071,7 @@ function renderTimeline() {
     return;
   }
 
-  const endTitles   = { feed:'수유 완료', sleep:'기상', pump:'유축 완료' };
+  const endTitles   = { feed:'수유', sleep:'기상', pump:'유축' };
   const startTitles = { feed:'수유 시작', sleep:'수면 시작', pump:'유축 시작' };
   const dispTitles  = { feed:'수유', sleep:'수면', pump:'유축' };
 
