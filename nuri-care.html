@@ -1966,11 +1966,15 @@ body.dark .tl-content-title { color: #f0ead8; }
       <button class="opt-btn" id="fe-bottle" onclick="feSel('bottle')" style="flex:1;padding:12px 6px;font-size:14px;">분유</button>
       <button class="opt-btn" id="fe-both" onclick="feSel('both')" style="flex:1;padding:12px 6px;font-size:14px;">혼합</button>
     </div>
+    <span class="field-label">수유 시간 (분)</span>
+    <input type="number" id="fe-min" placeholder="예: 15" min="0" max="120" style="margin-bottom:12px;">
     <div id="fe-ml-wrap">
       <span class="field-label" id="fe-ml-label" style="opacity:0.4;">분유량 (ml)</span>
       <input type="number" id="fe-ml" placeholder="예: 80" min="0" max="500"
         disabled style="margin-bottom:12px;opacity:0.35;cursor:not-allowed;background:#f3f4f6;">
     </div>
+    <span class="field-label">기록 시각</span>
+    <input type="datetime-local" id="fe-time" style="margin-bottom:12px;">
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeFeedEndModal()">취소</button>
       <button class="btn-save" onclick="saveFeedEnd()">완료</button>
@@ -6288,12 +6292,15 @@ function openFeedEndModal() {
     _feedEndData = { dur: 0, stStr: nowLocal() };
   }
   _feType = 'breast';
-  // 기본 선택: 모유
-  ['breast','bottle','both'].forEach(v => {
-    const btn = document.getElementById('fe-'+v);
-    if (btn) btn.classList.toggle('sel', v==='breast');
-  });
-  // 분유량: 기본 비활성화 (모유 선택 상태)
+  // fe-min, fe-time 초기화
+  const feMin = document.getElementById('fe-min');
+  if (feMin) feMin.value = '';
+  const feTime = document.getElementById('fe-time');
+  if (feTime) feTime.value = nowLocal();
+  // fe-ml 값 초기화 (모달 새로 열 때만)
+  const feMl = document.getElementById('fe-ml');
+  if (feMl) feMl.value = '';
+  // 기본 선택: 모유 (비활성화)
   feSel('breast');
   const modal = document.getElementById('modal-feed-end');
   if (modal) modal.classList.add('open');
@@ -6314,7 +6321,7 @@ function feSel(t) {
     mlEl.style.opacity = isMilk ? '1' : '0.35';
     mlEl.style.cursor = isMilk ? '' : 'not-allowed';
     mlEl.style.background = isMilk ? '' : '#f3f4f6';
-    if (!isMilk) mlEl.value = '';
+    // 값은 지우지 않음 - 잠금 상태만 변경
   }
   if (mlLabel) mlLabel.style.opacity = isMilk ? '1' : '0.4';
 }
@@ -6327,23 +6334,33 @@ function closeFeedEndModal() {
 }
 
 function saveFeedEnd() {
-  document.getElementById('modal-feed-end').classList.remove('open');
-  var d = _feedEndData;
-  var dur = d.dur || 0;
-  var H = Math.floor(dur/60), M = dur%60;
-  var durStr = (H>0?H+'시간 ':'')+M+'분';
-  var ft = _feType || 'breast';
-  var ftLabel = {breast:'모유',bottle:'분유',both:'혼합'}[ft] || '모유';
-  var ftTitle = ft==='bottle'?'분유 수유 완료':ft==='both'?'혼합 수유 완료':'모유 수유 완료';
-  var mlEl = document.getElementById('fe-ml');
-  var ml = (ft==='bottle'||ft==='both') && mlEl && mlEl.value ? parseInt(mlEl.value)||null : null;
-  var sub = ftLabel+' · '+durStr+(ml?' · '+ml+'ml':'');
-  feedingStart = null;
-  if(typeof feedingType !== 'undefined') feedingType = 'breast';
-  saveSessions();
-  addRecord({type:'feed',time:nowLocal(),title:ftTitle,sub:sub,icon:'🍼',cat:'feed',_startTime:d.stStr,_durMin:dur,feedType:ft,ml:ml||undefined});
-  showCompleteFeedback('🍼', ftTitle.replace(' 완료','')+'\n'+durStr);
-  speak(ftLabel+' 수유 완료. '+durStr+' 수유했어요.');
+  // 모달 먼저 닫기
+  const modal = document.getElementById('modal-feed-end');
+  if (modal) modal.classList.remove('open');
+  try {
+    var ft = _feType || 'breast';
+    var ftLabel = {breast:'모유',bottle:'분유',both:'혼합'}[ft] || '모유';
+    var ftTitle = ft==='bottle'?'분유 수유 완료':ft==='both'?'혼합 수유 완료':'모유 수유 완료';
+    // 수유 시간: 직접 입력값 우선, 없으면 세션 경과시간
+    var feMinEl = document.getElementById('fe-min');
+    var feTimeEl = document.getElementById('fe-time');
+    var mlEl = document.getElementById('fe-ml');
+    var inputMin = feMinEl && feMinEl.value ? parseInt(feMinEl.value) : null;
+    var d = _feedEndData || {};
+    var dur = inputMin !== null ? inputMin : (d.dur || 0);
+    var H = Math.floor(dur/60), M = dur%60;
+    var durStr = dur > 0 ? (H>0?H+'시간 ':'')+M+'분' : '';
+    var recTime = (feTimeEl && feTimeEl.value) ? feTimeEl.value : nowLocal();
+    var ml = (ft==='bottle'||ft==='both') && mlEl && mlEl.value ? parseInt(mlEl.value)||null : null;
+    var sub = ftLabel + (durStr ? ' · '+durStr : '') + (ml ? ' · '+ml+'ml' : '');
+    feedingStart = null;
+    if(typeof feedingType !== 'undefined') feedingType = 'breast';
+    localStorage.setItem('baby_feeding', '');
+    addRecord({type:'feed', time:recTime, title:ftTitle, sub:sub, icon:'🍼', cat:'feed',
+      _startTime:d.stStr||recTime, _durMin:dur||undefined, feedType:ft, ml:ml||undefined});
+    showCompleteFeedback('🍼', ftTitle.replace(' 완료','') + (durStr?'\n'+durStr:''));
+    speak(ftLabel+' 수유 완료' + (durStr?'. '+durStr+' 수유했어요.':'.'));
+  } catch(e) { console.warn('saveFeedEnd:', e); feedingStart=null; localStorage.setItem('baby_feeding',''); }
   updateQuickBtns(); renderTimeline(); updateStatus(); setVoiceBtnState(false);
 }
 
@@ -6504,7 +6521,8 @@ function processVoiceCommand(text) {
     showCompleteFeedback('🍼', '수유 시작!');
     matched = true;
   } else if (t.includes('수유종료')||t.includes('수유완료')||t.includes('수유끝')||(t.includes('수유')&&t.includes('끝'))) {
-    openFeedEndModal(); matched = true;
+    if (feedingStart) { openFeedEndModal(); } else { showVoiceToast('수유 시작 기록이 없어요', false); }
+    matched = true;
   } else if (t.includes('수유')||t.includes('밥먹')||t.includes('분유')||t.includes('젖먹')) {
     if (feedingStart) { endSession('feed'); }
     else { startSession('feed'); showCompleteFeedback('🍼', '수유 시작!'); }
