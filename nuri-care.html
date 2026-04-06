@@ -3064,7 +3064,7 @@ function renderTimeline() {
     return;
   }
 
-  const endTitles   = { feed:'수유', sleep:'기상', pump:'유축' };
+  const endTitles   = { feed:['수유','모유 수유 완료','분유 수유 완료','혼합 수유 완료'], sleep:['기상'], pump:['유축'] };
   const startTitles = { feed:'수유 시작', sleep:'수면 시작', pump:'유축 시작' };
   const dispTitles  = { feed:'수유', sleep:'수면', pump:'유축' };
 
@@ -3075,7 +3075,7 @@ function renderTimeline() {
     if (usedIdx.has(i)) return;
 
     // 완료 기록 → 짝이 되는 시작 기록 찾기
-    if (r.cat in endTitles && r.title === endTitles[r.cat]) {
+    if (r.cat in endTitles && endTitles[r.cat].includes(r.title)) {
       const startIdx = todayRecs.findIndex((s, si) =>
         si > i && !usedIdx.has(si) && s.cat === r.cat && s.title === startTitles[r.cat]
       );
@@ -3096,7 +3096,7 @@ function renderTimeline() {
     // 시작 기록 → 종료 기록이 이미 처리됐으면 스킵, 아니면 진행중 표시
     if (r.cat in startTitles && r.title === startTitles[r.cat]) {
       const hasEnd = todayRecs.some((s, si) =>
-        si < i && s.cat === r.cat && s.title === endTitles[r.cat]
+        si < i && s.cat === r.cat && endTitles[r.cat] && endTitles[r.cat].includes(s.title)
       );
       if (hasEnd) { usedIdx.add(i); return; }
       r = { ...r, _inProgress: true };
@@ -3606,10 +3606,10 @@ function renderDadScreen(readonly) {
         return '<div class="dad-event-item' + (done ? ' done' : '') + '" onclick="toggleDadCheck(\'' + item.id + '\')">' +
           '<div class="dad-event-checkbox' + (done ? ' checked' : '') + '"></div>' +
           '<div class="dad-event-info">' +
-          '<div class="dad-event-title' + (done ? ' done-text' : '') + '">' + item.title + '</div>' +
+          '<div class="dad-event-title' + (done ? ' done-text' : '') + '" style="font-size:15px;font-weight:700;color:#1a1a1a;line-height:1.5;letter-spacing:-0.02em;">' + item.title + '</div>' +
           (done
-            ? '<div class="dad-event-praise">' + praise + '</div>'
-            : '<div class="dad-event-desc">' + item.desc.replace(/\n/g,'<br>') + '</div>'
+            ? '<div class="dad-event-praise" style="font-size:13px;color:#16a34a;font-weight:600;margin-top:4px;">' + praise + '</div>'
+            : '<div class="dad-event-desc" style="font-size:13px;color:#6b7280;margin-top:5px;line-height:1.65;word-break:keep-all;font-weight:500;">' + item.desc.replace(/\n/g,'<br>') + '</div>'
           ) +
           '<span class="dad-event-tag ' + (done ? 'done-tag' : '') + '">' + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
           '</div></div>';
@@ -6361,6 +6361,9 @@ function saveFeedEnd() {
     var startDate = dur > 0 ? new Date(recDate.getTime() - dur*60000) : recDate;
     var startKST = new Date(startDate.getTime() + 9*3600*1000);
     var startStr = startKST.toISOString().slice(0,16);
+    // 기존 '수유 시작' 기록 찾아서 제거 (완료 기록으로 교체)
+    const feedStartIdx = records.findIndex(r => r.cat === 'feed' && r.title === '수유 시작');
+    if (feedStartIdx !== -1) records.splice(feedStartIdx, 1);
     addRecord({type:'feed', time:recTime, title:ftTitle, sub:sub, icon:'🍼', cat:'feed',
       _startTime:startStr, _durMin:dur||undefined, feedType:ft, ml:ml||undefined});
     showCompleteFeedback('🍼', ftTitle.replace(' 완료','') + (durStr?'\n'+durStr:''));
