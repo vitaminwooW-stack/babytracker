@@ -1829,7 +1829,7 @@ body.dark .tl-content-title { color: #f0ead8; }
     <button class="modal-close-x" onclick="closePumpModal()">✕</button>
     <h2>🤱 유축 기록</h2>
     <div style="text-align:center;margin-bottom:16px;">
-      <div id="pump-timer-display" style="font-size:36px;font-weight:800;color:#7c3aaf;letter-spacing:2px;font-variant-numeric:tabular-nums;">00:00</div>
+      <div id="pump-timer-display" style="font-size:36px;font-weight:800;color:#7c3aaf;letter-spacing:2px;font-variant-numeric:tabular-nums;">00:00:00</div>
       <div style="display:flex;justify-content:center;gap:8px;margin-top:8px;">
         <button id="pump-timer-btn" onclick="pumpTimerToggle()" style="padding:6px 16px;border-radius:20px;border:none;background:#7c3aaf;color:#fff;font-size:13px;font-weight:700;cursor:pointer;touch-action:manipulation;">시작</button>
         <button onclick="pumpTimerReset()" style="padding:6px 16px;border-radius:20px;border:1px solid #d8b4fe;background:#fff;color:#7c3aaf;font-size:13px;font-weight:700;cursor:pointer;touch-action:manipulation;">초기화</button>
@@ -1966,8 +1966,27 @@ body.dark .tl-content-title { color: #f0ead8; }
       <button class="opt-btn" id="fe-bottle" onclick="feSel('bottle')" style="flex:1;padding:12px 6px;font-size:14px;">분유</button>
       <button class="opt-btn" id="fe-both" onclick="feSel('both')" style="flex:1;padding:12px 6px;font-size:14px;">혼합</button>
     </div>
-    <span class="field-label">수유 시간 (분)</span>
-    <input type="number" id="fe-min" placeholder="예: 15" min="0" max="120" style="margin-bottom:12px;">
+    <span class="field-label">수유 시간</span>
+    <div id="fe-side-wrap" style="display:flex;gap:10px;margin-bottom:12px;">
+      <div style="flex:1;">
+        <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">⬅️ 왼쪽 (분)</div>
+        <input type="number" id="fe-left-min" placeholder="예: 10" min="0" max="120"
+          oninput="feCalcTotal()" style="width:100%;box-sizing:border-box;">
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">➡️ 오른쪽 (분)</div>
+        <input type="number" id="fe-right-min" placeholder="예: 10" min="0" max="120"
+          oninput="feCalcTotal()" style="width:100%;box-sizing:border-box;">
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <div style="flex:1;">
+        <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">📊 총합 (분)</div>
+        <input type="number" id="fe-min" placeholder="자동계산" min="0" max="240"
+          oninput="feSetTotal()" style="width:100%;box-sizing:border-box;">
+      </div>
+      <div style="padding-top:18px;font-size:14px;font-weight:800;color:#7a5600;" id="fe-total-display">= 0 분</div>
+    </div>
     <div id="fe-ml-wrap">
       <span class="field-label" id="fe-ml-label" style="opacity:0.4;">분유량 (ml)</span>
       <input type="number" id="fe-ml" placeholder="예: 80" min="0" max="500"
@@ -3136,7 +3155,7 @@ function renderTimeline() {
     const catColors = { feed:'#eff6ff', sleep:'#f0f9ff', diaper:'#f0fdf4', pump:'#fdf4ff' };
     const bgColor = catColors[r.cat] || '#f9fafb';
 
-    let icon = r.icon, subDisplay = r.sub;
+    let icon = r.icon, subDisplay = (r.sub||'').replace(/\n/g, '<br>');
     if (r.cat === 'diaper') {
       if (r.sub === '소변') { icon = '💧'; subDisplay = '소변'; }
       else if (r.sub === '대변') { icon = '💩'; subDisplay = '대변'; }
@@ -6145,7 +6164,7 @@ var _feType = 'breast';
 
 // ── 유축 타이머 ──
 let _pumpTimerInterval = null;
-let _pumpTimerSec = 0;
+let _pumpTimerMs = 0;
 let _pumpTimerRunning = false;
 
 function pumpTimerToggle() {
@@ -6158,22 +6177,23 @@ function pumpTimerToggle() {
     _pumpTimerRunning = true;
     if (btn) btn.textContent = '정지';
     _pumpTimerInterval = setInterval(() => {
-      _pumpTimerSec++;
-      const h = Math.floor(_pumpTimerSec/3600);
-      const m = Math.floor((_pumpTimerSec%3600)/60);
-      const s = _pumpTimerSec%60;
+      _pumpTimerMs += 10;
+      const totalSec = Math.floor(_pumpTimerMs / 1000);
+      const mm = Math.floor(totalSec / 60);
+      const ss = totalSec % 60;
+      const cs = Math.floor((_pumpTimerMs % 1000) / 10); // 센티초 (0~99)
       const el = document.getElementById('pump-timer-display');
-      if (el) el.textContent = (h>0?String(h).padStart(2,'0')+':':'')+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-    }, 1000);
+      if (el) el.textContent = String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0')+':'+String(cs).padStart(2,'0');
+    }, 10);
   }
 }
 
 function pumpTimerReset() {
   clearInterval(_pumpTimerInterval);
   _pumpTimerRunning = false;
-  _pumpTimerSec = 0;
+  _pumpTimerMs = 0;
   const el = document.getElementById('pump-timer-display');
-  if (el) el.textContent = '00:00';
+  if (el) el.textContent = '00:00:00';
   const btn = document.getElementById('pump-timer-btn');
   if (btn) btn.textContent = '시작';
 }
@@ -6224,14 +6244,22 @@ function savePumpSimple() {
     const totalInput = parseInt(document.getElementById('pump-total-ml')?.value||'0')||0;
     const total = (L>0||R>0) ? L+R : totalInput;
     const t = document.getElementById('pump-time')?.value || nowLocal();
-    const timerSec = _pumpTimerSec;
-    let sub = total > 0 ? '총 '+total+'ml' : '유축 완료';
-    if (total > 0 && L>0) sub += ' · 왼쪽 '+L+'ml';
-    if (total > 0 && R>0) sub += ' · 오른쪽 '+R+'ml';
+    const timerSec = Math.floor(_pumpTimerMs / 1000);
+    // 첫째 줄: 총합 (+ 타이머)
+    let subLine1 = total > 0 ? '총 '+total+'ml' : '유축 완료';
     if (timerSec > 0) {
-      const h=Math.floor(timerSec/3600), m2=Math.floor((timerSec%3600)/60);
-      sub += ' · '+(h>0?h+'시간 ':'')+m2+'분';
+      const tm=Math.floor(timerSec/60), ts=timerSec%60;
+      subLine1 += ' · '+String(tm).padStart(2,'0')+':'+String(ts).padStart(2,'0');
     }
+    // 둘째 줄: 왼쪽/오른쪽 세부
+    let subLine2 = '';
+    if (total > 0 && (L>0||R>0)) {
+      const parts = [];
+      if (L>0) parts.push('왼쪽 '+L+'ml');
+      if (R>0) parts.push('오른쪽 '+R+'ml');
+      subLine2 = parts.join(' · ');
+    }
+    const sub = subLine2 ? subLine1 + '\n' + subLine2 : subLine1;
     addRecord({ type:'pump', time:t, title:'유축', sub, icon:'🤱', cat:'pump',
       Lml:L||undefined, Rml:R||undefined, total:total||undefined });
   } catch(e) { console.warn('savePump:', e); }
@@ -6296,6 +6324,12 @@ function openFeedEndModal() {
   try {
     var feMin = document.getElementById('fe-min');
     if (feMin) feMin.value = '';
+    var feLeft = document.getElementById('fe-left-min');
+    if (feLeft) feLeft.value = '';
+    var feRight = document.getElementById('fe-right-min');
+    if (feRight) feRight.value = '';
+    var feTotalDisp = document.getElementById('fe-total-display');
+    if (feTotalDisp) feTotalDisp.textContent = '= 0 분';
     var feTime = document.getElementById('fe-time');
     if (feTime) feTime.value = nowLocal();
     var feMl = document.getElementById('fe-ml');
@@ -6323,6 +6357,8 @@ function feSel(t) {
     var btn = document.getElementById('fe-'+v);
     if(btn) btn.classList.toggle('sel', v===t);
   });
+
+  // 분유량(ml): 분유/혼합만 활성화
   const isMilk = (t === 'bottle' || t === 'both');
   const mlEl = document.getElementById('fe-ml');
   const mlLabel = document.getElementById('fe-ml-label');
@@ -6331,9 +6367,45 @@ function feSel(t) {
     mlEl.style.opacity = isMilk ? '1' : '0.35';
     mlEl.style.cursor = isMilk ? '' : 'not-allowed';
     mlEl.style.background = isMilk ? '' : '#f3f4f6';
-    // 값은 지우지 않음 - 잠금 상태만 변경
   }
   if (mlLabel) mlLabel.style.opacity = isMilk ? '1' : '0.4';
+
+  // 수유시간 좌/우: 모유/혼합만 활성화, 분유는 잠금
+  const isBreastFeed = (t === 'breast' || t === 'both');
+  const sideWrap = document.getElementById('fe-side-wrap');
+  ['fe-left-min','fe-right-min'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.disabled = !isBreastFeed;
+    el.style.opacity = isBreastFeed ? '1' : '0.35';
+    el.style.cursor = isBreastFeed ? '' : 'not-allowed';
+    el.style.background = isBreastFeed ? '' : '#f3f4f6';
+    if (!isBreastFeed) el.value = '';
+  });
+  // 분유일 때 사이드 타이틀 색 흐리게
+  if (sideWrap) sideWrap.style.opacity = isBreastFeed ? '1' : '0.4';
+  if (!isBreastFeed) feCalcTotal(); // 총합 0으로 리셋
+}
+
+function feCalcTotal() {
+  const L = parseInt(document.getElementById('fe-left-min')?.value||'0')||0;
+  const R = parseInt(document.getElementById('fe-right-min')?.value||'0')||0;
+  const total = L + R;
+  const td = document.getElementById('fe-total-display');
+  const ti = document.getElementById('fe-min');
+  if (td) td.textContent = '= '+total+' 분';
+  if (ti && (L>0||R>0)) ti.value = total;
+}
+
+function feSetTotal() {
+  const total = parseInt(document.getElementById('fe-min')?.value||'0')||0;
+  const td = document.getElementById('fe-total-display');
+  if (td) td.textContent = '= '+total+' 분';
+  // 좌우 초기화
+  const lEl = document.getElementById('fe-left-min');
+  const rEl = document.getElementById('fe-right-min');
+  if (lEl && !lEl.disabled) lEl.value = '';
+  if (rEl && !rEl.disabled) rEl.value = '';
 }
 
 function closeFeedEndModal() {
