@@ -6301,39 +6301,37 @@ function endSession(type) {
 function openFeedEndModal() {
   // feedingStart 기반으로 경과시간 계산
   if (feedingStart) {
-    const now = new Date();
-    const fSt = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
-    const dur = Math.round((now - fSt) / 60000);
-    const stStr = new Date(fSt.getTime()+9*3600*1000).toISOString().slice(0,16);
-    _feedEndData = { dur, stStr };
+    var now2 = new Date();
+    var fSt = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
+    var dur2 = Math.round((now2 - fSt) / 60000);
+    var stStr2 = new Date(fSt.getTime()+9*3600*1000).toISOString().slice(0,16);
+    _feedEndData = { dur: dur2, stStr: stStr2 };
   } else {
     _feedEndData = { dur: 0, stStr: nowLocal() };
   }
   _feType = 'breast';
+
+  // DOM 초기화 (try-catch로 안전하게)
   try {
-    // fe-min, fe-time 초기화
-    const feMin = document.getElementById('fe-min');
+    var feMin = document.getElementById('fe-min');
     if (feMin) feMin.value = '';
-    const feTime = document.getElementById('fe-time');
+    var feTime = document.getElementById('fe-time');
     if (feTime) feTime.value = nowLocal();
-    const feMl = document.getElementById('fe-ml');
-    if (feMl) feMl.value = '';
-    // 기본 선택: 모유 (비활성화)
-    ['breast','bottle','both'].forEach(v => {
-      const btn = document.getElementById('fe-'+v);
+    var feMl = document.getElementById('fe-ml');
+    if (feMl) { feMl.value = ''; feMl.disabled=true; feMl.style.opacity='0.35'; feMl.style.background='#f3f4f6'; feMl.style.cursor='not-allowed'; }
+    var mlLabel = document.getElementById('fe-ml-label');
+    if (mlLabel) mlLabel.style.opacity = '0.4';
+    ['breast','bottle','both'].forEach(function(v) {
+      var btn = document.getElementById('fe-'+v);
       if (btn) btn.classList.toggle('sel', v==='breast');
     });
-    const mlEl = document.getElementById('fe-ml');
-    if (mlEl) { mlEl.disabled=true; mlEl.style.opacity='0.35'; mlEl.style.cursor='not-allowed'; mlEl.style.background='#f3f4f6'; }
-    const mlLabel = document.getElementById('fe-ml-label');
-    if (mlLabel) mlLabel.style.opacity='0.4';
   } catch(e) { console.warn('openFeedEndModal init:', e); }
-  // 모달 표시
-  const modal = document.getElementById('modal-feed-end');
+
+  // 모달 표시 - display:flex 직접 설정으로 확실히
+  var modal = document.getElementById('modal-feed-end');
   if (modal) {
+    modal.style.display = 'flex';
     modal.classList.add('open');
-    modal.style.display = 'flex'; // 강제 표시
-    setTimeout(() => { modal.style.display = ''; }, 100);
   }
 }
 
@@ -6358,21 +6356,21 @@ function feSel(t) {
 }
 
 function closeFeedEndModal() {
-  document.getElementById('modal-feed-end').classList.remove('open');
+  var mfe=document.getElementById('modal-feed-end');
+  if(mfe){mfe.classList.remove('open');mfe.style.display='';}
   feedingStart = null;
   if(typeof feedingType !== 'undefined') feedingType = 'breast';
   saveSessions(); updateQuickBtns(); renderTimeline(); updateStatus();
 }
 
 function saveFeedEnd() {
-  // 모달 먼저 닫기
+  // 모달 닫기
   var modal = document.getElementById('modal-feed-end');
   if (modal) modal.classList.remove('open');
   try {
     var ft = _feType || 'breast';
     var ftLabel = {breast:'모유',bottle:'분유',both:'혼합'}[ft] || '모유';
 
-    // 수유 시간: 직접 입력 우선, 없으면 세션 경과시간
     var feMinEl = document.getElementById('fe-min');
     var feTimeEl = document.getElementById('fe-time');
     var mlEl = document.getElementById('fe-ml');
@@ -6390,25 +6388,25 @@ function saveFeedEnd() {
     var startKST = new Date(startDate.getTime() + 9*3600*1000);
     var startStr = startKST.toISOString().slice(0,16);
 
-    // sub: 세부 정보 (종류 · 시간 · ml)
+    // sub
     var sub = ftLabel;
     if (durStr) sub += ' · ' + durStr;
     if (ml) sub += ' · ' + ml + 'ml';
 
-    // 기존 '수유 시작' 기록 모두 제거 (오늘 것)
-    var todayStr = new Date(Date.now()+9*3600*1000).toISOString().slice(0,10);
-    for (var ri = records.length-1; ri >= 0; ri--) {
-      var rec = records[ri];
-      if (rec.cat==='feed' && rec.title==='수유 시작' && rec.time && rec.time.slice(0,10)===todayStr) {
-        records.splice(ri, 1);
-      }
-    }
-
+    // feedingStart 클리어
     feedingStart = null;
     if (typeof feedingType !== 'undefined') feedingType = 'breast';
     localStorage.setItem('baby_feeding', '');
 
-    // title: '수유' (단순), sub: 세부내용, _startTime으로 시간범위 표시
+    // ★ 오늘의 '수유 시작' 기록 전부 삭제 (addRecord 직전)
+    var todayKST = nowLocal().slice(0,10);
+    for (var ri = records.length-1; ri >= 0; ri--) {
+      var rec = records[ri];
+      if (rec.cat==='feed' && rec.title==='수유 시작' && String(rec.time||'').slice(0,10) === todayKST) {
+        records.splice(ri, 1);
+      }
+    }
+
     addRecord({
       type:'feed', time:recTime, title:'수유', sub:sub, icon:'🍼', cat:'feed',
       _startTime:startStr, _durMin:dur||undefined, feedType:ft, ml:ml||undefined
@@ -6417,7 +6415,7 @@ function saveFeedEnd() {
     showCompleteFeedback('🍼', '수유 완료' + (durStr?'\n'+durStr:''));
     speak(ftLabel+' 수유 완료' + (durStr?'. '+durStr+' 수유했어요.':'.'));
   } catch(e) {
-    console.warn('saveFeedEnd:', e);
+    console.warn('saveFeedEnd err:', e);
     feedingStart=null;
     localStorage.setItem('baby_feeding','');
   }
@@ -6581,9 +6579,9 @@ function processVoiceCommand(text) {
     showCompleteFeedback('🍼', '수유 시작!');
     matched = true;
   } else if (t.includes('수유종료')||t.includes('수유완료')||t.includes('수유끝')||(t.includes('수유')&&(t.includes('끝')||t.includes('종료')||t.includes('완료')||t.includes('그만')))) {
-    // 페이지2(메인)로 이동 후 모달 열기
+    // 페이지2(메인)로 이동
     if (typeof goToPage === 'function') goToPage(2);
-    setTimeout(openFeedEndModal, 150);
+    openFeedEndModal();
     matched = true;
   } else if (t.includes('수유')||t.includes('밥먹')||t.includes('분유')||t.includes('젖먹')) {
     if (feedingStart) { endSession('feed'); }
