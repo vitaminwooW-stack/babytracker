@@ -338,7 +338,7 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .policy-item-amount { font-size: 13px; font-weight: 700; color: #1d4ed8; white-space: nowrap; flex-shrink: 0; }
 .policy-link { display: block; text-align: center; font-size: 12px; color: #1d4ed8; margin-top: 14px; padding: 8px; background: #EBF4FF; border-radius: 8px; text-decoration: none; }
 .policy-notice { background: #fff7ed; border-radius: 12px; padding: 10px 14px; font-size: 12px; color: #8a6d00; margin-bottom: 16px; line-height: 1.6; }
-.modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 300; align-items: flex-end; }
+.modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 400; align-items: flex-end; }
 .modal-bg.open { display: flex; }
 .modal { position: relative; background: #fff; border-radius: 16px 16px 0 0; padding: 24px 20px 40px; width: 100%; max-height: 92vh; overflow-y: auto; }
 .modal-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 20px; }
@@ -3071,9 +3071,9 @@ function renderTimeline() {
     return;
   }
 
-  const endTitles   = { sleep:['기상'], pump:['유축'] };
-  const startTitles = { sleep:'수면 시작', pump:'유축 시작' };
-  const dispTitles  = { sleep:'수면', pump:'유축' };
+  const endTitles   = { feed:['수유'], sleep:['기상'], pump:['유축'] };
+  const startTitles = { feed:'수유 시작', sleep:'수면 시작', pump:'유축 시작' };
+  const dispTitles  = { feed:'수유', sleep:'수면', pump:'유축' };
 
   const merged = [];
   const usedIdx = new Set();
@@ -3122,9 +3122,14 @@ function renderTimeline() {
     const dadBadge = r.byDad
       ? '<span style="font-size:9px;background:#eff6ff;color:#1d4ed8;border-radius:6px;padding:1px 5px;font-weight:700;margin-left:4px;">공간</span>'
       : '';
-    const progressBadge = r._inProgress
-      ? '<span style="font-size:9px;background:#fef9c3;color:#854d0e;border-radius:6px;padding:1px 5px;font-weight:700;margin-left:4px;">진행중</span>'
-      : '';
+    // 진행중 배지: 수유/수면/유축 중인 기록에 표시
+    let progressBadge = '';
+    if (r._inProgress) {
+      const pbColors = { feed:'#fff7ed,#fdba74,#92400e', sleep:'#eff6ff,#93c5fd,#1e40af', pump:'#fdf4ff,#d8b4fe,#6b21a8', default:'#fef9c3,#fbbf24,#854d0e' };
+      const pbC = (pbColors[r.cat]||pbColors.default).split(',');
+      const pbLabel = r.cat==='feed'?'수유중':r.cat==='sleep'?'수면중':r.cat==='pump'?'유축중':'진행중';
+      progressBadge = '<span style="font-size:9px;background:'+pbC[0]+';border:1px solid '+pbC[1]+';color:'+pbC[2]+';border-radius:6px;padding:1px 6px;font-weight:700;margin-left:4px;">'+pbLabel+'</span>';
+    }
 
     const catColors = { feed:'#eff6ff', sleep:'#f0f9ff', diaper:'#f0fdf4', pump:'#fdf4ff' };
     const bgColor = catColors[r.cat] || '#f9fafb';
@@ -5435,7 +5440,7 @@ function showVoiceToast(text, ok) {
   toast.id = 'voice-toast';
   toast.style.cssText = `position:fixed;bottom:100px;left:50%;transform:translateX(-50%);
     background:${ok?'#1a1a1a':'#dc2626'};color:#fff;padding:10px 18px;border-radius:20px;
-    font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.25);
+    font-size:13px;font-weight:600;z-index:280;box-shadow:0 4px 16px rgba(0,0,0,0.25);
     max-width:280px;text-align:center;`;
   toast.textContent = `"${text}"`;
   document.body.appendChild(toast);
@@ -6138,7 +6143,7 @@ function showCompleteFeedback(emoji, msg) {
   el.style.cssText = `
     position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(0.8);
     background:#1a1a1a; color:#fff; padding:20px 28px; border-radius:20px;
-    font-size:15px; font-weight:700; z-index:9999;
+    font-size:15px; font-weight:700; z-index:280;
     box-shadow:0 8px 32px rgba(0,0,0,0.35);
     text-align:center; transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);
     pointer-events:none;
@@ -6288,6 +6293,11 @@ function endSession(type) {
     const fStStr = new Date(fSt.getTime()+9*3600*1000).toISOString().slice(0,16);
     feedingStart = null;
     localStorage.setItem('baby_feeding', '');
+    // '수유 시작' 기록 제거 후 '수유'로 교체
+    const todayKST2 = nowLocal().slice(0,10);
+    for (let ri2=records.length-1; ri2>=0; ri2--) {
+      if (records[ri2].cat==='feed' && records[ri2].title==='수유 시작' && String(records[ri2].time||'').slice(0,10)===todayKST2) records.splice(ri2,1);
+    }
     addRecord({ type:'feed', time:nowLocal(), title:'수유', sub:fDurStr, icon:'🍼', cat:'feed', _startTime:fStStr, _durMin:fDur });
     showCompleteFeedback('🍼','수유 완료 '+fDurStr);
     speak('수유 완료.');
@@ -6364,9 +6374,9 @@ function closeFeedEndModal() {
 }
 
 function saveFeedEnd() {
-  // 모달 닫기
+  // 모달 닫기 (display와 class 모두)
   var modal = document.getElementById('modal-feed-end');
-  if (modal) modal.classList.remove('open');
+  if (modal) { modal.classList.remove('open'); modal.style.display = ''; }
   try {
     var ft = _feType || 'breast';
     var ftLabel = {breast:'모유',bottle:'분유',both:'혼합'}[ft] || '모유';
@@ -6579,9 +6589,10 @@ function processVoiceCommand(text) {
     showCompleteFeedback('🍼', '수유 시작!');
     matched = true;
   } else if (t.includes('수유종료')||t.includes('수유완료')||t.includes('수유끝')||(t.includes('수유')&&(t.includes('끝')||t.includes('종료')||t.includes('완료')||t.includes('그만')))) {
-    // 페이지2(메인)로 이동
+    // 페이지2(메인)로 이동 후 모달 열기
     if (typeof goToPage === 'function') goToPage(2);
-    openFeedEndModal();
+    // 페이지 전환 애니메이션 완료 후 모달 열기 (300ms)
+    setTimeout(function() { openFeedEndModal(); }, 300);
     matched = true;
   } else if (t.includes('수유')||t.includes('밥먹')||t.includes('분유')||t.includes('젖먹')) {
     if (feedingStart) { endSession('feed'); }
