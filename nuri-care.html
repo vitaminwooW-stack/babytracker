@@ -3000,7 +3000,6 @@ function saveDiaper() {
     };
     var info = typeMap[t] || typeMap.wet;
     addRecord({ type:'diaper', time: time || nowLocal(), title: info.title, sub: info.sub, icon: info.icon, cat:'diaper' });
-    showCompleteFeedback(info.icon, '기저귀\n기록 완료!');
   } catch(e) { console.warn('saveDiaper:', e); }
   updateQuickBtns(); renderTimeline(); updateStatus();
 }
@@ -3122,13 +3121,16 @@ function renderTimeline() {
     const dadBadge = r.byDad
       ? '<span style="font-size:9px;background:#eff6ff;color:#1d4ed8;border-radius:6px;padding:1px 5px;font-weight:700;margin-left:4px;">공간</span>'
       : '';
-    // 진행중 배지: 수유/수면/유축 중인 기록에 표시
+    // 진행중 배지: 텍스트는 '진행중', 컬러만 카테고리별로 다르게
     let progressBadge = '';
     if (r._inProgress) {
-      const pbColors = { feed:'#fff7ed,#fdba74,#92400e', sleep:'#eff6ff,#93c5fd,#1e40af', pump:'#fdf4ff,#d8b4fe,#6b21a8', default:'#fef9c3,#fbbf24,#854d0e' };
-      const pbC = (pbColors[r.cat]||pbColors.default).split(',');
-      const pbLabel = r.cat==='feed'?'수유중':r.cat==='sleep'?'수면중':r.cat==='pump'?'유축중':'진행중';
-      progressBadge = '<span style="font-size:9px;background:'+pbC[0]+';border:1px solid '+pbC[1]+';color:'+pbC[2]+';border-radius:6px;padding:1px 6px;font-weight:700;margin-left:4px;">'+pbLabel+'</span>';
+      const pbBg  = { feed:'#fff7ed', sleep:'#eff6ff', pump:'#fdf4ff' };
+      const pbBd  = { feed:'#fdba74', sleep:'#93c5fd', pump:'#d8b4fe' };
+      const pbTxt = { feed:'#92400e', sleep:'#1e40af', pump:'#6b21a8' };
+      const bg  = pbBg[r.cat]  || '#fef9c3';
+      const bd  = pbBd[r.cat]  || '#fbbf24';
+      const txt = pbTxt[r.cat] || '#854d0e';
+      progressBadge = '<span style="font-size:9px;background:'+bg+';border:1px solid '+bd+';color:'+txt+';border-radius:6px;padding:1px 6px;font-weight:700;margin-left:4px;">진행중</span>';
     }
 
     const catColors = { feed:'#eff6ff', sleep:'#f0f9ff', diaper:'#f0fdf4', pump:'#fdf4ff' };
@@ -6135,31 +6137,6 @@ function startSession(type) {
 }
 
 // ── 종료 완료 시각적 피드백 ──
-function showCompleteFeedback(emoji, msg) {
-  const old = document.getElementById('complete-feedback');
-  if (old) old.remove();
-  const el = document.createElement('div');
-  el.id = 'complete-feedback';
-  el.style.cssText = `
-    position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(0.8);
-    background:#1a1a1a; color:#fff; padding:20px 28px; border-radius:20px;
-    font-size:15px; font-weight:700; z-index:280;
-    box-shadow:0 8px 32px rgba(0,0,0,0.35);
-    text-align:center; transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);
-    pointer-events:none;
-  `;
-  el.innerHTML = `<div style="font-size:40px;margin-bottom:8px;">${emoji}</div><div>${msg}</div>`;
-  document.body.appendChild(el);
-  requestAnimationFrame(() => {
-    el.style.transform = 'translate(-50%,-50%) scale(1)';
-    el.style.opacity = '1';
-  });
-  setTimeout(() => {
-    el.style.transform = 'translate(-50%,-50%) scale(0.9)';
-    el.style.opacity = '0';
-    setTimeout(() => el.remove(), 300);
-  }, 1800);
-}
 
 // ── 세션 종료 ──
 var _feedEndData = {};
@@ -6263,7 +6240,6 @@ function savePumpSimple() {
 function endSession(type) {
   const now = new Date();
   if (type === 'sleep') {
-    if (!sleepingStart) { showCompleteFeedback('😴','수면 시작 기록 없음'); return; }
     const st = sleepingStart instanceof Date ? sleepingStart : new Date(sleepingStart);
     const dur = Math.round((now - st) / 60000);
     const h = Math.floor(dur/60), m = dur%60;
@@ -6272,10 +6248,8 @@ function endSession(type) {
     localStorage.setItem('baby_sleeping', '');
     clearInterval(sleepTimer);
     addRecord({ type:'sleep', time:nowLocal(), title:'기상', sub:'수면 '+sub, icon:'☀️', cat:'sleep' });
-    showCompleteFeedback('☀️','기상 완료! '+sub);
     speak('기상을 기록했어요.');
   } else if (type === 'pump') {
-    if (!pumpingStart) { showCompleteFeedback('🤱','유축 시작 기록 없음'); return; }
     const pSt = pumpingStart instanceof Date ? pumpingStart : new Date(pumpingStart);
     const pDur = Math.round((now - pSt) / 60000);
     const pDurStr = (Math.floor(pDur/60)>0?Math.floor(pDur/60)+'시간 ':'')+pDur%60+'분';
@@ -6283,10 +6257,8 @@ function endSession(type) {
     pumpingStart = null;
     localStorage.setItem('baby_pumping', '');
     addRecord({ type:'pump', time:nowLocal(), title:'유축', sub:pDurStr, icon:'🤱', cat:'pump', _startTime:pStStr, _durMin:pDur });
-    showCompleteFeedback('🤱','유축 완료 '+pDurStr);
     speak('유축 완료.');
   } else if (type === 'feed') {
-    if (!feedingStart) { showCompleteFeedback('🍼','수유 시작 기록 없음'); return; }
     const fSt = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
     const fDur = Math.round((now - fSt) / 60000);
     const fDurStr = (Math.floor(fDur/60)>0?Math.floor(fDur/60)+'시간 ':'')+fDur%60+'분';
@@ -6299,7 +6271,6 @@ function endSession(type) {
       if (records[ri2].cat==='feed' && records[ri2].title==='수유 시작' && String(records[ri2].time||'').slice(0,10)===todayKST2) records.splice(ri2,1);
     }
     addRecord({ type:'feed', time:nowLocal(), title:'수유', sub:fDurStr, icon:'🍼', cat:'feed', _startTime:fStStr, _durMin:fDur });
-    showCompleteFeedback('🍼','수유 완료 '+fDurStr);
     speak('수유 완료.');
   }
   updateQuickBtns();
@@ -6422,7 +6393,6 @@ function saveFeedEnd() {
       _startTime:startStr, _durMin:dur||undefined, feedType:ft, ml:ml||undefined
     });
 
-    showCompleteFeedback('🍼', '수유 완료' + (durStr?'\n'+durStr:''));
     speak(ftLabel+' 수유 완료' + (durStr?'. '+durStr+' 수유했어요.':'.'));
   } catch(e) {
     console.warn('saveFeedEnd err:', e);
@@ -6450,7 +6420,6 @@ function savePumpEnd() {
   var sub = durStr+(total?' · '+total+'ml':'')+(Lv&&Rv?' (L:'+Lv+' R:'+Rv+')':'');
   pumpingStart = null; saveSessions();
   addRecord({type:'pump',time:nowLocal(),title:'유축 완료',sub:sub,icon:'🤱',cat:'pump',_startTime:d.stStr,_durMin:dur,Lml:Lv||undefined,Rml:Rv||undefined,total:total||undefined});
-  showCompleteFeedback('🤱','유축 완료\n'+sub);
   speak('유축 완료. '+durStr+(total?' '+total+'ml':'')+' 유축했어요.');
   updateQuickBtns(); renderTimeline(); updateStatus(); setVoiceBtnState(false);
 }
@@ -6464,14 +6433,12 @@ function quickStartAction(type) {
     } else {
       // 시작 - 바로 기록
       startSession('feed');
-      showCompleteFeedback('🍼', '수유 시작!');
     }
   } else if (type === 'sleep') {
     if (sleepingStart) {
       endSession('sleep');
     } else {
       startSession('sleep');
-      showCompleteFeedback('😴', '수면 시작!');
     }
   } else if (type === 'pump') {
     if (pumpingStart) {
@@ -6586,7 +6553,6 @@ function processVoiceCommand(text) {
   // ── 수유 ──
   if (t.includes('수유시작') || (t.includes('수유') && (t.includes('시작')||t.includes('했어')||t.includes('먹여')||t.includes('먹이')))) {
     startSession('feed');
-    showCompleteFeedback('🍼', '수유 시작!');
     matched = true;
   } else if (t.includes('수유종료')||t.includes('수유완료')||t.includes('수유끝')||(t.includes('수유')&&(t.includes('끝')||t.includes('종료')||t.includes('완료')||t.includes('그만')))) {
     // 페이지2(메인)로 이동 후 모달 열기
@@ -6596,13 +6562,11 @@ function processVoiceCommand(text) {
     matched = true;
   } else if (t.includes('수유')||t.includes('밥먹')||t.includes('분유')||t.includes('젖먹')) {
     if (feedingStart) { endSession('feed'); }
-    else { startSession('feed'); showCompleteFeedback('🍼', '수유 시작!'); }
     matched = true;
   }
   // ── 수면 ──
   else if (t.includes('수면시작')||t.includes('잠시작')||t.includes('재웠어')||t.includes('잠재워')||t.includes('아기재워')||t.includes('잠들었')||(t.includes('자기')&&t.includes('시작'))) {
     startSession('sleep');
-    showCompleteFeedback('😴', '수면 시작!');
     matched = true;
   } else if (t.includes('기상')||t.includes('일어났')||t.includes('깼어')||t.includes('잠깼')||t.includes('수면종료')||t.includes('수면끝')||t.includes('일어나')) {
     endSession('sleep'); matched = true;
@@ -6610,7 +6574,6 @@ function processVoiceCommand(text) {
     speakSleepTiming(); matched = true;
   } else if (t.includes('수면')||t.includes('잠자')||t.includes('재워')||t.includes('낮잠')) {
     if (sleepingStart) { endSession('sleep'); }
-    else { startSession('sleep'); showCompleteFeedback('😴', '수면 시작!'); }
     matched = true;
   }
   // ── 유축 ──
@@ -6621,7 +6584,6 @@ function processVoiceCommand(text) {
     endSession('pump'); matched = true;
   } else if (t.includes('유축')) {
     if (pumpingStart) { endSession('pump'); }
-    else { startSession('pump'); showCompleteFeedback('🤱', '유축 시작!'); }
     matched = true;
   }
   // ── 기저귀 ──
@@ -6633,7 +6595,6 @@ function processVoiceCommand(text) {
       dTitle = '기저귀 교체 (소변+대변)'; dIcon = '💩'; dSub = '소변+대변';
     }
     addRecord({ type:'diaper', time:nowLocal(), title:dTitle, sub:dSub, icon:dIcon, cat:'diaper' });
-    showCompleteFeedback(dIcon, '기저귀\n기록 완료!');
     speak('기저귀 교체 기록했어요'); matched = true;
   }
   // ── 상태 확인 ──
