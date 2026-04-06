@@ -49,7 +49,7 @@ input:focus { border-color: #bfdbfe; }
 .dad-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 16px; width: 100%; }
 
 .dad-section { margin-bottom: 20px; }
-.dad-section-title { font-size: 13px; font-weight: 700; color: #334155; letter-spacing: 0.04em; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.dad-section-title { font-size: 14px; font-weight: 800; color: #1e293b; letter-spacing: -0.01em; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
 .dad-section-title span { display: none; }
 
 .dad-check-card { background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden; box-shadow: none; }
@@ -413,8 +413,8 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .dad-event-checkbox.checked { background: #2563eb; border-color: #2563eb; }
 .dad-event-checkbox.checked::after { content: '♥'; color: #fff; font-size: 11px; }
 .dad-event-info { flex: 1; min-width: 0; }
-.dad-event-title { font-size: 14px; font-weight: 600; color: #1a1a1a; line-height: 1.4; }
-.dad-event-title.dad-event-desc { font-size: 12px; color: #6b7280; margin-top: 3px; line-height: 1.5; word-break: keep-all; }
+.dad-event-title { font-size: 14px; font-weight: 700; color: #1a1a1a; line-height: 1.5; letter-spacing: -0.02em; }
+.dad-event-title.dad-event-desc { font-size: 12px; color: #6b7280; margin-top: 4px; line-height: 1.6; word-break: keep-all; font-weight: 500; }
 .dad-event-praise { font-size: 13px; color: #1d4ed8; font-weight: 600; margin-top: 4px; }
 .dad-event-tag { font-size: 11px; background: #eff6ff; color: #1d4ed8; padding: 2px 8px; border-radius: 8px; margin-top: 5px; display: inline-block; font-weight: 600; }
 .dad-section-secret { font-size: 11px; color: #1d4ed8; margin-left: 6px; font-weight: 500; }
@@ -1536,10 +1536,10 @@ body.dark .tl-content-title { color: #f0ead8; }
       <div class="swipe-page">
         <div class="feature-page" id="dad-tab-page">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-            <div class="feature-page-title" style="margin-bottom:0;">👨 아빠 탭</div>
+            <div class="feature-page-title" style="margin-bottom:0;">👨 아빠 공간</div>
             <div id="dad-linked-status" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;background:#f0fdf4;color:#16a34a;display:none;">🔗 연동됨</div>
           </div>
-          <div class="feature-page-sub" id="dad-tab-sub">아빠도 기록하고 함께 육아해요 💛</div>
+          <div class="feature-page-sub" id="dad-tab-sub">소중한 육아 파트너와 함께해요 💛</div>
           <div id="dad-invite-section" style="background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:14px;padding:16px;margin-bottom:14px;">
             <div style="font-size:14px;font-weight:700;color:#1d4ed8;margin-bottom:6px;">🔗 엄마 앱과 연동하기</div>
             <div style="font-size:12px;color:#6b7280;margin-bottom:12px;line-height:1.6;">
@@ -3113,7 +3113,7 @@ function renderTimeline() {
     const mm = m < 10 ? '0' + m : m;
 
     const dadBadge = r.byDad
-      ? '<span style="font-size:9px;background:#eff6ff;color:#1d4ed8;border-radius:6px;padding:1px 5px;font-weight:700;margin-left:4px;">아빠</span>'
+      ? '<span style="font-size:9px;background:#eff6ff;color:#1d4ed8;border-radius:6px;padding:1px 5px;font-weight:700;margin-left:4px;">공간</span>'
       : '';
     const progressBadge = r._inProgress
       ? '<span style="font-size:9px;background:#fef9c3;color:#854d0e;border-radius:6px;padding:1px 5px;font-weight:700;margin-left:4px;">진행중</span>'
@@ -6356,8 +6356,13 @@ function saveFeedEnd() {
     feedingStart = null;
     if(typeof feedingType !== 'undefined') feedingType = 'breast';
     localStorage.setItem('baby_feeding', '');
+    // 수유 시작시간: 기록시간 - 수유시간(분)
+    var recDate = new Date(recTime.replace('T', ' ') || Date.now());
+    var startDate = dur > 0 ? new Date(recDate.getTime() - dur*60000) : recDate;
+    var startKST = new Date(startDate.getTime() + 9*3600*1000);
+    var startStr = startKST.toISOString().slice(0,16);
     addRecord({type:'feed', time:recTime, title:ftTitle, sub:sub, icon:'🍼', cat:'feed',
-      _startTime:d.stStr||recTime, _durMin:dur||undefined, feedType:ft, ml:ml||undefined});
+      _startTime:startStr, _durMin:dur||undefined, feedType:ft, ml:ml||undefined});
     showCompleteFeedback('🍼', ftTitle.replace(' 완료','') + (durStr?'\n'+durStr:''));
     speak(ftLabel+' 수유 완료' + (durStr?'. '+durStr+' 수유했어요.':'.'));
   } catch(e) { console.warn('saveFeedEnd:', e); feedingStart=null; localStorage.setItem('baby_feeding',''); }
