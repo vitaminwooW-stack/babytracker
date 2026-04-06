@@ -405,7 +405,7 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .dad-invite-input::placeholder { color: rgba(255,255,255,0.4); font-weight: 400; letter-spacing: 0; }
 /* 아빠 이벤트 섹션 */
 .dad-event-card { background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: none; border: 1px solid #e5e7eb; }
-.dad-event-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #f3f4f6; cursor: pointer; transition: background 0.1s; }
+.dad-event-item { display: flex; align-items: flex-start; gap: 14px; padding: 18px 16px; border-bottom: 1px solid #fce7f3; cursor: pointer; transition: background 0.15s; }
 .dad-event-item:last-child { border-bottom: none; }
 .dad-event-item:active { background: #f8fafc; }
 .dad-event-item.done { background: #f0fdf4; }
@@ -1586,7 +1586,7 @@ body.dark .tl-content-title { color: #f0ead8; }
             <div class="dad-check-card" id="dad-tab-checklist-prep"></div>
           </div>
           <div class="dad-section">
-            <div class="dad-section-title"><span>💝</span> 아내를 위한 이벤트 <span class="dad-section-secret">😉 엄마 몰래</span></div>
+            <div style="font-size:16px;font-weight:800;color:#be185d;margin-bottom:12px;display:flex;align-items:center;gap:8px;letter-spacing:-0.02em;">💝 아내를 위한 이벤트 <span style="font-size:11px;font-weight:600;color:#9d174d;background:#fce7f3;padding:2px 8px;border-radius:10px;">😉 엄마 몰래</span></div>
             <div class="dad-event-card" id="dad-tab-checklist-events"></div>
           </div>
           <button onclick="openGuide('app')" style="width:100%;padding:14px;background:#fff;border:1.5px solid #e0e0e0;border-radius:14px;font-size:14px;font-weight:700;color:#555;cursor:pointer;margin-top:8px;">
@@ -3606,10 +3606,10 @@ function renderDadScreen(readonly) {
         return '<div class="dad-event-item' + (done ? ' done' : '') + '" onclick="toggleDadCheck(\'' + item.id + '\')">' +
           '<div class="dad-event-checkbox' + (done ? ' checked' : '') + '"></div>' +
           '<div class="dad-event-info">' +
-          '<div class="dad-event-title' + (done ? ' done-text' : '') + '" style="font-size:15px;font-weight:700;color:#1a1a1a;line-height:1.5;letter-spacing:-0.02em;">' + item.title + '</div>' +
+          '<div style="font-size:16px;font-weight:700;color:' + (done?'#be185d':'#1a1a1a') + ';line-height:1.5;letter-spacing:-0.02em;">' + item.title + '</div>' +
           (done
-            ? '<div class="dad-event-praise" style="font-size:13px;color:#16a34a;font-weight:600;margin-top:4px;">' + praise + '</div>'
-            : '<div class="dad-event-desc" style="font-size:13px;color:#6b7280;margin-top:5px;line-height:1.65;word-break:keep-all;font-weight:500;">' + item.desc.replace(/\n/g,'<br>') + '</div>'
+            ? '<div style="font-size:13px;color:#be185d;font-weight:600;margin-top:6px;">' + praise + '</div>'
+            : '<div style="font-size:13px;color:#6b7280;margin-top:6px;line-height:1.7;word-break:keep-all;font-weight:400;">' + item.desc.replace(/\n/g,'<br>') + '</div>'
           ) +
           '<span class="dad-event-tag ' + (done ? 'done-tag' : '') + '">' + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
           '</div></div>';
@@ -4316,22 +4316,38 @@ function openInviteModal() {
 // 링크 방식 초대 (카카오톡 공유)
 function shareInviteLink() {
   const { code, payload } = generateInviteCode();
-  // 현재 앱 URL에 초대 파라미터 추가
   const baseUrl = window.location.href.split('?')[0].split('#')[0];
   const inviteUrl = `${baseUrl}?invite=${code}&data=${encodeURIComponent(payload)}`;
 
-  const shareText = `👶 누리케어 — 육아 기록 앱\n아빠도 함께 기록해요!\n\n아래 링크를 누르면 바로 연동돼요:\n${inviteUrl}`;
+  // 카카오톡 공유: 짧은 메시지 + 코드만
+  const shortText = `👶 누리케어 초대 코드: ${code}\n\n아빠 앱에서 [초대] 버튼을 누르고\n코드를 입력해주세요!`;
+  const shareMsg = `👶 누리케어\n\n초대 코드: ${code}\n\n앱에서 [초대] 탭 → 코드 입력\n(또는 링크로 바로 연동)\n${baseUrl}?invite=${code}`;
 
-  // 카카오톡 공유 or 클립보드 복사
   if (navigator.share) {
     navigator.share({
-      title: '누리케어 — 아빠 초대',
-      text: '아빠도 함께 육아 기록해요!',
-      url: inviteUrl
-    }).catch(() => _copyToClipboard(shareText));
+      title: '👶 누리케어 — 아빠 초대',
+      text: shortText,
+      url: `${baseUrl}?invite=${code}`
+    }).catch(() => {
+      // 공유 실패 시 코드만 복사
+      _copyToClipboard(shortText);
+      showBackupToast('초대 코드를 복사했어요! 카카오톡에 붙여넣어주세요 😊', code);
+    });
   } else {
-    _copyToClipboard(shareText);
+    _copyToClipboard(shortText);
+    showBackupToast('초대 코드를 복사했어요! 카카오톡에 붙여넣어주세요 😊', code);
   }
+}
+
+function showBackupToast(msg, code) {
+  const el = document.createElement('div');
+  el.style.cssText = `position:fixed;bottom:100px;left:50%;transform:translateX(-50%);
+    background:#1a1a1a;color:#fff;padding:14px 20px;border-radius:16px;
+    font-size:14px;font-weight:600;z-index:9999;text-align:center;
+    box-shadow:0 4px 20px rgba(0,0,0,0.3);max-width:300px;line-height:1.6;`;
+  el.innerHTML = `${msg}<br><span style="font-size:22px;font-weight:800;letter-spacing:4px;color:#fbbf24;">${code}</span>`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 4000);
 }
 
 function copyInviteCode() {
@@ -5680,16 +5696,6 @@ function initLogin() {
 }
 
 // ── 🟡 중요1: 백업 토스트 ──
-function showBackupToast(msg) {
-  const old = document.getElementById('backup-toast-el');
-  if (old) old.remove();
-  const el = document.createElement('div');
-  el.id = 'backup-toast-el';
-  el.className = 'backup-toast';
-  el.innerHTML = `<span>${msg}</span>`;
-  document.body.appendChild(el);
-  setTimeout(() => { if (el.parentNode) el.remove(); }, 3000);
-}
 
 function checkBackupReminder() {
   const last = parseInt(localStorage.getItem('last_backup_remind') || '0');
