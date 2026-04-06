@@ -2530,14 +2530,19 @@ function renderPatternAnalysis() {
     <div style="font-size:11px;font-weight:700;color:#9ca3af;letter-spacing:0.05em;margin:4px 0 6px;">🌿 기저귀 패턴 · 최근 7일</div>
     <div class="pattern-grid">
       <div class="pattern-card">
-        <div class="pattern-card-label">하루 평균</div>
-        <div class="pattern-card-value">${avgDiaper}<span style="font-size:13px;font-weight:600;"> 회</span></div>
-        <div class="pattern-card-sub">총 ${diapers7.length}회</div>
+        <div class="pattern-card-label">💧 소변</div>
+        <div class="pattern-card-value">${peeCount}<span style="font-size:13px;font-weight:600;"> 회</span></div>
+        <div class="pattern-card-sub">평균 ${(peeCount/activeDays).toFixed(1)}회/일</div>
       </div>
       <div class="pattern-card">
-        <div class="pattern-card-label">소변 / 대변</div>
-        <div class="pattern-card-value" style="font-size:17px;">💧${peeCount} · 💩${poopCount}</div>
-        <div class="pattern-card-sub">7일 합계</div>
+        <div class="pattern-card-label">💩 대변</div>
+        <div class="pattern-card-value">${poopCount}<span style="font-size:13px;font-weight:600;"> 회</span></div>
+        <div class="pattern-card-sub">평균 ${(poopCount/activeDays).toFixed(1)}회/일</div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-card-label">하루 평균</div>
+        <div class="pattern-card-value">${avgDiaper}<span style="font-size:13px;font-weight:600;"> 회</span></div>
+        <div class="pattern-card-sub">총 ${diapers7.length}회 · 7일</div>
       </div>
     </div>
   `;
@@ -3064,9 +3069,9 @@ function renderTimeline() {
     return;
   }
 
-  const endTitles   = { feed:['수유','모유 수유 완료','분유 수유 완료','혼합 수유 완료'], sleep:['기상'], pump:['유축'] };
-  const startTitles = { feed:'수유 시작', sleep:'수면 시작', pump:'유축 시작' };
-  const dispTitles  = { feed:'수유', sleep:'수면', pump:'유축' };
+  const endTitles   = { sleep:['기상'], pump:['유축'] };
+  const startTitles = { sleep:'수면 시작', pump:'유축 시작' };
+  const dispTitles  = { sleep:'수면', pump:'유축' };
 
   const merged = [];
   const usedIdx = new Set();
@@ -3651,13 +3656,13 @@ function renderDadTabChecklist() {
     evEl.innerHTML = DAD_EVENTS.map((item, idx) => {
       const done = !!checks[item.id];
       const praise = EVENT_PRAISE[idx % EVENT_PRAISE.length];
-      return '<div class="dad-event-item' + (done ? ' done' : '') + '" onclick="toggleDadTabCheck(\'' + item.id + '\')">' +
+      return '<div class="dad-event-item' + (done ? ' done' : '') + '" onclick="toggleDadTabCheck(\'' + item.id + '\')" style="padding:18px 16px;border-bottom:1px solid #fce7f3;">' +
         '<div class="dad-event-checkbox' + (done ? ' checked' : '') + '"></div>' +
         '<div class="dad-event-info">' +
-        '<div class="dad-event-title' + (done ? ' done-text' : '') + '">' + item.title + '</div>' +
-        (done ? '<div class="dad-event-praise">' + praise + '</div>'
-               : '<div class="dad-event-desc">' + item.desc.replace(/\n/g,'<br>') + '</div>') +
-        '<span class="dad-event-tag ' + (done ? 'done-tag' : '') + '">' + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
+        '<div style="font-size:16px;font-weight:700;color:' + (done?'#be185d':'#1a1a1a') + ';line-height:1.5;letter-spacing:-0.02em;">' + item.title + '</div>' +
+        (done ? '<div style="font-size:13px;color:#be185d;font-weight:600;margin-top:6px;">' + praise + '</div>'
+               : '<div style="font-size:13px;color:#555;margin-top:6px;line-height:1.7;word-break:keep-all;">' + item.desc.replace(/\n/g,'<br>') + '</div>') +
+        '<span style="font-size:11px;background:' + (done?'#fce7f3':'#fce7f3') + ';color:#be185d;border-radius:10px;padding:2px 8px;font-weight:700;display:inline-block;margin-top:6px;">' + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
         '</div></div>';
     }).join('');
   }
