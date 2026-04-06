@@ -1272,6 +1272,37 @@ body.dark .tl-content-title { color: #f0ead8; }
       <div class="swipe-page">
         <div class="feature-page">
           <div class="feature-page-title">📊 통계 & 기록</div>
+
+          <!-- ── 생활 패턴 ── -->
+          <div id="life-pattern-wrap" style="background:#fff;border-radius:18px;border:1.5px solid #f0f0f0;padding:16px;margin-bottom:16px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <div style="font-size:15px;font-weight:800;color:#1a1a1a;">🕐 생활 패턴</div>
+              <div style="display:flex;gap:6px;align-items:center;">
+                <button onclick="patternPrevDay()" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #e0e0e0;background:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;">‹</button>
+                <div id="pattern-date-label" style="font-size:12px;font-weight:700;color:#7a5600;min-width:80px;text-align:center;"></div>
+                <button onclick="patternNextDay()" id="pattern-next-btn" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #e0e0e0;background:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;">›</button>
+              </div>
+            </div>
+            <!-- 일/주 탭 -->
+            <div style="display:flex;gap:6px;margin-bottom:14px;">
+              <button id="ptab-day" onclick="patternSetTab('day')" style="flex:1;padding:7px;border-radius:20px;border:none;background:#7a5600;color:#fff;font-size:12px;font-weight:700;cursor:pointer;">일</button>
+              <button id="ptab-week" onclick="patternSetTab('week')" style="flex:1;padding:7px;border-radius:20px;border:1.5px solid #e0e0e0;background:#fff;color:#888;font-size:12px;font-weight:700;cursor:pointer;">주</button>
+            </div>
+            <!-- 범례 -->
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;justify-content:center;" id="pattern-legend">
+              <span style="font-size:11px;display:flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#60a5fa;display:inline-block;"></span>수면</span>
+              <span style="font-size:11px;display:flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#fb923c;display:inline-block;"></span>수유</span>
+              <span style="font-size:11px;display:flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#a78bfa;display:inline-block;"></span>유축</span>
+              <span style="font-size:11px;display:flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#4ade80;display:inline-block;"></span>기저귀</span>
+            </div>
+            <!-- 원형 시계 캔버스 -->
+            <div style="display:flex;justify-content:center;position:relative;">
+              <canvas id="pattern-clock" width="280" height="280"></canvas>
+            </div>
+            <!-- 패턴 인사이트 -->
+            <div id="pattern-insight-text" style="margin-top:12px;font-size:12px;color:#6b7280;text-align:center;line-height:1.6;min-height:36px;"></div>
+          </div>
+
           <div id="mood-selector-wrap" style="background:linear-gradient(135deg,#fffbeb,#fff7d6);border-radius:14px;padding:14px 16px;margin-bottom:12px;">
             <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:10px;">오늘 육아는 어땠나요?</div>
             <div style="display:flex;justify-content:space-around;">
@@ -3029,6 +3060,7 @@ function addRecord(r) {
   saveData();
   renderTimeline();
   updateStatus();
+  try { renderPatternClock(); } catch(e) {}
 
   if (typeof _pushRecordToFirebase === 'function') _pushRecordToFirebase(r);
 }
@@ -3072,6 +3104,233 @@ function switchTimelineTab(tab) {
   if(a){a.style.background=tab==='all'?'#7a5600':'#fff';a.style.color=tab==='all'?'#fff':'#7a5600';}
   renderTimeline();
 }
+
+// ══════════════════════════════════════
+// 🕐 생활 패턴 원형 시계
+// ══════════════════════════════════════
+let _patternDate = new Date();   // 현재 보여주는 날짜
+let _patternTab = 'day';         // 'day' | 'week'
+
+function patternDateStr(d) {
+  // KST 기준 YYYY-MM-DD
+  const kst = new Date(d.getTime() + 9*3600*1000);
+  return kst.toISOString().slice(0,10);
+}
+
+function patternPrevDay() {
+  _patternDate = new Date(_patternDate.getTime() - 86400000);
+  renderPatternClock();
+}
+function patternNextDay() {
+  const tomorrow = new Date(Date.now() + 86400000);
+  if (_patternDate < new Date(patternDateStr(tomorrow) + 'T00:00:00+09:00')) {
+    _patternDate = new Date(_patternDate.getTime() + 86400000);
+    renderPatternClock();
+  }
+}
+function patternSetTab(tab) {
+  _patternTab = tab;
+  document.getElementById('ptab-day').style.background = tab==='day' ? '#7a5600' : '#fff';
+  document.getElementById('ptab-day').style.color     = tab==='day' ? '#fff' : '#888';
+  document.getElementById('ptab-day').style.border    = tab==='day' ? 'none' : '1.5px solid #e0e0e0';
+  document.getElementById('ptab-week').style.background = tab==='week' ? '#7a5600' : '#fff';
+  document.getElementById('ptab-week').style.color     = tab==='week' ? '#fff' : '#888';
+  document.getElementById('ptab-week').style.border    = tab==='week' ? 'none' : '1.5px solid #e0e0e0';
+  renderPatternClock();
+}
+
+function renderPatternClock() {
+  const canvas = document.getElementById('pattern-clock');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W/2, cy = H/2;
+  const outerR = W*0.44, innerR = W*0.26, trackR = outerR+2;
+  ctx.clearRect(0, 0, W, H);
+
+  // 날짜 레이블
+  const today = patternDateStr(new Date());
+  const sel   = patternDateStr(_patternDate);
+  const dateLabel = document.getElementById('pattern-date-label');
+  if (dateLabel) {
+    const d = _patternDate;
+    const kst = new Date(d.getTime()+9*3600*1000);
+    const mo = kst.getUTCMonth()+1, da = kst.getUTCDate();
+    dateLabel.textContent = sel===today ? `${mo}월 ${da}일 (오늘)` : `${mo}월 ${da}일`;
+  }
+  // 다음날 버튼 비활성화
+  const nextBtn = document.getElementById('pattern-next-btn');
+  if (nextBtn) nextBtn.style.opacity = sel>=today ? '0.3' : '1';
+
+  // 해당 날짜 레코드 수집
+  let targetDates = [sel];
+  if (_patternTab === 'week') {
+    targetDates = Array.from({length:7}, (_,i) => {
+      const d2 = new Date(_patternDate.getTime() - i*86400000);
+      return patternDateStr(d2);
+    });
+  }
+  const dayRecs = records.filter(r => r.time && targetDates.includes(r.time.slice(0,10)));
+
+  // 배경 원 (트랙)
+  ctx.beginPath();
+  ctx.arc(cx, cy, outerR, 0, Math.PI*2);
+  ctx.fillStyle = '#f5f5f5';
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(cx, cy, innerR, 0, Math.PI*2);
+  ctx.fillStyle = '#fff';
+  ctx.fill();
+
+  // 호 그리기 함수
+  function drawArc(startMin, endMin, color, r1, r2, alpha) {
+    const totalMin = _patternTab==='week' ? 7*1440 : 1440;
+    const s = (startMin / totalMin) * Math.PI*2 - Math.PI/2;
+    const e = (endMin   / totalMin) * Math.PI*2 - Math.PI/2;
+    if (Math.abs(e-s) < 0.002) return;
+    ctx.save();
+    ctx.globalAlpha = alpha||1;
+    ctx.beginPath();
+    ctx.moveTo(cx + r2*Math.cos(s), cy + r2*Math.sin(s));
+    ctx.arc(cx, cy, r2, s, e);
+    ctx.arc(cx, cy, r1, e, s, true);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // 카테고리 색상
+  const CAT_COLORS = { sleep:'#60a5fa', feed:'#fb923c', pump:'#a78bfa', diaper:'#4ade80' };
+  // 트랙 두께 (카테고리별로 다른 반지름)
+  const CAT_BANDS = {
+    sleep: [innerR+2, outerR],
+    feed:  [innerR+2, outerR],
+    pump:  [innerR+2, outerR],
+    diaper:[innerR+2, outerR],
+  };
+  // 레이어 순서 (겹칠 때 위에 올 것)
+  const CAT_ORDER = ['sleep','feed','pump','diaper'];
+  const BAND_STEP = (outerR - innerR - 4) / CAT_ORDER.length;
+
+  const totalMin = _patternTab==='week' ? 7*1440 : 1440;
+
+  // 수면: _startTime ~ time 기반
+  CAT_ORDER.forEach((cat, ci) => {
+    const r1 = innerR + 2 + ci*BAND_STEP;
+    const r2 = r1 + BAND_STEP - 1;
+    const color = CAT_COLORS[cat];
+
+    dayRecs.filter(r => r.cat===cat).forEach(r => {
+      let startMin, endMin;
+      const recDate = r.time.slice(0,10);
+      const dayOffset = targetDates.indexOf(recDate);
+      const dayBase = (_patternTab==='week') ? (6-dayOffset)*1440 : 0;
+
+      if (r._startTime && r._startTime !== r.time) {
+        // 시작~끝 범위 있는 기록 (수면, 수유 완료)
+        const st = new Date(r._startTime.replace('T',' ')+':00');
+        const en = new Date(r.time.replace('T',' ')+':00');
+        const stKST = new Date(r._startTime);
+        const enKST = new Date(r.time);
+        const stMin = (stKST.getHours()*60 + stKST.getMinutes());
+        const enMin = (enKST.getHours()*60 + enKST.getMinutes());
+        startMin = dayBase + stMin;
+        endMin   = dayBase + (enMin >= stMin ? enMin : enMin + 1440);
+        drawArc(startMin, endMin, color, r1, r2, 0.85);
+      } else {
+        // 점 기록 (기저귀, 수유 시작 등) → 짧은 호 (5분)
+        const recKST = new Date(r.time);
+        const recMin = recKST.getHours()*60 + recKST.getMinutes();
+        startMin = dayBase + recMin;
+        endMin   = startMin + (cat==='diaper' ? 4 : 8);
+        drawArc(startMin, endMin, color, r1, r2, 0.75);
+      }
+    });
+  });
+
+  // 눈금선 + 숫자
+  for (let h=0; h<24; h++) {
+    const angle = (h/24)*Math.PI*2 - Math.PI/2;
+    const isMajor = h%6===0;
+    const r1 = outerR + (isMajor ? 4 : 2);
+    const r2 = outerR + (isMajor ? 10 : 6);
+    ctx.beginPath();
+    ctx.moveTo(cx+r1*Math.cos(angle), cy+r1*Math.sin(angle));
+    ctx.lineTo(cx+r2*Math.cos(angle), cy+r2*Math.sin(angle));
+    ctx.strokeStyle = '#ccc'; ctx.lineWidth=1; ctx.stroke();
+    if (isMajor) {
+      const tx = cx + (outerR+18)*Math.cos(angle);
+      const ty = cy + (outerR+18)*Math.sin(angle);
+      ctx.fillStyle='#888'; ctx.font='bold 11px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(h, tx, ty);
+    }
+  }
+
+  // 현재 시각 바늘 (오늘 일 때만)
+  if (_patternTab==='day' && sel===today) {
+    const now = new Date();
+    const nowMin = now.getHours()*60 + now.getMinutes();
+    const angle = (nowMin/1440)*Math.PI*2 - Math.PI/2;
+    ctx.save();
+    ctx.strokeStyle='#ef4444'; ctx.lineWidth=2; ctx.globalAlpha=0.9;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx+(outerR+2)*Math.cos(angle), cy+(outerR+2)*Math.sin(angle));
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // 중앙 텍스트
+  ctx.fillStyle='#1a1a1a'; ctx.font='bold 13px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  const days = getBabyAgeDays();
+  ctx.fillText(days!==null ? 'D+'+days : '누리', cx, cy-8);
+  ctx.fillStyle='#9ca3af'; ctx.font='11px sans-serif';
+  ctx.fillText(_patternTab==='day' ? sel.slice(5).replace('-','/') : '7일 평균', cx, cy+10);
+
+  // 패턴 인사이트 텍스트
+  renderPatternInsight(dayRecs, sel);
+}
+
+function renderPatternInsight(dayRecs, sel) {
+  const el = document.getElementById('pattern-insight-text');
+  if (!el) return;
+  const today = patternDateStr(new Date());
+
+  const feedRecs = dayRecs.filter(r => r.cat==='feed');
+  const sleepRecs = dayRecs.filter(r => r.cat==='sleep' && r._startTime);
+  const diaperRecs = dayRecs.filter(r => r.cat==='diaper');
+
+  const insights = [];
+
+  // 수유 횟수
+  if (feedRecs.length > 0) {
+    insights.push(`🍼 수유 ${feedRecs.length}회`);
+  }
+  // 총 수면시간
+  if (sleepRecs.length > 0) {
+    let totalSleepMin = 0;
+    sleepRecs.forEach(r => {
+      const st = new Date(r._startTime); const en = new Date(r.time);
+      totalSleepMin += Math.round((en-st)/60000);
+    });
+    const sh = Math.floor(totalSleepMin/60), sm = totalSleepMin%60;
+    insights.push(`😴 수면 ${sh>0?sh+'시간 ':''}${sm}분`);
+  }
+  // 기저귀
+  if (diaperRecs.length > 0) {
+    const pee = diaperRecs.filter(r=>r.sub==='소변'||r.sub==='소변+대변').length;
+    const poo = diaperRecs.filter(r=>r.sub==='대변'||r.sub==='소변+대변').length;
+    insights.push(`🌿 기저귀 ${diaperRecs.length}회 (💧${pee} 💩${poo})`);
+  }
+
+  if (insights.length === 0) {
+    el.textContent = sel===today ? '오늘 기록이 아직 없어요 — 기록을 시작해보세요!' : '이 날 기록이 없어요';
+  } else {
+    el.textContent = insights.join('  ·  ');
+  }
+}
+
 
 function renderTimeline() {
   const el = document.getElementById('timeline');
@@ -5763,6 +6022,7 @@ function updatePageLabel(n) {
 
 function goToPage(n) {
   currentPage = Math.max(0, Math.min(9, n));
+  if (n===3) try { renderPatternClock(); } catch(e) {}
   document.getElementById('swipe-container').style.transform =
     'translateX(-' + (currentPage * 100 / 10) + '%)';
   // dots (숨겨져 있지만 호환성 유지)
@@ -5939,6 +6199,7 @@ function enterApp() {
   try { renderMoodSelector(); } catch(e) {}
   try { updateQuickBtns(); } catch(e) {}
   try { renderCoachCard(); } catch(e) {}
+  try { renderPatternClock(); } catch(e) {}
   try { startSessionTimer(); } catch(e) {}
   try { startDadRefreshTimer(); } catch(e) {}
   try { updateSettingsRoleUI(); } catch(e) {}
