@@ -201,8 +201,8 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .section-title-row .section-title { margin-bottom: 0; }
 
 /* ── 스와이프 ── */
-.swipe-container { display: flex; width: 1000%; height: 100%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
-.swipe-page { width: calc(100% / 10); height: 100%; flex-shrink: 0; overflow: hidden; }
+.swipe-container { display: flex; width: 1100%; height: 100%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
+.swipe-page { width: calc(100% / 11); height: 100%; flex-shrink: 0; overflow: hidden; }
 /* 사진 페이지(2번째)는 스크롤 없이 꽉 차게 */
 .swipe-page:nth-child(2) { overflow: hidden; }
 
@@ -609,6 +609,135 @@ body.dark .coach-title, body.dark .coach-reason { color: #a89880; }
 .onboarding-btn { width: 100%; padding: 15px; background: #7a5600; color: #fff; border: none; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; }
 .onboarding-skip { display: block; text-align: center; margin-top: 12px; font-size: 13px; color: #9ca3af; cursor: pointer; }
 body.dark .onboarding-card { background: #2a2520; }
+/* ── 다크모드 추가 보완 (생활패턴, 타임라인, 통계 등) ── */
+
+/* CSS 변수 - 다크모드 */
+body.dark {
+  --card-bg: #2a2520;
+  --border-color: #3d3628;
+  --text-main: #f0ead8;
+  --text-sub: #a89880;
+  --bg-main: #1a1612;
+  --btn-inactive-bg: #2a2520;
+  --btn-inactive-color: #a89880;
+}
+body:not(.dark) {
+  --card-bg: #ffffff;
+  --border-color: #f0ece4;
+  --text-main: #1a1a1a;
+  --text-sub: #6b7280;
+  --bg-main: #fffdf2;
+  --btn-inactive-bg: #ffffff;
+  --btn-inactive-color: #888888;
+}
+
+/* 생활패턴 카드 */
+body.dark #life-pattern-wrap {
+  background: #2a2520 !important;
+  border-color: #3d3628 !important;
+}
+body.dark #pattern-date-label { color: #c8a870 !important; }
+body.dark #pattern-insight-text { color: #a89880 !important; }
+body.dark #ptab-week {
+  background: #2a2520 !important;
+  border-color: #3d3628 !important;
+  color: #a89880 !important;
+}
+
+/* 타임라인 아이템 */
+body.dark .tl-item { border-color: #3d3628; }
+body.dark .tl-content { background: #2a2520; border-color: #3d3628; }
+body.dark .tl-content-title { color: #f0ead8; }
+body.dark .tl-content-sub { color: #a89880; }
+body.dark .tl-time-ampm { color: #a89880; }
+body.dark .tl-time-hm { color: #c8a870; }
+body.dark .tl-icon-circle { opacity: 0.85; }
+body.dark .t-edit-btn { background: #3d3628; color: #c8a870; border-color: #4d4030; }
+body.dark .t-del-btn { background: #3d2020; color: #f87171; border-color: #5a2828; }
+body.dark .timeline-list { background: transparent; }
+body.dark #tl-btn-all {
+  background: #2a2520 !important;
+  border-color: #3d3628 !important;
+  color: #a89880 !important;
+}
+
+/* 패턴 분석 카드 */
+body.dark .pattern-card {
+  background: #2a2520 !important;
+  border-color: #3d3628 !important;
+}
+body.dark .pattern-card-label { color: #a89880 !important; }
+body.dark .pattern-card-value { color: #f0ead8 !important; }
+body.dark .pattern-card-sub { color: #7a6a5a !important; }
+body.dark .pattern-insight { color: #a89880 !important; }
+body.dark #pattern-analysis-wrap > div { background: #2a2520 !important; border-color: #3d3628 !important; }
+
+/* 점수 카드 */
+body.dark #score-card-wrap > div { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .score-label { color: #a89880 !important; }
+body.dark .score-val { color: #f0ead8 !important; }
+
+/* 무드 셀렉터 */
+body.dark #mood-selector-wrap {
+  background: linear-gradient(135deg, #2a2218, #231e14) !important;
+}
+
+/* 차트 레전드 */
+body.dark .chart-legend-item { color: #a89880; }
+
+/* 퀵 버튼 */
+body.dark .quick-btn {
+  background: #2a2520 !important;
+  border-color: #3d3628 !important;
+}
+body.dark .quick-btn-label { color: #f0ead8; }
+body.dark .quick-btn-time { color: #a89880; }
+body.dark .quick-btn-icon { opacity: 0.9; }
+
+/* 모달 */
+body.dark .modal-bg { background: rgba(0,0,0,0.7); }
+body.dark .modal { background: #2a2520 !important; }
+body.dark .modal h2 { color: #f0ead8; }
+body.dark .field-label { color: #a89880; }
+body.dark .btn-cancel { background: #3d3628; color: #c8a870; border-color: #4d4030; }
+body.dark .btn-save { color: #fff; }
+body.dark .opt-btn { background: #3d3628 !important; border-color: #4d4030 !important; color: #f0ead8 !important; }
+body.dark .opt-btn.sel { background: #7a5600 !important; color: #fff !important; }
+body.dark input[type="number"],
+body.dark input[type="datetime-local"],
+body.dark input[type="text"],
+body.dark textarea {
+  background: #3d3628 !important;
+  border-color: #4d4030 !important;
+  color: #f0ead8 !important;
+}
+body.dark input::placeholder { color: #7a6a5a; }
+
+/* 코치 카드 텍스트 */
+body.dark .coach-title { color: #f0ead8 !important; }
+body.dark .coach-msg { color: #c8a870 !important; }
+
+/* 앱 배경 */
+body.dark .app-body { background: #1a1612 !important; }
+body.dark .voice-hero { background: transparent; }
+body.dark .voice-hero-status { color: #f0ead8; }
+body.dark .voice-hero-hint { color: #7a6a5a; }
+body.dark .voice-cmd { background: #2a2520; color: #c8a870; border-color: #3d3628; }
+
+/* 퀵 로그 */
+body.dark .quick-log-row .quick-btn {
+  background: #2a2520;
+  border: 1.5px solid #3d3628;
+}
+
+/* 타임라인 카드 배경 (feed, sleep 등) */
+body.dark [style*="background:#eff6ff"] { background: #0f1a2a !important; }
+body.dark [style*="background:#f0f9ff"] { background: #0a1a25 !important; }
+body.dark [style*="background:#f0fdf4"] { background: #0a2010 !important; }
+body.dark [style*="background:#fdf4ff"] { background: #1a0f25 !important; }
+body.dark [style*="background:#fff7ed"] { background: #251508 !important; }
+body.dark [style*="background:#fdf2f8"] { background: #2a0f20 !important; }
+
 body.dark .onboarding-title { color: #f0ead8; }
 
 /* ── 알림 권한 배너 ── */
@@ -1155,13 +1284,14 @@ body.dark .tl-content-title { color: #f0ead8; }
       <button class="qnav-btn" onclick="goToPage(0)" id="qn-0">📔</button>
       <button class="qnav-btn" onclick="goToPage(1)" id="qn-1">📷</button>
       <button class="qnav-btn active" onclick="goToPage(2)" id="qn-2">🍼</button>
-      <button class="qnav-btn" onclick="goToPage(3)" id="qn-3">📊</button>
-      <button class="qnav-btn" onclick="goToPage(4)" id="qn-4">📏</button>
-      <button class="qnav-btn" onclick="goToPage(5)" id="qn-5">⭐</button>
+      <button class="qnav-btn" onclick="goToPage(3)" id="qn-3">🕐</button>
+      <button class="qnav-btn" onclick="goToPage(4)" id="qn-4">📊</button>
+      <button class="qnav-btn" onclick="goToPage(5)" id="qn-5">📏</button>
+      <button class="qnav-btn" onclick="goToPage(6)" id="qn-6">⭐</button>
       <button class="qnav-btn" onclick="goToPage(6)" id="qn-6">👩</button>
-      <button class="qnav-btn" onclick="goToPage(7)" id="qn-7">🇰🇷</button>
-      <button class="qnav-btn" onclick="goToPage(8)" id="qn-8">👨</button>
-      <button class="qnav-btn" onclick="goToPage(9)" id="qn-9">⚙️</button>
+      <button class="qnav-btn" onclick="goToPage(8)" id="qn-8">🇰🇷</button>
+      <button class="qnav-btn" onclick="goToPage(9)" id="qn-9">👨</button>
+      <button class="qnav-btn" onclick="goToPage(10)" id="qn-10">⚙️</button>
     </div>
   </div>
   <div style="overflow:hidden; flex:1; height:0; min-height:0;">
@@ -1268,40 +1398,54 @@ body.dark .tl-content-title { color: #f0ead8; }
         </div>
       </div>
 
-      <!-- ── 페이지 3: 통계 + 자동 저장 기록 ── -->
+      <!-- ── 페이지 3: 생활 패턴 & 오늘의 기록 ── -->
       <div class="swipe-page">
         <div class="feature-page">
-          <div class="feature-page-title">📊 통계 & 기록</div>
+          <div class="feature-page-title">🕐 생활 패턴</div>
 
-          <!-- ── 생활 패턴 ── -->
-          <div id="life-pattern-wrap" style="background:#fff;border-radius:18px;border:1.5px solid #f0f0f0;padding:16px;margin-bottom:16px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+          <!-- ── 생활 패턴 원형 시계 ── -->
+          <div id="life-pattern-wrap" style="background:var(--card-bg,#fff);border-radius:18px;border:1.5px solid var(--border-color,#f0f0f0);padding:16px;margin-bottom:16px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-              <div style="font-size:15px;font-weight:800;color:#1a1a1a;">🕐 생활 패턴</div>
+              <div style="font-size:15px;font-weight:800;color:var(--text-main,#1a1a1a);">🕐 생활 패턴</div>
               <div style="display:flex;gap:6px;align-items:center;">
-                <button onclick="patternPrevDay()" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #e0e0e0;background:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;">‹</button>
+                <button onclick="patternPrevDay()" style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border-color,#e0e0e0);background:var(--card-bg,#fff);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-main,#1a1a1a);">‹</button>
                 <div id="pattern-date-label" style="font-size:12px;font-weight:700;color:#7a5600;min-width:80px;text-align:center;"></div>
-                <button onclick="patternNextDay()" id="pattern-next-btn" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #e0e0e0;background:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;">›</button>
+                <button onclick="patternNextDay()" id="pattern-next-btn" style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border-color,#e0e0e0);background:var(--card-bg,#fff);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-main,#1a1a1a);">›</button>
               </div>
             </div>
-            <!-- 일/주 탭 -->
             <div style="display:flex;gap:6px;margin-bottom:14px;">
               <button id="ptab-day" onclick="patternSetTab('day')" style="flex:1;padding:7px;border-radius:20px;border:none;background:#7a5600;color:#fff;font-size:12px;font-weight:700;cursor:pointer;">일</button>
-              <button id="ptab-week" onclick="patternSetTab('week')" style="flex:1;padding:7px;border-radius:20px;border:1.5px solid #e0e0e0;background:#fff;color:#888;font-size:12px;font-weight:700;cursor:pointer;">주</button>
+              <button id="ptab-week" onclick="patternSetTab('week')" style="flex:1;padding:7px;border-radius:20px;border:1.5px solid var(--border-color,#e0e0e0);background:var(--card-bg,#fff);color:var(--text-sub,#888);font-size:12px;font-weight:700;cursor:pointer;">주</button>
             </div>
-            <!-- 범례 -->
             <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;justify-content:center;" id="pattern-legend">
-              <span style="font-size:11px;display:flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#60a5fa;display:inline-block;"></span>수면</span>
-              <span style="font-size:11px;display:flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#fb923c;display:inline-block;"></span>수유</span>
-              <span style="font-size:11px;display:flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#a78bfa;display:inline-block;"></span>유축</span>
-              <span style="font-size:11px;display:flex;align-items:center;gap:3px;"><span style="width:10px;height:10px;border-radius:2px;background:#4ade80;display:inline-block;"></span>기저귀</span>
+              <span style="font-size:11px;display:flex;align-items:center;gap:3px;color:var(--text-sub,#555);"><span style="width:10px;height:10px;border-radius:2px;background:#60a5fa;display:inline-block;"></span>수면</span>
+              <span style="font-size:11px;display:flex;align-items:center;gap:3px;color:var(--text-sub,#555);"><span style="width:10px;height:10px;border-radius:2px;background:#fb923c;display:inline-block;"></span>수유</span>
+              <span style="font-size:11px;display:flex;align-items:center;gap:3px;color:var(--text-sub,#555);"><span style="width:10px;height:10px;border-radius:2px;background:#a78bfa;display:inline-block;"></span>유축</span>
+              <span style="font-size:11px;display:flex;align-items:center;gap:3px;color:var(--text-sub,#555);"><span style="width:10px;height:10px;border-radius:2px;background:#4ade80;display:inline-block;"></span>기저귀</span>
             </div>
-            <!-- 원형 시계 캔버스 -->
             <div style="display:flex;justify-content:center;position:relative;">
               <canvas id="pattern-clock" width="300" height="300"></canvas>
             </div>
-            <!-- 패턴 인사이트 -->
-            <div id="pattern-insight-text" style="margin-top:12px;font-size:12px;color:#6b7280;text-align:center;line-height:1.6;min-height:36px;"></div>
+            <div id="pattern-insight-text" style="margin-top:12px;font-size:12px;color:var(--text-sub,#6b7280);text-align:center;line-height:1.6;min-height:36px;"></div>
           </div>
+
+          <!-- ── 오늘의 기록 타임라인 ── -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <div class="feature-section-title" style="margin:0;">📋 오늘의 기록</div>
+            <div style="display:flex;gap:6px;">
+              <button onclick="filterTimeline('today')" id="tl-btn-today" style="padding:5px 12px;border-radius:14px;border:none;background:#7a5600;color:#fff;font-size:11px;font-weight:700;cursor:pointer;">오늘</button>
+              <button onclick="filterTimeline('all')" id="tl-btn-all" style="padding:5px 12px;border-radius:14px;border:1.5px solid var(--border-color,#e0e0e0);background:var(--card-bg,#fff);color:var(--text-sub,#888);font-size:11px;font-weight:700;cursor:pointer;">전체</button>
+            </div>
+          </div>
+          <div id="timeline" class="timeline-list"></div>
+
+        </div>
+      </div>
+
+<!-- ── 페이지 3.5(통계): 통계 & 분석 ── -->
+      <div class="swipe-page">
+        <div class="feature-page">
+          <div class="feature-page-title">📊 통계 & 분석</div>
 
           <div id="mood-selector-wrap" style="background:linear-gradient(135deg,#fffbeb,#fff7d6);border-radius:14px;padding:14px 16px;margin-bottom:12px;">
             <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:10px;">오늘 육아는 어땠나요?</div>
@@ -1328,25 +1472,10 @@ body.dark .tl-content-title { color: #f0ead8; }
             <div id="chart-empty" class="chart-empty" style="display:none;">아직 기록이 없어요</div>
             <div class="chart-legend" id="chart-legend"></div>
           </div>
-          <div class="chart-wrap" id="chart-summary" style="margin-bottom:16px;">
-            <div style="font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:8px;">요약</div>
-            <div id="chart-summary-body" style="font-size:13px;color:#555;line-height:2;"></div>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;margin-bottom:6px;">
-            <div class="feature-section-title" style="margin:0;">📋 기록</div>
-            <div style="display:flex;gap:6px;">
-              <button id="tl-tab-today" onclick="switchTimelineTab('today')" style="padding:4px 12px;border-radius:20px;border:1px solid #e8d796;font-size:12px;font-weight:700;cursor:pointer;background:#7a5600;color:#fff;">오늘</button>
-              <button id="tl-tab-all" onclick="switchTimelineTab('all')" style="padding:4px 12px;border-radius:20px;border:1px solid #e8d796;font-size:12px;font-weight:700;cursor:pointer;background:#fff;color:#7a5600;">전체</button>
-            </div>
-          </div>
-          <div class="timeline-card">
-            <div id="timeline"><div class="empty">아직 기록이 없어요 🌙<br>음성 또는 버튼으로 첫 기록을 남겨보세요!</div></div>
-          </div>
-
         </div>
       </div>
 
-      <!-- ── 페이지 4: 성장 기록 & 예방접종 ── -->
+<!-- ── 페이지 4: 성장 기록 & 예방접종 ── -->
       <div class="swipe-page">
         <div class="feature-page">
           <div class="feature-page-title">📏 성장 기록</div>
@@ -2078,6 +2207,7 @@ body.dark .tl-content-title { color: #f0ead8; }
 </div>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script>
 // ── Service Worker 등록 (자동 업데이트) ──
 if ('serviceWorker' in navigator) {
@@ -3282,10 +3412,13 @@ function renderPatternClock() {
     const profile = JSON.parse(localStorage.getItem('baby_profile') || '{}');
     const birthStr = profile.birthDate;
     if (birthStr) {
-      const birth = new Date(birthStr);
-      const selDate = new Date(sel + 'T00:00:00');
-      displayDays = Math.floor((selDate - birth) / 86400000);
-      if (displayDays < 0) displayDays = null;
+      // calcBabyDays와 동일한 방식: 로컬 날짜 기준, +1
+      const parts = birthStr.split('-');
+      const birth = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+      const selParts = sel.split('-');
+      const selDate = new Date(parseInt(selParts[0]), parseInt(selParts[1])-1, parseInt(selParts[2]));
+      const diff = Math.floor((selDate - birth) / 86400000);
+      displayDays = diff >= 0 ? diff + 1 : null;
     }
   } catch(e) {}
   // D+숫자 크게
@@ -3344,6 +3477,16 @@ function renderPatternInsight(dayRecs, sel) {
   }
 }
 
+
+let _tlFilter = 'today';
+function filterTimeline(mode) {
+  _tlFilter = mode;
+  const btnToday = document.getElementById('tl-btn-today');
+  const btnAll   = document.getElementById('tl-btn-all');
+  if (btnToday) { btnToday.style.background = mode==='today' ? '#7a5600' : 'var(--card-bg,#fff)'; btnToday.style.color = mode==='today' ? '#fff' : 'var(--text-sub,#888)'; btnToday.style.border = mode==='today' ? 'none' : '1.5px solid var(--border-color,#e0e0e0)'; }
+  if (btnAll)   { btnAll.style.background   = mode==='all'   ? '#7a5600' : 'var(--card-bg,#fff)'; btnAll.style.color   = mode==='all'   ? '#fff' : 'var(--text-sub,#888)'; btnAll.style.border   = mode==='all'   ? 'none' : '1.5px solid var(--border-color,#e0e0e0)'; }
+  renderTimeline();
+}
 
 function renderTimeline() {
   const el = document.getElementById('timeline');
@@ -6034,10 +6177,11 @@ function updatePageLabel(n) {
 }
 
 function goToPage(n) {
-  currentPage = Math.max(0, Math.min(9, n));
+  currentPage = Math.max(0, Math.min(10, n));
   if (n===3) try { renderPatternClock(); } catch(e) {}
+  if (n===4) try { renderScoreCard(); renderPatternAnalysis(); updateChart(); } catch(e) {}
   document.getElementById('swipe-container').style.transform =
-    'translateX(-' + (currentPage * 100 / 10) + '%)';
+    'translateX(-' + (currentPage * 100 / 11) + "')";
   // dots (숨겨져 있지만 호환성 유지)
   for (let i = 0; i < 10; i++) {
     const dot = document.getElementById('dot-' + i);
@@ -7213,6 +7357,8 @@ const FB_ENABLED = typeof FIREBASE_CONFIG !== 'undefined' &&
 
 let fbApp = null;
 let fbDb = null;
+let fbAuth = null;
+let fbUid = null;
 let fbFamilyId = null;
 let fbSyncActive = false;
 let fbIsSyncing = false;
@@ -7224,6 +7370,14 @@ function fbInit() {
   try {
     fbApp = firebase.initializeApp(FIREBASE_CONFIG);
     fbDb = firebase.database();
+    fbAuth = firebase.auth();
+    // 익명 로그인 (앱 시작 시 자동)
+    fbAuth.signInAnonymously().then(function(result) {
+      fbUid = result.user.uid;
+      console.log('Firebase 익명 로그인 완료. UID:', fbUid);
+    }).catch(function(e) {
+      console.warn('Firebase 익명 로그인 실패:', e);
+    });
   } catch(e) {
     console.warn('Firebase 초기화 실패:', e);
   }
