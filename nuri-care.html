@@ -6181,7 +6181,7 @@ function goToPage(n) {
   if (n===3) try { renderPatternClock(); } catch(e) {}
   if (n===4) try { renderScoreCard(); renderPatternAnalysis(); updateChart(); } catch(e) {}
   document.getElementById('swipe-container').style.transform =
-    'translateX(-' + (currentPage * 100 / 11) + "')";
+    `translateX(-${currentPage * 100 / 11}%)`;
   // dots (숨겨져 있지만 호환성 유지)
   for (let i = 0; i < 10; i++) {
     const dot = document.getElementById('dot-' + i);
