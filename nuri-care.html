@@ -1297,7 +1297,7 @@ body.dark .tl-content-title { color: #f0ead8; }
             </div>
             <!-- 원형 시계 캔버스 -->
             <div style="display:flex;justify-content:center;position:relative;">
-              <canvas id="pattern-clock" width="280" height="280"></canvas>
+              <canvas id="pattern-clock" width="300" height="300"></canvas>
             </div>
             <!-- 패턴 인사이트 -->
             <div id="pattern-insight-text" style="margin-top:12px;font-size:12px;color:#6b7280;text-align:center;line-height:1.6;min-height:36px;"></div>
@@ -3145,7 +3145,7 @@ function renderPatternClock() {
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   const cx = W/2, cy = H/2;
-  const outerR = W*0.44, innerR = W*0.26, trackR = outerR+2;
+  const outerR = W*0.38, innerR = W*0.22, trackR = outerR+2;
   ctx.clearRect(0, 0, W, H);
 
   // 날짜 레이블
@@ -3249,20 +3249,27 @@ function renderPatternClock() {
     });
   });
 
-  // 눈금선 + 숫자
+  // 눈금선 + 숫자 (모든 시간 표시)
   for (let h=0; h<24; h++) {
     const angle = (h/24)*Math.PI*2 - Math.PI/2;
     const isMajor = h%6===0;
-    const r1 = outerR + (isMajor ? 4 : 2);
-    const r2 = outerR + (isMajor ? 10 : 6);
+    const isMid   = h%3===0 && !isMajor;
+    const r1 = outerR + (isMajor ? 5 : isMid ? 3 : 2);
+    const r2 = outerR + (isMajor ? 12 : isMid ? 8 : 5);
     ctx.beginPath();
     ctx.moveTo(cx+r1*Math.cos(angle), cy+r1*Math.sin(angle));
     ctx.lineTo(cx+r2*Math.cos(angle), cy+r2*Math.sin(angle));
-    ctx.strokeStyle = '#ccc'; ctx.lineWidth=1; ctx.stroke();
-    if (isMajor) {
-      const tx = cx + (outerR+18)*Math.cos(angle);
-      const ty = cy + (outerR+18)*Math.sin(angle);
-      ctx.fillStyle='#888'; ctx.font='bold 11px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.strokeStyle = isMajor ? '#999' : '#ddd';
+    ctx.lineWidth = isMajor ? 1.5 : 1;
+    ctx.stroke();
+    // 모든 짝수 시간 표시 (0,2,4,...22)
+    if (h%2===0) {
+      const labelR = outerR + (isMajor ? 22 : 18);
+      const tx = cx + labelR*Math.cos(angle);
+      const ty = cy + labelR*Math.sin(angle);
+      ctx.fillStyle = isMajor ? '#555' : '#aaa';
+      ctx.font = isMajor ? 'bold 10px sans-serif' : '9px sans-serif';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
       ctx.fillText(h, tx, ty);
     }
   }
@@ -3281,10 +3288,19 @@ function renderPatternClock() {
     ctx.restore();
   }
 
-  // 중앙 텍스트
+  // 중앙 텍스트 - 선택된 날짜 기준 D+일자 계산
   ctx.fillStyle='#1a1a1a'; ctx.font='bold 13px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
-  const days = getBabyAgeDays();
-  ctx.fillText(days!==null ? 'D+'+days : '누리', cx, cy-8);
+  let displayDays = null;
+  try {
+    const birthStr = localStorage.getItem('baby_birthdate') || localStorage.getItem('babyBirth');
+    if (birthStr) {
+      const birth = new Date(birthStr);
+      const selDate = new Date(sel + 'T00:00:00');
+      displayDays = Math.floor((selDate - birth) / 86400000);
+      if (displayDays < 0) displayDays = null;
+    }
+  } catch(e) {}
+  ctx.fillText(displayDays!==null ? 'D+'+displayDays : '누리', cx, cy-8);
   ctx.fillStyle='#9ca3af'; ctx.font='11px sans-serif';
   ctx.fillText(_patternTab==='day' ? sel.slice(5).replace('-','/') : '7일 평균', cx, cy+10);
 
