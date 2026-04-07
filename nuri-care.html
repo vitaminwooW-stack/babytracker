@@ -1821,7 +1821,7 @@ body.dark .tl-content-title { color: #f0ead8; }
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
               <span style="font-size:14px;color:#6b7280;">제작</span>
-              <span style="font-size:13px;font-weight:600;color:#1a1a1a;">vitaminwoo_app 🍼</span>
+              <span style="font-size:13px;font-weight:600;color:#1a1a1a;">vitaminwoo_app</span>
             </div>
             <a href="./privacy.html" target="_blank" style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid #f3f4f6;text-decoration:none;">
               <span style="font-size:14px;color:#374151;">🔐 개인정보처리방침</span>
@@ -4034,10 +4034,8 @@ function renderDadScreen(readonly) {
         '<div class="dad-checkbox' + (done ? ' checked' : '') + '"></div>' +
         '<div class="dad-check-info">' +
         '<div class="dad-check-title' + (done ? ' done-text' : '') + '">' + item.title + '</div>' +
-        (done
-          ? '<div class="dad-praise">' + praise + '</div>'
-          : '<div class="dad-check-desc">' + item.desc.replace(/\n/g,'<br>') + '</div>'
-        ) +
+        '<div class="dad-check-desc">' + item.desc.replace(/\n/g,'<br>') + '</div>' +
+        (done ? '<div class="dad-praise">' + praise + '</div>' : '') +
         '<span class="dad-check-tag ' + (done ? 'done-tag' : item.tag) + '">' +
           (done ? '✅ 완료' : tagLabels[item.tag]) +
         '</span>' +
@@ -4083,10 +4081,8 @@ function renderDadTabChecklist() {
         '<div class="dad-checkbox' + (done ? ' checked' : '') + '"></div>' +
         '<div class="dad-check-info">' +
         '<div class="dad-check-title' + (done ? ' done-text' : '') + '">' + item.title + '</div>' +
-        (done
-          ? '<div class="dad-praise">' + praise + '</div>'
-          : '<div class="dad-check-desc">' + item.desc.replace(/\n/g,'<br>') + '</div>'
-        ) +
+        '<div class="dad-check-desc">' + item.desc.replace(/\n/g,'<br>') + '</div>' +
+        (done ? '<div class="dad-praise">' + praise + '</div>' : '') +
         '<span class="dad-check-tag ' + (done ? 'done-tag' : item.tag) + '">' +
           (done ? '✅ 완료' : tagLabels[item.tag]) + '</span>' +
         '</div></div>';
