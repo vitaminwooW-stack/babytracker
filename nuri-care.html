@@ -3289,7 +3289,6 @@ function renderPatternClock() {
   }
 
   // 중앙 텍스트 - 선택된 날짜 기준 D+일자 계산
-  ctx.fillStyle='#1a1a1a'; ctx.font='bold 13px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
   let displayDays = null;
   try {
     const birthStr = localStorage.getItem('baby_birthdate') || localStorage.getItem('babyBirth');
@@ -3300,9 +3299,18 @@ function renderPatternClock() {
       if (displayDays < 0) displayDays = null;
     }
   } catch(e) {}
-  ctx.fillText(displayDays!==null ? 'D+'+displayDays : '누리', cx, cy-8);
-  ctx.fillStyle='#9ca3af'; ctx.font='11px sans-serif';
-  ctx.fillText(_patternTab==='day' ? sel.slice(5).replace('-','/') : '7일 평균', cx, cy+10);
+  // D+숫자 크게
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  if (displayDays !== null) {
+    ctx.fillStyle='#7a5600'; ctx.font='bold 18px sans-serif';
+    ctx.fillText('D+'+displayDays, cx, cy-6);
+  } else {
+    ctx.fillStyle='#aaa'; ctx.font='bold 14px sans-serif';
+    ctx.fillText('--', cx, cy-6);
+  }
+  // 날짜 작게
+  ctx.fillStyle='#9ca3af'; ctx.font='10px sans-serif';
+  ctx.fillText(_patternTab==='day' ? sel.slice(5).replace('-','/') : '7일 평균', cx, cy+12);
 
   // 패턴 인사이트 텍스트
   renderPatternInsight(dayRecs, sel);
