@@ -3274,24 +3274,13 @@ function renderPatternClock() {
     }
   }
 
-  // 현재 시각 바늘 (오늘 일 때만)
-  if (_patternTab==='day' && sel===today) {
-    const now = new Date();
-    const nowMin = now.getHours()*60 + now.getMinutes();
-    const angle = (nowMin/1440)*Math.PI*2 - Math.PI/2;
-    ctx.save();
-    ctx.strokeStyle='#ef4444'; ctx.lineWidth=2; ctx.globalAlpha=0.9;
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.lineTo(cx+(outerR+2)*Math.cos(angle), cy+(outerR+2)*Math.sin(angle));
-    ctx.stroke();
-    ctx.restore();
-  }
+
 
   // 중앙 텍스트 - 선택된 날짜 기준 D+일자 계산
   let displayDays = null;
   try {
-    const birthStr = localStorage.getItem('baby_birthdate') || localStorage.getItem('babyBirth');
+    const profile = JSON.parse(localStorage.getItem('baby_profile') || '{}');
+    const birthStr = profile.birthDate;
     if (birthStr) {
       const birth = new Date(birthStr);
       const selDate = new Date(sel + 'T00:00:00');
