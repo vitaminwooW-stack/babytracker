@@ -1523,7 +1523,8 @@ body.dark [style*="color:#7a5600"]:not(button):not(.active) { color: #c8a870 !im
           <!-- ── 오늘의 기록 타임라인 ── -->
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
             <div class="feature-section-title" style="margin:0;">📋 오늘의 기록</div>
-            <div style="display:flex;gap:6px;">
+            <div style="display:flex;gap:6px;align-items:center;">
+              <button onclick="openManualRecord()" style="padding:5px 12px;border-radius:14px;border:1.5px solid #7a5600;background:var(--card-bg,#fff);color:#7a5600;font-size:11px;font-weight:700;cursor:pointer;">✏️ 직접 입력</button>
               <button onclick="filterTimeline('today')" id="tl-btn-today" style="padding:5px 12px;border-radius:14px;border:none;background:#7a5600;color:#fff;font-size:11px;font-weight:700;cursor:pointer;">오늘</button>
               <button onclick="filterTimeline('all')" id="tl-btn-all" style="padding:5px 12px;border-radius:14px;border:1.5px solid var(--border-color,#e0e0e0);background:var(--card-bg,#fff);color:var(--text-sub,#888);font-size:11px;font-weight:700;cursor:pointer;">전체</button>
             </div>
@@ -1923,6 +1924,77 @@ body.dark [style*="color:#7a5600"]:not(button):not(.active) { color: #c8a870 !im
 </div>
 
 <!-- ═══════════ 엄마 케어 상세 모달 ═══════════ -->
+<!-- ── 모달: 직접 기록 입력 ── -->
+<div class="modal-bg" id="modal-manual-record" style="z-index:450;">
+  <div class="modal" style="max-height:90vh;overflow-y:auto;">
+    <div class="modal-handle"></div>
+    <h2>✏️ 기록 직접 입력</h2>
+    <span class="field-label">카테고리</span>
+    <div class="opt-row" style="gap:6px;margin-bottom:16px;flex-wrap:wrap;">
+      <button class="opt-btn sel" id="mr-cat-feed"   onclick="mrSetCat('feed')"   style="flex:1;min-width:60px;padding:10px 4px;font-size:13px;">🍼 수유</button>
+      <button class="opt-btn"     id="mr-cat-sleep"  onclick="mrSetCat('sleep')"  style="flex:1;min-width:60px;padding:10px 4px;font-size:13px;">😴 수면</button>
+      <button class="opt-btn"     id="mr-cat-diaper" onclick="mrSetCat('diaper')" style="flex:1;min-width:60px;padding:10px 4px;font-size:13px;">🌿 기저귀</button>
+      <button class="opt-btn"     id="mr-cat-pump"   onclick="mrSetCat('pump')"   style="flex:1;min-width:60px;padding:10px 4px;font-size:13px;">🤱 유축</button>
+      <button class="opt-btn"     id="mr-cat-etc"    onclick="mrSetCat('etc')"    style="flex:1;min-width:60px;padding:10px 4px;font-size:13px;">📝 기타</button>
+    </div>
+    <span class="field-label">시작 시각</span>
+    <input type="datetime-local" id="mr-start-time" style="margin-bottom:12px;">
+    <div id="mr-end-wrap">
+      <span class="field-label">종료 시각 <span style="font-size:11px;color:#9ca3af;">(수유·수면·유축)</span></span>
+      <input type="datetime-local" id="mr-end-time" style="margin-bottom:12px;">
+    </div>
+    <!-- 수유 세부 -->
+    <div id="mr-feed-detail">
+      <span class="field-label">수유 방법</span>
+      <div class="opt-row" style="gap:8px;margin-bottom:12px;">
+        <button class="opt-btn sel" id="mr-fe-breast" onclick="mrFeSel('breast')" style="flex:1;padding:10px 4px;font-size:13px;">모유</button>
+        <button class="opt-btn"     id="mr-fe-bottle" onclick="mrFeSel('bottle')" style="flex:1;padding:10px 4px;font-size:13px;">분유</button>
+        <button class="opt-btn"     id="mr-fe-both"   onclick="mrFeSel('both')"   style="flex:1;padding:10px 4px;font-size:13px;">혼합</button>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:12px;" id="mr-side-wrap">
+        <div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">⬅️ 왼쪽 (분)</div>
+          <input type="number" id="mr-left-min" placeholder="0" min="0" max="120" oninput="mrCalcTotal()" style="width:100%;box-sizing:border-box;"></div>
+        <div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">➡️ 오른쪽 (분)</div>
+          <input type="number" id="mr-right-min" placeholder="0" min="0" max="120" oninput="mrCalcTotal()" style="width:100%;box-sizing:border-box;"></div>
+      </div>
+      <span class="field-label" id="mr-ml-label" style="opacity:0.4;">분유량 (ml)</span>
+      <input type="number" id="mr-ml" placeholder="예: 80" min="0" max="500" disabled
+        style="margin-bottom:12px;opacity:0.35;cursor:not-allowed;background:#f3f4f6;">
+    </div>
+    <!-- 기저귀 세부 -->
+    <div id="mr-diaper-detail" style="display:none;">
+      <span class="field-label">기저귀 종류</span>
+      <div class="opt-row" style="gap:8px;margin-bottom:12px;">
+        <button class="opt-btn sel" id="mr-dp-pee"  onclick="mrDpSel('소변')"      style="flex:1;padding:10px 4px;font-size:13px;">💧 소변</button>
+        <button class="opt-btn"     id="mr-dp-poo"  onclick="mrDpSel('대변')"      style="flex:1;padding:10px 4px;font-size:13px;">💩 대변</button>
+        <button class="opt-btn"     id="mr-dp-both" onclick="mrDpSel('소변+대변')" style="flex:1;padding:10px 4px;font-size:13px;">둘다</button>
+      </div>
+    </div>
+    <!-- 유축 세부 -->
+    <div id="mr-pump-detail" style="display:none;">
+      <div style="display:flex;gap:10px;margin-bottom:12px;">
+        <div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">⬅️ 왼쪽 (ml)</div>
+          <input type="number" id="mr-pump-L" placeholder="0" min="0" max="500" oninput="mrPumpTotal()" style="width:100%;box-sizing:border-box;"></div>
+        <div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">➡️ 오른쪽 (ml)</div>
+          <input type="number" id="mr-pump-R" placeholder="0" min="0" max="500" oninput="mrPumpTotal()" style="width:100%;box-sizing:border-box;"></div>
+      </div>
+      <div style="font-size:12px;color:#7a5600;font-weight:700;margin-bottom:12px;" id="mr-pump-total-label">총합: 0 ml</div>
+    </div>
+    <!-- 기타 세부 -->
+    <div id="mr-etc-detail" style="display:none;">
+      <span class="field-label">제목</span>
+      <input type="text" id="mr-etc-title" placeholder="예: 목욕, 외출, 예방접종..." style="margin-bottom:12px;">
+      <span class="field-label">메모 <span style="font-size:11px;color:#9ca3af;">(선택)</span></span>
+      <textarea id="mr-etc-memo" rows="2" placeholder="간단한 메모..."
+        style="width:100%;box-sizing:border-box;padding:10px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;resize:none;margin-bottom:12px;"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeManualRecord()">취소</button>
+      <button class="btn-save" onclick="saveManualRecord()">저장</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-bg" id="modal-mom-detail">
   <div class="modal" style="max-height:85vh;overflow-y:auto;">
     <div class="modal-handle"></div>
@@ -3591,6 +3663,171 @@ function filterTimeline(mode) {
   if (btnAll)   { btnAll.style.background   = mode==='all'   ? '#7a5600' : 'var(--card-bg,#fff)'; btnAll.style.color   = mode==='all'   ? '#fff' : 'var(--text-sub,#888)'; btnAll.style.border   = mode==='all'   ? 'none' : '1.5px solid var(--border-color,#e0e0e0)'; }
   renderTimeline();
 }
+
+// ══════════════════════════════════════
+// ✏️ 직접 기록 입력
+// ══════════════════════════════════════
+let _mrCat = 'feed';
+let _mrFeSel = 'breast';
+let _mrDpSel = '소변';
+
+function openManualRecord() {
+  _mrCat = 'feed';
+  _mrFeSel = 'breast';
+  _mrDpSel = '소변';
+  const now = nowLocal();
+  const el = id => document.getElementById(id);
+  el('mr-start-time').value = now;
+  el('mr-end-time').value = '';
+  el('mr-left-min').value = '';
+  el('mr-right-min').value = '';
+  el('mr-ml').value = '';
+  el('mr-pump-L').value = '';
+  el('mr-pump-R').value = '';
+  if (el('mr-etc-title')) el('mr-etc-title').value = '';
+  if (el('mr-etc-memo')) el('mr-etc-memo').value = '';
+  el('mr-pump-total-label').textContent = '총합: 0 ml';
+  mrSetCat('feed');
+  mrFeSel('breast');
+  mrDpSel('소변');
+  document.getElementById('modal-manual-record').classList.add('open');
+}
+
+function closeManualRecord() {
+  document.getElementById('modal-manual-record').classList.remove('open');
+}
+
+function mrSetCat(cat) {
+  _mrCat = cat;
+  ['feed','sleep','diaper','pump','etc'].forEach(c => {
+    const btn = document.getElementById('mr-cat-'+c);
+    if (btn) btn.classList.toggle('sel', c===cat);
+  });
+  // 세부 섹션 표시/숨김
+  const el = id => document.getElementById(id);
+  el('mr-feed-detail').style.display   = cat==='feed'   ? '' : 'none';
+  el('mr-diaper-detail').style.display = cat==='diaper' ? '' : 'none';
+  el('mr-pump-detail').style.display   = cat==='pump'   ? '' : 'none';
+  el('mr-etc-detail').style.display    = cat==='etc'    ? '' : 'none';
+  // 종료 시각: 수유/수면/유축만
+  el('mr-end-wrap').style.display = ['feed','sleep','pump'].includes(cat) ? '' : 'none';
+}
+
+function mrFeSel(type) {
+  _mrFeSel = type;
+  ['breast','bottle','both'].forEach(t => {
+    const btn = document.getElementById('mr-fe-'+t);
+    if (btn) btn.classList.toggle('sel', t===type);
+  });
+  const isBreast = type==='breast' || type==='both';
+  const isMilk   = type==='bottle' || type==='both';
+  const sideWrap = document.getElementById('mr-side-wrap');
+  const mlEl     = document.getElementById('mr-ml');
+  const mlLabel  = document.getElementById('mr-ml-label');
+  ['mr-left-min','mr-right-min'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.disabled = !isBreast;
+    el.style.opacity = isBreast ? '1' : '0.35';
+    el.style.cursor  = isBreast ? '' : 'not-allowed';
+    el.style.background = isBreast ? '' : '#f3f4f6';
+    if (!isBreast) el.value = '';
+  });
+  if (sideWrap) sideWrap.style.opacity = isBreast ? '1' : '0.4';
+  if (mlEl) {
+    mlEl.disabled = !isMilk;
+    mlEl.style.opacity = isMilk ? '1' : '0.35';
+    mlEl.style.cursor  = isMilk ? '' : 'not-allowed';
+    mlEl.style.background = isMilk ? '' : '#f3f4f6';
+  }
+  if (mlLabel) mlLabel.style.opacity = isMilk ? '1' : '0.4';
+  if (!isBreast) mrCalcTotal();
+}
+
+function mrCalcTotal() {
+  const L = parseInt(document.getElementById('mr-left-min')?.value||'0')||0;
+  const R = parseInt(document.getElementById('mr-right-min')?.value||'0')||0;
+}
+
+function mrDpSel(type) {
+  _mrDpSel = type;
+  const map = {'소변':'pee','대변':'poo','소변+대변':'both'};
+  ['소변','대변','소변+대변'].forEach(t => {
+    const btn = document.getElementById('mr-dp-'+map[t]);
+    if (btn) btn.classList.toggle('sel', t===type);
+  });
+}
+
+function mrPumpTotal() {
+  const L = parseInt(document.getElementById('mr-pump-L')?.value||'0')||0;
+  const R = parseInt(document.getElementById('mr-pump-R')?.value||'0')||0;
+  const el = document.getElementById('mr-pump-total-label');
+  if (el) el.textContent = '총합: '+(L+R)+' ml';
+}
+
+function saveManualRecord() {
+  const el = id => document.getElementById(id);
+  const startVal = el('mr-start-time').value;
+  if (!startVal) { alert('시작 시각을 입력해주세요'); return; }
+  const endVal = el('mr-end-time').value;
+  const cat = _mrCat;
+
+  let rec = {};
+
+  if (cat === 'feed') {
+    const L = parseInt(el('mr-left-min')?.value||'0')||0;
+    const R = parseInt(el('mr-right-min')?.value||'0')||0;
+    const ml = parseInt(el('mr-ml')?.value||'0')||0;
+    const totalMin = L + R;
+    const sub = _mrFeSel==='bottle'
+      ? (ml>0 ? '분유 '+ml+'ml' : '분유')
+      : (_mrFeSel==='both'
+          ? (totalMin>0 ? '모유 '+totalMin+'분 · 분유 '+ml+'ml' : '혼합')
+          : (totalMin>0 ? '모유 왼쪽 '+L+'분 · 오른쪽 '+R+'분' : '모유'));
+    rec = {
+      type:'feed', cat:'feed', icon:'🍼', title:'수유',
+      sub, time: endVal||startVal,
+      _startTime: endVal ? startVal : undefined,
+      Lmin: L||undefined, Rmin: R||undefined, ml: ml||undefined,
+      feedType: _mrFeSel
+    };
+  } else if (cat === 'sleep') {
+    rec = {
+      type:'sleep', cat:'sleep', icon:'😴', title:'기상',
+      time: endVal||startVal,
+      _startTime: endVal ? startVal : undefined,
+      sub: endVal ? '' : '수면 기록'
+    };
+  } else if (cat === 'diaper') {
+    rec = {
+      type:'diaper', cat:'diaper', icon:'🌿', title:'기저귀',
+      sub: _mrDpSel, time: startVal
+    };
+  } else if (cat === 'pump') {
+    const L = parseInt(el('mr-pump-L')?.value||'0')||0;
+    const R = parseInt(el('mr-pump-R')?.value||'0')||0;
+    const total = L+R;
+    let sub = total>0 ? '총 '+total+'ml' : '유축 완료';
+    if (total>0 && (L>0||R>0)) sub += '\n왼쪽 '+L+'ml · 오른쪽 '+R+'ml';
+    rec = {
+      type:'pump', cat:'pump', icon:'🤱', title:'유축',
+      sub, time: endVal||startVal,
+      _startTime: endVal ? startVal : undefined,
+      Lml: L||undefined, Rml: R||undefined, total: total||undefined
+    };
+  } else {
+    const title = el('mr-etc-title')?.value?.trim() || '기록';
+    const memo  = el('mr-etc-memo')?.value?.trim()  || '';
+    rec = {
+      type:'etc', cat:'etc', icon:'📝', title,
+      sub: memo, time: startVal
+    };
+  }
+
+  closeManualRecord();
+  addRecord(rec);
+}
+
 
 function renderTimeline() {
   const el = document.getElementById('timeline');
