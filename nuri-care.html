@@ -1379,7 +1379,7 @@ body.dark [style*="color:#7a5600"]:not(button):not(.active) { color: #c8a870 !im
       <button class="qnav-btn" onclick="goToPage(4)" id="qn-4">📊</button>
       <button class="qnav-btn" onclick="goToPage(5)" id="qn-5">📏</button>
       <button class="qnav-btn" onclick="goToPage(6)" id="qn-6">⭐</button>
-      <button class="qnav-btn" onclick="goToPage(6)" id="qn-6">👩</button>
+      <button class="qnav-btn" onclick="goToPage(7)" id="qn-7">👩</button>
       <button class="qnav-btn" onclick="goToPage(8)" id="qn-8">🇰🇷</button>
       <button class="qnav-btn" onclick="goToPage(9)" id="qn-9">👨</button>
       <button class="qnav-btn" onclick="goToPage(10)" id="qn-10">⚙️</button>
@@ -5485,17 +5485,17 @@ function _renderMilestoneAt(stageIdx) {
 
   // 상단 이전/다음 버튼
   let topNav = `<div style="display:flex;gap:10px;margin-bottom:16px;">`;
-  if (currentStageIdx > 0) {
-    const prevS = MILESTONE_STAGES[currentStageIdx - 1];
-    topNav += `<button onclick="showMilestoneStage(${currentStageIdx-1})"
+  if (stageIdx > 0) {
+    const prevS = MILESTONE_STAGES[stageIdx - 1];
+    topNav += `<button onclick="showMilestoneStage(${stageIdx-1})"
       style="flex:1;padding:10px;border:1.5px solid #e8d796;border-radius:12px;
              background:" + (isDark?'#2a2520':'#fff') + ";font-size:13px;font-weight:700;color:" + (isDark?'#c8a870':'#7a5600') + ";border-color:" + (isDark?'#3d3628':'#e8d796') + ";cursor:pointer;">
       ← ${prevS.label}
     </button>`;
   }
-  if (currentStageIdx < MILESTONE_STAGES.length - 1) {
-    const nextS = MILESTONE_STAGES[currentStageIdx + 1];
-    topNav += `<button onclick="showMilestoneStage(${currentStageIdx+1})"
+  if (stageIdx < MILESTONE_STAGES.length - 1) {
+    const nextS = MILESTONE_STAGES[stageIdx + 1];
+    topNav += `<button onclick="showMilestoneStage(${stageIdx+1})"
       style="flex:1;padding:10px;border:1.5px solid #e8d796;border-radius:12px;
              background:" + (isDark?'#2a2218':'#fff7d6') + ";font-size:13px;font-weight:700;color:" + (isDark?'#c8a870':'#7a5600') + ";border-color:" + (isDark?'#3d3628':'#e8d796') + ";cursor:pointer;">
       ${nextS.label} →
@@ -6355,7 +6355,7 @@ function goToPage(n) {
     if (dot) dot.classList.toggle('active', i === currentPage);
   }
   // 탭바 active 업데이트
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i <= 10; i++) {
     const qn = document.getElementById('qn-' + i);
     if (qn) qn.classList.toggle('active', i === currentPage);
   }
@@ -6364,7 +6364,8 @@ function goToPage(n) {
   try { sessionStorage.setItem('nuri_last_page', String(currentPage)); } catch(e) {}
   if (currentPage === 4) setTimeout(() => { renderMainChart(); renderPatternAnalysis(); }, 100);
   if (currentPage === 5) setTimeout(() => { renderGrowthChart(); renderGrowthTable(); }, 100);
-  if (currentPage === 6) { try { renderMomCarePage(); } catch(e){} }
+  if (currentPage === 6) { try { renderMilestoneList(); } catch(e){} }
+  if (currentPage === 7) { try { renderMomCarePage(); } catch(e){} }
   if (currentPage === 9) {
     renderDadTabChecklist();
     renderDadTodayRecords();
