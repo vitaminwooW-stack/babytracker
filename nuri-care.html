@@ -6191,9 +6191,9 @@ function goToPage(n) {
   updatePageLabel(currentPage);
   // 새로고침 시 복원을 위해 페이지 저장
   try { sessionStorage.setItem('nuri_last_page', String(currentPage)); } catch(e) {}
-  if (currentPage === 3) setTimeout(() => { renderMainChart(); renderPatternAnalysis(); }, 100);
-  if (currentPage === 4) setTimeout(() => { renderGrowthChart(); renderGrowthTable(); }, 100);
-  if (currentPage === 8) {
+  if (currentPage === 4) setTimeout(() => { renderMainChart(); renderPatternAnalysis(); }, 100);
+  if (currentPage === 5) setTimeout(() => { renderGrowthChart(); renderGrowthTable(); }, 100);
+  if (currentPage === 9) {
     renderDadTabChecklist();
     renderDadTodayRecords();
   }
