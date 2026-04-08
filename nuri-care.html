@@ -1026,6 +1026,93 @@ body.dark .tl-time-col { border-color: #2a2520; }
 body.dark .tl-time-hm { color: #f0ead8; }
 body.dark .tl-content-title { color: #f0ead8; }
 .tag-badge { background:#fff; border:1px solid #e8d796; border-radius:8px; padding:4px 10px; font-size:12px; color:#7a5600; font-weight:600; }
+
+/* ══════ 다크모드 추가 보완 2 ══════ */
+
+/* ── 발달 마일스톤 ── */
+body.dark { --ms-header-bg: #1a1612; }
+body.dark .ms-card { background: #2a2520 !important; box-shadow: 0 3px 12px rgba(0,0,0,0.3), 0 0 0 1.5px #3d3628 !important; }
+body.dark .ms-card.ms-done { background: linear-gradient(135deg,#0f2a1a,#162a1a) !important; box-shadow: 0 3px 12px rgba(34,197,94,0.15), 0 0 0 2px #166534 !important; }
+body.dark .ms-card-title { color: #f0ead8 !important; }
+body.dark .ms-card-desc { color: #a89880 !important; }
+body.dark .ms-card-btn { background: #7a5600; color: #fff; }
+body.dark .ms-card.ms-done .ms-card-btn { background: #166534; }
+body.dark .ms-month-title { color: #c8a870 !important; }
+body.dark .ms-all-done { color: #4ade80 !important; }
+body.dark .ms-stage-dot { background: #3d3628; }
+body.dark .ms-stage-dot.active { background: #c8860a; }
+body.dark .ms-stage-dot.done { background: #166534; }
+/* 마일스톤 이전/다음 버튼 */
+body.dark #milestone-list button[onclick*="showMilestoneStage"] {
+  background: #2a2520 !important;
+  border-color: #3d3628 !important;
+  color: #c8a870 !important;
+}
+
+/* ── 엄마 케어 ── */
+body.dark .mom-page { background: #1a1612 !important; }
+body.dark .mom-page-header { background: #2a2218 !important; }
+body.dark .mom-care-card { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .mom-care-card-title { color: #f0ead8 !important; }
+body.dark .mom-care-text { color: #a89880 !important; }
+body.dark .mom-care-badge { background: #3d3628 !important; color: #c8a870 !important; }
+body.dark .mom-section-title { color: #c8a870 !important; }
+body.dark .mom-week-label { color: #a89880 !important; }
+body.dark .mom-tip-card { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .mom-tip-text { color: #d0c0a8 !important; }
+
+/* ── 출산 지원 정책 ── */
+body.dark .policy-page { background: #1a1612 !important; }
+body.dark .policy-page-header { background: #2a2218 !important; }
+body.dark .policy-card { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .policy-card-title { color: #f0ead8 !important; }
+body.dark .policy-item-text { color: #a89880 !important; }
+body.dark .policy-tag { background: #3d3628 !important; color: #c8a870 !important; }
+body.dark .policy-amount { color: #fbbf24 !important; }
+body.dark .policy-badge { background: #3d3628 !important; color: #c8a870 !important; }
+
+/* ── 아빠 공간 ── */
+body.dark #dad-tab-page { background: #1a1612; }
+body.dark .dad-section { background: #1a1612; }
+body.dark .dad-section-title { color: #c8a870 !important; }
+body.dark .dad-check-card { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .dad-check-item { border-color: #3d3628 !important; }
+body.dark .dad-check-item:hover { background: #2f2820 !important; }
+body.dark .dad-check-title { color: #f0ead8 !important; }
+body.dark .dad-check-desc { color: #a89880 !important; }
+body.dark .dad-check-tag { background: #3d3628 !important; color: #c8a870 !important; }
+body.dark .dad-check-tag.done-tag { background: #1a3020 !important; color: #4ade80 !important; }
+body.dark .dad-praise { color: #fbbf24 !important; }
+body.dark .dad-event-card { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .dad-event-item { border-color: #3d2a35 !important; }
+body.dark .dad-rec-section { background: #2a2218 !important; border-color: #3d3628 !important; }
+body.dark .dad-rec-title { color: #f0ead8 !important; }
+body.dark .dad-rec-btn { background: #2a2520 !important; border-color: #3d3628 !important; color: #c8a870 !important; }
+body.dark .dad-invite-section, body.dark #dad-invite-section { background: #0f1a2a !important; border-color: #1e3a5f !important; }
+body.dark #dad-tab-sub { color: #a89880 !important; }
+body.dark #dad-linked-status { background: #0f2a1a !important; color: #4ade80 !important; }
+body.dark .dad-progress-bar-wrap { background: #3d3628 !important; }
+
+/* ── 설정 ── */
+body.dark .feature-page { background: #1a1612 !important; }
+body.dark .chart-wrap { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .export-btn { background: #2a2520 !important; border-color: #3d3628 !important; color: #c8a870 !important; }
+body.dark .feature-section-title { color: #c8a870 !important; }
+body.dark .feature-page-title { color: #f0ead8 !important; }
+body.dark .feature-page-sub { color: #a89880 !important; }
+/* 토글 스위치 비활성 */
+body.dark input[type="checkbox"] { accent-color: #7a5600; }
+/* 앱 정보 카드 */
+body.dark [style*="background:linear-gradient(135deg,#fffbeb"] { background: linear-gradient(135deg,#2a2218,#231e14) !important; }
+body.dark [style*="background:#fff7d6"] { background: #2a2218 !important; }
+body.dark [style*="background:#fffdf2"] { background: #1a1612 !important; }
+body.dark [style*="background:#fffbeb"] { background: #2a2218 !important; }
+/* 설정 카드 내 텍스트 */
+body.dark [style*="color:#1a1a1a"] { color: #f0ead8 !important; }
+body.dark [style*="color:#374151"] { color: #c8a870 !important; }
+body.dark [style*="color:#6b7280"] { color: #a89880 !important; }
+body.dark [style*="color:#7a5600"]:not(button):not(.active) { color: #c8a870 !important; }
+
 </style>
 </head>
 <body style="visibility:hidden;">
@@ -1511,7 +1598,7 @@ body.dark .tl-content-title { color: #f0ead8; }
       <!-- ── 페이지 5: 발달 마일스톤 ── -->
       <div class="swipe-page">
         <div class="feature-page" style="padding:0 0 80px;">
-          <div style="padding:16px 16px 0;position:sticky;top:0;background:#fff7d6;z-index:10;">
+          <div style="padding:16px 16px 0;position:sticky;top:0;background:var(--ms-header-bg,#fff7d6);z-index:10;">
             <div class="feature-page-title" style="margin-bottom:2px;">⭐ 발달 마일스톤</div>
             <div id="milestone-age-label" style="font-size:13px;color:#7a5600;font-weight:600;margin-bottom:12px;"></div>
             <div style="display:flex;gap:3px;margin-bottom:14px;" id="milestone-stage-bar"></div>
@@ -1760,14 +1847,9 @@ body.dark .tl-content-title { color: #f0ead8; }
         <div class="feature-page">
           <div class="feature-page-title">⚙️ 설정</div>
           <div class="feature-page-sub">앱 설정과 데이터를 관리해요</div>
-          <div class="feature-section-title">🔥 실시간 동기화</div>
-          <div class="chart-wrap" style="padding:14px 16px;">
-            <div id="fb-sync-status" style="font-size:13px;line-height:1.6;margin-bottom:10px;">
-              <span style="color:#9ca3af;">확인 중...</span>
-            </div>
-            <button class="export-btn" onclick="typeof fbPushAll==='function'&&fbPushAll()" style="margin-bottom:0;">
-              🔄 지금 동기화
-            </button>
+          <!-- 실시간 동기화 섹션 숨김 -->
+          <div style="display:none;">
+            <div id="fb-sync-status"></div>
           </div>
 
           <!-- 화면 유지 & 음성 단축키 -->
@@ -5263,7 +5345,27 @@ function renderMilestoneList() {
   const completedCount = stage.items.filter(item => checks['m-' + stage.label + '-' + item.title]).length;
   const allDone = completedCount === stage.items.length;
 
-  let html = `<div class="ms-month-title">${stage.label} · ${completedCount}/${stage.items.length} 달성</div>`;
+  // 상단 이전/다음 버튼
+  let topNav = `<div style="display:flex;gap:10px;margin-bottom:16px;">`;
+  if (currentStageIdx > 0) {
+    const prevS = MILESTONE_STAGES[currentStageIdx - 1];
+    topNav += `<button onclick="showMilestoneStage(${currentStageIdx-1})"
+      style="flex:1;padding:10px;border:1.5px solid #e8d796;border-radius:12px;
+             background:#fff;font-size:13px;font-weight:700;color:#7a5600;cursor:pointer;">
+      ← ${prevS.label}
+    </button>`;
+  }
+  if (currentStageIdx < MILESTONE_STAGES.length - 1) {
+    const nextS = MILESTONE_STAGES[currentStageIdx + 1];
+    topNav += `<button onclick="showMilestoneStage(${currentStageIdx+1})"
+      style="flex:1;padding:10px;border:1.5px solid #e8d796;border-radius:12px;
+             background:#fff7d6;font-size:13px;font-weight:700;color:#7a5600;cursor:pointer;">
+      ${nextS.label} →
+    </button>`;
+  }
+  topNav += `</div>`;
+
+  let html = topNav + `<div class="ms-month-title">${stage.label} · ${completedCount}/${stage.items.length} 달성</div>`;
 
   if (allDone) {
     html += `<div class="ms-all-done">🎉 이 단계 마일스톤을 모두 달성했어요!<br><span style="font-size:13px;color:#9ca3af;font-weight:400;">다음 단계도 기대해요 💛</span></div>`;
@@ -5336,7 +5438,27 @@ function _renderMilestoneAt(stageIdx) {
   const completedCount = stage.items.filter(item => checks['m-' + stage.label + '-' + item.title]).length;
   const allDone = completedCount === stage.items.length;
 
-  let html = `<div class="ms-month-title">${stage.label} · ${completedCount}/${stage.items.length} 달성</div>`;
+  // 상단 이전/다음 버튼
+  let topNav = `<div style="display:flex;gap:10px;margin-bottom:16px;">`;
+  if (currentStageIdx > 0) {
+    const prevS = MILESTONE_STAGES[currentStageIdx - 1];
+    topNav += `<button onclick="showMilestoneStage(${currentStageIdx-1})"
+      style="flex:1;padding:10px;border:1.5px solid #e8d796;border-radius:12px;
+             background:#fff;font-size:13px;font-weight:700;color:#7a5600;cursor:pointer;">
+      ← ${prevS.label}
+    </button>`;
+  }
+  if (currentStageIdx < MILESTONE_STAGES.length - 1) {
+    const nextS = MILESTONE_STAGES[currentStageIdx + 1];
+    topNav += `<button onclick="showMilestoneStage(${currentStageIdx+1})"
+      style="flex:1;padding:10px;border:1.5px solid #e8d796;border-radius:12px;
+             background:#fff7d6;font-size:13px;font-weight:700;color:#7a5600;cursor:pointer;">
+      ${nextS.label} →
+    </button>`;
+  }
+  topNav += `</div>`;
+
+  let html = topNav + `<div class="ms-month-title">${stage.label} · ${completedCount}/${stage.items.length} 달성</div>`;
   if (allDone) html += `<div class="ms-all-done">🎉 이 단계 마일스톤을 모두 달성했어요!</div>`;
 
   html += stage.items.map(item => {

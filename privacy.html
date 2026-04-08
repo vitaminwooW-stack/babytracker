@@ -20,9 +20,12 @@
   .section li { margin-bottom: 4px; }
   .highlight { background: #fffbeb; border-left: 3px solid #f59e0b; padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 10px 0; font-size: 13px; color: #92400e; }
   .highlight.green { background: #f0fdf4; border-color: #22c55e; color: #166534; }
+  .highlight.blue { background: #eff6ff; border-color: #3b82f6; color: #1e40af; }
   .tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin: 2px; }
   .tag.local { background: #f0fdf4; color: #16a34a; }
   .tag.firebase { background: #fdf4ff; color: #7c3aaf; }
+  .tag.linked { background: #fff1f2; color: #9f1239; }
+  .tag.notlinked { background: #f0fdf4; color: #166534; }
   .table-wrap { overflow-x: auto; margin: 10px 0; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th { background: #fef9f0; color: #7a5600; font-weight: 700; padding: 8px 10px; border: 1px solid #f0e8d0; text-align: left; }
@@ -45,100 +48,165 @@
 <div class="container">
   <div class="effective-date">📅 시행일: 2026년 4월 8일 &nbsp;|&nbsp; 최종 수정일: 2026년 4월 8일</div>
 
+  <!-- 1. 개요 -->
   <div class="section">
-    <h2>📋 1. 개요</h2>
-    <p>누리케어(NuriCare)는 신생아 육아 기록 앱으로, 사용자의 개인정보를 소중히 여깁니다.</p>
+    <h2>📋 1. 개요 및 개발자 정보</h2>
+    <p>누리케어(NuriCare)는 신생아 육아 기록을 위한 모바일 앱입니다. 사용자의 개인정보를 소중히 여기며, 본 방침은 수집하는 정보와 이용 방법을 안내합니다.</p>
+    <div class="highlight blue">
+      <strong>개발자 정보</strong><br>
+      개발자: vitaminwoo_app<br>
+      문의: hmw0106@naver.com<br>
+      앱 이름: 누리케어 (NuriCare)
+    </div>
     <div class="highlight green">✅ 누리케어는 <strong>광고를 게재하지 않으며</strong>, 개인정보를 제3자에게 판매하지 않습니다.</div>
   </div>
 
+  <!-- 2. 수집 데이터 -->
   <div class="section">
-    <h2>📦 2. 수집하는 개인정보 항목</h2>
+    <h2>📦 2. 수집하는 개인정보 항목 및 목적</h2>
+    <p>앱이 수집하는 데이터 유형, 수집 방법, 사용 목적, 사용자 신원 연결 여부를 아래에 명시합니다.</p>
     <div class="table-wrap">
       <table>
-        <tr><th>항목</th><th>수집 목적</th><th>저장 위치</th></tr>
-        <tr><td>아기 이름, 생년월일, 성별</td><td>육아 기록 개인화</td><td><span class="tag local">기기 로컬</span></td></tr>
-        <tr><td>수유·수면·기저귀·유축 기록</td><td>육아 패턴 분석</td><td><span class="tag local">기기 로컬</span></td></tr>
-        <tr><td>성장 기록 (몸무게·키)</td><td>성장 추이 관리</td><td><span class="tag local">기기 로컬</span></td></tr>
-        <tr><td>가족 공유 기록</td><td>엄마·아빠 공동 육아</td><td><span class="tag firebase">Firebase</span></td></tr>
-        <tr><td>사진 (육아일기)</td><td>추억 기록</td><td><span class="tag local">기기 로컬</span></td></tr>
+        <tr><th>데이터 항목</th><th>수집 목적</th><th>저장 위치</th><th>신원 연결</th></tr>
+        <tr>
+          <td>아기 이름, 생년월일, 성별</td>
+          <td>육아 기록 개인화, D+일수 계산</td>
+          <td><span class="tag local">기기 로컬</span></td>
+          <td><span class="tag notlinked">연결 안 됨</span></td>
+        </tr>
+        <tr>
+          <td>수유·수면·기저귀·유축 기록</td>
+          <td>육아 패턴 분석 및 기록</td>
+          <td><span class="tag local">기기 로컬</span></td>
+          <td><span class="tag notlinked">연결 안 됨</span></td>
+        </tr>
+        <tr>
+          <td>성장 기록 (몸무게·키)</td>
+          <td>성장 추이 관리</td>
+          <td><span class="tag local">기기 로컬</span></td>
+          <td><span class="tag notlinked">연결 안 됨</span></td>
+        </tr>
+        <tr>
+          <td>사진 (육아일기)</td>
+          <td>추억 기록</td>
+          <td><span class="tag local">기기 로컬</span></td>
+          <td><span class="tag notlinked">연결 안 됨</span></td>
+        </tr>
+        <tr>
+          <td>가족 공유 기록 (선택)</td>
+          <td>엄마·아빠 공동 육아 기록 공유</td>
+          <td><span class="tag firebase">Firebase</span></td>
+          <td><span class="tag linked">가족 코드로 연결</span></td>
+        </tr>
+        <tr>
+          <td>마이크 음성 데이터</td>
+          <td>음성 명령 인식 (수유/수면 시작 등) — 기기 내 처리 후 즉시 폐기, 서버 전송 없음</td>
+          <td><span class="tag local">기기 내 처리</span></td>
+          <td><span class="tag notlinked">연결 안 됨</span></td>
+        </tr>
       </table>
     </div>
-    <div class="highlight">⚠️ 회원가입·이메일·전화번호 등 <strong>직접 식별 정보는 수집하지 않습니다.</strong></div>
+    <div class="highlight">⚠️ 회원가입·이메일·전화번호·위치정보 등 <strong>직접 식별 정보는 수집하지 않습니다.</strong><br>앱이 개인정보를 수집하지 않는 경우에도 본 방침이 적용됩니다.</div>
   </div>
 
+  <!-- 3. 마이크 권한 -->
   <div class="section">
-    <h2>☁️ 3. Firebase 사용 안내</h2>
-    <p>가족 공유 기능 사용 시 Google Firebase(싱가포르 서버)에 기록이 저장됩니다.</p>
+    <h2>🎙️ 3. 마이크 권한 사용 안내</h2>
+    <p>누리케어는 음성 명령 기능을 위해 마이크 접근 권한을 요청합니다.</p>
     <ul>
-      <li>Firebase는 Google의 보안 인프라를 사용합니다</li>
-      <li>초대 코드 방식으로만 가족 간 공유됩니다</li>
+      <li>음성 인식은 기기 내 브라우저 API(Web Speech API)를 통해 처리됩니다</li>
+      <li>음성 데이터는 서버에 저장되거나 제3자에게 전송되지 않습니다</li>
+      <li>마이크 사용은 사용자가 음성 버튼을 탭할 때만 활성화됩니다</li>
+      <li>권한은 기기 설정에서 언제든지 철회 가능합니다</li>
+    </ul>
+    <div class="highlight">⚠️ Web Speech API는 운영체제 또는 브라우저 공급자(Google, Apple)의 정책을 따를 수 있습니다. 해당 공급자의 개인정보 처리 방침을 함께 확인하세요.</div>
+  </div>
+
+  <!-- 4. Firebase -->
+  <div class="section">
+    <h2>☁️ 4. 제3자 서비스 (Firebase) 사용 안내</h2>
+    <p>가족 공유 기능 사용 시 Google Firebase(싱가포르 서버, asia-southeast1)에 기록이 저장됩니다.</p>
+    <ul>
+      <li>Firebase는 Google LLC의 서비스로, Google의 보안 인프라와 동일한 수준의 데이터 보호를 적용합니다</li>
+      <li>Firebase와 공유되는 데이터는 가족 공유 기록에 한정됩니다</li>
+      <li>Firebase는 제공받은 데이터를 광고 또는 마케팅 목적으로 사용하지 않습니다</li>
       <li>공유 기능 미사용 시 모든 데이터는 기기에만 저장됩니다</li>
     </ul>
+    <div class="highlight blue">
+      Firebase 개인정보 처리 방침: <a href="https://firebase.google.com/support/privacy" target="_blank" style="color:#1d4ed8;">firebase.google.com/support/privacy</a>
+    </div>
     <div class="highlight">
       <strong>보안 방식</strong><br>
       • 초대 코드 방식 — 6자리 랜덤 코드로 가족 간 공유 제한<br>
-      • 로컬 우선 저장 — 기본 데이터는 기기에만 저장, 동기화는 선택
+      • 로컬 우선 저장 — 기본 데이터는 기기에만 저장, 동기화는 선택사항
     </div>
   </div>
 
+  <!-- 5. 보관 기간 -->
   <div class="section">
-    <h2>🗓️ 4. 개인정보 보관 기간</h2>
+    <h2>🗓️ 5. 개인정보 보관 기간 및 삭제 정책</h2>
     <ul>
-      <li>기기 내 데이터: 앱 삭제 시까지</li>
-      <li>Firebase 공유 데이터: 삭제 요청 시 즉시 삭제</li>
+      <li>기기 내 데이터: 앱 삭제 시 자동 삭제</li>
+      <li>Firebase 공유 데이터: 사용자 삭제 요청 시 즉시 삭제</li>
       <li>별도 서버에 데이터를 보관하지 않습니다</li>
+      <li>앱에서 계정 삭제 기능을 제공하지 않으나, 아래 방법으로 모든 데이터를 삭제할 수 있습니다</li>
     </ul>
-  </div>
-
-  <div class="section">
-    <h2>🗑️ 5. 데이터 삭제 방법</h2>
-    <div class="delete-box">
-      <strong>앱 내 삭제</strong>
-      설정 → 데이터 관리 → 전체 초기화
-    </div>
-    <div class="delete-box">
-      <strong>이메일 삭제 요청</strong>
-      hmw0106@naver.com 으로 요청 시 3일 이내 처리
+    <div class="highlight green">
+      <strong>데이터 삭제 방법</strong><br>
+      • 앱 내: 설정 → 데이터 관리 → 전체 초기화<br>
+      • 이메일 요청: hmw0106@naver.com (3일 이내 처리)
     </div>
   </div>
 
+  <!-- 6. 사용자 동의 및 권리 -->
   <div class="section">
-    <h2>🔒 6. 개인정보 제3자 제공</h2>
-    <p>누리케어는 다음의 경우를 제외하고 개인정보를 제3자에게 제공하지 않습니다.</p>
+    <h2>✋ 6. 사용자 권리 및 동의 철회</h2>
+    <p>사용자는 언제든지 아래 권리를 행사할 수 있습니다.</p>
     <ul>
-      <li>사용자가 직접 가족 공유를 동의한 경우</li>
+      <li><strong>열람 요청</strong>: 수집된 데이터 확인 요청 (이메일 문의)</li>
+      <li><strong>정정 요청</strong>: 잘못된 정보 수정 요청</li>
+      <li><strong>삭제 요청</strong>: 모든 데이터 삭제 요청 (이메일 또는 앱 내 초기화)</li>
+      <li><strong>동의 철회</strong>: 마이크 권한 — 기기 설정에서 언제든지 철회 가능</li>
+      <li><strong>데이터 내보내기</strong>: 설정 → 데이터 내보내기(CSV) 기능 제공</li>
+    </ul>
+    <div class="highlight">사용자의 요청에 따라 권리 행사를 거부하거나 불이익을 제공하지 않습니다.</div>
+  </div>
+
+  <!-- 7. 제3자 제공 -->
+  <div class="section">
+    <h2>🔒 7. 개인정보 제3자 제공</h2>
+    <p>누리케어는 아래의 경우를 제외하고 개인정보를 제3자에게 제공하지 않습니다.</p>
+    <ul>
+      <li>사용자가 직접 가족 공유 기능을 활성화한 경우 (Firebase 저장)</li>
       <li>법령에 의해 요구되는 경우</li>
     </ul>
+    <p style="margin-top:8px;">앱은 광고 SDK, 분석 SDK, 추적 SDK를 포함하지 않습니다.</p>
   </div>
 
+  <!-- 8. 아동 보호 -->
   <div class="section">
-    <h2>👶 7. 아동 개인정보 보호</h2>
-    <p>본 앱은 부모가 아기의 정보를 기록하는 도구입니다. 모든 기록은 보호자가 입력합니다.</p>
+    <h2>👶 8. 아동 개인정보 보호</h2>
+    <p>누리케어는 신생아의 부모/보호자를 위한 앱입니다. 만 14세 미만 아동이 직접 앱을 이용하지 않으며, 모든 정보는 성인 보호자가 입력합니다. 아기의 정보는 가족 내부 육아 기록 목적으로만 사용됩니다.</p>
   </div>
 
-  <div class="section">
-    <h2>✋ 8. 사용자의 권리</h2>
-    <ul>
-      <li>개인정보 열람 요청</li>
-      <li>개인정보 정정·삭제 요청</li>
-      <li>데이터 이동 (내보내기 기능 제공)</li>
-    </ul>
-  </div>
-
+  <!-- 9. 보안 -->
   <div class="section">
     <h2>🔐 9. 보안 조치</h2>
     <ul>
-      <li>HTTPS 통신 암호화</li>
-      <li>Firebase 보안 규칙 적용</li>
-      <li>초대 코드 기반 접근 제한</li>
+      <li>HTTPS를 통한 모든 통신 암호화</li>
+      <li>Firebase 보안 규칙을 통한 데이터 접근 제한</li>
+      <li>초대 코드(6자리 랜덤) 기반 가족 공유 접근 제한</li>
+      <li>개인 식별 정보(이름, 이메일 등) 미수집으로 데이터 유출 위험 최소화</li>
     </ul>
   </div>
 
+  <!-- 10. 개정 안내 -->
   <div class="section">
     <h2>📝 10. 개인정보처리방침 변경</h2>
-    <p>본 방침이 변경될 경우 앱 내 공지 또는 이 페이지를 통해 사전 안내합니다. 중요한 변경 사항은 시행 <strong>7일 전</strong>에 고지합니다.</p>
+    <p>본 방침이 변경될 경우 앱 내 공지 또는 이 페이지를 통해 사전 안내합니다. 중요한 변경 사항은 시행 <strong>7일 전</strong>에 고지합니다. 변경된 방침의 지속적인 이용은 변경 내용에 동의한 것으로 간주됩니다.</p>
   </div>
 
+  <!-- 담당자 -->
   <div class="contact">
     <h2>📬 개인정보 보호 담당자</h2>
     <p>개인정보 관련 문의, 열람, 정정, 삭제 요청</p>
