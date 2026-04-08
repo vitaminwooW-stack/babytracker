@@ -232,7 +232,7 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .diary-img-upload-btn:active { background: #fff7d6; }
 
 /* ── 각 페이지 빈공간 제거 ── */
-.mom-page { padding: 16px 16px 40px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; }
+.mom-page { padding: 16px 16px 40px; background: var(--page-bg, #fffdf2); height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; touch-action: pan-y; }
 .policy-page { padding: 16px 16px 40px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; }
 .mom-page-header { margin-bottom: 16px; }
 .mom-page-header h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; }
@@ -525,7 +525,7 @@ body.dark .vaccine-age-badge { background: #3d3628; color: #c8a870; }
   margin-bottom:14px; text-align:center;
   box-shadow:0 3px 12px rgba(122,86,0,0.10), 0 0 0 1.5px rgba(232,215,150,0.6);
   transition:transform 0.15s, box-shadow 0.15s;
-  cursor:pointer; user-select:none;
+  cursor:pointer; user-select:none; touch-action: manipulation;
 }
 .ms-card:active { transform:scale(0.97); }
 .ms-card.ms-done {
@@ -564,7 +564,7 @@ body.dark .ms-month-title { color:#c8a870; }
 body.dark .export-btn { background: #2a2520; border-color: #3d3628; color: #c8a870; }
 
 /* ── 새 기능 페이지 공통 ── */
-.feature-page { padding: 16px 16px 60px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; }
+.feature-page { padding: 16px 16px 60px; background: var(--page-bg, #fffdf2); height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; touch-action: pan-y; }
 .feature-page-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
 .feature-page-sub { font-size: 13px; color: #6b7280; margin-bottom: 16px; }
 .feature-section-title { font-size: 12px; font-weight: 700; color: #7a5600; letter-spacing: 0.06em; text-transform: uppercase; margin: 16px 0 8px; }
@@ -618,6 +618,8 @@ body.dark {
   --text-main: #f0ead8;
   --text-sub: #a89880;
   --bg-main: #1a1612;
+  --page-bg: #1a1612;
+  --ms-header-bg: #1a1612;
   --btn-inactive-bg: #2a2520;
   --btn-inactive-color: #a89880;
 }
@@ -627,6 +629,8 @@ body:not(.dark) {
   --text-main: #1a1a1a;
   --text-sub: #6b7280;
   --bg-main: #fffdf2;
+  --page-bg: #fffdf2;
+  --ms-header-bg: #fff7d6;
   --btn-inactive-bg: #ffffff;
   --btn-inactive-color: #888888;
 }
@@ -3978,8 +3982,20 @@ let swipeTouchStartX = 0, swipeTouchStartY = 0;
 
 function initSwipe() {
   const el = document.getElementById('swipe-container');
-  el.addEventListener('touchstart', e => { swipeTouchStartX = e.touches[0].clientX; swipeTouchStartY = e.touches[0].clientY; }, { passive: true });
+  let _swipeBlocked = false;
+  el.addEventListener('touchstart', e => {
+    swipeTouchStartX = e.touches[0].clientX;
+    swipeTouchStartY = e.touches[0].clientY;
+    _swipeBlocked = false;
+  }, { passive: true });
+  el.addEventListener('touchmove', e => {
+    const dx = Math.abs(e.touches[0].clientX - swipeTouchStartX);
+    const dy = Math.abs(e.touches[0].clientY - swipeTouchStartY);
+    // 수직 이동이 수평보다 크면 스와이프 차단 (내부 스크롤 우선)
+    if (dy > dx && dy > 10) { _swipeBlocked = true; }
+  }, { passive: true });
   el.addEventListener('touchend', e => {
+    if (_swipeBlocked) return;
     const dx = e.changedTouches[0].clientX - swipeTouchStartX;
     const dy = e.changedTouches[0].clientY - swipeTouchStartY;
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
