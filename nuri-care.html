@@ -957,7 +957,7 @@ body.dark .mom-grid-count { color: rgba(255,255,255,0.4); background: rgba(0,0,0
 .mom-detail-item { display:flex; align-items:flex-start; gap:12px; padding:11px 0; border-bottom:1px solid #f3f0e0; }
 .mom-detail-item:last-child { border-bottom:none; }
 .mom-detail-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:6px; }
-.mom-detail-text { font-size:14px; color:#374151; line-height:1.65; word-break:keep-all; }
+.mom-detail-text { font-size:14px; color:var(--text-main,#374151); line-height:1.65; word-break:keep-all; }
 body.dark .mom-detail-text { color:#d0c0a8; }
 body.dark .mom-detail-item { border-color:#3d3628; }
 /* 패턴 분석 카드 */
@@ -1614,7 +1614,7 @@ body.dark [style*="color:#7a5600"]:not(button):not(.active) { color: #c8a870 !im
       <!-- ── 페이지 6: 엄마 케어 ── -->
       <div class="swipe-page">
         <div class="mom-page" id="mom-care-page">
-          <div class="mom-page-header">
+          <div class="mom-page-header" id="mom-page-header-el">
             <h2>👩 엄마 케어</h2>
             <p>출산 후 엄마 회복 정보 &amp; 커뮤니티</p>
           </div>
@@ -2633,10 +2633,10 @@ const MOM_CARE = {
 function openMomDetail(secIdEncoded) {
   const secTitle = decodeURIComponent(secIdEncoded);
   const raw = localStorage.getItem('baby_profile');
-  if (!raw) return;
-  const p = JSON.parse(raw);
-  const careData = MOM_CARE[p.birthType];
-  const allSections = [...careData.sections, ...MOM_CARE.common];
+  const p = raw ? JSON.parse(raw) : {};
+  const birthType = p.birthType || 'natural';
+  const careData = MOM_CARE[birthType] || MOM_CARE.natural;
+  const allSections = [...(careData.sections || []), ...(MOM_CARE.common || [])];
   const sec = allSections.find(s => s.title === secTitle);
   if (!sec) return;
 
@@ -2653,11 +2653,14 @@ function openMomDetail(secIdEncoded) {
         ⚠️ 위 증상이 나타나면 지체 없이 병원을 방문하세요.
       </div>` : '';
 
+  const isDark = document.body.classList.contains('dark');
+  const titleColor = isDark ? '#f0ead8' : '#1a1a1a';
+  const textColor  = isDark ? '#c8a870' : '#374151';
   document.getElementById('mom-detail-content').innerHTML = `
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:14px;border-bottom:2px solid ${dotColor}22;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:14px;border-bottom:2px solid ${dotColor}44;">
       <div style="font-size:36px;line-height:1;">${sec.icon}</div>
       <div>
-        <h2 style="font-size:17px;font-weight:800;color:#1a1a1a;margin-bottom:2px;">${sec.title}</h2>
+        <h2 style="font-size:17px;font-weight:800;color:${titleColor};margin-bottom:2px;">${sec.title}</h2>
         <div style="font-size:12px;color:${dotColor};font-weight:600;">${sec.items.length}가지 정보</div>
       </div>
     </div>
@@ -2836,33 +2839,47 @@ function renderMoodSelector() {
 
 function renderMomCarePage() {
   const raw = localStorage.getItem('baby_profile');
-  if (!raw) return;
-  const p = JSON.parse(raw);
-  if (!p.birthType) return;
+  const p = raw ? JSON.parse(raw) : {};
+  const birthType = p.birthType || 'natural';
+  const careData = MOM_CARE[birthType] || MOM_CARE.natural;
+  const isCs = birthType === 'csection';
+  const isDark = document.body.classList.contains('dark');
 
-  const careData = MOM_CARE[p.birthType];
-  const isCs = p.birthType === 'csection';
   const badgeEl = document.getElementById('mom-birth-type-badge');
-  badgeEl.innerHTML = '<span class="mom-birth-badge ' + careData.cls + '">' + careData.label + ' 산모</span>';
+  if (badgeEl) badgeEl.innerHTML = '<span class="mom-birth-badge ' + careData.cls + '">' + careData.label + ' 산모</span>';
 
-  // 그리드 색상 팔레트
-  const cardColors = [
-    { bg:'linear-gradient(135deg,#fff0f6,#fce7f3)', accent:'#db2777', dot:'pink' },
-    { bg:'linear-gradient(135deg,#eff6ff,#dbeafe)', accent:'#2563eb', dot:'blue' },
-    { bg:'linear-gradient(135deg,#f0fdf4,#dcfce7)', accent:'#16a34a', dot:'green' },
-    { bg:'linear-gradient(135deg,#fdf4ff,#f3e8ff)', accent:'#9333ea', dot:'purple' },
-    { bg:'linear-gradient(135deg,#fffbeb,#fef9c3)', accent:'#d97706', dot:'yellow' },
-    { bg:'linear-gradient(135deg,#fff7ed,#ffedd5)', accent:'#ea580c', dot:'orange' },
-    { bg:'linear-gradient(135deg,#fff1f2,#ffe4e6)', accent:'#dc2626', dot:'pink' },
-    { bg:'linear-gradient(135deg,#f0fdfa,#ccfbf1)', accent:'#0d9488', dot:'green' },
+  // 다크모드 카드 팔레트
+  const cardColors = isDark ? [
+    { bg:'linear-gradient(135deg,#2a1520,#3a1a28)', accent:'#f472b6' },
+    { bg:'linear-gradient(135deg,#0f1a2a,#1a2a3a)', accent:'#60a5fa' },
+    { bg:'linear-gradient(135deg,#0a2010,#162a18)', accent:'#4ade80' },
+    { bg:'linear-gradient(135deg,#1a0f25,#2a1535)', accent:'#c084fc' },
+    { bg:'linear-gradient(135deg,#1a1500,#2a2000)', accent:'#fbbf24' },
+    { bg:'linear-gradient(135deg,#1a1008,#2a1a10)', accent:'#fb923c' },
+    { bg:'linear-gradient(135deg,#2a0f10,#3a1515)', accent:'#f87171' },
+    { bg:'linear-gradient(135deg,#0a1a18,#102a25)', accent:'#2dd4bf' },
+  ] : [
+    { bg:'linear-gradient(135deg,#fff0f6,#fce7f3)', accent:'#db2777' },
+    { bg:'linear-gradient(135deg,#eff6ff,#dbeafe)', accent:'#2563eb' },
+    { bg:'linear-gradient(135deg,#f0fdf4,#dcfce7)', accent:'#16a34a' },
+    { bg:'linear-gradient(135deg,#fdf4ff,#f3e8ff)', accent:'#9333ea' },
+    { bg:'linear-gradient(135deg,#fffbeb,#fef9c3)', accent:'#d97706' },
+    { bg:'linear-gradient(135deg,#fff7ed,#ffedd5)', accent:'#ea580c' },
+    { bg:'linear-gradient(135deg,#fff1f2,#ffe4e6)', accent:'#dc2626' },
+    { bg:'linear-gradient(135deg,#f0fdfa,#ccfbf1)', accent:'#0d9488' },
   ];
 
-  const allSections = [...careData.sections, ...MOM_CARE.common];
+  const titleColor = isDark ? '#f0ead8' : '#1a1a1a';
+  const subColor   = isDark ? '#a89880' : '#6b7280';
+
+  const allSections = [...(careData.sections || []), ...(MOM_CARE.common || [])];
   let colorIdx = 0;
 
   const gridHtml = allSections.map(sec => {
     const col = sec.warn
-      ? { bg:'linear-gradient(135deg,#fff1f2,#ffe4e6)', accent:'#dc2626' }
+      ? (isDark
+          ? { bg:'linear-gradient(135deg,#2a0f10,#3a1515)', accent:'#f87171' }
+          : { bg:'linear-gradient(135deg,#fff1f2,#ffe4e6)', accent:'#dc2626' })
       : cardColors[colorIdx++ % cardColors.length];
     const secId = encodeURIComponent(sec.title);
     const warnClass = sec.warn ? ' warn' : '';
@@ -2871,32 +2888,33 @@ function renderMomCarePage() {
         onclick="openMomDetail('${secId}')">
         <div class="mom-grid-emoji">${sec.icon}</div>
         <div style="flex:1;">
-          <div class="mom-grid-title">⚠️ ${sec.title}</div>
+          <div class="mom-grid-title" style="color:${titleColor};">⚠️ ${sec.title}</div>
           <div class="mom-grid-count" style="color:${col.accent};">${sec.items.length}가지 증상 확인</div>
         </div>
         <div style="font-size:18px;color:${col.accent};opacity:0.5;">▶</div>
       </div>`;
     }
-    return `<div class="mom-grid-card" style="background:${col.bg};border-top:3px solid ${col.accent}22;"
+    return `<div class="mom-grid-card" style="background:${col.bg};border-top:3px solid ${col.accent}33;"
       onclick="openMomDetail('${secId}')">
       <div class="mom-grid-emoji">${sec.icon}</div>
-      <div class="mom-grid-title">${sec.title}</div>
-      <div class="mom-grid-count">${sec.items.length}가지 정보 →</div>
+      <div class="mom-grid-title" style="color:${titleColor};">${sec.title}</div>
+      <div class="mom-grid-count" style="color:${col.accent};">${sec.items.length}가지 정보 →</div>
     </div>`;
   }).join('');
 
   document.getElementById('mom-care-content').innerHTML =
     '<div class="mom-grid">' + gridHtml + '</div>';
 
-  // 커뮤니티 검색 칩 생성 — 내장 KB 키워드 기반
+  // 커뮤니티 검색 칩
   const communityBox = document.getElementById('community-search-box');
-  communityBox.style.display = 'block';
+  if (communityBox) communityBox.style.display = 'block';
   const chips = [
     '신생아 황달', '모유수유', '분유 추천', '수면교육',
     '영아산통', '이유식', '예방접종', '기저귀 발진',
     '배앓이', '신생아 목욕'
   ];
-  document.getElementById('community-chips').innerHTML = chips.map(c =>
+  const chipsEl = document.getElementById('community-chips');
+  if (chipsEl) chipsEl.innerHTML = chips.map(c =>
     '<span class="community-chip" onclick="setCommunityQuery(\'' + c + '\')">' + c + '</span>'
   ).join('');
 }
@@ -5323,6 +5341,11 @@ const MILESTONE_STAGES = [
 ];
 
 function renderMilestoneList() {
+  // _milestoneStageOverride가 있으면 그 스테이지로 렌더
+  if (_milestoneStageOverride !== null && _milestoneStageOverride !== undefined) {
+    _renderMilestoneAt(_milestoneStageOverride);
+    return;
+  }
   const el = document.getElementById('milestone-list');
   const stageBar = document.getElementById('milestone-stage-bar');
   const ageLabel = document.getElementById('milestone-age-label');
@@ -5362,20 +5385,25 @@ function renderMilestoneList() {
   const allDone = completedCount === stage.items.length;
 
   // 상단 이전/다음 버튼
+  const isDark = document.body.classList.contains('dark');
+  const msBtnBg   = isDark ? '#2a2520' : '#fff';
+  const msBtnBgAc = isDark ? '#2a2218' : '#fff7d6';
+  const msBtnClr  = isDark ? '#c8a870' : '#7a5600';
+  const msBtnBd   = isDark ? '#3d3628' : '#e8d796';
   let topNav = `<div style="display:flex;gap:10px;margin-bottom:16px;">`;
   if (currentStageIdx > 0) {
     const prevS = MILESTONE_STAGES[currentStageIdx - 1];
     topNav += `<button onclick="showMilestoneStage(${currentStageIdx-1})"
-      style="flex:1;padding:10px;border:1.5px solid #e8d796;border-radius:12px;
-             background:#fff;font-size:13px;font-weight:700;color:#7a5600;cursor:pointer;">
+      style="flex:1;padding:10px;border:1.5px solid ${msBtnBd};border-radius:12px;
+             background:${msBtnBg};font-size:13px;font-weight:700;color:${msBtnClr};cursor:pointer;">
       ← ${prevS.label}
     </button>`;
   }
   if (currentStageIdx < MILESTONE_STAGES.length - 1) {
     const nextS = MILESTONE_STAGES[currentStageIdx + 1];
     topNav += `<button onclick="showMilestoneStage(${currentStageIdx+1})"
-      style="flex:1;padding:10px;border:1.5px solid #e8d796;border-radius:12px;
-             background:#fff7d6;font-size:13px;font-weight:700;color:#7a5600;cursor:pointer;">
+      style="flex:1;padding:10px;border:1.5px solid ${msBtnBd};border-radius:12px;
+             background:${msBtnBgAc};font-size:13px;font-weight:700;color:${msBtnClr};cursor:pointer;">
       ${nextS.label} →
     </button>`;
   }
@@ -5433,6 +5461,7 @@ function showMilestoneStage(idx) {
 }
 
 function _renderMilestoneAt(stageIdx) {
+  const isDark = document.body.classList.contains('dark');
   const el = document.getElementById('milestone-list');
   const stageBar = document.getElementById('milestone-stage-bar');
   const ageLabel = document.getElementById('milestone-age-label');
@@ -5460,7 +5489,7 @@ function _renderMilestoneAt(stageIdx) {
     const prevS = MILESTONE_STAGES[currentStageIdx - 1];
     topNav += `<button onclick="showMilestoneStage(${currentStageIdx-1})"
       style="flex:1;padding:10px;border:1.5px solid #e8d796;border-radius:12px;
-             background:#fff;font-size:13px;font-weight:700;color:#7a5600;cursor:pointer;">
+             background:" + (isDark?'#2a2520':'#fff') + ";font-size:13px;font-weight:700;color:" + (isDark?'#c8a870':'#7a5600') + ";border-color:" + (isDark?'#3d3628':'#e8d796') + ";cursor:pointer;">
       ← ${prevS.label}
     </button>`;
   }
@@ -5468,7 +5497,7 @@ function _renderMilestoneAt(stageIdx) {
     const nextS = MILESTONE_STAGES[currentStageIdx + 1];
     topNav += `<button onclick="showMilestoneStage(${currentStageIdx+1})"
       style="flex:1;padding:10px;border:1.5px solid #e8d796;border-radius:12px;
-             background:#fff7d6;font-size:13px;font-weight:700;color:#7a5600;cursor:pointer;">
+             background:" + (isDark?'#2a2218':'#fff7d6') + ";font-size:13px;font-weight:700;color:" + (isDark?'#c8a870':'#7a5600') + ";border-color:" + (isDark?'#3d3628':'#e8d796') + ";cursor:pointer;">
       ${nextS.label} →
     </button>`;
   }
@@ -5494,8 +5523,8 @@ function _renderMilestoneAt(stageIdx) {
   }).join('');
 
   html += `<div style="display:flex;gap:10px;margin-top:16px;">`;
-  if (stageIdx > 0) html += `<button onclick="showMilestoneStage(${stageIdx-1})" style="flex:1;padding:12px;border:1.5px solid #e8d796;border-radius:12px;background:#fff;font-size:13px;font-weight:700;color:#7a5600;cursor:pointer;">← ${MILESTONE_STAGES[stageIdx-1].label}</button>`;
-  if (stageIdx < MILESTONE_STAGES.length - 1) html += `<button onclick="showMilestoneStage(${stageIdx+1})" style="flex:1;padding:12px;border:1.5px solid #e8d796;border-radius:12px;background:#fff7d6;font-size:13px;font-weight:700;color:#7a5600;cursor:pointer;">${MILESTONE_STAGES[stageIdx+1].label} →</button>`;
+  if (stageIdx > 0) html += `<button onclick="showMilestoneStage(${stageIdx-1})" style="flex:1;padding:12px;border:1.5px solid #e8d796;border-radius:12px;background:" + (isDark?'#2a2520':'#fff') + ";font-size:13px;font-weight:700;color:" + (isDark?'#c8a870':'#7a5600') + ";border-color:" + (isDark?'#3d3628':'#e8d796') + ";cursor:pointer;">← ${MILESTONE_STAGES[stageIdx-1].label}</button>`;
+  if (stageIdx < MILESTONE_STAGES.length - 1) html += `<button onclick="showMilestoneStage(${stageIdx+1})" style="flex:1;padding:12px;border:1.5px solid #e8d796;border-radius:12px;background:" + (isDark?'#2a2218':'#fff7d6') + ";font-size:13px;font-weight:700;color:" + (isDark?'#c8a870':'#7a5600') + ";border-color:" + (isDark?'#3d3628':'#e8d796') + ";cursor:pointer;">${MILESTONE_STAGES[stageIdx+1].label} →</button>`;
   html += `</div>`;
   el.innerHTML = html;
 }
@@ -5530,6 +5559,10 @@ function toggleDarkMode() {
   const knob = document.getElementById('dark-knob');
   if (toggle) toggle.style.background = isDark ? '#7a5600' : '#d1d5db';
   if (knob) knob.style.transform = isDark ? 'translateX(20px)' : 'translateX(0)';
+  // 다크모드 전환 시 JS로 렌더된 페이지 재렌더
+  try { renderMomCarePage(); } catch(e) {}
+  try { renderMilestoneList(); } catch(e) {}
+  try { renderPatternClock(); } catch(e) {}
 }
 
 function loadDarkMode() {
@@ -6331,6 +6364,7 @@ function goToPage(n) {
   try { sessionStorage.setItem('nuri_last_page', String(currentPage)); } catch(e) {}
   if (currentPage === 4) setTimeout(() => { renderMainChart(); renderPatternAnalysis(); }, 100);
   if (currentPage === 5) setTimeout(() => { renderGrowthChart(); renderGrowthTable(); }, 100);
+  if (currentPage === 6) { try { renderMomCarePage(); } catch(e){} }
   if (currentPage === 9) {
     renderDadTabChecklist();
     renderDadTodayRecords();
