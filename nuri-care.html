@@ -1201,6 +1201,25 @@ body.dark .dad-rec-btn.sleep  { background: linear-gradient(135deg,#0f1a2a,#1a2a
 body.dark .dad-rec-btn.bath   { background: linear-gradient(135deg,#0a1e22,#102830) !important; border-color: #0e7490 !important; }
 body.dark .dad-rec-btn span:last-child { opacity: 0.7; }
 
+
+/* ══ 타이틀 다크모드 강화 ══ */
+body.dark .diary-header h2 { color: #f0ead8 !important; }
+body.dark .diary-write-btn { background: #2a2520 !important; border-color: #3d3628 !important; color: #c8a870 !important; }
+body.dark .diary-empty { color: #7a6a5a !important; }
+body.dark .diary-header { color: #f0ead8; }
+body.dark .diary-page { background: #1a1612 !important; }
+
+body.dark .mom-page-header h2 { color: #f0ead8 !important; }
+body.dark .mom-page-header p  { color: #a89880 !important; }
+body.dark .mom-birth-badge    { opacity: 0.9; }
+
+body.dark .policy-page-header h2 { color: #f0ead8 !important; }
+body.dark .policy-page-header p  { color: #a89880 !important; }
+body.dark .policy-page { background: #1a1612 !important; }
+
+body.dark .feature-page-title { color: #f0ead8 !important; }
+body.dark .feature-section-title { color: #c8a870 !important; }
+
 </style>
 </head>
 <body style="visibility:hidden;">
@@ -2035,6 +2054,79 @@ body.dark .dad-rec-btn span:last-child { opacity: 0.7; }
 </div>
 
 <!-- ═══════════ 엄마 케어 상세 모달 ═══════════ -->
+<!-- ── 모달: 아빠 기록 ── -->
+<div class="modal-bg" id="modal-dad-record">
+  <div class="modal" style="max-height:85vh;overflow-y:auto;">
+    <div class="modal-handle"></div>
+    <div id="dad-record-header" style="text-align:center;padding:8px 0 20px;">
+      <div id="dad-rec-emoji" style="font-size:52px;margin-bottom:8px;">🍼</div>
+      <div id="dad-rec-title" style="font-size:19px;font-weight:900;color:#1a1a1a;margin-bottom:4px;"></div>
+      <div id="dad-rec-sub" style="font-size:13px;color:#9ca3af;">아빠가 기록해요 👨</div>
+    </div>
+
+    <!-- 수유 세부 -->
+    <div id="dad-feed-detail">
+      <span class="field-label">수유량 (ml)</span>
+      <input type="number" id="dad-feed-ml" placeholder="예: 120ml (모르면 비워두세요)" min="0" max="500"
+        style="margin-bottom:8px;">
+      <span class="field-label">수유 방법</span>
+      <div class="opt-row" style="gap:8px;margin-bottom:16px;">
+        <button class="opt-btn sel" id="dad-fe-bottle" onclick="dadFeSel('bottle')" style="flex:1;padding:10px;font-size:13px;">🍼 분유</button>
+        <button class="opt-btn"     id="dad-fe-breast" onclick="dadFeSel('breast')" style="flex:1;padding:10px;font-size:13px;">🤱 모유</button>
+        <button class="opt-btn"     id="dad-fe-both"   onclick="dadFeSel('both')"   style="flex:1;padding:10px;font-size:13px;">혼합</button>
+      </div>
+    </div>
+
+    <!-- 기저귀 세부 -->
+    <div id="dad-diaper-detail" style="display:none;">
+      <span class="field-label">기저귀 종류</span>
+      <div style="display:flex;gap:10px;margin-bottom:16px;">
+        <button class="opt-btn sel" id="dad-dp-pee"  onclick="dadDpSel('소변')"      style="flex:1;padding:14px;font-size:15px;flex-direction:column;display:flex;align-items:center;gap:4px;border-radius:14px;">
+          <span>💧</span><span style="font-size:12px;font-weight:700;">소변</span>
+        </button>
+        <button class="opt-btn"     id="dad-dp-poo"  onclick="dadDpSel('대변')"      style="flex:1;padding:14px;font-size:15px;flex-direction:column;display:flex;align-items:center;gap:4px;border-radius:14px;">
+          <span>💩</span><span style="font-size:12px;font-weight:700;">대변</span>
+        </button>
+        <button class="opt-btn"     id="dad-dp-both" onclick="dadDpSel('소변+대변')" style="flex:1;padding:14px;font-size:15px;flex-direction:column;display:flex;align-items:center;gap:4px;border-radius:14px;">
+          <span>💧💩</span><span style="font-size:12px;font-weight:700;">둘다</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 수면 세부 -->
+    <div id="dad-sleep-detail" style="display:none;">
+      <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:14px;padding:16px;margin-bottom:16px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:6px;">🌙</div>
+        <div style="font-size:14px;font-weight:700;color:#1d4ed8;">재웠어요 기록</div>
+        <div style="font-size:12px;color:#6b7280;margin-top:4px;">지금 시각으로 기록돼요</div>
+      </div>
+    </div>
+
+    <!-- 목욕 세부 -->
+    <div id="dad-bath-detail" style="display:none;">
+      <div style="background:linear-gradient(135deg,#ecfeff,#cffafe);border-radius:14px;padding:16px;margin-bottom:16px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:6px;">🛁</div>
+        <div style="font-size:14px;font-weight:700;color:#0e7490;">목욕 기록</div>
+        <div style="font-size:12px;color:#6b7280;margin-top:4px;">지금 시각으로 기록돼요</div>
+      </div>
+    </div>
+
+    <!-- 메모 -->
+    <span class="field-label">메모 <span style="font-size:11px;color:#9ca3af;">(선택)</span></span>
+    <textarea id="dad-rec-memo" rows="2" placeholder="간단한 메모..."
+      style="width:100%;box-sizing:border-box;padding:10px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;resize:none;margin-bottom:16px;"></textarea>
+
+    <!-- 기록 시각 -->
+    <span class="field-label">기록 시각</span>
+    <input type="datetime-local" id="dad-rec-time" style="margin-bottom:16px;">
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeDadRecordModal()">취소</button>
+      <button class="btn-save"   id="dad-rec-save-btn" onclick="saveDadRecordModal()">기록하기</button>
+    </div>
+  </div>
+</div>
+
 <!-- ── 모달: 직접 기록 입력 ── -->
 <div class="modal-bg" id="modal-manual-record" style="z-index:450;">
   <div class="modal" style="max-height:90vh;overflow-y:auto;">
@@ -3048,7 +3140,7 @@ function renderMomCarePage() {
     { bg:'linear-gradient(135deg,#fdf4ff,#f3e8ff)', accent:'#9333ea' },
     { bg:'linear-gradient(135deg,#fffbeb,#fef9c3)', accent:'#d97706' },
     { bg:'linear-gradient(135deg,#fff7ed,#ffedd5)', accent:'#ea580c' },
-    { bg:'linear-gradient(135deg,#fff1f2,#ffe4e6)', accent:'#dc2626' },
+    { bg:'linear-gradient(135deg,#fefce8,#fef9c3)', accent:'#ca8a04' },
     { bg:'linear-gradient(135deg,#f0fdfa,#ccfbf1)', accent:'#0d9488' },
   ];
 
@@ -7796,42 +7888,97 @@ const DAD_RECORD_LABELS = {
 };
 
 // 아빠 기저귀 — 소변/대변 선택 후 기록
-function dadDiaperRecord() {
-  const choice = prompt('어떤 기저귀인가요?\n1 = 소변\n2 = 대변\n3 = 소변+대변\n(숫자 입력)');
-  if (choice === null) return; // 취소
-  const typeMap = {
-    '1': { sub:'소변', icon:'💧', title:'아빠가 기저귀 갈았어요 (소변)' },
-    '2': { sub:'대변', icon:'💩', title:'아빠가 기저귀 갈았어요 (대변)' },
-    '3': { sub:'소변+대변', icon:'💩', title:'아빠가 기저귀 갈았어요 (소변+대변)' },
+
+
+
+function _openDadModal(type) {
+  const el = id => document.getElementById(id);
+  // 모든 세부 숨기기
+  ['feed','diaper','sleep','bath'].forEach(t => {
+    const d = el('dad-'+t+'-detail');
+    if (d) d.style.display = 'none';
+  });
+  // 타입별 설정
+  const configs = {
+    feed:   { emoji:'🍼', title:'수유 기록', color:'#c2410c', detail:'dad-feed-detail' },
+    diaper: { emoji:'🌿', title:'기저귀 기록', color:'#15803d', detail:'dad-diaper-detail' },
+    sleep:  { emoji:'😴', title:'재웠어요', color:'#1d4ed8', detail:'dad-sleep-detail' },
+    bath:   { emoji:'🛁', title:'목욕 기록', color:'#0e7490', detail:'dad-bath-detail' },
   };
-  const info = typeMap[choice] || typeMap['1'];
-  _saveDadRecord({ type:'diaper', time:nowLocal(), title:info.title, sub:info.sub, icon:info.icon, cat:'diaper', byDad:true });
-  showDadToast(info.icon + ' ' + info.title);
-  renderDadTodayRecords();
+  const cfg = configs[type] || configs.feed;
+  el('dad-rec-emoji').textContent = cfg.emoji;
+  el('dad-rec-title').textContent = cfg.title;
+  el('dad-rec-title').style.color = cfg.color;
+  el('dad-rec-save-btn').style.background = cfg.color;
+  const detail = el(cfg.detail);
+  if (detail) detail.style.display = '';
+  el('dad-rec-memo').value = '';
+  el('dad-rec-time').value = nowLocal();
+  // 기저귀 초기화
+  if (type==='diaper') dadDpSel('소변');
+  if (type==='feed') { dadFeSel('bottle'); el('dad-feed-ml').value = ''; }
+  el('modal-dad-record').classList.add('open');
+  window._dadModalType = type;
 }
-function dadRecordFeed() {
-  const ml = prompt('몇 ml 먹였나요? (모르면 그냥 확인)');
-  if (ml === null) return; // 취소 시 저장 안 함
-  const mlText = ml && !isNaN(parseInt(ml)) ? parseInt(ml) + 'ml' : '';
-  const title = mlText ? `아빠가 분유 ${mlText} 먹였어요` : '아빠가 분유 먹였어요';
-  const sub = mlText ? `👨 아빠 기록 · ${mlText}` : '👨 아빠 기록';
-  _saveDadRecord({ type:'feed', time:nowLocal(), title, sub, icon:'🍼', cat:'feed', byDad:true });
-  showDadToast(`🍼 ${title}`);
+
+let _dadFeSel = 'bottle';
+let _dadDpSel = '소변';
+
+function dadFeSel(t) {
+  _dadFeSel = t;
+  ['bottle','breast','both'].forEach(v => {
+    const btn = document.getElementById('dad-fe-'+v);
+    if (btn) btn.classList.toggle('sel', v===t);
+  });
+}
+function dadDpSel(t) {
+  _dadDpSel = t;
+  const map = {'소변':'pee','대변':'poo','소변+대변':'both'};
+  ['소변','대변','소변+대변'].forEach(v => {
+    const btn = document.getElementById('dad-dp-'+map[v]);
+    if (btn) btn.classList.toggle('sel', v===t);
+  });
+}
+function closeDadRecordModal() {
+  document.getElementById('modal-dad-record').classList.remove('open');
+}
+function saveDadRecordModal() {
+  const el = id => document.getElementById(id);
+  const type = window._dadModalType || 'feed';
+  const time = el('dad-rec-time').value || nowLocal();
+  const memo = el('dad-rec-memo').value.trim();
+  let rec = {};
+  if (type === 'feed') {
+    const ml = parseInt(el('dad-feed-ml')?.value||'0')||0;
+    const typeLabel = _dadFeSel==='bottle'?'분유':_dadFeSel==='breast'?'모유':'혼합';
+    const mlText = ml ? ' '+ml+'ml' : '';
+    rec = { type:'feed', cat:'feed', icon:'🍼', byDad:true, time,
+      title:'아빠가 '+typeLabel+mlText+' 먹였어요',
+      sub: '👨 아빠 기록'+(memo?' · '+memo:''), feedType:_dadFeSel, ml:ml||undefined };
+  } else if (type === 'diaper') {
+    rec = { type:'diaper', cat:'diaper', icon: _dadDpSel==='소변'?'💧':_dadDpSel==='대변'?'💩':'🌿',
+      byDad:true, time,
+      title:'아빠가 기저귀 갈았어요',
+      sub: _dadDpSel + (memo?' · '+memo:'') };
+  } else if (type === 'sleep') {
+    rec = { type:'sleep', cat:'sleep', icon:'😴', byDad:true, time,
+      title:'아빠가 재웠어요', sub:'👨 아빠 기록'+(memo?' · '+memo:'') };
+  } else if (type === 'bath') {
+    rec = { type:'etc', cat:'etc', icon:'🛁', byDad:true, time,
+      title:'아빠가 목욕시켰어요', sub:'👨 아빠 기록'+(memo?' · '+memo:'') };
+  }
+  closeDadRecordModal();
+  addRecord(rec);
   renderDadTodayRecords();
 }
 
+function dadRecordFeed()    { _openDadModal('feed'); }
+function dadDiaperRecord()  { _openDadModal('diaper'); }
 function dadRecord(type) {
-  const info = DAD_RECORD_LABELS[type];
-  if (!info) return;
-  if (!confirm(`"${info.title}" 기록을 추가할까요?`)) return; // 취소 시 저장 안 함
-  _saveDadRecord({
-    type: info.cat, time: nowLocal(),
-    title: info.title, sub: '👨 아빠 기록',
-    icon: info.icon, cat: info.cat, byDad: true,
-  });
-  showDadToast(info.icon + ' ' + info.title);
-  renderDadTodayRecords();
+  const typeMap = { sleep:'sleep', bath:'bath' };
+  _openDadModal(typeMap[type] || type);
 }
+
 
 function _saveDadRecord(rec) {
 
