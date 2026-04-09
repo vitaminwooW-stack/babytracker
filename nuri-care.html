@@ -1031,6 +1031,82 @@ body.dark .tl-time-hm { color: #f0ead8; }
 body.dark .tl-content-title { color: #f0ead8; }
 .tag-badge { background:#fff; border:1px solid #e8d796; border-radius:8px; padding:4px 10px; font-size:12px; color:#7a5600; font-weight:600; }
 
+
+/* ══════ 다크모드 전역 강화 ══════ */
+
+/* 전체 배경/텍스트 기본 */
+body.dark { background: #1a1612 !important; color: #f0ead8; }
+body.dark .app-body { background: #1a1612 !important; }
+
+/* feature-page 전체 (성장기록, 통계, 예방접종 등) */
+body.dark .feature-page { background: #1a1612 !important; color: #f0ead8; }
+body.dark .feature-page-title { color: #f0ead8 !important; }
+body.dark .feature-page-sub { color: #a89880 !important; }
+body.dark .feature-section-title { color: #c8a870 !important; }
+
+/* 카드/섹션 */
+body.dark .chart-wrap,
+body.dark .score-card,
+body.dark .pattern-card,
+body.dark .vaccine-card,
+body.dark .growth-card { background: #2a2520 !important; border-color: #3d3628 !important; }
+
+/* 텍스트 */
+body.dark .chart-period-label { color: #c8a870 !important; }
+body.dark [style*="color:#1a1a1a"] { color: #f0ead8 !important; }
+body.dark [style*="color:#374151"] { color: #c8b898 !important; }
+body.dark [style*="color:#6b7280"] { color: #a89880 !important; }
+body.dark [style*="color:#9ca3af"] { color: #7a6a5a !important; }
+body.dark [style*="color:#7a5600"] { color: #c8a870 !important; }
+
+/* 성장 기록 테이블 */
+body.dark .growth-table { color: #f0ead8; }
+body.dark .growth-table th { background: #2a2520 !important; color: #c8a870 !important; border-color: #3d3628 !important; }
+body.dark .growth-table td { color: #d0c0a8 !important; border-color: #3d3628 !important; }
+body.dark .growth-input-row input { background: #2a2520 !important; border-color: #3d3628 !important; color: #f0ead8 !important; }
+body.dark .growth-add-btn { background: #7a5600 !important; }
+
+/* 예방접종 */
+body.dark .vaccine-card { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .vaccine-row { border-color: #3d3628 !important; }
+body.dark .vaccine-name { color: #f0ead8 !important; }
+body.dark .vaccine-age-badge { background: #3d3628 !important; color: #c8a870 !important; }
+body.dark .vaccine-done-text { color: #4ade80 !important; }
+
+/* 통계 분석 */
+body.dark .chart-tab { background: #2a2520 !important; border-color: #3d3628 !important; color: #c8a870 !important; }
+body.dark .chart-tab.active { background: #7a5600 !important; color: #fff !important; }
+body.dark .chart-legend-item { color: #a89880 !important; }
+body.dark .pattern-analysis-wrap > div { background: #2a2520 !important; border-color: #3d3628 !important; color: #f0ead8 !important; }
+
+/* 무드 셀렉터 */
+body.dark #mood-selector-wrap { background: linear-gradient(135deg,#2a2218,#1e1a10) !important; }
+
+/* 직접 입력 모달 */
+body.dark #modal-manual-record .modal { background: #2a2520 !important; }
+body.dark #modal-manual-record textarea { background: #3d3628 !important; border-color: #4d4030 !important; color: #f0ead8 !important; }
+
+/* score-card-wrap 내부 */
+body.dark #score-card-wrap * { color: #f0ead8; }
+body.dark #score-card-wrap [style*="background"] { background: #2a2520 !important; }
+
+/* 복지정책 페이지 */
+body.dark .policy-page { background: #1a1612 !important; }
+body.dark .policy-card { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .policy-card-title { color: #f0ead8 !important; }
+body.dark .policy-item-text { color: #a89880 !important; }
+body.dark [style*="#fff0f6"],[style*="#fce7f3"] { background: #2a1520 !important; }
+
+/* 설정 페이지 카드들 */
+body.dark .feature-page .chart-wrap { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark [style*="background:#f9fafb"] { background: #2a2520 !important; }
+body.dark [style*="background:#f3f4f6"] { background: #3d3628 !important; }
+body.dark [style*="background:#fff"] { }
+
+/* 직접입력 모달 세부 */
+body.dark #mr-side-wrap div { color: #c8a870; }
+body.dark #mr-pump-total-label { color: #c8a870 !important; }
+
 /* ══════ 다크모드 추가 보완 2 ══════ */
 
 /* ── 발달 마일스톤 ── */
@@ -1116,6 +1192,14 @@ body.dark [style*="color:#1a1a1a"] { color: #f0ead8 !important; }
 body.dark [style*="color:#374151"] { color: #c8a870 !important; }
 body.dark [style*="color:#6b7280"] { color: #a89880 !important; }
 body.dark [style*="color:#7a5600"]:not(button):not(.active) { color: #c8a870 !important; }
+
+
+/* 아빠 기록 버튼 다크모드 */
+body.dark .dad-rec-btn.feed   { background: linear-gradient(135deg,#2a1a08,#3a2010) !important; border-color: #c2410c !important; }
+body.dark .dad-rec-btn.diaper { background: linear-gradient(135deg,#0a2010,#162a18) !important; border-color: #15803d !important; }
+body.dark .dad-rec-btn.sleep  { background: linear-gradient(135deg,#0f1a2a,#1a2a3a) !important; border-color: #1d4ed8 !important; }
+body.dark .dad-rec-btn.bath   { background: linear-gradient(135deg,#0a1e22,#102830) !important; border-color: #0e7490 !important; }
+body.dark .dad-rec-btn span:last-child { opacity: 0.7; }
 
 </style>
 </head>
@@ -1558,6 +1642,13 @@ body.dark [style*="color:#7a5600"]:not(button):not(.active) { color: #c8a870 !im
             <button class="chart-tab" id="ctab-diaper" onclick="selectChartTab('diaper')">🌿 기저귀</button>
             <button class="chart-tab" id="ctab-pump" onclick="selectChartTab('pump')">🤱 유축</button>
           </div>
+          <!-- 기저귀 서브탭 -->
+          <div id="diaper-subtab-row" style="display:none;gap:6px;margin-bottom:10px;display:none;" class="chart-tab-row">
+            <button class="chart-tab active" id="dsubtab-all"    onclick="selectDiaperSub('all')"   style="font-size:12px;padding:4px 10px;">전체</button>
+            <button class="chart-tab"         id="dsubtab-pee"   onclick="selectDiaperSub('pee')"   style="font-size:12px;padding:4px 10px;">💧 소변</button>
+            <button class="chart-tab"         id="dsubtab-poo"   onclick="selectDiaperSub('poo')"   style="font-size:12px;padding:4px 10px;">💩 대변</button>
+            <button class="chart-tab"         id="dsubtab-both"  onclick="selectDiaperSub('both')"  style="font-size:12px;padding:4px 10px;">둘다</button>
+          </div>
           <div class="chart-wrap">
             <div style="font-size:13px;font-weight:600;color:#7a5600;margin-bottom:10px;" id="chart-period-label">최근 7일</div>
             <canvas id="main-chart" height="160"></canvas>
@@ -1584,8 +1675,12 @@ body.dark [style*="color:#7a5600"]:not(button):not(.active) { color: #c8a870 !im
             </div>
           </div>
           <div class="feature-section-title">성장 추이</div>
-          <div class="chart-wrap">
-            <canvas id="growth-chart" height="160"></canvas>
+          <div style="display:flex;gap:6px;margin-bottom:8px;">
+            <button id="growth-tab-weight" class="chart-tab active" onclick="growthSetTab('weight')" style="font-size:12px;padding:5px 14px;">⚖️ 몸무게</button>
+            <button id="growth-tab-height" class="chart-tab"        onclick="growthSetTab('height')" style="font-size:12px;padding:5px 14px;">📏 키</button>
+          </div>
+          <div class="chart-wrap" style="position:relative;">
+            <canvas id="growth-chart" height="220"></canvas>
             <div id="growth-empty" class="chart-empty" style="display:none;">아직 기록이 없어요</div>
           </div>
           <div class="feature-section-title">기록 목록</div>
@@ -1811,11 +1906,27 @@ body.dark [style*="color:#7a5600"]:not(button):not(.active) { color: #c8a870 !im
           </div>
           <div class="dad-rec-section">
             <div class="dad-rec-title">📋 아빠 기록 <span class="dad-rec-badge">엄마 타임라인에 공유됨</span></div>
-            <div class="dad-rec-btns">
-              <button class="dad-rec-btn feed"   onclick="dadRecordFeed()">🍼 분유·수유</button>
-              <button class="dad-rec-btn diaper" onclick="dadDiaperRecord()">🌿 기저귀</button>
-              <button class="dad-rec-btn sleep"  onclick="dadRecord('sleep')">😴 재웠어요</button>
-              <button class="dad-rec-btn bath"   onclick="dadRecord('bath')">🛁 목욕</button>
+            <div class="dad-rec-btns" style="grid-template-columns:1fr 1fr;gap:10px;">
+              <button class="dad-rec-btn feed" onclick="dadRecordFeed()" style="padding:16px 8px;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid #fdba74;background:linear-gradient(135deg,#fff7ed,#ffedd5);">
+                <span style="font-size:28px;">🍼</span>
+                <span style="font-size:13px;font-weight:800;color:#c2410c;">분유·수유</span>
+                <span style="font-size:10px;color:#ea580c;opacity:0.8;">기록하기</span>
+              </button>
+              <button class="dad-rec-btn diaper" onclick="dadDiaperRecord()" style="padding:16px 8px;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid #86efac;background:linear-gradient(135deg,#f0fdf4,#dcfce7);">
+                <span style="font-size:28px;">🌿</span>
+                <span style="font-size:13px;font-weight:800;color:#15803d;">기저귀</span>
+                <span style="font-size:10px;color:#16a34a;opacity:0.8;">기록하기</span>
+              </button>
+              <button class="dad-rec-btn sleep" onclick="dadRecord('sleep')" style="padding:16px 8px;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid #93c5fd;background:linear-gradient(135deg,#eff6ff,#dbeafe);">
+                <span style="font-size:28px;">😴</span>
+                <span style="font-size:13px;font-weight:800;color:#1d4ed8;">재웠어요</span>
+                <span style="font-size:10px;color:#2563eb;opacity:0.8;">기록하기</span>
+              </button>
+              <button class="dad-rec-btn bath" onclick="dadRecord('bath')" style="padding:16px 8px;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid #a5f3fc;background:linear-gradient(135deg,#ecfeff,#cffafe);">
+                <span style="font-size:28px;">🛁</span>
+                <span style="font-size:13px;font-weight:800;color:#0e7490;">목욕</span>
+                <span style="font-size:10px;color:#0891b2;opacity:0.8;">기록하기</span>
+              </button>
             </div>
             <div class="dad-rec-today" id="dad-rec-today">
               <div class="dad-rec-empty">오늘 아직 기록이 없어요<br>위 버튼을 눌러 기록해보세요 💪</div>
@@ -5293,10 +5404,21 @@ function showLinkedBadge(name) { _showDadLinkedState(name ? { name } : null); }
 // ── 📊 차트 & 통계 ──
 let chartTab = 'feed';
 
+let diaperSub = 'all';
 function selectChartTab(tab) {
   chartTab = tab;
   ['feed','sleep','diaper','pump'].forEach(t => {
     document.getElementById('ctab-' + t).classList.toggle('active', t === tab);
+  });
+  const dRow = document.getElementById('diaper-subtab-row');
+  if (dRow) dRow.style.display = tab==='diaper' ? 'flex' : 'none';
+  renderMainChart();
+}
+function selectDiaperSub(sub) {
+  diaperSub = sub;
+  ['all','pee','poo','both'].forEach(s => {
+    const btn = document.getElementById('dsubtab-'+s);
+    if (btn) btn.classList.toggle('active', s===sub);
   });
   renderMainChart();
 }
@@ -5331,8 +5453,13 @@ function renderMainChart() {
       data[i] = Math.round(mins / 60 * 10) / 10;
       color = '#1a5fa8'; unit = '시간';
     } else if (chartTab === 'diaper') {
-      data[i] = recs.filter(r => r.cat === 'diaper').length;
-      color = '#1d7a3a'; unit = '회';
+      const dRecs = recs.filter(r => r.cat === 'diaper');
+      if (diaperSub === 'all')  data[i] = dRecs.length;
+      else if (diaperSub==='pee')  data[i] = dRecs.filter(r=>r.sub==='소변').length;
+      else if (diaperSub==='poo')  data[i] = dRecs.filter(r=>r.sub==='대변').length;
+      else if (diaperSub==='both') data[i] = dRecs.filter(r=>r.sub==='소변+대변').length;
+      color = diaperSub==='pee'?'#3b82f6':diaperSub==='poo'?'#92400e':diaperSub==='both'?'#7c3aaf':'#1d7a3a';
+      unit = '회';
     } else if (chartTab === 'pump') {
       data[i] = recs.filter(r => r.cat === 'pump').reduce((a, r) => a + (r.total || 0), 0);
       color = '#7c3aaf'; unit = 'ml';
@@ -5385,6 +5512,13 @@ function renderMainChart() {
 // ── 📏 성장 기록 ──
 let growthRecords = [];
 
+function growthSetTab(tab) {
+  ['weight','height'].forEach(t => {
+    const btn = document.getElementById('growth-tab-'+t);
+    if (btn) btn.classList.toggle('active', t===tab);
+  });
+  renderGrowthChart();
+}
 function addGrowthRecord() {
   const date = document.getElementById('growth-date').value;
   const weight = parseFloat(document.getElementById('growth-weight').value);
@@ -5402,44 +5536,140 @@ function addGrowthRecord() {
 
 function renderGrowthChart() {
   const canvas = document.getElementById('growth-chart');
-  if (!canvas || !growthRecords.length) return;
+  if (!canvas) return;
   const sorted = [...growthRecords].sort((a,b) => new Date(a.date)-new Date(b.date));
-  const W = canvas.offsetWidth || 320, H = 160;
+  const W = canvas.offsetWidth || 320, H = 220;
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
   const dark = document.body.classList.contains('dark');
   const gridColor = dark ? '#3d3628' : '#f0e8d0';
   const textColor = dark ? '#a89880' : '#6b7280';
-  ctx.clearRect(0, 0, W, H);
-  const weights = sorted.map(r => r.weight).filter(Boolean);
-  const heights = sorted.map(r => r.height).filter(Boolean);
-  if (!weights.length && !heights.length) return;
-  // 몸무게 선
-  if (weights.length > 0) {
-    const wMin = Math.min(...weights) * 0.95, wMax = Math.max(...weights) * 1.05;
-    ctx.strokeStyle = '#c0410f'; ctx.lineWidth = 2;
+  const bgColor   = dark ? '#1a1612' : '#fff';
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0,0,W,H);
+
+  // 성별 가져오기
+  let gender = 'girl';
+  try { const p=JSON.parse(localStorage.getItem('baby_profile')||'{}'); gender=p.gender||'girl'; } catch(e){}
+
+  // 한국 소아 체중 평균 (개월수 기준, kg) - WHO/대한소아과학회
+  const KR_WEIGHT = {
+    boy:  [3.3,4.5,5.6,6.4,7.0,7.5,7.9,8.3,8.6,8.9,9.2,9.4,9.6,10.2,10.8,11.3,11.8,12.2,12.6],
+    girl: [3.2,4.2,5.1,5.8,6.4,6.9,7.3,7.6,7.9,8.2,8.5,8.7,8.9, 9.5,10.0,10.5,10.9,11.4,11.8]
+  };
+  const KR_HEIGHT = {
+    boy:  [49.9,54.7,58.4,61.4,63.9,65.9,67.6,69.2,70.6,72.0,73.3,74.5,75.7,78.0,80.2,82.3,84.2,86.0,87.8],
+    girl: [49.1,53.7,57.1,59.8,62.1,64.0,65.7,67.3,68.7,70.1,71.5,72.8,74.0,76.3,78.5,80.7,82.7,84.6,86.5]
+  };
+  const gKey = gender==='boy' ? 'boy' : 'girl';
+  const gColor = gender==='boy' ? '#60a5fa' : '#f472b6';
+  const gLabel = gender==='boy' ? '남아' : '여아';
+
+  const weights = sorted.filter(r=>r.weight);
+  const heights = sorted.filter(r=>r.height);
+  const pad = { top:20, right:16, bottom:30, left:40 };
+  const cW = W - pad.left - pad.right;
+  const cH = H - pad.top - pad.bottom;
+
+  // 탭 확인
+  const wTab = document.getElementById('growth-tab-weight');
+  const showWeight = !wTab || wTab.classList.contains('active');
+
+  const dataRecs = showWeight ? weights : heights;
+  const krAvg    = showWeight ? KR_WEIGHT[gKey] : KR_HEIGHT[gKey];
+  const unit     = showWeight ? 'kg' : 'cm';
+  const lineColor= showWeight ? '#c8860a' : '#7c3aaf';
+  const dotColor = showWeight ? '#7a5600' : '#6b21a8';
+
+  if (!dataRecs.length) {
+    ctx.fillStyle = textColor;
+    ctx.font = '13px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('기록이 없어요', W/2, H/2);
+    return;
+  }
+
+  // 기준 범위 계산 (아기 데이터 + 평균 모두 포함)
+  const allVals = dataRecs.map(r => showWeight?r.weight:r.height).concat(krAvg);
+  const minV = Math.min(...allVals)*0.95, maxV = Math.max(...allVals)*1.05;
+
+  // 그리드 5줄
+  ctx.strokeStyle = gridColor; ctx.lineWidth = 0.7;
+  for (let i=0; i<=4; i++) {
+    const y = pad.top + (cH/4)*i;
+    ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(W-pad.right,y); ctx.stroke();
+    const val = maxV - (maxV-minV)*(i/4);
+    ctx.fillStyle = textColor; ctx.font='9px sans-serif'; ctx.textAlign='right';
+    ctx.fillText(val.toFixed(1), pad.left-4, y+3);
+  }
+
+  // 아기 기록 날짜 → x 좌표 계산
+  const dates = dataRecs.map(r => new Date(r.date).getTime());
+  const minD = Math.min(...dates), maxD = Math.max(...dates);
+  const xOf = d => {
+    if (maxD===minD) return pad.left + cW/2;
+    return pad.left + (d-minD)/(maxD-minD)*cW;
+  };
+  const yOf = v => pad.top + (1-(v-minV)/(maxV-minV))*cH;
+
+  // 한국 평균선 (개월수 0~18, 아기 날짜 범위에 맞게 그리기)
+  let birthDate = null;
+  try { const p=JSON.parse(localStorage.getItem('baby_profile')||'{}');
+    if(p.birthDate) birthDate=new Date(p.birthDate); } catch(e){}
+  if (birthDate) {
+    ctx.save();
+    ctx.strokeStyle = gColor;
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([5,3]);
     ctx.beginPath();
-    sorted.filter(r => r.weight).forEach((r, i, arr) => {
-      const x = 30 + (sorted.indexOf(r)) / Math.max(sorted.length-1, 1) * (W-40);
-      const y = H - 20 - (r.weight - wMin) / (wMax - wMin + 0.001) * (H - 35);
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-      ctx.fillStyle = '#c0410f';
-      ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI*2); ctx.fill();
+    let started = false;
+    krAvg.forEach((v,mo) => {
+      const d = new Date(birthDate); d.setMonth(d.getMonth()+mo);
+      const x = xOf(d.getTime()), y = yOf(v);
+      if (!started) { ctx.moveTo(x,y); started=true; } else ctx.lineTo(x,y);
     });
     ctx.stroke();
+    ctx.restore();
+    // 평균 레이블
+    ctx.fillStyle = gColor; ctx.font='9px sans-serif'; ctx.textAlign='left';
+    ctx.fillText('한국 '+gLabel+' 평균', pad.left+4, pad.top+12);
   }
-  // 날짜 레이블
-  ctx.fillStyle = textColor; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
-  sorted.forEach((r, i) => {
-    const x = 30 + i / Math.max(sorted.length-1, 1) * (W-40);
-    const d = new Date(r.date);
-    ctx.fillText((d.getMonth()+1)+'/'+(d.getDate()), x, H - 6);
+
+  // 아기 데이터 선
+  ctx.save();
+  ctx.strokeStyle = lineColor;
+  ctx.lineWidth = 2.5;
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  dataRecs.forEach((r,i) => {
+    const v = showWeight?r.weight:r.height;
+    const x = xOf(new Date(r.date).getTime()), y = yOf(v);
+    i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
   });
-  // 범례
-  const legendEl = document.createElement('div');
-  legendEl.className = 'chart-legend';
-  if (weights.length) legendEl.innerHTML += '<div class="chart-legend-item"><div class="chart-legend-dot" style="background:#c0410f"></div>몸무게(kg)</div>';
-  document.getElementById('growth-chart').parentNode.querySelector('.chart-legend') && (document.getElementById('growth-chart').parentNode.querySelector('.chart-legend').innerHTML = legendEl.innerHTML);
+  ctx.stroke();
+  ctx.restore();
+
+  // 점 + 값 라벨
+  dataRecs.forEach(r => {
+    const v = showWeight?r.weight:r.height;
+    const x = xOf(new Date(r.date).getTime()), y = yOf(v);
+    ctx.beginPath();
+    ctx.arc(x,y,4,0,Math.PI*2);
+    ctx.fillStyle = dotColor; ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth=1.5; ctx.stroke();
+    ctx.fillStyle = dark?'#f0ead8':'#1a1a1a';
+    ctx.font='bold 9px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(v+unit, x, y-8);
+  });
+
+  // x축 날짜
+  ctx.fillStyle = textColor; ctx.font='9px sans-serif'; ctx.textAlign='center';
+  dataRecs.forEach(r => {
+    const x = xOf(new Date(r.date).getTime());
+    const mo = r.date.slice(5,7)+'/'+ r.date.slice(8,10);
+    ctx.fillText(mo, x, H-8);
+  });
 }
 
 function renderGrowthTable() {
