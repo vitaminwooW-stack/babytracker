@@ -1220,6 +1220,46 @@ body.dark .policy-page { background: #1a1612 !important; }
 body.dark .feature-page-title { color: #f0ead8 !important; }
 body.dark .feature-section-title { color: #c8a870 !important; }
 
+
+/* ══ 커뮤니티 검색 다크모드 ══ */
+body.dark .community-search-box { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .community-search-title { color: #f0ead8 !important; }
+body.dark .community-chip { background: #1a2535 !important; color: #60a5fa !important; border-color: #1e3a5a !important; }
+body.dark .community-chip:active { background: #1d4ed8 !important; color: #fff !important; }
+body.dark .community-search-input { background: #2a2520 !important; border-color: #3d3628 !important; color: #f0ead8 !important; }
+body.dark .community-search-btn { background: #7a5600 !important; color: #fff !important; }
+
+/* 아빠 체크 타이틀/설명 더 밝게 */
+body.dark .dad-check-title { color: #f5ead8 !important; font-weight: 700; }
+body.dark .dad-check-desc { color: #d4c4a8 !important; }
+body.dark .dad-praise { color: #fcd34d !important; }
+body.dark .dad-event-card { background: #2a1a20 !important; border-color: #4d2a35 !important; }
+body.dark .dad-event-item { border-color: #4d2a35 !important; }
+
+/* 아빠 모달 */
+body.dark #modal-dad-record .modal { background: #2a2520 !important; }
+body.dark #dad-record-header .dad-rec-sub { color: #a89880 !important; }
+body.dark #dad-feed-detail .field-label { color: #c8a870 !important; }
+body.dark #dad-rec-memo { background: #3d3628 !important; border-color: #4d4030 !important; color: #f0ead8 !important; }
+body.dark #dad-rec-time { background: #3d3628 !important; border-color: #4d4030 !important; color: #f0ead8 !important; }
+body.dark #dad-sleep-detail > div { background: linear-gradient(135deg,#0f1a2a,#1a2a3a) !important; }
+body.dark #dad-bath-detail > div { background: linear-gradient(135deg,#0a1e22,#102830) !important; }
+body.dark #dad-sleep-detail .dad-sleep-label { color: #60a5fa !important; }
+body.dark #dad-sleep-detail p { color: #a89880 !important; }
+
+
+/* ══ 라이트모드 엄마케어 카드 보호 ══ */
+body:not(.dark) .mom-grid-card { color: inherit; }
+
+/* ══ 다크모드 엄마케어 warn 카드 ══ */
+body.dark .mom-grid-card.warn { background: linear-gradient(135deg,#2a0f10,#3a1515) !important; }
+body.dark .mom-grid-card.warn .mom-grid-title { color: #f87171 !important; }
+
+/* ══ 다크모드 커뮤니티 검색 결과 ══ */
+body.dark .community-result { background: #2a2520 !important; color: #f0ead8 !important; }
+body.dark .community-result-title { color: #f0ead8 !important; }
+body.dark .community-result-sub { color: #a89880 !important; }
+
 </style>
 </head>
 <body style="visibility:hidden;">
@@ -4097,7 +4137,7 @@ function renderTimeline() {
     const mm = String(m).padStart(2, '0');
 
     const dadBadge = r.byDad
-      ? '<span style="font-size:9px;background:#eff6ff;color:#1d4ed8;border-radius:6px;padding:1px 5px;font-weight:700;margin-left:4px;">공간</span>'
+      ? '<span style="font-size:9px;background:#eff6ff;color:#1d4ed8;border-radius:6px;padding:1px 6px;font-weight:700;margin-left:4px;">👨 아빠</span>'
       : '';
     // 진행중 배지: 텍스트는 '진행중', 컬러만 카테고리별로 다르게
     let progressBadge = '';
@@ -4625,6 +4665,9 @@ function renderDadScreen(readonly) {
 // 앱 내부 아빠 탭 체크리스트 렌더
 function renderDadTabChecklist() {
   const checks = JSON.parse(localStorage.getItem('dad_checks') || '{}');
+  const isDark = document.body.classList.contains('dark');
+  const titleClr = isDark ? '#f0ead8' : '#1a1a1a';
+  const descClr  = isDark ? '#c8b898' : '#555';
   const tagLabels = { urgent:'🚨 지금 바로', soon:'📋 곧 필요', prep:'💡 알아두기' };
 
   ['urgent','soon','prep'].forEach(section => {
@@ -4654,9 +4697,9 @@ function renderDadTabChecklist() {
       return '<div class="dad-event-item' + (done ? ' done' : '') + '" onclick="toggleDadTabCheck(\'' + item.id + '\')" style="padding:18px 16px;border-bottom:1px solid #fce7f3;">' +
         '<div class="dad-event-checkbox' + (done ? ' checked' : '') + '"></div>' +
         '<div class="dad-event-info">' +
-        '<div style="font-size:16px;font-weight:700;color:' + (done?'#be185d':'#1a1a1a') + ';line-height:1.5;letter-spacing:-0.02em;">' + item.title + '</div>' +
-        (done ? '<div style="font-size:13px;color:#be185d;font-weight:600;margin-top:6px;">' + praise + '</div>'
-               : '<div style="font-size:13px;color:#555;margin-top:6px;line-height:1.7;word-break:keep-all;">' + item.desc.replace(/\n/g,'<br>') + '</div>') +
+        '<div style="font-size:16px;font-weight:700;color:' + (done?'#f472b6':(isDark?'#f0ead8':'#1a1a1a')) + ';line-height:1.5;letter-spacing:-0.02em;">' + item.title + '</div>' +
+        (done ? '<div style="font-size:13px;color:' + (isDark?'#f472b6':'#be185d') + ';font-weight:600;margin-top:6px;">' + praise + '</div>'
+               : '<div style="font-size:13px;color:' + descClr + ';margin-top:6px;line-height:1.7;word-break:keep-all;">' + item.desc.replace(/\n/g,'<br>') + '</div>') +
         '<span style="font-size:11px;background:' + (done?'#fce7f3':'#fce7f3') + ';color:#be185d;border-radius:10px;padding:2px 8px;font-weight:700;display:inline-block;margin-top:6px;">' + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
         '</div></div>';
     }).join('');
@@ -6122,6 +6165,7 @@ function toggleDarkMode() {
   try { renderMomCarePage(); } catch(e) {}
   try { renderMilestoneList(); } catch(e) {}
   try { renderPatternClock(); } catch(e) {}
+  try { if (document.getElementById('dad-tab-checklist-urgent').innerHTML) renderDadTabChecklist(); } catch(e) {}
 }
 
 function loadDarkMode() {
