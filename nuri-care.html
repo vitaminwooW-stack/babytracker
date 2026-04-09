@@ -461,7 +461,7 @@ body.dark .guide-card-body { border-top-color: #3d3628; }
 body.dark { background: #1a1612; color: #f0ead8; }
 body.dark .app-header, body.dark .timeline-card, body.dark .status-card,
 body.dark .mom-care-card, body.dark .policy-card, body.dark .guide-card,
-body.dark .dad-check-card, body.dark .dad-event-card, body.dark .diary-entry,
+body.dark .dad-check-card, body.dark .diary-entry,
 body.dark .modal, body.dark .profile-card, body.dark .invite-section { background: #2a2520; border-color: #3d3628; color: #f0ead8; }
 body.dark .app-body, body.dark .diary-page, body.dark .mom-page, body.dark .policy-page { background: #1a1612; }
 body.dark .photo-page, body.dark .swipe-page { background: #1a1612; }
@@ -1233,8 +1233,7 @@ body.dark .community-search-btn { background: #7a5600 !important; color: #fff !i
 body.dark .dad-check-title { color: #f5ead8 !important; font-weight: 700; }
 body.dark .dad-check-desc { color: #d4c4a8 !important; }
 body.dark .dad-praise { color: #fcd34d !important; }
-body.dark .dad-event-card { background: #2a1a20 !important; border-color: #4d2a35 !important; }
-body.dark .dad-event-item { border-color: #4d2a35 !important; }
+
 
 /* 아빠 모달 */
 body.dark #modal-dad-record .modal { background: #2a2520 !important; }
@@ -1277,8 +1276,7 @@ body.dark .dad-checkbox { border-color: #5a5040 !important; background: #2a2520 
 body.dark .dad-checkbox.checked { background: #166534 !important; border-color: #166534 !important; }
 
 /* 아빠 이벤트 카드 */
-body.dark .dad-event-card { background: #2a1a20 !important; border-color: #4d2835 !important; }
-body.dark .dad-event-item { border-color: #3d2030 !important; background: transparent !important; }
+
 
 /* 아빠 진행 상태 바 */
 body.dark .dad-progress-wrap { background: #2a2520 !important; border-color: #3d3628 !important; }
@@ -1290,9 +1288,16 @@ body:not(.dark) .mom-grid-card {
 /* 라이트모드에서 어두운 배경 강제 방지 */
 body:not(.dark) .mom-grid-card[style*="#2a"],
 body:not(.dark) .mom-grid-card[style*="#1a"],
-body:not(.dark) .mom-grid-card[style*="#0"] {
+body:not(.dark) .mom-grid-card[style*="#0a"],
+body:not(.dark) .mom-grid-card[style*="#0f"] {
   background: #fff0f6 !important;
 }
+/* 라이트모드 아빠 이벤트 카드 */
+body:not(.dark) .dad-event-card { background: #ffffff !important; border-color: #e5e7eb !important; }
+body:not(.dark) .dad-event-item { background: transparent !important; border-color: #fce7f3 !important; }
+body:not(.dark) .dad-check-card { background: #ffffff !important; border-color: #e5e7eb !important; }
+body:not(.dark) .dad-check-item { background: transparent !important; }
+body:not(.dark) .dad-section { background: transparent !important; }
 
 /* 커뮤니티 검색박스 */
 body.dark #community-search-box { background: #2a2520 !important; border-color: #3d3628 !important; }
@@ -3202,17 +3207,8 @@ function renderMomCarePage() {
   const badgeEl = document.getElementById('mom-birth-type-badge');
   if (badgeEl) badgeEl.innerHTML = '<span class="mom-birth-badge ' + careData.cls + '">' + careData.label + ' 산모</span>';
 
-  // 다크모드 카드 팔레트
-  const cardColors = isDark ? [
-    { bg:'linear-gradient(135deg,#2a1520,#3a1a28)', accent:'#f472b6' },
-    { bg:'linear-gradient(135deg,#0f1a2a,#1a2a3a)', accent:'#60a5fa' },
-    { bg:'linear-gradient(135deg,#0a2010,#162a18)', accent:'#4ade80' },
-    { bg:'linear-gradient(135deg,#1a0f25,#2a1535)', accent:'#c084fc' },
-    { bg:'linear-gradient(135deg,#1a1500,#2a2000)', accent:'#fbbf24' },
-    { bg:'linear-gradient(135deg,#1a1008,#2a1a10)', accent:'#fb923c' },
-    { bg:'linear-gradient(135deg,#2a0f10,#3a1515)', accent:'#f87171' },
-    { bg:'linear-gradient(135deg,#0a1a18,#102a25)', accent:'#2dd4bf' },
-  ] : [
+  // 라이트/다크 카드 팔레트 완전 분리
+  const LIGHT_COLORS = [
     { bg:'linear-gradient(135deg,#fff0f6,#fce7f3)', accent:'#db2777' },
     { bg:'linear-gradient(135deg,#eff6ff,#dbeafe)', accent:'#2563eb' },
     { bg:'linear-gradient(135deg,#f0fdf4,#dcfce7)', accent:'#16a34a' },
@@ -3222,7 +3218,17 @@ function renderMomCarePage() {
     { bg:'linear-gradient(135deg,#fefce8,#fef9c3)', accent:'#ca8a04' },
     { bg:'linear-gradient(135deg,#f0fdfa,#ccfbf1)', accent:'#0d9488' },
   ];
-
+  const DARK_COLORS = [
+    { bg:'linear-gradient(135deg,#2a1520,#3a1a28)', accent:'#f472b6' },
+    { bg:'linear-gradient(135deg,#0f1a2a,#1a2a3a)', accent:'#60a5fa' },
+    { bg:'linear-gradient(135deg,#0a2010,#162a18)', accent:'#4ade80' },
+    { bg:'linear-gradient(135deg,#1a0f25,#2a1535)', accent:'#c084fc' },
+    { bg:'linear-gradient(135deg,#1a1500,#2a2000)', accent:'#fbbf24' },
+    { bg:'linear-gradient(135deg,#1a1008,#2a1a10)', accent:'#fb923c' },
+    { bg:'linear-gradient(135deg,#2a0f10,#3a1515)', accent:'#f87171' },
+    { bg:'linear-gradient(135deg,#0a1a18,#102a25)', accent:'#2dd4bf' },
+  ];
+  const cardColors = isDark ? DARK_COLORS : LIGHT_COLORS;
   const titleColor = isDark ? '#f0ead8' : '#1a1a1a';
   const subColor   = isDark ? '#a89880' : '#6b7280';
 
