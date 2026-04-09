@@ -1260,6 +1260,45 @@ body.dark .community-result { background: #2a2520 !important; color: #f0ead8 !im
 body.dark .community-result-title { color: #f0ead8 !important; }
 body.dark .community-result-sub { color: #a89880 !important; }
 
+
+/* ══ 이미지 분석 기반 다크모드 수정 ══ */
+
+/* 아빠 체크리스트 카드 배경 */
+body.dark .dad-check-card { background: #232018 !important; border-color: #3d3628 !important; }
+body.dark .dad-check-item { background: transparent !important; border-color: #3d3628 !important; }
+body.dark .dad-check-item.done { background: linear-gradient(135deg,#0f2a1a,#162a1e) !important; }
+
+/* 아빠 섹션 배경 통일 */
+body.dark .dad-tab-page, body.dark #dad-tab-page { background: #1a1612 !important; }
+body.dark .dad-section { background: transparent !important; }
+
+/* 아빠 체크박스 */
+body.dark .dad-checkbox { border-color: #5a5040 !important; background: #2a2520 !important; }
+body.dark .dad-checkbox.checked { background: #166534 !important; border-color: #166534 !important; }
+
+/* 아빠 이벤트 카드 */
+body.dark .dad-event-card { background: #2a1a20 !important; border-color: #4d2835 !important; }
+body.dark .dad-event-item { border-color: #3d2030 !important; background: transparent !important; }
+
+/* 아빠 진행 상태 바 */
+body.dark .dad-progress-wrap { background: #2a2520 !important; border-color: #3d3628 !important; }
+
+/* 엄마케어 카드 그리드 라이트모드 보호 */
+body:not(.dark) .mom-grid-card { 
+  background: revert; 
+}
+/* 라이트모드에서 어두운 배경 강제 방지 */
+body:not(.dark) .mom-grid-card[style*="#2a"],
+body:not(.dark) .mom-grid-card[style*="#1a"],
+body:not(.dark) .mom-grid-card[style*="#0"] {
+  background: #fff0f6 !important;
+}
+
+/* 커뮤니티 검색박스 */
+body.dark #community-search-box { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .community-search-title { color: #f0ead8 !important; }
+body.dark .community-chip { background: #1a2535 !important; color: #60a5fa !important; border-color: #1e3a5a !important; }
+
 </style>
 </head>
 <body style="visibility:hidden;">
@@ -7119,12 +7158,12 @@ function enterApp() {
   try { setTimeout(initSwipe, 100); } catch(e) {}
 
   try { renderPhotoPage(); } catch(e) {}
+  try { loadDarkMode(); } catch(e) {}
   try { renderMomCarePage(); } catch(e) {}
   try { loadPolicyChecks(); } catch(e) {}
   try { renderDiaryList(); } catch(e) {}
   try { renderVaccineList(); } catch(e) {}
   try { renderMilestoneList(); } catch(e) {}
-  try { loadDarkMode(); } catch(e) {}
   try { renderMoodSelector(); } catch(e) {}
   try { updateQuickBtns(); } catch(e) {}
   try { renderCoachCard(); } catch(e) {}
