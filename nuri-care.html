@@ -339,6 +339,8 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .policy-link { display: block; text-align: center; font-size: 12px; color: #1d4ed8; margin-top: 14px; padding: 8px; background: #EBF4FF; border-radius: 8px; text-decoration: none; }
 .policy-notice { background: #fff7ed; border-radius: 12px; padding: 10px 14px; font-size: 12px; color: #8a6d00; margin-bottom: 16px; line-height: 1.6; }
 .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 400; align-items: flex-end; }
+.modal { transition: transform 0.15s ease; touch-action: pan-x; }
+.modal-bg.drag-closing .modal { transition: none; }
 .modal-bg.open { display: flex; }
 .modal { position: relative; background: #fff; border-radius: 16px 16px 0 0; padding: 24px 20px 40px; width: 100%; max-height: 92vh; overflow-y: auto; }
 .modal-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 20px; }
@@ -2844,25 +2846,26 @@ body.dark #widget-diaper-count, body.dark #widget-pump-total { color: #f0ead8 !i
       <button class="opt-btn" id="fe-both" onclick="feSel('both')" style="flex:1;padding:12px 6px;font-size:14px;">혼합</button>
     </div>
     <!-- 수유 타이머 -->
-    <div id="fe-timer-wrap" style="background:linear-gradient(135deg,#fff0f6,#fce7f3);border-radius:14px;padding:14px;margin-bottom:14px;text-align:center;">
-      <div style="font-size:11px;font-weight:700;color:#db2777;margin-bottom:8px;letter-spacing:0.04em;">⏱️ 수유 타이머 (선택)</div>
-      <div style="display:flex;gap:20px;justify-content:center;margin-bottom:10px;">
-        <div style="text-align:center;">
-          <div style="font-size:10px;color:#9ca3af;margin-bottom:3px;">⬅️ 왼쪽</div>
-          <div id="fe-timer-left" style="font-size:26px;font-weight:900;color:#db2777;font-family:monospace;">00:00</div>
+    <div id="fe-timer-wrap" style="background:#fff8f0;border:1.5px solid #fde8cc;border-radius:14px;padding:14px;margin-bottom:14px;text-align:center;">
+      <div style="font-size:11px;font-weight:700;color:#c2410c;margin-bottom:10px;letter-spacing:0.04em;">⏱️ 수유 타이머 (선택)</div>
+      <div style="display:flex;gap:12px;justify-content:center;margin-bottom:10px;">
+        <!-- 왼쪽 -->
+        <div id="fe-side-left-card" style="flex:1;background:#fff;border:2px solid #e5e7eb;border-radius:12px;padding:12px 8px;transition:all 0.2s;">
+          <div style="font-size:10px;font-weight:700;color:#9ca3af;margin-bottom:4px;">⬅️ 왼쪽</div>
+          <div id="fe-timer-left" style="font-size:22px;font-weight:900;color:#9ca3af;font-family:monospace;letter-spacing:1px;transition:color 0.2s;">00:00:00</div>
           <button id="fe-left-btn" onclick="feTimerToggle('left')"
-            style="margin-top:5px;padding:5px 12px;background:#db2777;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">시작</button>
+            style="margin-top:8px;width:100%;padding:7px 0;background:#e5e7eb;color:#6b7280;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;">시작</button>
         </div>
-        <div style="align-self:center;color:#f0c0d8;font-size:20px;">|</div>
-        <div style="text-align:center;">
-          <div style="font-size:10px;color:#9ca3af;margin-bottom:3px;">➡️ 오른쪽</div>
-          <div id="fe-timer-right" style="font-size:26px;font-weight:900;color:#db2777;font-family:monospace;">00:00</div>
+        <!-- 오른쪽 -->
+        <div id="fe-side-right-card" style="flex:1;background:#fff;border:2px solid #e5e7eb;border-radius:12px;padding:12px 8px;transition:all 0.2s;">
+          <div style="font-size:10px;font-weight:700;color:#9ca3af;margin-bottom:4px;">➡️ 오른쪽</div>
+          <div id="fe-timer-right" style="font-size:22px;font-weight:900;color:#9ca3af;font-family:monospace;letter-spacing:1px;transition:color 0.2s;">00:00:00</div>
           <button id="fe-right-btn" onclick="feTimerToggle('right')"
-            style="margin-top:5px;padding:5px 12px;background:#db2777;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">시작</button>
+            style="margin-top:8px;width:100%;padding:7px 0;background:#e5e7eb;color:#6b7280;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;">시작</button>
         </div>
       </div>
-      <button onclick="feTimerReset()" style="font-size:11px;color:#be185d;background:none;border:none;cursor:pointer;text-decoration:underline;">⟳ 초기화</button>
-      <div style="font-size:10px;color:#9ca3af;margin-top:4px;">타이머 종료 시 수유 시간 자동 입력</div>
+      <button onclick="feTimerReset()" style="font-size:11px;color:#9ca3af;background:none;border:none;cursor:pointer;">⟳ 초기화</button>
+      <div style="font-size:10px;color:#9ca3af;margin-top:3px;">정지 시 수유 시간 자동 입력돼요</div>
     </div>
 
     <span class="field-label">수유 시간</span>
@@ -2947,7 +2950,7 @@ body.dark #widget-diaper-count, body.dark #widget-pump-total { color: #f0ead8 !i
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script>
+<script data-cfasync="false">
 // ── Service Worker 등록 (자동 업데이트) ──
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').then(reg => {
@@ -5462,6 +5465,25 @@ const EVENT_PRAISE = [
 // ── 🔆 Wake Lock — 화면 유지 ──
 let wakeLock = null;
 
+// 타이머 자동 화면 유지
+let _timerWakeLock = null;
+async function timerRequestWakeLock() {
+  if (_timerWakeLock) return; // 이미 활성
+  if (!('wakeLock' in navigator)) return;
+  try {
+    _timerWakeLock = await navigator.wakeLock.request('screen');
+    _timerWakeLock.addEventListener('release', () => { _timerWakeLock = null; });
+    showToast('🔆 타이머 중 화면 유지 켜짐');
+  } catch(e) {}
+}
+function timerReleaseWakeLock() {
+  const noTimer = !_feTimerLStart && !_feTimerRStart && !_pumpTimerRunning;
+  if (noTimer && _timerWakeLock) {
+    try { _timerWakeLock.release(); } catch(e) {}
+    _timerWakeLock = null;
+  }
+}
+
 async function toggleWakeLock() {
   const btn = document.getElementById('wake-lock-btn');
   if (wakeLock) {
@@ -5502,6 +5524,14 @@ async function toggleWakeLock() {
 }
 
 // 페이지 다시 보일 때 Wake Lock 자동 재활성화
+document.addEventListener('visibilitychange', () => {
+  // 화면이 다시 켜졌을 때 타이머 디스플레이 즉시 갱신
+  if (document.visibilityState === 'visible') {
+    try { _feTimerTick(); } catch(e) {}
+    try { if (_pumpTimerRunning) _pumpTimerTick(); } catch(e) {}
+  }
+});
+
 document.addEventListener('visibilitychange', async () => {
   if (document.visibilityState === 'visible' && wakeLock === null) {
     const btn = document.getElementById('wake-lock-btn');
@@ -8083,29 +8113,43 @@ var _feType = 'breast';
 
 // ── 유축 타이머 ──
 let _pumpTimerInterval = null;
-let _pumpTimerMs = 0;
+let _pumpTimerMs = 0;      // 누적 ms (화면 꺼져도 유지)
+let _pumpTimerStart = null;  // 시작 시각 (Date.now())
 let _pumpTimerRunning = false;
 
 function pumpTimerToggle() {
   const btn = document.getElementById('pump-timer-btn');
   if (_pumpTimerRunning) {
-    clearInterval(_pumpTimerInterval);
+    // 정지 - 경과 시간 누적
+    _pumpTimerMs += Date.now() - _pumpTimerStart;
+    _pumpTimerStart = null;
     _pumpTimerRunning = false;
-    if (btn) btn.textContent = '재개';
+    clearInterval(_pumpTimerInterval);
+    _pumpTimerInterval = null;
+    if (btn) { btn.textContent = '재개'; btn.style.background = '#7c3aaf'; }
+    timerReleaseWakeLock();
   } else {
+    // 시작/재개 - 시작 시각 기록
+    _pumpTimerStart = Date.now();
     _pumpTimerRunning = true;
-    if (btn) btn.textContent = '정지';
-    _pumpTimerInterval = setInterval(() => {
-      _pumpTimerMs += 10;
-      const totalSec = Math.floor(_pumpTimerMs / 1000);
-      const mm = Math.floor(totalSec / 60);
-      const ss = totalSec % 60;
-      const cs = Math.floor((_pumpTimerMs % 1000) / 10); // 센티초 (0~99)
-      const el = document.getElementById('pump-timer-display');
-      if (el) el.textContent = String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0')+':'+String(cs).padStart(2,'0');
-    }, 10);
+    if (btn) { btn.textContent = '정지'; btn.style.background = '#dc2626'; }
+    _pumpTimerInterval = setInterval(_pumpTimerTick, 200);
+    _pumpTimerTick(); // 즉시 한 번 업데이트
+    // 화면 유지 자동 활성화
+    timerRequestWakeLock();
   }
 }
+
+function _pumpTimerTick() {
+  const elapsed = _pumpTimerMs + (_pumpTimerStart ? Date.now() - _pumpTimerStart : 0);
+  const totalSec = Math.floor(elapsed / 1000);
+  const hh = Math.floor(totalSec / 3600);
+  const mm = Math.floor((totalSec % 3600) / 60);
+  const ss = totalSec % 60;
+  const el = document.getElementById('pump-timer-display');
+  if (el) el.textContent = String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');
+}
+
 
 function pumpTimerReset() {
   clearInterval(_pumpTimerInterval);
@@ -8310,50 +8354,99 @@ function feSel(t) {
 }
 
 // ── 수유 타이머 ──
-let _feTimerL = 0, _feTimerR = 0;        // 누적 초
-let _feTimerLStart = null, _feTimerRStart = null;  // 현재 시작시각
+let _feTimerL = 0, _feTimerR = 0;          // 누적 ms
+let _feTimerLStart = null, _feTimerRStart = null;
 let _feTimerInterval = null;
+let _feActiveSide = null;  // 현재 진행 중인 방향
 
 function feTimerToggle(side) {
-  const btn = document.getElementById('fe-' + side + '-btn');
-  const display = document.getElementById('fe-timer-' + side);
   const isLeft = side === 'left';
+  const startRef = isLeft ? _feTimerLStart : _feTimerRStart;
+  const otherSide = isLeft ? 'right' : 'left';
 
-  if (isLeft ? _feTimerLStart : _feTimerRStart) {
-    // 정지
-    const elapsed = Math.floor((Date.now() - (isLeft ? _feTimerLStart : _feTimerRStart)) / 1000);
+  if (startRef) {
+    // ── 정지 ──
+    const elapsed = Date.now() - startRef;
     if (isLeft) { _feTimerL += elapsed; _feTimerLStart = null; }
     else         { _feTimerR += elapsed; _feTimerRStart = null; }
-    if (btn) { btn.textContent = '시작'; btn.style.background = '#db2777'; }
+    _feActiveSide = null;
+    _feUpdateCardUI('left', false);
+    _feUpdateCardUI('right', false);
+    clearInterval(_feTimerInterval); _feTimerInterval = null;
     _feTimerTick();
-    // 분 입력란에 자동 반영
-    const totalSec = isLeft ? _feTimerL : _feTimerR;
+    timerReleaseWakeLock();
+    // 분 입력란 자동 반영
+    const totalMs = isLeft ? _feTimerL : _feTimerR;
     const inputId = isLeft ? 'fe-left-min' : 'fe-right-min';
     const el = document.getElementById(inputId);
-    if (el) { el.value = Math.round(totalSec / 60) || ''; feCalcTotal(); }
+    if (el) { el.value = Math.round(totalMs/60000) || ''; feCalcTotal(); }
   } else {
-    // 시작
+    // ── 시작 (반대편이 진행 중이면 먼저 정지) ──
+    if (_feActiveSide && _feActiveSide !== side) {
+      feTimerToggle(_feActiveSide);  // 반대편 정지
+    }
     if (isLeft) _feTimerLStart = Date.now();
     else        _feTimerRStart = Date.now();
-    if (btn) { btn.textContent = '정지'; btn.style.background = '#dc2626'; }
+    _feActiveSide = side;
+    _feUpdateCardUI(side, true);
+    _feUpdateCardUI(otherSide, false);
     if (!_feTimerInterval) {
-      _feTimerInterval = setInterval(_feTimerTick, 1000);
+      _feTimerInterval = setInterval(_feTimerTick, 50);
+    }
+    timerRequestWakeLock();
+  }
+}
+
+function _feUpdateCardUI(side, active) {
+  const card = document.getElementById('fe-side-' + side + '-card');
+  const btn  = document.getElementById('fe-' + side + '-btn');
+  const disp = document.getElementById('fe-timer-' + side);
+  const isRunning = side === 'left' ? !!_feTimerLStart : !!_feTimerRStart;
+
+  if (card) {
+    if (active) {
+      card.style.background = '#fff1f8';
+      card.style.borderColor = '#db2777';
+      card.style.boxShadow = '0 0 0 3px #fce7f366';
+    } else if (isRunning) {
+      card.style.background = '#fff1f8';
+      card.style.borderColor = '#db2777';
+    } else {
+      card.style.background = '#fff';
+      card.style.borderColor = '#e5e7eb';
+      card.style.boxShadow = '';
+    }
+  }
+  if (disp) {
+    disp.style.color = (active || isRunning) ? '#db2777' : '#9ca3af';
+  }
+  if (btn) {
+    if (isRunning) {
+      btn.textContent = '정지';
+      btn.style.background = '#db2777';
+      btn.style.color = '#fff';
+    } else {
+      btn.textContent = '시작';
+      btn.style.background = '#e5e7eb';
+      btn.style.color = '#6b7280';
     }
   }
 }
 
 function _feTimerTick() {
-  const fmtSec = s => {
-    const m = Math.floor(s/60), sec = s%60;
-    return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+  const fmtMs = ms => {
+    const totalSec = Math.floor(ms / 1000);
+    const hh = Math.floor(totalSec / 3600);
+    const mm = Math.floor((totalSec % 3600) / 60);
+    const ss = totalSec % 60;
+    return String(hh).padStart(2,'0') + ':' + String(mm).padStart(2,'0') + ':' + String(ss).padStart(2,'0');
   };
-  const nowL = _feTimerLStart ? _feTimerL + Math.floor((Date.now()-_feTimerLStart)/1000) : _feTimerL;
-  const nowR = _feTimerRStart ? _feTimerR + Math.floor((Date.now()-_feTimerRStart)/1000) : _feTimerR;
+  const nowL = _feTimerLStart ? _feTimerL + (Date.now()-_feTimerLStart) : _feTimerL;
+  const nowR = _feTimerRStart ? _feTimerR + (Date.now()-_feTimerRStart) : _feTimerR;
   const dL = document.getElementById('fe-timer-left');
   const dR = document.getElementById('fe-timer-right');
-  if (dL) dL.textContent = fmtSec(nowL);
-  if (dR) dR.textContent = fmtSec(nowR);
-  // 타이머 없으면 interval 정리
+  if (dL) dL.textContent = fmtMs(nowL);
+  if (dR) dR.textContent = fmtMs(nowR);
   if (!_feTimerLStart && !_feTimerRStart) {
     clearInterval(_feTimerInterval); _feTimerInterval = null;
   }
@@ -8363,17 +8456,16 @@ function feTimerReset() {
   clearInterval(_feTimerInterval); _feTimerInterval = null;
   _feTimerL = 0; _feTimerR = 0;
   _feTimerLStart = null; _feTimerRStart = null;
-  const dL = document.getElementById('fe-timer-left');
-  const dR = document.getElementById('fe-timer-right');
-  if (dL) dL.textContent = '00:00';
-  if (dR) dR.textContent = '00:00';
-  ['fe-left-btn','fe-right-btn'].forEach(id => {
-    const b = document.getElementById(id);
-    if (b) { b.textContent = '시작'; b.style.background = '#db2777'; }
+  _feActiveSide = null;
+  ['left','right'].forEach(s => {
+    _feUpdateCardUI(s, false);
+    const d = document.getElementById('fe-timer-'+s);
+    if (d) d.textContent = '00:00:00';
   });
-  const lm = document.getElementById('fe-left-min');
-  const rm = document.getElementById('fe-right-min');
-  if (lm) lm.value = ''; if (rm) rm.value = '';
+  ['fe-left-min','fe-right-min'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
   feCalcTotal();
 }
 
@@ -9314,7 +9406,100 @@ function fbRenderStatus() {
 }
 
 // ── 앱 시작 ──
+
+// ══════════════════════════════════════
+// 모달 드래그 다운으로 닫기
+// ══════════════════════════════════════
+function initModalDragClose() {
+  document.querySelectorAll('.modal-bg').forEach(bg => {
+    const modal = bg.querySelector('.modal');
+    if (!modal) return;
+    const handle = modal.querySelector('.modal-handle');
+    const dragTarget = handle || modal;  // 핸들 없으면 모달 전체
+
+    let startY = 0, startX = 0, currentY = 0, isDragging = false;
+    const CLOSE_THRESHOLD = 120;  // px 이상 내리면 닫힘
+    const VELOCITY_THRESHOLD = 0.5; // 빠르게 내리면 닫힘
+    let lastY = 0, lastTime = 0;
+
+    function onStart(e) {
+      if (!bg.classList.contains('open')) return;
+      const touch = e.touches ? e.touches[0] : e;
+      startY = touch.clientY;
+      startX = touch.clientX;
+      lastY = startY;
+      lastTime = Date.now();
+      isDragging = true;
+      currentY = 0;
+      bg.classList.add('drag-closing');
+    }
+
+    function onMove(e) {
+      if (!isDragging) return;
+      const touch = e.touches ? e.touches[0] : e;
+      const deltaX = Math.abs(touch.clientX - startX);
+      const deltaY = touch.clientY - startY;
+
+      // 수평 스와이프(페이지 전환)는 무시
+      if (deltaX > deltaY && deltaX > 10) { isDragging = false; return; }
+      if (deltaY < 0) return;  // 위로 드래그 무시
+
+      e.preventDefault();
+      currentY = deltaY;
+      const velocity = (touch.clientY - lastY) / (Date.now() - lastTime + 1);
+      lastY = touch.clientY;
+      lastTime = Date.now();
+
+      // 모달 이동 + 배경 투명도
+      modal.style.transform = 'translateY(' + currentY + 'px)';
+      const progress = Math.min(currentY / CLOSE_THRESHOLD, 1);
+      bg.style.background = 'rgba(0,0,0,' + (0.45 * (1 - progress * 0.8)) + ')';
+    }
+
+    function onEnd(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      bg.classList.remove('drag-closing');
+
+      const touch = e.changedTouches ? e.changedTouches[0] : e;
+      const velocity = lastTime ? (touch.clientY - startY) / (Date.now() - lastTime + 1) : 0;
+      const shouldClose = currentY > CLOSE_THRESHOLD || velocity > VELOCITY_THRESHOLD;
+
+      if (shouldClose) {
+        // 닫기 애니메이션
+        modal.style.transition = 'transform 0.25s ease';
+        modal.style.transform = 'translateY(110%)';
+        bg.style.transition = 'background 0.25s ease';
+        bg.style.background = 'rgba(0,0,0,0)';
+        setTimeout(() => {
+          bg.classList.remove('open');
+          modal.style.transform = '';
+          modal.style.transition = '';
+          bg.style.background = '';
+          bg.style.transition = '';
+        }, 250);
+      } else {
+        // 원위치로 복귀
+        modal.style.transition = 'transform 0.3s cubic-bezier(0.34,1.56,0.64,1)';
+        modal.style.transform = 'translateY(0)';
+        bg.style.transition = 'background 0.3s ease';
+        bg.style.background = '';
+        setTimeout(() => {
+          modal.style.transition = '';
+          bg.style.transition = '';
+        }, 300);
+      }
+      currentY = 0;
+    }
+
+    dragTarget.addEventListener('touchstart', onStart, { passive: true });
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchend', onEnd, { passive: true });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  try { initModalDragClose(); } catch(e) {}
   try { appStart(); } catch(e) {
     console.error('appStart 실패:', e);
     // 폴백: 스플래시 숨기고 로그인으로
