@@ -5603,7 +5603,7 @@ document.addEventListener('visibilitychange', async () => {
 const URL_ACTIONS = {
   'pump_start':   () => startSession('pump'),
   'pump_end':     () => endSession('pump'),
-  'feed_start':   () => startSession('feed'),
+  'feed_start':   () => { startSession('feed'); setTimeout(()=>{ try{openFeedTimerModal();}catch(e){} },50); },
   'feed_end':     () => endSession('feed'),
   'sleep_start':  () => startSession('sleep'),
   'sleep_end':    () => endSession('sleep'),
@@ -8146,8 +8146,6 @@ function startSession(type) {
     }
     addRecord({ type:'feed', time:nowLocal(), title:'수유 시작', sub:'수유 중', icon:'🍼', cat:'feed' });
     speak('수유 시작을 기록했어요 🍼');
-    // 타이머 모달 열기 (약간 지연: DOM 업데이트 후)
-    setTimeout(function(){ try { openFeedTimerModal(); } catch(e) { console.warn('타이머모달:', e); } }, 50);
   } else if (type === 'diaper') {
     selOpts['diaper-t'] = 'wet';
     ['wet','poop','both'].forEach(v => {
