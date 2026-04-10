@@ -195,7 +195,7 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .empty { text-align: center; padding: 40px 0; color: #9ca3af; font-size: 14px; line-height: 1.8; }
 .clear-btn { margin-top: 12px; width: 100%; padding: 12px; background: none; border: 1px dashed #ddd; border-radius: 12px; color: #ccc; font-size: 13px; cursor: pointer; }
 .t-actions { display: flex; gap: 4px; flex-shrink: 0; margin-left: 4px; }
-.t-edit-btn { background: #f0f5ff; border: none; border-radius: 8px; padding: 6px 8px; font-size: 13px; cursor: pointer; color: #1d4ed8; }
+.t-edit-btn { background: #f0f5ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 7px 10px; font-size: 12px; font-weight: 700; cursor: pointer; color: #1d4ed8; white-space: nowrap; }
 .t-del-btn  { background: #fff0f0; border: none; border-radius: 8px; padding: 6px 8px; font-size: 13px; cursor: pointer; color: #e05555; }
 .section-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .section-title-row .section-title { margin-bottom: 0; }
@@ -1424,6 +1424,15 @@ body.dark #modal-delete-confirm [style*="background:#fff5f5"] {
   background: #2a1010 !important; border-color: #7f1d1d !important;
 }
 
+
+/* ══ 오늘 요약 위젯 다크모드 ══ */
+body.dark #today-summary-widget > div:nth-child(1) { background: linear-gradient(135deg,#1a1008,#2a1a10) !important; border-color: #7c2d12 !important; }
+body.dark #today-summary-widget > div:nth-child(2) { background: linear-gradient(135deg,#0f1a2a,#1a2a3a) !important; border-color: #1e3a5a !important; }
+body.dark #today-summary-widget > div:nth-child(3) { background: linear-gradient(135deg,#0a2010,#162a18) !important; border-color: #166534 !important; }
+body.dark #today-summary-widget > div:nth-child(4) { background: linear-gradient(135deg,#1a0f25,#2a1535) !important; border-color: #4c1d95 !important; }
+body.dark #widget-feed-count, body.dark #widget-sleep-time,
+body.dark #widget-diaper-count, body.dark #widget-pump-total { color: #f0ead8 !important; }
+
 </style>
 </head>
 <body style="visibility:hidden;">
@@ -1862,6 +1871,30 @@ body.dark #modal-delete-confirm [style*="background:#fff5f5"] {
           </div>
 
           <!-- ── 오늘의 기록 타임라인 ── -->
+          <!-- 오늘 요약 위젯 카드 -->
+          <div id="today-summary-widget" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+            <div style="background:linear-gradient(135deg,#fff7ed,#ffedd5);border-radius:14px;padding:12px;border:1px solid #fed7aa;">
+              <div style="font-size:10px;font-weight:700;color:#ea580c;margin-bottom:2px;">🍼 수유</div>
+              <div id="widget-feed-count" style="font-size:22px;font-weight:900;color:#c2410c;line-height:1;">0회</div>
+              <div id="widget-feed-last" style="font-size:10px;color:#9ca3af;margin-top:2px;">기록 없음</div>
+            </div>
+            <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:14px;padding:12px;border:1px solid #bfdbfe;">
+              <div style="font-size:10px;font-weight:700;color:#2563eb;margin-bottom:2px;">😴 수면</div>
+              <div id="widget-sleep-time" style="font-size:22px;font-weight:900;color:#1d4ed8;line-height:1;">0h</div>
+              <div id="widget-sleep-last" style="font-size:10px;color:#9ca3af;margin-top:2px;">기록 없음</div>
+            </div>
+            <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:14px;padding:12px;border:1px solid #bbf7d0;">
+              <div style="font-size:10px;font-weight:700;color:#16a34a;margin-bottom:2px;">🌿 기저귀</div>
+              <div id="widget-diaper-count" style="font-size:22px;font-weight:900;color:#15803d;line-height:1;">0회</div>
+              <div id="widget-diaper-last" style="font-size:10px;color:#9ca3af;margin-top:2px;">기록 없음</div>
+            </div>
+            <div style="background:linear-gradient(135deg,#fdf4ff,#f3e8ff);border-radius:14px;padding:12px;border:1px solid #e9d5ff;">
+              <div style="font-size:10px;font-weight:700;color:#7c3aed;margin-bottom:2px;">🤱 유축</div>
+              <div id="widget-pump-total" style="font-size:22px;font-weight:900;color:#6d28d9;line-height:1;">0ml</div>
+              <div id="widget-pump-last" style="font-size:10px;color:#9ca3af;margin-top:2px;">기록 없음</div>
+            </div>
+          </div>
+
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
             <div class="feature-section-title" style="margin:0;">📋 오늘의 기록</div>
             <div style="display:flex;gap:6px;align-items:center;">
@@ -2254,7 +2287,7 @@ body.dark #modal-delete-confirm [style*="background:#fff5f5"] {
           <!-- 화면 설정 -->
           <div class="feature-section-title">🌙 화면 설정</div>
           <div class="chart-wrap" style="padding:14px 16px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
               <div>
                 <div style="font-size:14px;font-weight:600;">다크 모드</div>
                 <div style="font-size:12px;color:#9ca3af;margin-top:2px;">야간 수유 시 눈이 편해요</div>
@@ -2263,6 +2296,25 @@ body.dark #modal-delete-confirm [style*="background:#fff5f5"] {
                 <div id="dark-knob" style="width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
               </div>
             </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:14px;font-weight:600;">PIN 잠금 <span style="font-size:11px;background:#fff7d6;color:#7a5600;padding:2px 6px;border-radius:8px;font-weight:700;">선택사항</span></div>
+                <div style="font-size:12px;color:#9ca3af;margin-top:2px;">켜면 앱 시작 시 PIN 4자리 입력</div>
+              </div>
+              <div id="pin-toggle" onclick="togglePinLock()" style="width:44px;height:24px;border-radius:12px;background:#d1d5db;cursor:pointer;position:relative;transition:background 0.2s;">
+                <div id="pin-knob" style="width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+              </div>
+            </div>
+          </div>
+          <div class="feature-section-title">🔔 수유·수면 알림</div>
+          <div class="chart-wrap" style="padding:14px 16px;">
+            <div style="font-size:13px;color:var(--text-sub,#555);margin-bottom:10px;line-height:1.7;">
+              수유 시간이 되거나 아기가 오래 깨있으면<br>
+              <strong>자동으로 알림</strong>을 보내드려요.
+            </div>
+            <button id="notif-req-btn" class="export-btn" onclick="requestNotifPermission()" style="margin-bottom:0;">
+              🔔 수유·수면 알림 켜기
+            </button>
           </div>
           <div class="feature-section-title">📤 데이터 내보내기</div>
           <button class="export-btn" onclick="exportCSV()">📊 기록 데이터 CSV로 내보내기</button>
@@ -2791,6 +2843,28 @@ body.dark #modal-delete-confirm [style*="background:#fff5f5"] {
       <button class="opt-btn" id="fe-bottle" onclick="feSel('bottle')" style="flex:1;padding:12px 6px;font-size:14px;">분유</button>
       <button class="opt-btn" id="fe-both" onclick="feSel('both')" style="flex:1;padding:12px 6px;font-size:14px;">혼합</button>
     </div>
+    <!-- 수유 타이머 -->
+    <div id="fe-timer-wrap" style="background:linear-gradient(135deg,#fff0f6,#fce7f3);border-radius:14px;padding:14px;margin-bottom:14px;text-align:center;">
+      <div style="font-size:11px;font-weight:700;color:#db2777;margin-bottom:8px;letter-spacing:0.04em;">⏱️ 수유 타이머 (선택)</div>
+      <div style="display:flex;gap:20px;justify-content:center;margin-bottom:10px;">
+        <div style="text-align:center;">
+          <div style="font-size:10px;color:#9ca3af;margin-bottom:3px;">⬅️ 왼쪽</div>
+          <div id="fe-timer-left" style="font-size:26px;font-weight:900;color:#db2777;font-family:monospace;">00:00</div>
+          <button id="fe-left-btn" onclick="feTimerToggle('left')"
+            style="margin-top:5px;padding:5px 12px;background:#db2777;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">시작</button>
+        </div>
+        <div style="align-self:center;color:#f0c0d8;font-size:20px;">|</div>
+        <div style="text-align:center;">
+          <div style="font-size:10px;color:#9ca3af;margin-bottom:3px;">➡️ 오른쪽</div>
+          <div id="fe-timer-right" style="font-size:26px;font-weight:900;color:#db2777;font-family:monospace;">00:00</div>
+          <button id="fe-right-btn" onclick="feTimerToggle('right')"
+            style="margin-top:5px;padding:5px 12px;background:#db2777;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">시작</button>
+        </div>
+      </div>
+      <button onclick="feTimerReset()" style="font-size:11px;color:#be185d;background:none;border:none;cursor:pointer;text-decoration:underline;">⟳ 초기화</button>
+      <div style="font-size:10px;color:#9ca3af;margin-top:4px;">타이머 종료 시 수유 시간 자동 입력</div>
+    </div>
+
     <span class="field-label">수유 시간</span>
     <div id="fe-side-wrap" style="display:flex;gap:10px;margin-bottom:12px;">
       <div style="flex:1;">
@@ -3837,6 +3911,7 @@ function addRecord(r) {
   try { renderPatternClock(); } catch(e) {}
 
   if (typeof _pushRecordToFirebase === 'function') _pushRecordToFirebase(r);
+  try { updateTodayWidget(); } catch(e) {}
 }
 
 // ── 한국 시간 (KST = UTC+9) — 기기 시간대 무관하게 항상 KST ──
@@ -6379,6 +6454,47 @@ function toggleMilestone(key) {
 }
 
 // ── 🌙 다크 모드 ──
+// ── PIN 잠금 토글 ──
+function togglePinLock() {
+  const enabled = localStorage.getItem('pin_enabled') === '1';
+  if (!enabled) {
+    // PIN 켜기 → PIN 설정 화면으로
+    localStorage.setItem('pin_enabled', '1');
+    localStorage.removeItem('baby_pin');
+    const toggle = document.getElementById('pin-toggle');
+    const knob   = document.getElementById('pin-knob');
+    if (toggle) toggle.style.background = '#7a5600';
+    if (knob) knob.style.transform = 'translateX(20px)';
+    // PIN 설정 모달 열기
+    setTimeout(() => {
+      pinBuffer = ''; pinFirst = ''; pinMode = 'set';
+      document.querySelectorAll('[id^="pin-ui"]').forEach(e => e.style.display = 'none');
+      document.getElementById('pin-ui-set').style.display = '';
+      document.getElementById('pin-error').textContent = '';
+      updateDots('set', 0);
+      showScreen('login');
+    }, 200);
+  } else {
+    // PIN 끄기
+    localStorage.setItem('pin_enabled', '0');
+    localStorage.removeItem('baby_pin');
+    const toggle = document.getElementById('pin-toggle');
+    const knob   = document.getElementById('pin-knob');
+    if (toggle) toggle.style.background = '#d1d5db';
+    if (knob) knob.style.transform = 'translateX(0)';
+    showToast('🔓 PIN 잠금 해제됨');
+  }
+}
+
+function loadPinToggle() {
+  const enabled = localStorage.getItem('pin_enabled') === '1';
+  const toggle = document.getElementById('pin-toggle');
+  const knob   = document.getElementById('pin-knob');
+  if (!toggle) return;
+  toggle.style.background = enabled ? '#7a5600' : '#d1d5db';
+  if (knob) knob.style.transform = enabled ? 'translateX(20px)' : 'translateX(0)';
+}
+
 function toggleDarkMode() {
   const isDark = document.body.classList.toggle('dark');
   localStorage.setItem('dark_mode', isDark ? '1' : '0');
@@ -7095,6 +7211,7 @@ async function executeDelete() {
   // ── UI 새로고침 ──
   setTimeout(() => {
     try { renderTimeline(); } catch(e) {}
+  try { updateTodayWidget(); } catch(e) {}
     try { renderDiaryList(); } catch(e) {}
     try { renderGrowthTable(); } catch(e) {}
     try { renderGrowthChart(); } catch(e) {}
@@ -7177,7 +7294,27 @@ function pinForgot() {
 }
 
 function initLogin() {
-  const savedPin = localStorage.getItem('baby_pin');
+  // PIN 사용 안함 설정이면 바로 앱으로
+  const pinEnabled = localStorage.getItem('pin_enabled') === '1';
+  const savedPin   = localStorage.getItem('baby_pin');
+  const hasProfile = !!localStorage.getItem('baby_profile');
+
+  if (!pinEnabled || !savedPin) {
+    // PIN 없음 → 프로필 있으면 바로 앱, 없으면 온보딩
+    if (hasProfile) {
+      enterApp();
+    } else {
+      if (localStorage.getItem('onboarding_done') !== '1') {
+        showOnboarding();
+        showScreen('app');
+      } else {
+        showScreen('profile');
+      }
+    }
+    return;
+  }
+
+  // PIN 있음 → 기존 로직
   pinBuffer = ''; pinFirst = ''; pinFailCount = 0;
   document.querySelectorAll('[id^="pin-ui"]').forEach(e => e.style.display = 'none');
   document.getElementById('pin-error').textContent = '';
@@ -7186,25 +7323,17 @@ function initLogin() {
   if (fb) fb.style.display = 'none';
 
   const isDadInvite = !!localStorage.getItem('dad_linked');
-
-  if (!savedPin) {
-    pinMode = 'set';
-    document.getElementById('pin-ui-set').style.display = '';
-    document.getElementById('login-hint').textContent = isDadInvite
-      ? '아빠용 PIN 4자리를 설정해주세요.'
-      : 'PIN을 잊어도 데이터 유지하며 재설정 가능해요.';
-  } else {
-    pinMode = 'login';
-    document.getElementById('pin-ui-login').style.display = '';
-    const p = localStorage.getItem('baby_profile');
-    if (p) {
+  pinMode = 'login';
+  document.getElementById('pin-ui-login').style.display = '';
+  const p = localStorage.getItem('baby_profile');
+  if (p) {
+    try {
       const name = JSON.parse(p).name;
       document.getElementById('login-name-label').textContent = isDadInvite
-        ? `${name} 아빠 모드 🍼`
-        : `${name}의 누리케어 🍼`;
-    }
-    document.getElementById('login-hint').textContent = 'PIN 4자리를 입력해주세요.';
+        ? name + ' 아빠 모드 🍼' : name + '의 누리케어 🍼';
+    } catch(e) {}
   }
+  document.getElementById('login-hint').textContent = 'PIN 4자리를 입력해주세요.';
   showScreen('login');
 }
 
@@ -7275,18 +7404,7 @@ let notifPermission = false;
 let sleepNotifTimer = null;
 let feedNotifTimer = null;
 
-function requestNotifPermission() {
-  if (!('Notification' in window)) { alert('이 브라우저는 알림을 지원하지 않아요.'); return; }
-  Notification.requestPermission().then(perm => {
-    notifPermission = perm === 'granted';
-    localStorage.setItem('notif_permission', notifPermission ? '1' : '0');
-    dismissNotifBanner();
-    if (notifPermission) {
-      showBackupToast('🔔 알림 허용됐어요! 재울 타이밍을 알려드릴게요');
-      scheduleNotifications();
-    }
-  });
-}
+
 
 function dismissNotifBanner() {
   const el = document.getElementById('notif-banner');
@@ -7305,42 +7423,88 @@ function checkNotifBanner() {
 
 function scheduleNotifications() {
   if (!notifPermission) return;
-  clearTimeout(sleepNotifTimer); clearTimeout(feedNotifTimer);
-  const days = getBabyAgeDays();
-  if (!days) return;
-  // 수면 타이밍 알림
-  if (!sleepingStart) {
-    const lastWake = records.find(r => r.cat === 'sleep' && r.title === '기상');
-    if (lastWake) {
-      const ww = getWakeWindow(days);
-      const awakeMs = Date.now() - new Date(lastWake.time).getTime();
-      const targetMs = ww.min * 60000 - awakeMs;
-      if (targetMs > 0 && targetMs < 3*3600000) {
-        sleepNotifTimer = setTimeout(() => {
-          if (!sleepingStart) {
-            new Notification('😴 누리케어 — 재울 타이밍이에요!', {
-              body: `깨어있은 지 ${ww.min}분이 됐어요. 지금 재워보세요.`
-            });
-          }
-        }, targetMs);
-      }
+  clearTimeout(sleepNotifTimer);
+  clearTimeout(feedNotifTimer);
+  const days = getBabyAgeDays ? getBabyAgeDays() : 0;
+
+  // ── 수유 알림: 마지막 수유 후 일정 시간 ──
+  const lastFeed = records.find(r => r.cat === 'feed' && r.title === '수유');
+  if (lastFeed && !feedingStart) {
+    const elapsed = Date.now() - new Date(lastFeed.time).getTime();
+    // 신생아: 2~3시간, 2개월 이상: 3~4시간
+    const intervalMin = days < 60 ? 150 : 210; // 2.5h or 3.5h
+    const targetMs = intervalMin * 60000 - elapsed;
+    if (targetMs > 0 && targetMs < 4 * 3600000) {
+      feedNotifTimer = setTimeout(() => {
+        sendNotif('🍼 수유 시간이에요!',
+          `마지막 수유 후 ${Math.round(intervalMin/60*10)/10}시간이 지났어요. 아기가 배고플 수 있어요.`);
+      }, targetMs);
     }
   }
-  // 수유 알림
-  const lastFeed = records.find(r => r.cat === 'feed');
-  if (lastFeed) {
-    const interval = days < 90 ? 150 : days < 180 ? 180 : 240;
-    const feedMs = Date.now() - new Date(lastFeed.time).getTime();
-    const targetMs = interval * 60000 - feedMs;
-    if (targetMs > 0 && targetMs < 4*3600000) {
-      feedNotifTimer = setTimeout(() => {
-        new Notification('🍼 누리케어 — 수유 시간이에요!', {
-          body: `마지막 수유로부터 ${interval}분이 됐어요.`
-        });
+
+  // ── 수면 알림: 깨있는 시간이 너무 길면 ──
+  const lastSleep = records.find(r => r.cat === 'sleep' && r.title === '기상');
+  if (lastSleep && !sleepingStart) {
+    const awakeMs = Date.now() - new Date(lastSleep.time).getTime();
+    const maxAwakeMin = days < 30 ? 60 : days < 90 ? 90 : 120;
+    const targetMs = maxAwakeMin * 60000 - awakeMs;
+    if (targetMs > 0 && targetMs < 3 * 3600000) {
+      sleepNotifTimer = setTimeout(() => {
+        sendNotif('😴 졸려요~',
+          `아기가 깨있은 지 ${maxAwakeMin}분이 됐어요. 슬슬 재워볼까요?`);
       }, targetMs);
     }
   }
 }
+
+function sendNotif(title, body) {
+  if (!notifPermission) return;
+  try {
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({
+        type: 'SHOW_NOTIFICATION', title, body,
+        icon: '/babytracker/icon-192.png'
+      });
+    } else {
+      new Notification(title, { body, icon: '/babytracker/icon-192.png', badge: '/babytracker/icon-192.png' });
+    }
+  } catch(e) { console.warn('알림 실패:', e); }
+}
+
+function requestNotifPermission() {
+  if (!('Notification' in window)) {
+    showToast('❌ 이 브라우저는 알림을 지원하지 않아요');
+    return;
+  }
+  Notification.requestPermission().then(p => {
+    notifPermission = p === 'granted';
+    localStorage.setItem('notif_permission', notifPermission ? '1' : '0');
+    if (notifPermission) {
+      showToast('🔔 알림이 켜졌어요!');
+      scheduleNotifications();
+    } else {
+      showToast('🔕 알림 권한이 거부됐어요');
+    }
+    updateNotifBtnUI();
+  });
+}
+
+function updateNotifBtnUI() {
+  const btn = document.getElementById('notif-req-btn');
+  if (!btn) return;
+  if (notifPermission) {
+    btn.textContent = '🔔 알림 켜짐 ✅';
+    btn.style.background = '#f0fdf4';
+    btn.style.color = '#16a34a';
+    btn.style.borderColor = '#86efac';
+  } else {
+    btn.textContent = '🔔 수유·수면 알림 켜기';
+    btn.style.background = '';
+    btn.style.color = '';
+    btn.style.borderColor = '';
+  }
+}
+
 
 // ── 🟢 개선2: 온보딩 ──
 let obStep = 0;
@@ -7681,6 +7845,7 @@ function enterApp() {
 
   try { renderPhotoPage(); } catch(e) {}
   try { loadDarkMode(); } catch(e) {}
+  try { loadPinToggle(); } catch(e) {}
   try { renderMomCarePage(); } catch(e) {}
   try { loadPolicyChecks(); } catch(e) {}
   try { renderDiaryList(); } catch(e) {}
@@ -7809,13 +7974,16 @@ function appStart() {
 function obFinish() {
   document.getElementById('onboarding-overlay').style.display = 'none';
   localStorage.setItem('onboarding_done', '1');
-  initLogin();
+  // PIN 설정 없이 바로 프로필 입력으로
+  const hasProfile = !!localStorage.getItem('baby_profile');
+  if (hasProfile) { enterApp(); } else { showScreen('profile'); }
 }
 
 function obSkip() {
   document.getElementById('onboarding-overlay').style.display = 'none';
   localStorage.setItem('onboarding_done', '1');
-  initLogin();
+  const hasProfile = !!localStorage.getItem('baby_profile');
+  if (hasProfile) { enterApp(); } else { showScreen('profile'); }
 }
 
 function updateSettingsRoleUI() {
@@ -8136,6 +8304,88 @@ function feSel(t) {
   // 분유일 때 사이드 타이틀 색 흐리게
   if (sideWrap) sideWrap.style.opacity = isBreastFeed ? '1' : '0.4';
   if (!isBreastFeed) feCalcTotal(); // 총합 0으로 리셋
+
+  // 모유/혼합일 때 타이머 표시
+  feTimerShow(type === 'breast' || type === 'both');
+}
+
+// ── 수유 타이머 ──
+let _feTimerL = 0, _feTimerR = 0;        // 누적 초
+let _feTimerLStart = null, _feTimerRStart = null;  // 현재 시작시각
+let _feTimerInterval = null;
+
+function feTimerToggle(side) {
+  const btn = document.getElementById('fe-' + side + '-btn');
+  const display = document.getElementById('fe-timer-' + side);
+  const isLeft = side === 'left';
+
+  if (isLeft ? _feTimerLStart : _feTimerRStart) {
+    // 정지
+    const elapsed = Math.floor((Date.now() - (isLeft ? _feTimerLStart : _feTimerRStart)) / 1000);
+    if (isLeft) { _feTimerL += elapsed; _feTimerLStart = null; }
+    else         { _feTimerR += elapsed; _feTimerRStart = null; }
+    if (btn) { btn.textContent = '시작'; btn.style.background = '#db2777'; }
+    _feTimerTick();
+    // 분 입력란에 자동 반영
+    const totalSec = isLeft ? _feTimerL : _feTimerR;
+    const inputId = isLeft ? 'fe-left-min' : 'fe-right-min';
+    const el = document.getElementById(inputId);
+    if (el) { el.value = Math.round(totalSec / 60) || ''; feCalcTotal(); }
+  } else {
+    // 시작
+    if (isLeft) _feTimerLStart = Date.now();
+    else        _feTimerRStart = Date.now();
+    if (btn) { btn.textContent = '정지'; btn.style.background = '#dc2626'; }
+    if (!_feTimerInterval) {
+      _feTimerInterval = setInterval(_feTimerTick, 1000);
+    }
+  }
+}
+
+function _feTimerTick() {
+  const fmtSec = s => {
+    const m = Math.floor(s/60), sec = s%60;
+    return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+  };
+  const nowL = _feTimerLStart ? _feTimerL + Math.floor((Date.now()-_feTimerLStart)/1000) : _feTimerL;
+  const nowR = _feTimerRStart ? _feTimerR + Math.floor((Date.now()-_feTimerRStart)/1000) : _feTimerR;
+  const dL = document.getElementById('fe-timer-left');
+  const dR = document.getElementById('fe-timer-right');
+  if (dL) dL.textContent = fmtSec(nowL);
+  if (dR) dR.textContent = fmtSec(nowR);
+  // 타이머 없으면 interval 정리
+  if (!_feTimerLStart && !_feTimerRStart) {
+    clearInterval(_feTimerInterval); _feTimerInterval = null;
+  }
+}
+
+function feTimerReset() {
+  clearInterval(_feTimerInterval); _feTimerInterval = null;
+  _feTimerL = 0; _feTimerR = 0;
+  _feTimerLStart = null; _feTimerRStart = null;
+  const dL = document.getElementById('fe-timer-left');
+  const dR = document.getElementById('fe-timer-right');
+  if (dL) dL.textContent = '00:00';
+  if (dR) dR.textContent = '00:00';
+  ['fe-left-btn','fe-right-btn'].forEach(id => {
+    const b = document.getElementById(id);
+    if (b) { b.textContent = '시작'; b.style.background = '#db2777'; }
+  });
+  const lm = document.getElementById('fe-left-min');
+  const rm = document.getElementById('fe-right-min');
+  if (lm) lm.value = ''; if (rm) rm.value = '';
+  feCalcTotal();
+}
+
+function feTimerStopAll() {
+  // 모달 닫을 때 타이머 정지
+  if (_feTimerLStart) feTimerToggle('left');
+  if (_feTimerRStart) feTimerToggle('right');
+}
+
+function feTimerShow(show) {
+  const wrap = document.getElementById('fe-timer-wrap');
+  if (wrap) wrap.style.display = show ? '' : 'none';
 }
 
 function feCalcTotal() {
@@ -8160,6 +8410,8 @@ function feSetTotal() {
 }
 
 function closeFeedEndModal() {
+  feTimerStopAll();
+
   var mfe=document.getElementById('modal-feed-end');
   if(mfe){mfe.classList.remove('open');mfe.style.display='';}
   feedingStart = null;
@@ -8459,6 +8711,55 @@ function setVoiceBtnState(state) {
 function setVoiceBtn(active) { setVoiceBtnState(active); }
 
 // updateStatus에 세션 상태 포함
+function updateTodayWidget() {
+  const todayKST = new Date(Date.now() + 9*3600*1000).toISOString().slice(0,10);
+  const todayRecs = records.filter(r => r.time && r.time.slice(0,10) === todayKST);
+  const fmt = d => {
+    if (!d) return '기록 없음';
+    const diff = Date.now() - new Date(d).getTime();
+    const m = Math.floor(diff/60000);
+    if (m < 1) return '방금';
+    if (m < 60) return m+'분 전';
+    return Math.floor(m/60)+'시간 '+( m%60 ? (m%60)+'분 ' : '') + '전';
+  };
+
+  // 수유
+  const feedRecs = todayRecs.filter(r => r.cat==='feed');
+  const lastFeed = feedRecs[0];
+  const el = id => document.getElementById(id);
+  if(el('widget-feed-count')) el('widget-feed-count').textContent = feedRecs.length+'회';
+  if(el('widget-feed-last')) el('widget-feed-last').textContent = lastFeed ? fmt(lastFeed.time) : '기록 없음';
+
+  // 수면 - 오늘 총 수면시간
+  const sleepRecs = todayRecs.filter(r => r.cat==='sleep' && r._startTime);
+  let totalSleepMin = 0;
+  sleepRecs.forEach(r => {
+    const ms = new Date(r.time)-new Date(r._startTime);
+    if (ms>0) totalSleepMin += Math.floor(ms/60000);
+  });
+  const sleepH = Math.floor(totalSleepMin/60);
+  const sleepM = totalSleepMin%60;
+  if(el('widget-sleep-time')) el('widget-sleep-time').textContent =
+    sleepH>0 ? sleepH+'h'+(sleepM?sleepM+'m':'') : (sleepM?sleepM+'m':'0h');
+  const lastSleep = todayRecs.filter(r=>r.cat==='sleep')[0];
+  if(el('widget-sleep-last')) el('widget-sleep-last').textContent = lastSleep ? fmt(lastSleep.time) : '기록 없음';
+
+  // 기저귀
+  const diaperRecs = todayRecs.filter(r => r.cat==='diaper');
+  const lastDiaper = diaperRecs[0];
+  if(el('widget-diaper-count')) el('widget-diaper-count').textContent = diaperRecs.length+'회';
+  if(el('widget-diaper-last')) el('widget-diaper-last').textContent = lastDiaper ? fmt(lastDiaper.time) : '기록 없음';
+
+  // 유축
+  const pumpRecs = todayRecs.filter(r => r.cat==='pump');
+  const totalPump = pumpRecs.reduce((a,r) => a+(r.total||0), 0);
+  const lastPump = pumpRecs[0];
+  if(el('widget-pump-total')) el('widget-pump-total').textContent = totalPump ? totalPump+'ml' : '0ml';
+  if(el('widget-pump-last')) el('widget-pump-last').textContent = lastPump ? fmt(lastPump.time) : '기록 없음';
+
+  // 다크모드 위젯 카드 텍스트 색 (CSS로 처리)
+}
+
 function updateStatus() {
   const feed = records.find(r => r.cat === 'feed' && (r.title === '수유 완료' || r.title === '수유'));
   const pump = records.find(r => r.cat === 'pump' && r.title === '유축 완료');
