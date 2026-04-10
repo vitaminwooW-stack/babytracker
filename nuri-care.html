@@ -1413,6 +1413,17 @@ body:not(.dark) .dad-check-tag.prep   { background: #f0fdf4 !important; color: #
 body.dark .dad-event-tag { background: #2a1a28 !important; color: #f9a8d4 !important; }
 body.dark .dad-event-tag.done-tag { background: #1a2a18 !important; color: #86efac !important; }
 
+
+/* ══ 삭제 확인 모달 다크모드 ══ */
+body.dark #modal-delete-confirm .modal { background: #2a2520 !important; }
+body.dark #modal-delete-confirm input[type="text"] {
+  background: #3d3628 !important; border-color: #ef4444 !important; color: #f0ead8 !important;
+}
+body.dark #modal-delete-confirm label { color: #f0ead8; }
+body.dark #modal-delete-confirm [style*="background:#fff5f5"] {
+  background: #2a1010 !important; border-color: #7f1d1d !important;
+}
+
 </style>
 </head>
 <body style="visibility:hidden;">
@@ -2219,9 +2230,13 @@ body.dark .dad-event-tag.done-tag { background: #1a2a18 !important; color: #86ef
             <div style="font-size:12px;color:#9ca3af;margin-bottom:12px;line-height:1.6;">
               아래 작업은 되돌릴 수 없어요.<br>반드시 백업 후 진행하세요.
             </div>
-            <button onclick="confirmReset()" style="width:100%;padding:12px;background:none;border:1.5px solid #fecaca;border-radius:10px;color:#ef4444;font-size:13px;font-weight:700;cursor:pointer;">
+            <button onclick="confirmReset()" style="width:100%;padding:12px;background:none;border:1.5px solid #fecaca;border-radius:10px;color:#ef4444;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;">
               ⛔ 모든 데이터 초기화
             </button>
+            <a href="mailto:hmw0106@naver.com?subject=누리케어 데이터 삭제 요청&body=삭제를 요청합니다."
+              style="display:block;width:100%;padding:12px;background:none;border:1.5px solid #e5e7eb;border-radius:10px;color:#6b7280;font-size:13px;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;box-sizing:border-box;">
+              📧 이메일로 삭제 요청 (앱스토어 정책)
+            </a>
           </div>
           <div class="feature-section-title" style="margin-top:16px;">ℹ️ 앱 정보</div>
           <div class="chart-wrap" style="padding:14px 16px;">
@@ -2316,6 +2331,54 @@ body.dark .dad-event-tag.done-tag { background: #1a2a18 !important; color: #86ef
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeDadRecordModal()">취소</button>
       <button class="btn-save"   id="dad-rec-save-btn" onclick="saveDadRecordModal()">기록하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── 모달: 데이터 삭제 확인 ── -->
+<div class="modal-bg" id="modal-delete-confirm" style="z-index:500;">
+  <div class="modal" style="max-height:85vh;overflow-y:auto;">
+    <div class="modal-handle"></div>
+    <div style="text-align:center;padding:8px 0 20px;">
+      <div style="font-size:48px;margin-bottom:12px;">⛔</div>
+      <div style="font-size:18px;font-weight:900;color:#ef4444;margin-bottom:8px;">모든 데이터 초기화</div>
+      <div style="font-size:13px;color:#6b7280;line-height:1.7;">
+        아기 기록, 일기, 성장 기록 등<br>
+        <strong style="color:#ef4444;">모든 데이터가 영구 삭제</strong>됩니다.<br>
+        이 작업은 되돌릴 수 없어요.
+      </div>
+    </div>
+
+    <!-- 삭제 옵션 -->
+    <div style="background:#fff5f5;border-radius:12px;padding:14px;margin-bottom:16px;border:1.5px solid #fecaca;">
+      <div style="font-size:12px;font-weight:700;color:#ef4444;margin-bottom:10px;">삭제 범위 선택</div>
+      <label style="display:flex;align-items:center;gap:10px;margin-bottom:8px;cursor:pointer;">
+        <input type="checkbox" id="del-local" checked style="width:18px;height:18px;accent-color:#ef4444;">
+        <div>
+          <div style="font-size:13px;font-weight:600;">기기 내 데이터</div>
+          <div style="font-size:11px;color:#9ca3af;">기록, 일기, 성장기록, 설정 등</div>
+        </div>
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+        <input type="checkbox" id="del-firebase" style="width:18px;height:18px;accent-color:#ef4444;">
+        <div>
+          <div style="font-size:13px;font-weight:600;">Firebase 공유 데이터</div>
+          <div style="font-size:11px;color:#9ca3af;">가족 공유 기록 (서버 데이터)</div>
+        </div>
+      </label>
+    </div>
+
+    <!-- 확인 입력 -->
+    <span class="field-label">확인을 위해 <strong style="color:#ef4444;">삭제확인</strong> 을 입력하세요</span>
+    <input type="text" id="delete-confirm-input" placeholder="삭제확인"
+      style="margin-bottom:16px;border-color:#fecaca;text-align:center;font-size:16px;font-weight:700;letter-spacing:2px;">
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeDeleteModal()">취소</button>
+      <button onclick="executeDelete()"
+        style="flex:1;padding:14px;background:#ef4444;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;">
+        ⛔ 삭제하기
+      </button>
     </div>
   </div>
 </div>
@@ -6925,11 +6988,81 @@ function clearTodayRecords() {
 }
 
 function confirmReset() {
-  if (!confirm('⚠️ 모든 데이터를 삭제할까요?\n절대 되돌릴 수 없어요!')) return;
-  const code = prompt('삭제하려면 "삭제확인"을 입력하세요:');
-  if (code !== '삭제확인') { alert('취소됐어요.'); return; }
-  localStorage.clear();
-  location.reload();
+  // 삭제 확인 입력 초기화
+  const inp = document.getElementById('delete-confirm-input');
+  if (inp) inp.value = '';
+  document.getElementById('modal-delete-confirm').classList.add('open');
+}
+
+function closeDeleteModal() {
+  document.getElementById('modal-delete-confirm').classList.remove('open');
+}
+
+async function executeDelete() {
+  const inp = document.getElementById('delete-confirm-input');
+  if (!inp || inp.value.trim() !== '삭제확인') {
+    inp.style.borderColor = '#ef4444';
+    inp.style.animation = 'shake 0.3s ease';
+    setTimeout(() => { inp.style.animation = ''; inp.style.borderColor = '#fecaca'; }, 400);
+    return;
+  }
+
+  const delLocal    = document.getElementById('del-local')?.checked !== false;
+  const delFirebase = document.getElementById('del-firebase')?.checked === true;
+
+  closeDeleteModal();
+
+  // ── Firebase 삭제 ──
+  if (delFirebase) {
+    try {
+      const fid = localStorage.getItem('family_id');
+      if (fid && typeof firebase !== 'undefined' && firebase.database) {
+        const db = firebase.database();
+        await db.ref('families/' + fid).remove();
+        console.log('Firebase 데이터 삭제 완료');
+      }
+    } catch(e) { console.warn('Firebase 삭제 실패:', e); }
+  }
+
+  // ── 로컬 데이터 삭제 ──
+  if (delLocal) {
+    const keepKeys = ['dark_mode', 'notif_permission', 'nuri_last_page'];
+    const allKeys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      allKeys.push(localStorage.key(i));
+    }
+    allKeys.forEach(k => {
+      if (!keepKeys.includes(k)) localStorage.removeItem(k);
+    });
+    // 전역 변수 초기화
+    try {
+      records = [];
+      growthRecords = [];
+      diaryEntries = [];
+      saveData();
+    } catch(e) {}
+    console.log('로컬 데이터 삭제 완료');
+  }
+
+  // ── UI 새로고침 ──
+  setTimeout(() => {
+    try { renderTimeline(); } catch(e) {}
+    try { renderDiaryList(); } catch(e) {}
+    try { renderGrowthTable(); } catch(e) {}
+    try { renderGrowthChart(); } catch(e) {}
+    try { renderAppHeader(); } catch(e) {}
+    try { updateStatus(); } catch(e) {}
+    try { updateQuickBtns(); } catch(e) {}
+    try { renderPatternClock(); } catch(e) {}
+    // 온보딩으로 이동
+    if (delLocal) {
+      setTimeout(() => {
+        try { showScreen('onboarding'); } catch(e) {
+          location.reload();
+        }
+      }, 500);
+    }
+  }, 300);
 }
 
 // ── 🔴 즉시3: PIN 개선 ──
