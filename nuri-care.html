@@ -1505,6 +1505,31 @@ body.dark .u-hint     { color: #7a6a5a; }
 body.dark .u-hint-mt  { color: #7a6a5a; }
 body.dark .u-modal-card { background: #2a2520; }
 
+
+/* ══ 신생아 케어 가이드 다크모드 ══ */
+body.dark #screen-guide { background: #1a1612 !important; }
+body.dark .guide-story-card { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .guide-story-header { border-bottom-color: #3d3628 !important; }
+body.dark .guide-story-emoji { background: #3d3628 !important; }
+body.dark .guide-story-title { color: #f0ead8 !important; }
+body.dark .guide-story-sub { color: #a89880 !important; }
+body.dark .guide-story-desc { color: #c8b898 !important; }
+body.dark .guide-story-tag { background: #3d3628 !important; color: #c8a870 !important; }
+body.dark .guide-cat-btn { background: #2a2520 !important; border-color: #3d3628 !important; color: #a89880 !important; }
+body.dark .guide-cat-btn.active { background: #7a5600 !important; color: #fff !important; border-color: #7a5600 !important; }
+body.dark .guide-list { background: #1a1612 !important; }
+body.dark .guide-item { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .guide-item-title { color: #f0ead8 !important; }
+body.dark .guide-item-desc { color: #a89880 !important; }
+body.dark .guide-item-tag { background: #3d3628 !important; color: #c8a870 !important; }
+body.dark .guide-story-card[style*="background"] { background: #2a2520 !important; }
+body.dark .guide-story-collapsed { opacity: 0.7; }
+body.dark .guide-step { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .guide-step-title { color: #f0ead8 !important; }
+body.dark .guide-step-desc { color: #c8b898 !important; }
+body.dark .guide-tip { background: #2a2218 !important; border-color: #3d3628 !important; color: #c8a870 !important; }
+body.dark .guide-warn { background: #2a1010 !important; border-color: #7f1d1d !important; color: #f87171 !important; }
+
 </style>
 </head>
 <body style="visibility:hidden;">
@@ -2758,10 +2783,10 @@ body.dark .u-modal-card { background: #2a2520; }
     <h2>🍼 수유 기록</h2>
     <span class="field-label">수유 방법</span>
     <div class="opt-row" style="gap:6px;flex-wrap:wrap;">
-      <button class="opt-btn sel" id="feed-t-breast" onclick="selOpt('feed-t','breast');feedTypeChange('breast')" class="u-opt-sm3 opt-btn">모유</button>
-      <button class="opt-btn"    id="feed-t-bottle" onclick="selOpt('feed-t','bottle');feedTypeChange('bottle')" class="u-opt-sm3 opt-btn">분유</button>
-      <button class="opt-btn"    id="feed-t-both"   onclick="selOpt('feed-t','both');feedTypeChange('both')"     class="u-opt-sm3 opt-btn">혼합</button>
-      <button class="opt-btn"    id="feed-t-pump"   onclick="selOpt('feed-t','pump');feedTypeChange('pump')"     class="u-opt-sm3 opt-btn">🤱유축</button>
+      <button class="opt-btn sel" id="feed-t-breast" onclick="selOpt('feed-t','breast');feedTypeChange('breast')">모유</button>
+      <button class="opt-btn"    id="feed-t-bottle" onclick="selOpt('feed-t','bottle');feedTypeChange('bottle')">분유</button>
+      <button class="opt-btn"    id="feed-t-both"   onclick="selOpt('feed-t','both');feedTypeChange('both')">혼합</button>
+      <button class="opt-btn"    id="feed-t-pump"   onclick="selOpt('feed-t','pump');feedTypeChange('pump')">🤱 유축</button>
     </div>
 
     <!-- 모유/혼합: 분 입력 -->
@@ -5090,14 +5115,15 @@ function renderDadTabChecklist() {
     el.innerHTML = DAD_ITEMS[section].map((item, idx) => {
       const done = !!checks[item.id];
       const praise = PRAISE_MSGS[(idx + section.length) % PRAISE_MSGS.length];
-      return '<div class="dad-check-item' + (done ? ' done' : '') + ' onclick="toggleDadTabCheck(\'' + item.id + '\')">' +
-        '<div class="dad-checkbox' + (done ? ' checked' : '') + '></div>' +
+      return '<div class="dad-check-item' + (done ? ' done' : '') + '" onclick="toggleDadTabCheck(\'' + item.id + '\')">' +
+        '<div class="dad-checkbox' + (done ? ' checked' : '') + '"></div>' +
         '<div class="dad-check-info">' +
-        '<div class="dad-check-title' + (done ? ' done-text' : '') + '>' + item.title + '</div>' +
+        '<div class="dad-check-title' + (done ? ' done-text' : '') + '">' + item.title + '</div>' +
         '<div class="dad-check-desc">' + item.desc.replace(/\n/g,'<br>') + '</div>' +
         (done ? '<div class="dad-praise">' + praise + '</div>' : '') +
-        '<span class="dad-check-tag ' + (done ? 'done-tag' : item.tag) + '>' +
-          (done ? '✅ 완료' : tagLabels[item.tag]) + '</span>' +
+        '<span class="dad-check-tag ' + (done ? 'done-tag' : item.tag) + '">' +
+          (done ? '✅ 완료' : tagLabels[item.tag]) +
+        '</span>' +
         '</div></div>';
     }).join('');
   });
@@ -5108,26 +5134,19 @@ function renderDadTabChecklist() {
     evEl.innerHTML = DAD_EVENTS.map((item, idx) => {
       const done = !!checks[item.id];
       const praise = EVENT_PRAISE[idx % EVENT_PRAISE.length];
-      return '<div class="dad-event-item' + (done ? ' done' : '') + ' onclick="toggleDadTabCheck(\'' + item.id + '\')" style="padding:18px 16px;border-bottom:1px solid #fce7f3;">' +
-        '<div class="dad-event-checkbox' + (done ? ' checked' : '') + '></div>' +
+      return '<div class="dad-event-item' + (done ? ' done' : '') + '" onclick="toggleDadTabCheck(\'' + item.id + '\')" style="padding:18px 16px;border-bottom:1px solid #fce7f3;">' +
+        '<div class="dad-event-checkbox' + (done ? ' checked' : '') + '"></div>' +
         '<div class="dad-event-info">' +
         '<div style="font-size:16px;font-weight:700;color:' + (done?'#f472b6':(isDark?'#f0ead8':'#1a1a1a')) + ';line-height:1.5;letter-spacing:-0.02em;">' + item.title + '</div>' +
-        (done ? '<div style="font-size:13px;color:' + (isDark?'#f472b6':'#be185d') + ';font-weight:600;margin-top:6px;">' + praise + '</div>'
-               : '<div style="font-size:13px;color:' + descClr + ';margin-top:6px;line-height:1.7;word-break:keep-all;">' + item.desc.replace(/\n/g,'<br>') + '</div>') +
-        '<span class="dad-event-tag ' + (done ? 'done-tag' : '') + ">'" + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
+        (done
+          ? '<div style="font-size:13px;color:' + (isDark?'#f472b6':'#be185d') + ';font-weight:600;margin-top:6px;">' + praise + '</div>'
+          : '<div style="font-size:13px;color:' + descClr + ';margin-top:6px;line-height:1.7;word-break:keep-all;">' + item.desc.replace(/\n/g,'<br>') + '</div>') +
+        '<span class="dad-event-tag' + (done ? ' done-tag' : '') + '">' + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
         '</div></div>';
     }).join('');
   }
-
-  // 진행률
-  const allItems = [...DAD_ITEMS.urgent, ...DAD_ITEMS.soon, ...DAD_ITEMS.prep];
-  const doneCount = allItems.filter(i => checks[i.id]).length;
-  const pct = Math.round(doneCount / allItems.length * 100);
-  const bar = document.getElementById('dad-tab-progress-bar');
-  const txt = document.getElementById('dad-tab-progress-text');
-  if (bar) bar.style.width = pct + '%';
-  if (txt) txt.textContent = doneCount + ' / ' + allItems.length;
 }
+
 
 function toggleDadTabCheck(id) {
   const checks = JSON.parse(localStorage.getItem('dad_checks') || '{}');
