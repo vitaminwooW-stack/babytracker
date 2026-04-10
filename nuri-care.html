@@ -1530,6 +1530,23 @@ body.dark .guide-step-desc { color: #c8b898 !important; }
 body.dark .guide-tip { background: #2a2218 !important; border-color: #3d3628 !important; color: #c8a870 !important; }
 body.dark .guide-warn { background: #2a1010 !important; border-color: #7f1d1d !important; color: #f87171 !important; }
 
+
+/* 성장기록 입력 카드 다크모드 */
+body.dark #growth-date,
+body.dark #growth-weight,
+body.dark #growth-height {
+  background: #2a2520 !important;
+  border-color: #5a4a10 !important;
+  color: #f0ead8 !important;
+}
+body.dark .growth-table th { background: #2a2520 !important; }
+body.dark .growth-table tr { border-bottom-color: #3d3628 !important; }
+body.dark #growth-latest-badge {
+  background: #0a2010 !important;
+  border-color: #166534 !important;
+}
+body.dark #growth-latest-text { color: #4ade80 !important; }
+
 </style>
 </head>
 <body style="visibility:hidden;">
@@ -2048,38 +2065,74 @@ body.dark .guide-warn { background: #2a1010 !important; border-color: #7f1d1d !i
 
 <!-- ── 페이지 4: 성장 기록 & 예방접종 ── -->
       <div class="swipe-page">
-        <div class="feature-page">
+        <div class="feature-page" style="padding-bottom:80px;">
+
+          <!-- 헤더 -->
           <div class="feature-page-title">📏 성장 기록</div>
-          <div class="feature-page-sub">키·몸무게를 기록하고 추이를 확인해요</div>
-          <div class="feature-section-title">새 기록 추가</div>
-          <div class="chart-wrap">
-            <div style="display:flex;gap:8px;margin-bottom:8px;">
-              <input type="date" id="growth-date" aria-label="성장 기록 날짜" class="u-flex1">
+          <div class="feature-page-sub">키·몸무게를 기록하고 한국 평균과 비교해요</div>
+
+          <!-- 새 기록 입력 카드 -->
+          <div style="background:linear-gradient(135deg,#fffbf0,#fff7d6);border:1.5px solid #f0d060;border-radius:18px;padding:16px;margin-bottom:16px;">
+            <div style="font-size:13px;font-weight:800;color:#7a5600;margin-bottom:12px;">✏️ 새 기록 추가</div>
+            <input type="date" id="growth-date" aria-label="성장 기록 날짜"
+              style="width:100%;box-sizing:border-box;margin-bottom:10px;border-radius:10px;border:1.5px solid #f0d060;padding:9px 12px;font-size:14px;background:#fff;">
+            <div style="display:flex;gap:8px;margin-bottom:12px;">
+              <div style="flex:1;">
+                <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">⚖️ 몸무게 (kg)</div>
+                <input type="number" id="growth-weight" aria-label="몸무게 kg"
+                  placeholder="예: 4.2" step="0.01" min="0" max="30"
+                  style="width:100%;box-sizing:border-box;border-radius:10px;border:1.5px solid #f0d060;padding:9px 12px;font-size:14px;">
+              </div>
+              <div style="flex:1;">
+                <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">📏 키 (cm)</div>
+                <input type="number" id="growth-height" aria-label="키 cm"
+                  placeholder="예: 52.3" step="0.1" min="0" max="120"
+                  style="width:100%;box-sizing:border-box;border-radius:10px;border:1.5px solid #f0d060;padding:9px 12px;font-size:14px;">
+              </div>
             </div>
-            <div class="growth-input-row">
-              <input type="number" id="growth-weight" aria-label="몸무게 kg" placeholder="몸무게 (kg)" step="0.01" min="0" max="30">
-              <input type="number" id="growth-height" aria-label="키 cm" placeholder="키 (cm)" step="0.1" min="0" max="120">
-              <button class="growth-add-btn" onclick="addGrowthRecord()">추가</button>
-            </div>
+            <button onclick="addGrowthRecord()"
+              style="width:100%;padding:13px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:-0.02em;">
+              📝 기록 추가
+            </button>
           </div>
-          <div class="feature-section-title">성장 추이</div>
-          <div style="display:flex;gap:6px;margin-bottom:8px;">
-            <button id="growth-tab-weight" class="chart-tab active" onclick="growthSetTab('weight')" style="font-size:12px;padding:5px 14px;">⚖️ 몸무게</button>
-            <button id="growth-tab-height" class="chart-tab"        onclick="growthSetTab('height')" style="font-size:12px;padding:5px 14px;">📏 키</button>
+
+          <!-- 최근 기록 배지 -->
+          <div id="growth-latest-badge" style="display:none;background:#f0fdf4;border:1.5px solid #86efac;border-radius:14px;padding:12px 16px;margin-bottom:16px;">
+            <div style="font-size:11px;font-weight:700;color:#15803d;margin-bottom:4px;">📌 최근 기록</div>
+            <div id="growth-latest-text" style="font-size:15px;font-weight:800;color:#166534;"></div>
           </div>
-          <div class="chart-wrap" style="position:relative;">
+
+          <!-- 차트 탭 -->
+          <div style="font-size:13px;font-weight:800;color:var(--text-main,#1a1a1a);margin-bottom:10px;">📊 성장 추이</div>
+          <div style="display:flex;gap:6px;margin-bottom:10px;">
+            <button id="growth-tab-weight" class="chart-tab active" onclick="growthSetTab('weight')"
+              style="flex:1;padding:9px 0;border-radius:10px;font-size:13px;font-weight:700;">⚖️ 몸무게</button>
+            <button id="growth-tab-height" class="chart-tab"        onclick="growthSetTab('height')"
+              style="flex:1;padding:9px 0;border-radius:10px;font-size:13px;font-weight:700;">📏 키</button>
+          </div>
+          <div style="background:var(--card-bg,#fff);border-radius:16px;border:1px solid var(--border-color,#f0f0f0);padding:14px;margin-bottom:16px;position:relative;">
             <canvas id="growth-chart" height="220"></canvas>
             <div id="growth-empty" class="chart-empty" style="display:none;">아직 기록이 없어요</div>
           </div>
-          <div class="feature-section-title">기록 목록</div>
-          <div class="chart-wrap" style="padding:0;overflow:hidden;">
-            <table class="growth-table" id="growth-table">
-              <tr><th>날짜</th><th>몸무게</th><th>키</th><th></th></tr>
+
+          <!-- 기록 목록 -->
+          <div style="font-size:13px;font-weight:800;color:var(--text-main,#1a1a1a);margin-bottom:10px;">📋 기록 목록</div>
+          <div style="background:var(--card-bg,#fff);border-radius:16px;border:1px solid var(--border-color,#f0f0f0);overflow:hidden;margin-bottom:20px;">
+            <table class="growth-table" id="growth-table" style="width:100%;border-collapse:collapse;">
+              <tr style="background:linear-gradient(135deg,#fffbf0,#fff7d6);">
+                <th style="padding:10px 12px;font-size:12px;color:#7a5600;text-align:left;">날짜</th>
+                <th style="padding:10px 12px;font-size:12px;color:#7a5600;text-align:center;">⚖️ 몸무게</th>
+                <th style="padding:10px 12px;font-size:12px;color:#7a5600;text-align:center;">📏 키</th>
+                <th style="padding:10px 4px;font-size:12px;color:#7a5600;text-align:center;"></th>
+              </tr>
             </table>
           </div>
-          <div class="feature-section-title" style="margin-top:20px;">💉 예방접종</div>
-          <div class="feature-page-sub" style="margin-top:-8px;">접종 완료 시 체크해주세요</div>
+
+          <!-- 예방접종 -->
+          <div style="font-size:13px;font-weight:800;color:var(--text-main,#1a1a1a);margin-bottom:4px;">💉 예방접종</div>
+          <div class="feature-page-sub" style="margin-bottom:12px;">접종 완료 시 체크해주세요</div>
           <div id="vaccine-list"></div>
+
         </div>
       </div>
 
@@ -3923,13 +3976,7 @@ function selOpt(group, val) {
   document.querySelectorAll('[id^="' + group + '-"]').forEach(b => b.classList.remove('sel'));
   document.getElementById(group + '-' + val).classList.add('sel');
   if (group === 'sleep-t') document.getElementById('sleep-end-wrap').style.display = val === 'manual' ? '' : 'none';
-  if (group === 'feed-t') {
-    const mlInput = document.getElementById('feed-ml');
-    const mlLabel = document.getElementById('feed-ml-label');
-    const isMilk = (val === 'bottle' || val === 'both');
-    if (mlInput) { mlInput.disabled = !isMilk; mlInput.style.opacity = isMilk ? '1' : '0.35'; mlInput.style.cursor = isMilk ? '' : 'not-allowed'; if (!isMilk) mlInput.value = ''; }
-    if (mlLabel) mlLabel.style.opacity = isMilk ? '1' : '0.35';
-  }
+  // feed-t 처리는 feedTypeChange()에서 전담
 }
 
 function saveFeed() {
@@ -4515,15 +4562,18 @@ function renderTimeline() {
   const el = document.getElementById('timeline');
   if (!el) return;
 
-  // 오늘 KST 날짜 기준 필터
+  // 날짜 필터 (_tlFilter: 'today' or 'all')
   const todayKST = new Date(Date.now() + 9*3600*1000).toISOString().slice(0,10);
-  const todayRecs = records
-    .map((r, i) => ({ ...r, _origIdx: i }))
-    .filter(r => r.time && r.time.slice(0,10) === todayKST)
-    .sort((a, b) => b.time.localeCompare(a.time));
+  const allMapped = records.map((r, i) => ({ ...r, _origIdx: i }));
+  const todayRecs = (_tlFilter === 'all'
+    ? allMapped
+    : allMapped.filter(r => r.time && r.time.slice(0,10) === todayKST)
+  ).filter(r => r.time).sort((a, b) => b.time.localeCompare(a.time));
 
   if (!todayRecs.length) {
-    el.innerHTML = '<div class="empty">아직 기록이 없어요 🌙<br>위 버튼을 눌러 첫 기록을 남겨보세요!</div>';
+    el.innerHTML = '<div class="empty">' +
+      (_tlFilter === 'all' ? '아직 기록이 없어요 🌙' : '오늘 기록이 없어요 🌙<br>위 버튼을 눌러 첫 기록을 남겨보세요!') +
+      '</div>';
     return;
   }
 
@@ -4568,7 +4618,21 @@ function renderTimeline() {
     if (!usedIdx.has(i)) merged.push(r);
   });
 
-  el.innerHTML = merged.slice(0, 60).map(r => {
+  // 전체 모드: 날짜별 구분
+  let prevDate = '';
+  el.innerHTML = merged.slice(0, 200).map(r => {
+    const rDate = r.time.slice(0,10);
+    let dateHeader = '';
+    if (_tlFilter === 'all' && rDate !== prevDate) {
+      prevDate = rDate;
+      const [y,mo,d] = rDate.split('-');
+      const dObj = new Date(rDate+'T00:00:00');
+      const dayNames = ['일','월','화','수','목','금','토'];
+      const dow = dayNames[dObj.getDay()];
+      const isToday = rDate === todayKST;
+      const label = isToday ? '오늘' : `${parseInt(mo)}월 ${parseInt(d)}일 (${dow})`;
+      dateHeader = '<div style="font-size:12px;font-weight:700;color:#7a5600;padding:12px 0 4px;border-top:1px solid var(--border-color,#f0f0f0);margin-top:4px;">' + label + '</div>';
+    }
     const d = new Date(r.time);
     const h = d.getHours(), m = d.getMinutes();
     const ampm = h < 12 ? '오전' : '오후';
@@ -4605,7 +4669,7 @@ function renderTimeline() {
       durationBadge = '<span style="font-size:10px;color:#9ca3af;">' + fmtTime(r._startTime) + ' ~ ' + fmtTime(r.time) + '</span>';
     }
 
-    return '<div class="tl-item">' +
+    return dateHeader + '<div class="tl-item">' +
       '<div class="tl-time-col">' +
         '<div class="tl-time-ampm">' + ampm + '</div>' +
         '<div class="tl-time-hm">' + hh + ':' + mm + '</div>' +
@@ -6270,12 +6334,36 @@ function renderGrowthChart() {
 function renderGrowthTable() {
   const table = document.getElementById('growth-table');
   if (!table) return;
+
+  // 최근 기록 배지
+  const badge = document.getElementById('growth-latest-badge');
+  const badgeText = document.getElementById('growth-latest-text');
+  if (badge && badgeText && growthRecords.length > 0) {
+    const latest = growthRecords[0];
+    const parts = [];
+    if (latest.weight) parts.push('⚖️ ' + latest.weight + 'kg');
+    if (latest.height) parts.push('📏 ' + latest.height + 'cm');
+    badgeText.textContent = latest.date + '  ' + parts.join('  ');
+    badge.style.display = '';
+  } else if (badge) { badge.style.display = 'none'; }
+
   const rows = growthRecords.map((r, i) =>
-    '<tr><td>' + r.date + '</td><td>' + (r.weight ? r.weight+'kg' : '-') + '</td><td>' + (r.height ? r.height+'cm' : '-') + '</td>' +
-    '<td><button onclick="deleteGrowthRecord('+i+')" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:13px;">✕</button></td></tr>'
+    '<tr style="border-bottom:1px solid var(--border-color,#f5f0e0);">' +
+    '<td style="padding:10px 12px;font-size:13px;color:var(--text-main,#333);">' + r.date + '</td>' +
+    '<td style="padding:10px 12px;font-size:13px;font-weight:700;color:#7a5600;text-align:center;">' + (r.weight ? r.weight+'kg' : '-') + '</td>' +
+    '<td style="padding:10px 12px;font-size:13px;font-weight:700;color:#1d4ed8;text-align:center;">' + (r.height ? r.height+'cm' : '-') + '</td>' +
+    '<td style="padding:10px 4px;text-align:center;">' +
+    '<button onclick="deleteGrowthRecord(' + i + ')" aria-label="삭제" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:16px;">🗑️</button></td></tr>'
   ).join('');
-  table.innerHTML = '<tr><th>날짜</th><th>몸무게</th><th>키</th><th></th></tr>' + (rows || '<tr><td colspan="4" style="text-align:center;color:#9ca3af;padding:16px;">기록 없음</td></tr>');
+
+  const header = '<tr style="background:linear-gradient(135deg,#fffbf0,#fff7d6);">' +
+    '<th style="padding:10px 12px;font-size:12px;color:#7a5600;text-align:left;">날짜</th>' +
+    '<th style="padding:10px 12px;font-size:12px;color:#7a5600;text-align:center;">⚖️ 몸무게</th>' +
+    '<th style="padding:10px 12px;font-size:12px;color:#7a5600;text-align:center;">📏 키</th>' +
+    '<th style="padding:10px 4px;"></th></tr>';
+  table.innerHTML = header + (rows || '<tr><td colspan="4" style="text-align:center;padding:20px;color:#9ca3af;font-size:13px;">아직 기록이 없어요</td></tr>');
 }
+
 
 function deleteGrowthRecord(i) {
   growthRecords.splice(i, 1);
