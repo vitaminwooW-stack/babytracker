@@ -1439,9 +1439,27 @@ body.dark #widget-diaper-count, body.dark #widget-pump-total { color: #f0ead8 !i
 /* 엄마몰래 뱃지 - 항상 라이트 */
 body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color: #9d174d !important; }
 
+
+/* ── 스크린 리더 skip navigation ── */
+.skip-nav {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: #7a5600;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 700;
+  z-index: 9999;
+  text-decoration: none;
+}
+.skip-nav:focus { top: 0; }
+
 </style>
 </head>
 <body style="visibility:hidden;">
+<a href="#screen-app" class="skip-nav" aria-label="본문 바로가기">본문 바로가기</a>
 
 <!-- ═══════════ 온보딩 오버레이 ═══════════ -->
 <div id="onboarding-overlay" style="display:none;">
@@ -1516,7 +1534,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
 </div>
 
 <!-- ═══════════ 스플래시 화면 ═══════════ -->
-<div id="screen-splash">
+<div id="screen-splash" aria-hidden="true">
   <div class="splash-icon">
     <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="48" cy="48" r="48" fill="#FFF7D6"/>
@@ -1727,29 +1745,29 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
         </button>
       </div>
     </div>
-    <div class="quick-nav-bar">
-      <button class="qnav-btn" onclick="goToPage(0)" id="qn-0">📔</button>
-      <button class="qnav-btn" onclick="goToPage(1)" id="qn-1">📷</button>
-      <button class="qnav-btn active" onclick="goToPage(2)" id="qn-2">🍼</button>
-      <button class="qnav-btn" onclick="goToPage(3)" id="qn-3">🕐</button>
-      <button class="qnav-btn" onclick="goToPage(4)" id="qn-4">📊</button>
-      <button class="qnav-btn" onclick="goToPage(5)" id="qn-5">📏</button>
-      <button class="qnav-btn" onclick="goToPage(6)" id="qn-6">⭐</button>
-      <button class="qnav-btn" onclick="goToPage(7)" id="qn-7">👩</button>
-      <button class="qnav-btn" onclick="goToPage(8)" id="qn-8">🇰🇷</button>
-      <button class="qnav-btn" onclick="goToPage(9)" id="qn-9">👨</button>
-      <button class="qnav-btn" onclick="goToPage(10)" id="qn-10">⚙️</button>
+    <div class="quick-nav-bar" role="navigation" aria-label="페이지 탐색">
+      <button class="qnav-btn" onclick="goToPage(0)" id="qn-0" aria-label="육아 일기" title="육아 일기">📔</button>
+      <button class="qnav-btn" onclick="goToPage(1)" id="qn-1" aria-label="아기 사진" title="아기 사진">📷</button>
+      <button class="qnav-btn active" onclick="goToPage(2)" id="qn-2" aria-label="수유 기록 메인" title="수유 기록 메인">🍼</button>
+      <button class="qnav-btn" onclick="goToPage(3)" id="qn-3" aria-label="생활 패턴" title="생활 패턴">🕐</button>
+      <button class="qnav-btn" onclick="goToPage(4)" id="qn-4" aria-label="통계 분석" title="통계 분석">📊</button>
+      <button class="qnav-btn" onclick="goToPage(5)" id="qn-5" aria-label="성장 기록" title="성장 기록">📏</button>
+      <button class="qnav-btn" onclick="goToPage(6)" id="qn-6" aria-label="발달 마일스톤" title="발달 마일스톤">⭐</button>
+      <button class="qnav-btn" onclick="goToPage(7)" id="qn-7" aria-label="엄마 케어" title="엄마 케어">👩</button>
+      <button class="qnav-btn" onclick="goToPage(8)" id="qn-8" aria-label="복지 정책" title="복지 정책">🇰🇷</button>
+      <button class="qnav-btn" onclick="goToPage(9)" id="qn-9" aria-label="아빠 공간" title="아빠 공간">👨</button>
+      <button class="qnav-btn" onclick="goToPage(10)" id="qn-10" aria-label="설정" title="설정">⚙️</button>
     </div>
   </div>
   <div style="overflow:hidden; flex:1; height:0; min-height:0;">
-    <div class="swipe-container" id="swipe-container">
+    <div class="swipe-container" aria-live="polite" id="swipe-container">
 
       <!-- ── 페이지 0: 일기 ── -->
       <div class="swipe-page">
         <div class="diary-page">
           <div class="diary-header">
             <h2>📔 육아 일기</h2>
-            <button class="diary-write-btn" onclick="openDiaryWrite()">✏️ 쓰기</button>
+            <button class="diary-write-btn" aria-label="일기 쓰기" onclick="openDiaryWrite()">✏️ 쓰기</button>
           </div>
           <div id="diary-list">
             <div class="diary-empty">
@@ -1909,7 +1927,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
               <button onclick="filterTimeline('all')" id="tl-btn-all" style="padding:5px 12px;border-radius:14px;border:1.5px solid var(--border-color,#e0e0e0);background:var(--card-bg,#fff);color:var(--text-sub,#888);font-size:11px;font-weight:700;cursor:pointer;">전체</button>
             </div>
           </div>
-          <div id="timeline" class="timeline-list"></div>
+          <div id="timeline" class="timeline-list" role="feed" aria-label="오늘의 기록"></div>
 
         </div>
       </div>
@@ -1962,11 +1980,11 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
           <div class="feature-section-title">새 기록 추가</div>
           <div class="chart-wrap">
             <div style="display:flex;gap:8px;margin-bottom:8px;">
-              <input type="date" id="growth-date" style="flex:1;">
+              <input type="date" id="growth-date" aria-label="성장 기록 날짜" style="flex:1;">
             </div>
             <div class="growth-input-row">
-              <input type="number" id="growth-weight" placeholder="몸무게 (kg)" step="0.01" min="0" max="30">
-              <input type="number" id="growth-height" placeholder="키 (cm)" step="0.1" min="0" max="120">
+              <input type="number" id="growth-weight" aria-label="몸무게 kg" placeholder="몸무게 (kg)" step="0.01" min="0" max="30">
+              <input type="number" id="growth-height" aria-label="키 cm" placeholder="키 (cm)" step="0.1" min="0" max="120">
               <button class="growth-add-btn" onclick="addGrowthRecord()">추가</button>
             </div>
           </div>
@@ -2298,7 +2316,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
                 <div style="font-size:14px;font-weight:600;">다크 모드</div>
                 <div style="font-size:12px;color:#9ca3af;margin-top:2px;">야간 수유 시 눈이 편해요</div>
               </div>
-              <div id="dark-toggle" onclick="toggleDarkMode()" style="width:44px;height:24px;border-radius:12px;background:#d1d5db;cursor:pointer;position:relative;transition:background 0.2s;">
+              <div id="dark-toggle" aria-label="다크 모드 토글" role="switch" onclick="toggleDarkMode()" style="width:44px;height:24px;border-radius:12px;background:#d1d5db;cursor:pointer;position:relative;transition:background 0.2s;">
                 <div id="dark-knob" style="width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
               </div>
             </div>
@@ -2307,7 +2325,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
                 <div style="font-size:14px;font-weight:600;">PIN 잠금 <span style="font-size:11px;background:#fff7d6;color:#7a5600;padding:2px 6px;border-radius:8px;font-weight:700;">선택사항</span></div>
                 <div style="font-size:12px;color:#9ca3af;margin-top:2px;">켜면 앱 시작 시 PIN 4자리 입력</div>
               </div>
-              <div id="pin-toggle" onclick="togglePinLock()" style="width:44px;height:24px;border-radius:12px;background:#d1d5db;cursor:pointer;position:relative;transition:background 0.2s;">
+              <div id="pin-toggle" aria-label="PIN 잠금 토글" role="switch" onclick="togglePinLock()" style="width:44px;height:24px;border-radius:12px;background:#d1d5db;cursor:pointer;position:relative;transition:background 0.2s;">
                 <div id="pin-knob" style="width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
               </div>
             </div>
@@ -2372,7 +2390,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
 <!-- ── 모달: 수유 타이머 (시작 시) ── -->
 
 
-<div class="modal-bg" id="modal-dad-record">
+<div class="modal-bg" id="modal-dad-record" role="dialog" aria-modal="true" aria-label="아빠 기록">
   <div class="modal" style="max-height:85vh;overflow-y:auto;">
     <div class="modal-handle"></div>
     <div id="dad-record-header" style="text-align:center;padding:8px 0 20px;">
@@ -2438,8 +2456,8 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
     <input type="datetime-local" id="dad-rec-time" style="margin-bottom:16px;">
 
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeDadRecordModal()">취소</button>
-      <button class="btn-save"   id="dad-rec-save-btn" onclick="saveDadRecordModal()">기록하기</button>
+      <button class="btn-cancel" aria-label="취소" onclick="closeDadRecordModal()">취소</button>
+      <button class="btn-save" aria-label="저장"   id="dad-rec-save-btn" onclick="saveDadRecordModal()">기록하기</button>
     </div>
   </div>
 </div>
@@ -2479,11 +2497,11 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
 
     <!-- 확인 입력 -->
     <span class="field-label">확인을 위해 <strong style="color:#ef4444;">삭제확인</strong> 을 입력하세요</span>
-    <input type="text" id="delete-confirm-input" placeholder="삭제확인"
+    <input type="text" id="delete-confirm-input" aria-label="삭제 확인 입력" placeholder="삭제확인"
       style="margin-bottom:16px;border-color:#fecaca;text-align:center;font-size:16px;font-weight:700;letter-spacing:2px;">
 
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeDeleteModal()">취소</button>
+      <button class="btn-cancel" aria-label="취소" onclick="closeDeleteModal()">취소</button>
       <button onclick="executeDelete()"
         style="flex:1;padding:14px;background:#ef4444;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;">
         ⛔ 삭제하기
@@ -2506,10 +2524,10 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
       <button class="opt-btn"     id="mr-cat-etc"    onclick="mrSetCat('etc')"    style="flex:1;min-width:60px;padding:10px 4px;font-size:13px;">📝 기타</button>
     </div>
     <span class="field-label">시작 시각</span>
-    <input type="datetime-local" id="mr-start-time" style="margin-bottom:12px;">
+    <input type="datetime-local" id="mr-start-time" aria-label="시작 시각" style="margin-bottom:12px;">
     <div id="mr-end-wrap">
       <span class="field-label">종료 시각 <span style="font-size:11px;color:#9ca3af;">(수유·수면·유축)</span></span>
-      <input type="datetime-local" id="mr-end-time" style="margin-bottom:12px;">
+      <input type="datetime-local" id="mr-end-time" aria-label="종료 시각" style="margin-bottom:12px;">
     </div>
     <!-- 수유 세부 -->
     <div id="mr-feed-detail">
@@ -2557,25 +2575,25 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
         style="width:100%;box-sizing:border-box;padding:10px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;resize:none;margin-bottom:12px;"></textarea>
     </div>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeManualRecord()">취소</button>
-      <button class="btn-save" onclick="saveManualRecord()">저장</button>
+      <button class="btn-cancel" aria-label="취소" onclick="closeManualRecord()">취소</button>
+      <button class="btn-save" aria-label="저장" onclick="saveManualRecord()">저장</button>
     </div>
   </div>
 </div>
 
-<div class="modal-bg" id="modal-mom-detail">
+<div class="modal-bg" id="modal-mom-detail" role="dialog" aria-modal="true" aria-label="엄마 케어 상세">
   <div class="modal" style="max-height:85vh;overflow-y:auto;">
     <div class="modal-handle"></div>
-    <button class="modal-close-x" onclick="closeModal('mom-detail')">✕</button>
+    <button class="modal-close-x" aria-label="닫기" onclick="closeModal('mom-detail')">✕</button>
     <div id="mom-detail-content"></div>
   </div>
 </div>
 
 <!-- ═══════════ 음성 단축키 안내 모달 ═══════════ -->
-<div class="modal-bg" id="modal-shortcut">
+<div class="modal-bg" id="modal-shortcut" role="dialog" aria-modal="true" aria-label="음성 단축키">
   <div class="modal" style="max-height:90vh;overflow-y:auto;">
     <div class="modal-handle"></div>
-    <button class="modal-close-x" onclick="closeModal('shortcut')">✕</button>
+    <button class="modal-close-x" aria-label="닫기" onclick="closeModal('shortcut')">✕</button>
     <h2>🎙️ 음성으로 빠른 기록</h2>
     <p style="font-size:13px;color:#6b7280;margin-bottom:16px;line-height:1.6;">
       앱을 열지 않고 Siri나 Google Assistant로<br>바로 기록할 수 있어요!
@@ -2609,15 +2627,15 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
       <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:8px;">🗣️ 설정 가능한 음성 명령</div>
       <div style="display:flex;flex-direction:column;gap:4px;" id="action-list"></div>
     </div>
-<button class="btn-save" style="width:100%;" onclick="closeModal('shortcut')">확인</button>
+<button class="btn-save" aria-label="저장" style="width:100%;" onclick="closeModal('shortcut')">확인</button>
   </div>
 </div>
 
 <!-- ═══════════ 초대 코드 모달 ═══════════ -->
-<div class="modal-bg" id="modal-invite">
+<div class="modal-bg" id="modal-invite" role="dialog" aria-modal="true" aria-label="아빠 초대">
   <div class="modal">
     <div class="modal-handle"></div>
-    <button class="modal-close-x" onclick="closeModal('invite')">✕</button>
+    <button class="modal-close-x" aria-label="닫기" onclick="closeModal('invite')">✕</button>
     <h2>💌 아빠 초대하기</h2>
     <p style="font-size:13px;color:#6b7280;margin-bottom:16px;line-height:1.6;">
       링크를 카카오톡으로 보내주세요.<br>
@@ -2644,30 +2662,30 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
       <button class="invite-gen-btn" onclick="generateInviteCode()" style="margin-top:8px;">새 코드 생성</button>
     </div>
 <div class="modal-actions" style="margin-top:14px;">
-      <button class="btn-save" onclick="closeModal('invite')">닫기</button>
+      <button class="btn-save" aria-label="저장" onclick="closeModal('invite')">닫기</button>
     </div>
   </div>
 </div>
 
 <!-- ═══════════ 아빠 체크리스트 확인 모달 (엄마용) ═══════════ -->
-<div class="modal-bg" id="modal-dad-view">
+<div class="modal-bg" id="modal-dad-view" role="dialog" aria-modal="true" aria-label="아빠 체크리스트">
   <div class="modal dad-view-modal" style="max-height:88vh;">
     <div class="modal-handle"></div>
-    <button class="modal-close-x" onclick="closeModal('dad-view')">✕</button>
+    <button class="modal-close-x" aria-label="닫기" onclick="closeModal('dad-view')">✕</button>
     <h2>👨 아빠 체크리스트</h2>
     <div id="dad-view-summary" class="dad-view-summary"></div>
     <div id="dad-view-body"></div>
     <div class="modal-actions" style="margin-top:16px;">
-      <button class="btn-save" onclick="closeModal('dad-view')">닫기</button>
+      <button class="btn-save" aria-label="저장" onclick="closeModal('dad-view')">닫기</button>
     </div>
   </div>
 </div>
 
 <!-- ═══════════ 일기 작성 모달 ═══════════ -->
-<div class="modal-bg" id="modal-diary">
+<div class="modal-bg" id="modal-diary" role="dialog" aria-modal="true" aria-label="일기 쓰기">
   <div class="modal">
     <div class="modal-handle"></div>
-    <button class="modal-close-x" onclick="closeDiaryWrite()">✕</button>
+    <button class="modal-close-x" aria-label="닫기" onclick="closeDiaryWrite()">✕</button>
     <h2 id="diary-modal-title">📔 일기 쓰기</h2>
     <span class="field-label">오늘 있었던 일을 적어보세요</span>
     <textarea class="diary-textarea" id="diary-text" placeholder="오늘 아기가 처음으로 웃었어요 😊&#10;&#10;수유할 때 눈을 마주쳤는데 방긋 웃더라고요..."></textarea>
@@ -2677,17 +2695,17 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
     <input type="file" id="diary-img-input" accept="image/*" style="display:none;" onchange="previewDiaryImg(event)">
     <img id="diary-img-preview" class="diary-img-preview" src="" alt="">
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeDiaryWrite()">취소</button>
-      <button class="btn-save" onclick="saveDiaryEntry()" style="background:#7a5600;">저장</button>
+      <button class="btn-cancel" aria-label="취소" onclick="closeDiaryWrite()">취소</button>
+      <button class="btn-save" aria-label="저장" onclick="saveDiaryEntry()" style="background:#7a5600;">저장</button>
     </div>
   </div>
 </div>
 
 <!-- ═══════════ 수유 모달 ═══════════ -->
-<div class="modal-bg" id="modal-feed">
+<div class="modal-bg" id="modal-feed" role="dialog" aria-modal="true" aria-label="수유 기록">
   <div class="modal">
     <div class="modal-handle"></div>
-    <button class="modal-close-x" onclick="closeModal('feed');fmtReset()">✕</button>
+    <button class="modal-close-x" aria-label="닫기" onclick="closeModal('feed');fmtReset()">✕</button>
     <h2>🍼 수유 기록</h2>
     <span class="field-label">수유 방법</span>
     <div class="opt-row" style="gap:6px;flex-wrap:wrap;">
@@ -2700,13 +2718,13 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
     <!-- 모유/혼합: 분 입력 -->
     <div id="feed-min-wrap" style="margin-top:12px;">
       <span class="field-label">수유 시간 (분)</span>
-      <input type="number" id="feed-min" placeholder="예: 15" min="1" max="120">
+      <input type="number" id="feed-min" aria-label="수유 시간 분" placeholder="예: 15" min="1" max="120">
     </div>
 
     <!-- 분유/혼합: ml 입력 -->
     <div id="feed-bottle-wrap" style="display:none;margin-top:12px;">
       <span class="field-label">분유량 (ml)</span>
-      <input type="number" id="feed-ml" placeholder="예: 120" min="0" max="500" style="margin-bottom:0;">
+      <input type="number" id="feed-ml" aria-label="분유량 ml" placeholder="예: 120" min="0" max="500" style="margin-bottom:0;">
     </div>
 
     <!-- 유축: ml 입력 -->
@@ -2714,25 +2732,25 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
       <div style="background:#f5f0ff;border:1.5px solid #e9d5ff;border-radius:12px;padding:12px;margin-bottom:0;">
         <div style="font-size:12px;font-weight:700;color:#7c3aaf;margin-bottom:8px;">🤱 유축한 모유를 수유했어요</div>
         <span class="field-label" style="margin-top:0;">유축 수유량 (ml)</span>
-        <input type="number" id="feed-pump-ml" placeholder="예: 80" min="0" max="500">
+        <input type="number" id="feed-pump-ml" aria-label="유축 수유량 ml" placeholder="예: 80" min="0" max="500">
       </div>
     </div>
 
     <span class="field-label" style="margin-top:12px;">기록 시각</span>
-    <input type="datetime-local" id="feed-time" style="margin-bottom:12px;">
+    <input type="datetime-local" id="feed-time" aria-label="수유 기록 시각" style="margin-bottom:12px;">
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('feed');fmtReset()">취소</button>
-      <button class="btn-save" onclick="saveFeed()">저장</button>
+      <button class="btn-cancel" aria-label="취소" onclick="closeModal('feed');fmtReset()">취소</button>
+      <button class="btn-save" aria-label="저장" onclick="saveFeed()">저장</button>
     </div>
   </div>
 </div>
 
 
 <!-- ═══════════ 유축 모달 ═══════════ -->
-<div class="modal-bg" id="modal-pump">
+<div class="modal-bg" id="modal-pump" role="dialog" aria-modal="true" aria-label="유축 기록">
   <div class="modal" style="max-height:85vh;overflow-y:auto;">
     <div class="modal-handle"></div>
-    <button class="modal-close-x" onclick="closePumpModal()">✕</button>
+    <button class="modal-close-x" aria-label="닫기" onclick="closePumpModal()">✕</button>
     <h2>🤱 유축 기록</h2>
 
     <!-- 유축 타이머 (좌/우 분리) -->
@@ -2759,35 +2777,35 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
     <div style="display:flex;gap:8px;align-items:flex-end;margin-bottom:12px;">
       <div style="flex:1;">
         <div style="font-size:11px;font-weight:700;color:#7c3aaf;margin-bottom:4px;">⬅️ 왼쪽 (ml)</div>
-        <input type="number" id="pump-L-ml" placeholder="예: 80" min="0" max="500" oninput="pumpCalcTotal()" style="width:100%;box-sizing:border-box;">
+        <input type="number" id="pump-L-ml" aria-label="왼쪽 유축량 ml" placeholder="예: 80" min="0" max="500" oninput="pumpCalcTotal()" style="width:100%;box-sizing:border-box;">
       </div>
       <div style="flex:1;">
         <div style="font-size:11px;font-weight:700;color:#7c3aaf;margin-bottom:4px;">➡️ 오른쪽 (ml)</div>
-        <input type="number" id="pump-R-ml" placeholder="예: 70" min="0" max="500" oninput="pumpCalcTotal()" style="width:100%;box-sizing:border-box;">
+        <input type="number" id="pump-R-ml" aria-label="오른쪽 유축량 ml" placeholder="예: 70" min="0" max="500" oninput="pumpCalcTotal()" style="width:100%;box-sizing:border-box;">
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
       <div style="flex:1;">
         <div style="font-size:11px;font-weight:700;color:#7c3aaf;margin-bottom:4px;">📊 총합 (ml)</div>
-        <input type="number" id="pump-total-ml" placeholder="또는 총합만 입력" min="0" max="1000" oninput="pumpSetTotal()" style="width:100%;box-sizing:border-box;">
+        <input type="number" id="pump-total-ml" aria-label="유축 총합 ml" placeholder="또는 총합만 입력" min="0" max="1000" oninput="pumpSetTotal()" style="width:100%;box-sizing:border-box;">
       </div>
       <div style="padding-top:20px;font-size:20px;font-weight:800;color:#7c3aaf;" id="pump-total-display">= 0 ml</div>
     </div>
     <span class="field-label">기록 시각</span>
-    <input type="datetime-local" id="pump-time">
+    <input type="datetime-local" id="pump-time" aria-label="유축 기록 시각">
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closePumpModal()">취소</button>
-      <button class="btn-save" style="background:#7c3aaf;" onclick="savePumpSimple()">저장</button>
+      <button class="btn-cancel" aria-label="취소" onclick="closePumpModal()">취소</button>
+      <button class="btn-save" aria-label="저장" style="background:#7c3aaf;" onclick="savePumpSimple()">저장</button>
     </div>
   </div>
 </div>
 
 
 <!-- ═══════════ 프로필 수정 모달 ═══════════ -->
-<div class="modal-bg" id="modal-profile-edit">
+<div class="modal-bg" id="modal-profile-edit" role="dialog" aria-modal="true" aria-label="프로필 수정">
   <div class="modal">
     <div class="modal-handle"></div>
-    <button class="modal-close-x" onclick="closeModal('profile-edit')">✕</button>
+    <button class="modal-close-x" aria-label="닫기" onclick="closeModal('profile-edit')">✕</button>
     <h2>✏️ 프로필 수정</h2>
     <span class="field-label">이름 또는 태명 *</span>
     <input type="text" id="ep-name" placeholder="예: 하준이, 콩이">
@@ -2832,31 +2850,31 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
     </div>
     <p id="ep-error" style="color:#e05555;font-size:13px;margin-top:8px;min-height:18px;"></p>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('profile-edit')">취소</button>
-      <button class="btn-save" onclick="saveProfileEdit()">저장</button>
+      <button class="btn-cancel" aria-label="취소" onclick="closeModal('profile-edit')">취소</button>
+      <button class="btn-save" aria-label="저장" onclick="saveProfileEdit()">저장</button>
     </div>
   </div>
 </div>
 
 <!-- ═══════════ 기록 수정 모달 ═══════════ -->
-<div class="modal-bg" id="modal-edit-record">
+<div class="modal-bg" id="modal-edit-record" role="dialog" aria-modal="true" aria-label="기록 수정">
   <div class="modal">
     <div class="modal-handle"></div>
-    <button class="modal-close-x" onclick="closeModal('edit-record')">✕</button>
+    <button class="modal-close-x" aria-label="닫기" onclick="closeModal('edit-record')">✕</button>
     <h2 id="edit-record-title">기록 수정</h2>
     <div id="edit-record-body"></div>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('edit-record')">취소</button>
-      <button class="btn-save" id="edit-record-save-btn">저장</button>
+      <button class="btn-cancel" aria-label="취소" onclick="closeModal('edit-record')">취소</button>
+      <button class="btn-save" aria-label="저장" id="edit-record-save-btn">저장</button>
     </div>
   </div>
 </div>
 
 <!-- ═══════════ 수면 모달 ═══════════ -->
-<div class="modal-bg" id="modal-sleep">
+<div class="modal-bg" id="modal-sleep" role="dialog" aria-modal="true" aria-label="수면 기록">
   <div class="modal">
     <div class="modal-handle"></div>
-    <button class="modal-close-x" onclick="closeModal('sleep')">✕</button>
+    <button class="modal-close-x" aria-label="닫기" onclick="closeModal('sleep')">✕</button>
     <h2>😴 수면 기록</h2>
     <span class="field-label">수면 상태</span>
     <div class="opt-row">
@@ -2864,20 +2882,20 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
       <button class="opt-btn" id="sleep-t-manual" onclick="selOpt('sleep-t','manual')">직접 입력</button>
     </div>
     <span class="field-label">시작 시각</span>
-    <input type="datetime-local" id="sleep-start">
+    <input type="datetime-local" id="sleep-start" aria-label="수면 시작 시각">
     <div id="sleep-end-wrap" style="display:none">
       <span class="field-label">종료 시각</span>
       <input type="datetime-local" id="sleep-end">
     </div>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('sleep')">취소</button>
-      <button class="btn-save" onclick="saveSleep()">저장</button>
+      <button class="btn-cancel" aria-label="취소" onclick="closeModal('sleep')">취소</button>
+      <button class="btn-save" aria-label="저장" onclick="saveSleep()">저장</button>
     </div>
   </div>
 </div>
 
 <!-- ═══════════ 기저귀 모달 ═══════════ -->
-<div class="modal-bg" id="modal-feed-end">
+<div class="modal-bg" id="modal-feed-end" role="dialog" aria-modal="true" aria-label="수유 완료">
   <div class="modal">
     <div class="modal-handle"></div>
     <h2>🍼 수유 완료</h2>
@@ -2894,33 +2912,33 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
     <div id="fe-side-wrap" style="display:flex;gap:10px;margin-bottom:12px;">
       <div style="flex:1;">
         <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">⬅️ 왼쪽 (분)</div>
-        <input type="number" id="fe-left-min" placeholder="예: 10" min="0" max="120"
+        <input type="number" id="fe-left-min" aria-label="왼쪽 수유 시간 분" placeholder="예: 10" min="0" max="120"
           oninput="feCalcTotal()" style="width:100%;box-sizing:border-box;">
       </div>
       <div style="flex:1;">
         <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">➡️ 오른쪽 (분)</div>
-        <input type="number" id="fe-right-min" placeholder="예: 10" min="0" max="120"
+        <input type="number" id="fe-right-min" aria-label="오른쪽 수유 시간 분" placeholder="예: 10" min="0" max="120"
           oninput="feCalcTotal()" style="width:100%;box-sizing:border-box;">
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
       <div style="flex:1;">
         <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">📊 총합 (분)</div>
-        <input type="number" id="fe-min" placeholder="자동계산" min="0" max="240"
+        <input type="number" id="fe-min" aria-label="수유 총합 분" placeholder="자동계산" min="0" max="240"
           oninput="feSetTotal()" style="width:100%;box-sizing:border-box;">
       </div>
       <div style="padding-top:18px;font-size:14px;font-weight:800;color:#7a5600;" id="fe-total-display">= 0 분</div>
     </div>
     <div id="fe-ml-wrap">
       <span class="field-label" id="fe-ml-label" style="opacity:0.4;">분유량 (ml)</span>
-      <input type="number" id="fe-ml" placeholder="예: 80" min="0" max="500"
+      <input type="number" id="fe-ml" aria-label="분유량 ml" placeholder="예: 80" min="0" max="500"
         disabled style="margin-bottom:12px;opacity:0.35;cursor:not-allowed;background:#f3f4f6;">
     </div>
     <span class="field-label">기록 시각</span>
-    <input type="datetime-local" id="fe-time" style="margin-bottom:12px;">
+    <input type="datetime-local" id="fe-time" aria-label="수유 완료 시각" style="margin-bottom:12px;">
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeFeedEndModal()">취소</button>
-      <button class="btn-save" onclick="saveFeedEnd()">완료</button>
+      <button class="btn-cancel" aria-label="취소" onclick="closeFeedEndModal()">취소</button>
+      <button class="btn-save" aria-label="저장" onclick="saveFeedEnd()">완료</button>
     </div>
   </div>
 </div>
@@ -2935,16 +2953,16 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
       <input type="number" id="pe-R" placeholder="오른쪽 (ml)" min="0" max="500" style="flex:1;">
     </div>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closePumpEndModal()">취소</button>
-      <button class="btn-save" onclick="savePumpEnd()">완료</button>
+      <button class="btn-cancel" aria-label="취소" onclick="closePumpEndModal()">취소</button>
+      <button class="btn-save" aria-label="저장" onclick="savePumpEnd()">완료</button>
     </div>
   </div>
 </div>
 
-<div class="modal-bg" id="modal-diaper">
+<div class="modal-bg" id="modal-diaper" role="dialog" aria-modal="true" aria-label="기저귀 기록">
   <div class="modal">
     <div class="modal-handle"></div>
-    <button class="modal-close-x" onclick="closeModal('diaper')">✕</button>
+    <button class="modal-close-x" aria-label="닫기" onclick="closeModal('diaper')">✕</button>
     <h2>🌿 기저귀 기록</h2>
     <span class="field-label">어떤 기저귀인가요?</span>
     <div class="opt-row" style="gap:8px;">
@@ -2964,8 +2982,8 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
     <span class="field-label">기록 시각</span>
     <input type="datetime-local" id="diaper-time">
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('diaper')">취소</button>
-      <button class="btn-save" onclick="saveDiaper()">저장</button>
+      <button class="btn-cancel" aria-label="취소" onclick="closeModal('diaper')">취소</button>
+      <button class="btn-save" aria-label="저장" onclick="saveDiaper()">저장</button>
     </div>
   </div>
 </div>
@@ -4526,8 +4544,8 @@ function renderTimeline() {
         '</div>' +
       '</div>' +
       '<div class="tl-actions-col">' +
-        '<button class="t-edit-btn" onclick="editRecord(' + r._origIdx + ')">✏️</button>' +
-        '<button class="t-del-btn" onclick="deleteRecord(' + r._origIdx + ')">🗑️</button>' +
+        '<button class="t-edit-btn" aria-label="기록 수정" onclick="editRecord(' + r._origIdx + ')">✏️</button>' +
+        '<button class="t-del-btn" aria-label="기록 삭제" onclick="deleteRecord(' + r._origIdx + ')">🗑️</button>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -6571,6 +6589,9 @@ function loadPinToggle() {
 
 function toggleDarkMode() {
   const isDark = document.body.classList.toggle('dark');
+  // 접근성: aria-checked 업데이트
+  const dt = document.getElementById('dark-toggle');
+  if(dt) dt.setAttribute('aria-checked', isDark ? 'true' : 'false');
   localStorage.setItem('dark_mode', isDark ? '1' : '0');
   const toggle = document.getElementById('dark-toggle');
   const knob = document.getElementById('dark-knob');
@@ -6585,8 +6606,10 @@ function toggleDarkMode() {
 
 function loadDarkMode() {
   const saved = localStorage.getItem('dark_mode');
+  const dt = document.getElementById('dark-toggle');
   if (saved === '1') {
     document.body.classList.add('dark');
+    if(dt) dt.setAttribute('aria-checked','true');
     const toggle = document.getElementById('dark-toggle');
     const knob = document.getElementById('dark-knob');
     if (toggle) toggle.style.background = '#7a5600';
