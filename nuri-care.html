@@ -9008,4 +9008,22 @@ function fbRenderStatus() {
   }
   const famId = localStorage.getItem('fb_family_id') || '-';
   const role = localStorage.getItem('fb_user_role') || 'mom';
-  el.innerHTML = `<span style="color:#16a34a;">🔥 Firebase 연결됨 · ${role === 'dad' ? '아�
+  el.innerHTML = '<span style="color:#16a34a;">🔥 Firebase 연결됨 · ' + (role === 'dad' ? '아빠 모드' : '엄마 모드') + ' · ' + famId.slice(-6) + '</span>' +
+    '<div style="font-size:10px;color:#9ca3af;margin-top:3px;">가족 코드: ' + famId.slice(-6) + '</div>';
+}
+
+// ── 앱 시작 ──
+document.addEventListener('DOMContentLoaded', () => {
+  try { appStart(); } catch(e) {
+    console.error('appStart 실패:', e);
+    // 폴백: 스플래시 숨기고 로그인으로
+    const splash = document.getElementById('screen-splash');
+    if (splash) splash.style.display = 'none';
+    try { initLogin(); } catch(e2) {
+      document.body.style.visibility = 'visible';
+    }
+  }
+});
+</script>
+</body>
+</html>
