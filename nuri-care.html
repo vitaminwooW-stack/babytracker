@@ -1875,23 +1875,23 @@ body.dark #widget-diaper-count, body.dark #widget-pump-total { color: #f0ead8 !i
           <!-- ── 오늘의 기록 타임라인 ── -->
           <!-- 오늘 요약 위젯 카드 -->
           <div id="today-summary-widget" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
-            <div style="background:linear-gradient(135deg,#fff7ed,#ffedd5);border-radius:14px;padding:12px;border:1px solid #fed7aa;">
-              <div style="font-size:10px;font-weight:700;color:#ea580c;margin-bottom:2px;">🍼 수유</div>
+            <div onclick="openModal('feed')" style="background:linear-gradient(135deg,#fff7ed,#ffedd5);border-radius:14px;padding:12px;border:1px solid #fed7aa;cursor:pointer;active:opacity:0.8;-webkit-tap-highlight-color:rgba(0,0,0,0.05);">
+              <div style="font-size:10px;font-weight:700;color:#ea580c;margin-bottom:2px;">🍼 수유 기록하기 +</div>
               <div id="widget-feed-count" style="font-size:22px;font-weight:900;color:#c2410c;line-height:1;">0회</div>
               <div id="widget-feed-last" style="font-size:10px;color:#9ca3af;margin-top:2px;">기록 없음</div>
             </div>
-            <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:14px;padding:12px;border:1px solid #bfdbfe;">
-              <div style="font-size:10px;font-weight:700;color:#2563eb;margin-bottom:2px;">😴 수면</div>
+            <div onclick="startSession('sleep')" style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:14px;padding:12px;border:1px solid #bfdbfe;cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0.05);">
+              <div style="font-size:10px;font-weight:700;color:#2563eb;margin-bottom:2px;">😴 수면 시작/종료 +</div>
               <div id="widget-sleep-time" style="font-size:22px;font-weight:900;color:#1d4ed8;line-height:1;">0h</div>
               <div id="widget-sleep-last" style="font-size:10px;color:#9ca3af;margin-top:2px;">기록 없음</div>
             </div>
-            <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:14px;padding:12px;border:1px solid #bbf7d0;">
-              <div style="font-size:10px;font-weight:700;color:#16a34a;margin-bottom:2px;">🌿 기저귀</div>
+            <div onclick="openModal('diaper')" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:14px;padding:12px;border:1px solid #bbf7d0;cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0.05);">
+              <div style="font-size:10px;font-weight:700;color:#16a34a;margin-bottom:2px;">🌿 기저귀 기록하기 +</div>
               <div id="widget-diaper-count" style="font-size:22px;font-weight:900;color:#15803d;line-height:1;">0회</div>
               <div id="widget-diaper-last" style="font-size:10px;color:#9ca3af;margin-top:2px;">기록 없음</div>
             </div>
-            <div style="background:linear-gradient(135deg,#fdf4ff,#f3e8ff);border-radius:14px;padding:12px;border:1px solid #e9d5ff;">
-              <div style="font-size:10px;font-weight:700;color:#7c3aed;margin-bottom:2px;">🤱 유축</div>
+            <div onclick="openModal('pump')" style="background:linear-gradient(135deg,#fdf4ff,#f3e8ff);border-radius:14px;padding:12px;border:1px solid #e9d5ff;cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0.05);">
+              <div style="font-size:10px;font-weight:700;color:#7c3aed;margin-bottom:2px;">🤱 유축 기록하기 +</div>
               <div id="widget-pump-total" style="font-size:22px;font-weight:900;color:#6d28d9;line-height:1;">0ml</div>
               <div id="widget-pump-last" style="font-size:10px;color:#9ca3af;margin-top:2px;">기록 없음</div>
             </div>
@@ -2684,18 +2684,40 @@ body.dark #widget-diaper-count, body.dark #widget-pump-total { color: #f0ead8 !i
     <h2>🍼 수유 기록</h2>
     <span class="field-label">수유 방법</span>
     <div class="opt-row">
-      <button class="opt-btn sel" id="feed-t-breast" onclick="selOpt('feed-t','breast')">모유</button>
-      <button class="opt-btn" id="feed-t-bottle" onclick="selOpt('feed-t','bottle')">분유</button>
-      <button class="opt-btn" id="feed-t-both" onclick="selOpt('feed-t','both')">혼합</button>
+      <button class="opt-btn sel" id="feed-t-breast" onclick="selOpt('feed-t','breast');feedShowTimer()">모유</button>
+      <button class="opt-btn" id="feed-t-bottle" onclick="selOpt('feed-t','bottle');feedHideTimer()">분유</button>
+      <button class="opt-btn" id="feed-t-both" onclick="selOpt('feed-t','both');feedShowTimer()">혼합</button>
     </div>
+
+    <!-- 수유 타이머 (모유/혼합 전용) -->
+    <div id="feed-modal-timer" style="background:#fff8f0;border:1.5px solid #fde8cc;border-radius:14px;padding:14px;margin-bottom:14px;text-align:center;">
+      <div style="font-size:11px;font-weight:700;color:#c2410c;margin-bottom:10px;letter-spacing:0.04em;">⏱️ 수유 타이머</div>
+      <div style="display:flex;gap:10px;justify-content:center;margin-bottom:10px;">
+        <div id="fmt-left-card" style="flex:1;background:#fff;border:2px solid #e5e7eb;border-radius:12px;padding:10px 6px;text-align:center;transition:all 0.2s;">
+          <div style="font-size:10px;font-weight:700;color:#9ca3af;margin-bottom:4px;">⬅️ 왼쪽</div>
+          <div id="fmt-left" style="font-size:20px;font-weight:900;color:#9ca3af;font-family:monospace;letter-spacing:1px;">00:00:00</div>
+          <button id="fmt-left-btn" onclick="fmtToggle('left')"
+            style="margin-top:6px;width:100%;padding:6px 0;background:#e5e7eb;color:#6b7280;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;">시작</button>
+        </div>
+        <div id="fmt-right-card" style="flex:1;background:#fff;border:2px solid #e5e7eb;border-radius:12px;padding:10px 6px;text-align:center;transition:all 0.2s;">
+          <div style="font-size:10px;font-weight:700;color:#9ca3af;margin-bottom:4px;">➡️ 오른쪽</div>
+          <div id="fmt-right" style="font-size:20px;font-weight:900;color:#9ca3af;font-family:monospace;letter-spacing:1px;">00:00:00</div>
+          <button id="fmt-right-btn" onclick="fmtToggle('right')"
+            style="margin-top:6px;width:100%;padding:6px 0;background:#e5e7eb;color:#6b7280;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;">시작</button>
+        </div>
+      </div>
+      <button onclick="fmtReset()" style="font-size:11px;color:#9ca3af;background:none;border:none;cursor:pointer;">⟳ 초기화</button>
+    </div>
+
     <span class="field-label">수유 시간 (분)</span>
-    <input type="number" id="feed-min" placeholder="예: 15" min="1" max="60">
+    <input type="number" id="feed-min" placeholder="타이머 정지 시 자동입력" min="1" max="60">
     <span class="field-label" id="feed-ml-label" style="opacity:0.35;">분유량 (ml, 선택)</span>
-    <input type="number" id="feed-ml" placeholder="예: 80" disabled style="opacity:0.35;cursor:not-allowed;">
+    <input type="number" id="feed-ml" placeholder="예: 80" min="0" max="500"
+      style="margin-bottom:12px;opacity:0.35;cursor:not-allowed;background:#f3f4f6;" disabled>
     <span class="field-label">기록 시각</span>
-    <input type="datetime-local" id="feed-time">
+    <input type="datetime-local" id="feed-time" style="margin-bottom:12px;">
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('feed')">취소</button>
+      <button class="btn-cancel" onclick="closeModal('feed');fmtReset()">취소</button>
       <button class="btn-save" onclick="saveFeed()">저장</button>
     </div>
   </div>
@@ -8133,7 +8155,7 @@ function pumpTimerToggle() {
     _pumpTimerStart = Date.now();
     _pumpTimerRunning = true;
     if (btn) { btn.textContent = '정지'; btn.style.background = '#dc2626'; }
-    _pumpTimerInterval = setInterval(_pumpTimerTick, 200);
+    _pumpTimerInterval = setInterval(_pumpTimerTick, 20);
     _pumpTimerTick(); // 즉시 한 번 업데이트
     // 화면 유지 자동 활성화
     timerRequestWakeLock();
@@ -8143,11 +8165,11 @@ function pumpTimerToggle() {
 function _pumpTimerTick() {
   const elapsed = _pumpTimerMs + (_pumpTimerStart ? Date.now() - _pumpTimerStart : 0);
   const totalSec = Math.floor(elapsed / 1000);
-  const hh = Math.floor(totalSec / 3600);
-  const mm = Math.floor((totalSec % 3600) / 60);
+  const mm = Math.floor(totalSec / 60);
   const ss = totalSec % 60;
+  const cs = Math.floor((elapsed % 1000) / 10);
   const el = document.getElementById('pump-timer-display');
-  if (el) el.textContent = String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');
+  if (el) el.textContent = String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0')+':'+String(cs).padStart(2,'0');
 }
 
 
@@ -8353,6 +8375,92 @@ function feSel(t) {
   feTimerShow(type === 'breast' || type === 'both');
 }
 
+// ── 수유 시작 모달 타이머 (fmt = feed modal timer) ──
+let _fmtL=0, _fmtR=0, _fmtLStart=null, _fmtRStart=null;
+let _fmtInterval=null, _fmtActive=null;
+
+function feedShowTimer() {
+  const el=document.getElementById('feed-modal-timer');
+  if(el) el.style.display='';
+}
+function feedHideTimer() {
+  const el=document.getElementById('feed-modal-timer');
+  if(el) el.style.display='none';
+  fmtReset();
+}
+
+function fmtToggle(side) {
+  const isL=side==='left';
+  const running=isL?_fmtLStart:_fmtRStart;
+  const other=isL?'right':'left';
+  if(running) {
+    const el=Date.now()-(isL?_fmtLStart:_fmtRStart);
+    if(isL){_fmtL+=el;_fmtLStart=null;}else{_fmtR+=el;_fmtRStart=null;}
+    _fmtActive=null;
+    fmtUpdateCard('left',false); fmtUpdateCard('right',false);
+    clearInterval(_fmtInterval);_fmtInterval=null;
+    fmtTick();
+    // feed-min 자동입력
+    const totalMs=isL?_fmtL:_fmtR;
+    const inp=document.getElementById('feed-min');
+    if(inp){inp.value=Math.round(((_fmtL+_fmtR)/2)/60000)||Math.round(totalMs/60000)||'';}
+  } else {
+    if(_fmtActive&&_fmtActive!==side) fmtToggle(_fmtActive);
+    if(isL)_fmtLStart=Date.now();else _fmtRStart=Date.now();
+    _fmtActive=side;
+    fmtUpdateCard(side,true); fmtUpdateCard(other,false);
+    if(!_fmtInterval) _fmtInterval=setInterval(fmtTick,20);
+  }
+}
+
+function fmtUpdateCard(side,active) {
+  const card=document.getElementById('fmt-'+side+'-card');
+  const btn=document.getElementById('fmt-'+side+'-btn');
+  const disp=document.getElementById('fmt-'+side);
+  const running=side==='left'?!!_fmtLStart:!!_fmtRStart;
+  if(card){
+    card.style.background=running?'#fff1f8':'#fff';
+    card.style.borderColor=running?'#db2777':'#e5e7eb';
+    card.style.boxShadow=active?'0 0 0 3px #fce7f366':'';
+  }
+  if(disp) disp.style.color=running?'#db2777':'#9ca3af';
+  if(btn){
+    btn.textContent=running?'정지':'시작';
+    btn.style.background=running?'#db2777':'#e5e7eb';
+    btn.style.color=running?'#fff':'#6b7280';
+  }
+}
+
+function fmtTick() {
+  const fmt=ms=>{
+    const ts=Math.floor(ms/1000),mm=Math.floor(ts/60),ss=ts%60,cs=Math.floor((ms%1000)/10);
+    return String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0')+':'+String(cs).padStart(2,'0');
+  };
+  const nL=_fmtLStart?_fmtL+(Date.now()-_fmtLStart):_fmtL;
+  const nR=_fmtRStart?_fmtR+(Date.now()-_fmtRStart):_fmtR;
+  const dL=document.getElementById('fmt-left');
+  const dR=document.getElementById('fmt-right');
+  if(dL)dL.textContent=fmt(nL);
+  if(dR)dR.textContent=fmt(nR);
+  if(!_fmtLStart&&!_fmtRStart){clearInterval(_fmtInterval);_fmtInterval=null;}
+}
+
+function fmtReset() {
+  clearInterval(_fmtInterval);_fmtInterval=null;
+  _fmtL=0;_fmtR=0;_fmtLStart=null;_fmtRStart=null;_fmtActive=null;
+  ['left','right'].forEach(s=>{
+    fmtUpdateCard(s,false);
+    const d=document.getElementById('fmt-'+s);
+    if(d)d.textContent='00:00:00';
+  });
+}
+
+function fmtGetMinutes(side) {
+  const ms = side==='left' ? _fmtL+((_fmtLStart)?(Date.now()-_fmtLStart):0)
+                            : _fmtR+((_fmtRStart)?(Date.now()-_fmtRStart):0);
+  return Math.round(ms/60000);
+}
+
 // ── 수유 타이머 ──
 let _feTimerL = 0, _feTimerR = 0;          // 누적 ms
 let _feTimerLStart = null, _feTimerRStart = null;
@@ -8391,7 +8499,7 @@ function feTimerToggle(side) {
     _feUpdateCardUI(side, true);
     _feUpdateCardUI(otherSide, false);
     if (!_feTimerInterval) {
-      _feTimerInterval = setInterval(_feTimerTick, 50);
+      _feTimerInterval = setInterval(_feTimerTick, 20);
     }
     timerRequestWakeLock();
   }
@@ -8436,10 +8544,10 @@ function _feUpdateCardUI(side, active) {
 function _feTimerTick() {
   const fmtMs = ms => {
     const totalSec = Math.floor(ms / 1000);
-    const hh = Math.floor(totalSec / 3600);
-    const mm = Math.floor((totalSec % 3600) / 60);
+    const mm = Math.floor(totalSec / 60);
     const ss = totalSec % 60;
-    return String(hh).padStart(2,'0') + ':' + String(mm).padStart(2,'0') + ':' + String(ss).padStart(2,'0');
+    const cs = Math.floor((ms % 1000) / 10);
+    return String(mm).padStart(2,'0') + ':' + String(ss).padStart(2,'0') + ':' + String(cs).padStart(2,'0');
   };
   const nowL = _feTimerLStart ? _feTimerL + (Date.now()-_feTimerLStart) : _feTimerL;
   const nowR = _feTimerRStart ? _feTimerR + (Date.now()-_feTimerRStart) : _feTimerR;
@@ -9414,87 +9522,66 @@ function initModalDragClose() {
   document.querySelectorAll('.modal-bg').forEach(bg => {
     const modal = bg.querySelector('.modal');
     if (!modal) return;
-    const handle = modal.querySelector('.modal-handle');
-    const dragTarget = handle || modal;  // 핸들 없으면 모달 전체
 
-    let startY = 0, startX = 0, currentY = 0, isDragging = false;
-    const CLOSE_THRESHOLD = 120;  // px 이상 내리면 닫힘
-    const VELOCITY_THRESHOLD = 0.5; // 빠르게 내리면 닫힘
-    let lastY = 0, lastTime = 0;
+    let startY=0, startX=0, curY=0, dragging=false, startTime=0;
+    const THRESHOLD = 100;
 
-    function onStart(e) {
+    // 모달 전체 상단 1/3 영역에서 드래그 시작 가능
+    modal.addEventListener('touchstart', e => {
       if (!bg.classList.contains('open')) return;
-      const touch = e.touches ? e.touches[0] : e;
-      startY = touch.clientY;
-      startX = touch.clientX;
-      lastY = startY;
-      lastTime = Date.now();
-      isDragging = true;
-      currentY = 0;
-      bg.classList.add('drag-closing');
-    }
+      const t = e.touches[0];
+      // 모달 내 input/textarea/button은 드래그 제외
+      const tag = e.target.tagName.toLowerCase();
+      if (['input','textarea','select','button'].includes(tag)) return;
+      const rect = modal.getBoundingClientRect();
+      // 상단 절반에서만 드래그 시작
+      if (t.clientY - rect.top > rect.height * 0.5) return;
+      startY = t.clientY; startX = t.clientX;
+      curY = 0; dragging = true; startTime = Date.now();
+    }, { passive: true });
 
-    function onMove(e) {
-      if (!isDragging) return;
-      const touch = e.touches ? e.touches[0] : e;
-      const deltaX = Math.abs(touch.clientX - startX);
-      const deltaY = touch.clientY - startY;
+    modal.addEventListener('touchmove', e => {
+      if (!dragging) return;
+      const t = e.touches[0];
+      const dy = t.clientY - startY;
+      const dx = Math.abs(t.clientX - startX);
+      if (dx > Math.abs(dy) && dx > 8) { dragging = false; return; }
+      if (dy < 0) return;
+      e.stopPropagation();
+      curY = dy;
+      modal.style.transform = 'translateY(' + curY + 'px)';
+      const p = Math.min(curY / THRESHOLD, 1);
+      bg.style.background = 'rgba(0,0,0,' + (0.45*(1-p*0.8)) + ')';
+    }, { passive: true });
 
-      // 수평 스와이프(페이지 전환)는 무시
-      if (deltaX > deltaY && deltaX > 10) { isDragging = false; return; }
-      if (deltaY < 0) return;  // 위로 드래그 무시
-
-      e.preventDefault();
-      currentY = deltaY;
-      const velocity = (touch.clientY - lastY) / (Date.now() - lastTime + 1);
-      lastY = touch.clientY;
-      lastTime = Date.now();
-
-      // 모달 이동 + 배경 투명도
-      modal.style.transform = 'translateY(' + currentY + 'px)';
-      const progress = Math.min(currentY / CLOSE_THRESHOLD, 1);
-      bg.style.background = 'rgba(0,0,0,' + (0.45 * (1 - progress * 0.8)) + ')';
-    }
-
-    function onEnd(e) {
-      if (!isDragging) return;
-      isDragging = false;
-      bg.classList.remove('drag-closing');
-
-      const touch = e.changedTouches ? e.changedTouches[0] : e;
-      const velocity = lastTime ? (touch.clientY - startY) / (Date.now() - lastTime + 1) : 0;
-      const shouldClose = currentY > CLOSE_THRESHOLD || velocity > VELOCITY_THRESHOLD;
-
+    modal.addEventListener('touchend', e => {
+      if (!dragging) return;
+      dragging = false;
+      const elapsed = Date.now() - startTime;
+      const velocity = curY / (elapsed || 1);
+      const shouldClose = curY > THRESHOLD || (velocity > 0.4 && curY > 40);
       if (shouldClose) {
-        // 닫기 애니메이션
-        modal.style.transition = 'transform 0.25s ease';
+        modal.style.transition = 'transform 0.22s ease';
         modal.style.transform = 'translateY(110%)';
-        bg.style.transition = 'background 0.25s ease';
+        bg.style.transition = 'background 0.22s ease';
         bg.style.background = 'rgba(0,0,0,0)';
         setTimeout(() => {
           bg.classList.remove('open');
-          modal.style.transform = '';
-          modal.style.transition = '';
-          bg.style.background = '';
-          bg.style.transition = '';
-        }, 250);
+          modal.style.cssText = '';
+          bg.style.cssText = '';
+        }, 230);
       } else {
-        // 원위치로 복귀
-        modal.style.transition = 'transform 0.3s cubic-bezier(0.34,1.56,0.64,1)';
+        modal.style.transition = 'transform 0.28s cubic-bezier(0.34,1.56,0.64,1)';
         modal.style.transform = 'translateY(0)';
-        bg.style.transition = 'background 0.3s ease';
+        bg.style.transition = 'background 0.28s';
         bg.style.background = '';
         setTimeout(() => {
           modal.style.transition = '';
           bg.style.transition = '';
         }, 300);
+        curY = 0;
       }
-      currentY = 0;
-    }
-
-    dragTarget.addEventListener('touchstart', onStart, { passive: true });
-    document.addEventListener('touchmove', onMove, { passive: false });
-    document.addEventListener('touchend', onEnd, { passive: true });
+    }, { passive: true });
   });
 }
 
