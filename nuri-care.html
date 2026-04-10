@@ -1456,6 +1456,55 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
 }
 .skip-nav:focus { top: 0; }
 
+
+/* ══════════════════════════════════════
+   누리케어 유틸리티 클래스 (방법1 최적화)
+   인라인 스타일 반복 패턴 → CSS 클래스
+══════════════════════════════════════ */
+
+/* 레이아웃 */
+.u-hidden        { display: none; }
+.u-flex1         { flex: 1; }
+.u-flex-row-gap10 { display: flex; gap: 10px; margin-bottom: 16px; }
+.u-flex-row-gap10b { display: flex; gap: 10px; margin-bottom: 12px; }
+.u-input-full    { width: 100%; box-sizing: border-box; }
+.u-p1416         { padding: 14px 16px; }
+.u-mb12          { margin-bottom: 12px; }
+.u-mb8           { margin-top: 8px; }
+.u-mt8           { margin-top: 8px; }
+.u-modal-scroll  { max-height: 85vh; overflow-y: auto; }
+
+/* 텍스트 */
+.u-hint          { font-size: 11px; color: #9ca3af; }
+.u-hint-mt       { font-size: 10px; color: #9ca3af; margin-top: 2px; }
+.u-subtext       { font-size: 11px; color: #6b7280; margin: 8px 0 4px; padding-top: 8px; border-top: 1px solid #f3f0e0; }
+.u-label-sm      { font-size: 11px; font-weight: 700; color: #7a5600; margin-bottom: 4px; }
+.u-label-sm-purple { font-size: 11px; font-weight: 700; color: #7c3aaf; margin-bottom: 4px; }
+.u-text13-600    { font-size: 13px; font-weight: 600; }
+.u-text12-700    { font-size: 12px; font-weight: 700; }
+.u-text12        { font-size: 12px; }
+.u-text28        { font-size: 28px; }
+.u-info-row      { font-size: 11px; display: flex; align-items: center; gap: 3px; color: var(--text-sub, #555); }
+
+/* 버튼 opt-btn 변형 */
+.u-opt-sm        { flex: 1; padding: 10px 4px; font-size: 13px; }
+.u-opt-sm2       { flex: 1; min-width: 60px; padding: 10px 4px; font-size: 13px; }
+.u-opt-sm3       { flex: 1; min-width: 56px; font-size: 13px; }
+.u-opt-md        { flex: 1; padding: 10px; font-size: 13px; }
+.u-opt-lg        { flex: 1; padding: 12px 6px; font-size: 14px; }
+.u-opt-xl        { flex: 1; padding: 14px 8px; font-size: 15px; }
+.u-opt-pill      { font-size: 12px; padding: 4px 10px; }
+.u-opt-card      { flex: 1; padding: 14px; font-size: 15px; flex-direction: column; display: flex; align-items: center; gap: 6px; border-radius: 16px; }
+
+/* 모달 카드 */
+.u-modal-card    { background: #fff; border-radius: 24px 24px 0 0; padding: 28px 24px 48px; width: 100%; max-width: 480px; margin: 0 auto; }
+
+/* 다크모드 유틸리티 */
+body.dark .u-subtext  { border-top-color: #3d3628; color: #a89880; }
+body.dark .u-hint     { color: #7a6a5a; }
+body.dark .u-hint-mt  { color: #7a6a5a; }
+body.dark .u-modal-card { background: #2a2520; }
+
 </style>
 </head>
 <body style="visibility:hidden;">
@@ -1831,7 +1880,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
             </div>
           </div>
           <!-- 진행 중 세션 카드 (수면·수유·유축 시작 후 이 화면에서 종료 가능) -->
-          <div id="coach-card-wrap" style="margin-bottom:12px;"></div>
+          <div id="coach-card-wrap" class="u-mb12"></div>
           <div class="quick-log-row">
             <button class="quick-btn" onclick="quickStartAction('feed')" id="qb-feed">
               <span class="quick-btn-icon" id="qi-feed">🍼</span>
@@ -1883,10 +1932,10 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
               <button id="ptab-week" onclick="patternSetTab('week')" style="flex:1;padding:7px;border-radius:20px;border:1.5px solid var(--border-color,#e0e0e0);background:var(--card-bg,#fff);color:var(--text-sub,#888);font-size:12px;font-weight:700;cursor:pointer;">주</button>
             </div>
             <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;justify-content:center;" id="pattern-legend">
-              <span style="font-size:11px;display:flex;align-items:center;gap:3px;color:var(--text-sub,#555);"><span style="width:10px;height:10px;border-radius:2px;background:#60a5fa;display:inline-block;"></span>수면</span>
-              <span style="font-size:11px;display:flex;align-items:center;gap:3px;color:var(--text-sub,#555);"><span style="width:10px;height:10px;border-radius:2px;background:#fb923c;display:inline-block;"></span>수유</span>
-              <span style="font-size:11px;display:flex;align-items:center;gap:3px;color:var(--text-sub,#555);"><span style="width:10px;height:10px;border-radius:2px;background:#a78bfa;display:inline-block;"></span>유축</span>
-              <span style="font-size:11px;display:flex;align-items:center;gap:3px;color:var(--text-sub,#555);"><span style="width:10px;height:10px;border-radius:2px;background:#4ade80;display:inline-block;"></span>기저귀</span>
+              <span class="u-info-row"><span style="width:10px;height:10px;border-radius:2px;background:#60a5fa;display:inline-block;"></span>수면</span>
+              <span class="u-info-row"><span style="width:10px;height:10px;border-radius:2px;background:#fb923c;display:inline-block;"></span>수유</span>
+              <span class="u-info-row"><span style="width:10px;height:10px;border-radius:2px;background:#a78bfa;display:inline-block;"></span>유축</span>
+              <span class="u-info-row"><span style="width:10px;height:10px;border-radius:2px;background:#4ade80;display:inline-block;"></span>기저귀</span>
             </div>
             <div style="display:flex;justify-content:center;position:relative;">
               <canvas id="pattern-clock" width="300" height="300"></canvas>
@@ -1900,22 +1949,22 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
             <div style="background:linear-gradient(135deg,#fff7ed,#ffedd5);border-radius:14px;padding:12px;border:1px solid #fed7aa;">
               <div style="font-size:10px;font-weight:700;color:#ea580c;margin-bottom:2px;">🍼 수유</div>
               <div id="widget-feed-count" style="font-size:22px;font-weight:900;color:#c2410c;line-height:1;">0회</div>
-              <div id="widget-feed-last" style="font-size:10px;color:#9ca3af;margin-top:2px;">기록 없음</div>
+              <div id="widget-feed-last" class="u-hint-mt">기록 없음</div>
             </div>
             <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:14px;padding:12px;border:1px solid #bfdbfe;">
               <div style="font-size:10px;font-weight:700;color:#2563eb;margin-bottom:2px;">😴 수면</div>
               <div id="widget-sleep-time" style="font-size:22px;font-weight:900;color:#1d4ed8;line-height:1;">0h</div>
-              <div id="widget-sleep-last" style="font-size:10px;color:#9ca3af;margin-top:2px;">기록 없음</div>
+              <div id="widget-sleep-last" class="u-hint-mt">기록 없음</div>
             </div>
             <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:14px;padding:12px;border:1px solid #bbf7d0;">
               <div style="font-size:10px;font-weight:700;color:#16a34a;margin-bottom:2px;">🌿 기저귀</div>
               <div id="widget-diaper-count" style="font-size:22px;font-weight:900;color:#15803d;line-height:1;">0회</div>
-              <div id="widget-diaper-last" style="font-size:10px;color:#9ca3af;margin-top:2px;">기록 없음</div>
+              <div id="widget-diaper-last" class="u-hint-mt">기록 없음</div>
             </div>
             <div style="background:linear-gradient(135deg,#fdf4ff,#f3e8ff);border-radius:14px;padding:12px;border:1px solid #e9d5ff;">
               <div style="font-size:10px;font-weight:700;color:#7c3aed;margin-bottom:2px;">🤱 유축</div>
               <div id="widget-pump-total" style="font-size:22px;font-weight:900;color:#6d28d9;line-height:1;">0ml</div>
-              <div id="widget-pump-last" style="font-size:10px;color:#9ca3af;margin-top:2px;">기록 없음</div>
+              <div id="widget-pump-last" class="u-hint-mt">기록 없음</div>
             </div>
           </div>
 
@@ -1958,10 +2007,10 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
           </div>
           <!-- 기저귀 서브탭 -->
           <div id="diaper-subtab-row" style="display:none;gap:6px;margin-bottom:10px;display:none;" class="chart-tab-row">
-            <button class="chart-tab active" id="dsubtab-all"    onclick="selectDiaperSub('all')"   style="font-size:12px;padding:4px 10px;">전체</button>
-            <button class="chart-tab"         id="dsubtab-pee"   onclick="selectDiaperSub('pee')"   style="font-size:12px;padding:4px 10px;">💧 소변</button>
-            <button class="chart-tab"         id="dsubtab-poo"   onclick="selectDiaperSub('poo')"   style="font-size:12px;padding:4px 10px;">💩 대변</button>
-            <button class="chart-tab"         id="dsubtab-both"  onclick="selectDiaperSub('both')"  style="font-size:12px;padding:4px 10px;">둘다</button>
+            <button class="chart-tab active" id="dsubtab-all"    onclick="selectDiaperSub('all')"   class="u-opt-pill">전체</button>
+            <button class="chart-tab"         id="dsubtab-pee"   onclick="selectDiaperSub('pee')"   class="u-opt-pill">💧 소변</button>
+            <button class="chart-tab"         id="dsubtab-poo"   onclick="selectDiaperSub('poo')"   class="u-opt-pill">💩 대변</button>
+            <button class="chart-tab"         id="dsubtab-both"  onclick="selectDiaperSub('both')"  class="u-opt-pill">둘다</button>
           </div>
           <div class="chart-wrap">
             <div style="font-size:13px;font-weight:600;color:#7a5600;margin-bottom:10px;" id="chart-period-label">최근 7일</div>
@@ -1980,7 +2029,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
           <div class="feature-section-title">새 기록 추가</div>
           <div class="chart-wrap">
             <div style="display:flex;gap:8px;margin-bottom:8px;">
-              <input type="date" id="growth-date" aria-label="성장 기록 날짜" style="flex:1;">
+              <input type="date" id="growth-date" aria-label="성장 기록 날짜" class="u-flex1">
             </div>
             <div class="growth-input-row">
               <input type="number" id="growth-weight" aria-label="몸무게 kg" placeholder="몸무게 (kg)" step="0.01" min="0" max="30">
@@ -2189,7 +2238,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
             </div>
           </div>
 <a class="policy-link" href="https://www.bokjiro.go.kr" target="_blank">🔗 복지로 — 전체 복지 혜택 검색</a>
-          <a class="policy-link" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank" style="margin-top:8px;">🚀 행복출산 원스톱 서비스</a>
+          <a class="policy-link" href="https://www.gov.kr/portal/onestopSvc/happyBirth" target="_blank" class="u-mt8">🚀 행복출산 원스톱 서비스</a>
         </div>
       </div>
 
@@ -2197,7 +2246,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
       <div class="swipe-page">
         <div class="feature-page" id="dad-tab-page">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-            <div class="feature-page-title" style="margin-bottom:0;">👨 아빠 공간</div>
+            <div class="feature-page-title" style="margin-bottom:0">👨 아빠 공간</div>
             <div id="dad-linked-status" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;background:#f0fdf4;color:#16a34a;display:none;">🔗 연동됨</div>
           </div>
           <div class="feature-page-sub" id="dad-tab-sub">소중한 육아 파트너와 함께해요 💛</div>
@@ -2222,22 +2271,22 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
             <div class="dad-rec-title">📋 아빠 기록 <span class="dad-rec-badge">엄마 타임라인에 공유됨</span></div>
             <div class="dad-rec-btns" style="grid-template-columns:1fr 1fr;gap:10px;">
               <button class="dad-rec-btn feed" onclick="dadRecordFeed()" style="padding:16px 8px;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid #fdba74;background:linear-gradient(135deg,#fff7ed,#ffedd5);">
-                <span style="font-size:28px;">🍼</span>
+                <span class="u-text28">🍼</span>
                 <span style="font-size:13px;font-weight:800;color:#c2410c;">분유·수유</span>
                 <span style="font-size:10px;color:#ea580c;opacity:0.8;">기록하기</span>
               </button>
               <button class="dad-rec-btn diaper" onclick="dadDiaperRecord()" style="padding:16px 8px;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid #86efac;background:linear-gradient(135deg,#f0fdf4,#dcfce7);">
-                <span style="font-size:28px;">🌿</span>
+                <span class="u-text28">🌿</span>
                 <span style="font-size:13px;font-weight:800;color:#15803d;">기저귀</span>
                 <span style="font-size:10px;color:#16a34a;opacity:0.8;">기록하기</span>
               </button>
               <button class="dad-rec-btn sleep" onclick="dadRecord('sleep')" style="padding:16px 8px;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid #93c5fd;background:linear-gradient(135deg,#eff6ff,#dbeafe);">
-                <span style="font-size:28px;">😴</span>
+                <span class="u-text28">😴</span>
                 <span style="font-size:13px;font-weight:800;color:#1d4ed8;">재웠어요</span>
                 <span style="font-size:10px;color:#2563eb;opacity:0.8;">기록하기</span>
               </button>
               <button class="dad-rec-btn bath" onclick="dadRecord('bath')" style="padding:16px 8px;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid #a5f3fc;background:linear-gradient(135deg,#ecfeff,#cffafe);">
-                <span style="font-size:28px;">🛁</span>
+                <span class="u-text28">🛁</span>
                 <span style="font-size:13px;font-weight:800;color:#0e7490;">목욕</span>
                 <span style="font-size:10px;color:#0891b2;opacity:0.8;">기록하기</span>
               </button>
@@ -2284,7 +2333,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
 
           <!-- 음성 단축키 -->
           <div class="feature-section-title">⚡ 음성 단축키 · 홈화면 추가</div>
-          <div class="chart-wrap" style="padding:14px 16px;">
+          <div class="chart-wrap u-p1416">
             <div style="font-size:13px;color:var(--text-sub,#555);margin-bottom:12px;line-height:1.7;">
               홈화면에서 아이콘 탭 → <strong>음성 인식 즉시 시작</strong><br>
               Siri / Google에 등록 → <strong>앱 없이 말 한마디로 기록</strong>
@@ -2310,7 +2359,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
 
           <!-- 화면 설정 -->
           <div class="feature-section-title">🌙 화면 설정</div>
-          <div class="chart-wrap" style="padding:14px 16px;">
+          <div class="chart-wrap u-p1416">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
               <div>
                 <div style="font-size:14px;font-weight:600;">다크 모드</div>
@@ -2331,12 +2380,12 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
             </div>
           </div>
           <div class="feature-section-title">🔔 수유·수면 알림</div>
-          <div class="chart-wrap" style="padding:14px 16px;">
+          <div class="chart-wrap u-p1416">
             <div style="font-size:13px;color:var(--text-sub,#555);margin-bottom:10px;line-height:1.7;">
               수유 시간이 되거나 아기가 오래 깨있으면<br>
               <strong>자동으로 알림</strong>을 보내드려요.
             </div>
-            <button id="notif-req-btn" class="export-btn" onclick="requestNotifPermission()" style="margin-bottom:0;">
+            <button id="notif-req-btn" class="export-btn" onclick="requestNotifPermission()" style="margin-bottom:0">
               🔔 수유·수면 알림 켜기
             </button>
           </div>
@@ -2345,8 +2394,8 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
           <button class="export-btn" onclick="exportGrowthCSV()">📏 성장 기록 CSV로 내보내기</button>
           <button class="export-btn" onclick="exportDiaryTxt()">📔 일기 텍스트로 내보내기</button>
           <div class="feature-section-title">💾 데이터 관리</div>
-          <div class="chart-wrap" style="padding:14px 16px;">
-            <div id="storage-status" style="margin-bottom:12px;"></div>
+          <div class="chart-wrap u-p1416">
+            <div id="storage-status" class="u-mb12"></div>
             <button class="export-btn" onclick="backupAllData()" style="margin-bottom:8px;">💾 전체 데이터 백업 (JSON)</button>
             <button class="export-btn" onclick="clearTodayRecords()" style="color:#f59e0b;border-color:#fde68a;">🗑️ 오늘 기록만 삭제</button>
           </div>
@@ -2363,7 +2412,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
             </a>
           </div>
           <div class="feature-section-title" style="margin-top:16px;">ℹ️ 앱 정보</div>
-          <div class="chart-wrap" style="padding:14px 16px;">
+          <div class="chart-wrap u-p1416">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
               <span style="font-size:14px;color:#6b7280;">버전</span>
               <span style="font-size:13px;font-weight:600;color:#1a1a1a;">누리케어 v4.1</span>
@@ -2391,7 +2440,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
 
 
 <div class="modal-bg" id="modal-dad-record" role="dialog" aria-modal="true" aria-label="아빠 기록">
-  <div class="modal" style="max-height:85vh;overflow-y:auto;">
+  <div class="modal u-modal-scroll">
     <div class="modal-handle"></div>
     <div id="dad-record-header" style="text-align:center;padding:8px 0 20px;">
       <div id="dad-rec-emoji" style="font-size:52px;margin-bottom:8px;">🍼</div>
@@ -2406,9 +2455,9 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
         style="margin-bottom:8px;">
       <span class="field-label">수유 방법</span>
       <div class="opt-row" style="gap:8px;margin-bottom:16px;">
-        <button class="opt-btn sel" id="dad-fe-bottle" onclick="dadFeSel('bottle')" style="flex:1;padding:10px;font-size:13px;">🍼 분유</button>
-        <button class="opt-btn"     id="dad-fe-breast" onclick="dadFeSel('breast')" style="flex:1;padding:10px;font-size:13px;">🤱 모유</button>
-        <button class="opt-btn"     id="dad-fe-both"   onclick="dadFeSel('both')"   style="flex:1;padding:10px;font-size:13px;">혼합</button>
+        <button class="opt-btn sel" id="dad-fe-bottle" onclick="dadFeSel('bottle')" class="u-opt-md opt-btn">🍼 분유</button>
+        <button class="opt-btn"     id="dad-fe-breast" onclick="dadFeSel('breast')" class="u-opt-md opt-btn">🤱 모유</button>
+        <button class="opt-btn"     id="dad-fe-both"   onclick="dadFeSel('both')"   class="u-opt-md opt-btn">혼합</button>
       </div>
     </div>
 
@@ -2417,13 +2466,13 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
       <span class="field-label">기저귀 종류</span>
       <div style="display:flex;gap:10px;margin-bottom:16px;">
         <button class="opt-btn sel" id="dad-dp-pee"  onclick="dadDpSel('소변')"      style="flex:1;padding:14px;font-size:15px;flex-direction:column;display:flex;align-items:center;gap:4px;border-radius:14px;">
-          <span>💧</span><span style="font-size:12px;font-weight:700;">소변</span>
+          <span>💧</span><span class="u-text12-700">소변</span>
         </button>
         <button class="opt-btn"     id="dad-dp-poo"  onclick="dadDpSel('대변')"      style="flex:1;padding:14px;font-size:15px;flex-direction:column;display:flex;align-items:center;gap:4px;border-radius:14px;">
-          <span>💩</span><span style="font-size:12px;font-weight:700;">대변</span>
+          <span>💩</span><span class="u-text12-700">대변</span>
         </button>
         <button class="opt-btn"     id="dad-dp-both" onclick="dadDpSel('소변+대변')" style="flex:1;padding:14px;font-size:15px;flex-direction:column;display:flex;align-items:center;gap:4px;border-radius:14px;">
-          <span>💧💩</span><span style="font-size:12px;font-weight:700;">둘다</span>
+          <span>💧💩</span><span class="u-text12-700">둘다</span>
         </button>
       </div>
     </div>
@@ -2447,7 +2496,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
     </div>
 
     <!-- 메모 -->
-    <span class="field-label">메모 <span style="font-size:11px;color:#9ca3af;">(선택)</span></span>
+    <span class="field-label">메모 <span class="u-hint">(선택)</span></span>
     <textarea id="dad-rec-memo" rows="2" placeholder="간단한 메모..."
       style="width:100%;box-sizing:border-box;padding:10px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;resize:none;margin-bottom:16px;"></textarea>
 
@@ -2464,7 +2513,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
 
 <!-- ── 모달: 데이터 삭제 확인 ── -->
 <div class="modal-bg" id="modal-delete-confirm" style="z-index:500;">
-  <div class="modal" style="max-height:85vh;overflow-y:auto;">
+  <div class="modal u-modal-scroll">
     <div class="modal-handle"></div>
     <div style="text-align:center;padding:8px 0 20px;">
       <div style="font-size:48px;margin-bottom:12px;">⛔</div>
@@ -2482,15 +2531,15 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
       <label style="display:flex;align-items:center;gap:10px;margin-bottom:8px;cursor:pointer;">
         <input type="checkbox" id="del-local" checked style="width:18px;height:18px;accent-color:#ef4444;">
         <div>
-          <div style="font-size:13px;font-weight:600;">기기 내 데이터</div>
-          <div style="font-size:11px;color:#9ca3af;">기록, 일기, 성장기록, 설정 등</div>
+          <div class="u-text13-600">기기 내 데이터</div>
+          <div class="u-hint">기록, 일기, 성장기록, 설정 등</div>
         </div>
       </label>
       <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
         <input type="checkbox" id="del-firebase" style="width:18px;height:18px;accent-color:#ef4444;">
         <div>
-          <div style="font-size:13px;font-weight:600;">Firebase 공유 데이터</div>
-          <div style="font-size:11px;color:#9ca3af;">가족 공유 기록 (서버 데이터)</div>
+          <div class="u-text13-600">Firebase 공유 데이터</div>
+          <div class="u-hint">가족 공유 기록 (서버 데이터)</div>
         </div>
       </label>
     </div>
@@ -2517,31 +2566,31 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
     <h2>✏️ 기록 직접 입력</h2>
     <span class="field-label">카테고리</span>
     <div class="opt-row" style="gap:6px;margin-bottom:16px;flex-wrap:wrap;">
-      <button class="opt-btn sel" id="mr-cat-feed"   onclick="mrSetCat('feed')"   style="flex:1;min-width:60px;padding:10px 4px;font-size:13px;">🍼 수유</button>
-      <button class="opt-btn"     id="mr-cat-sleep"  onclick="mrSetCat('sleep')"  style="flex:1;min-width:60px;padding:10px 4px;font-size:13px;">😴 수면</button>
-      <button class="opt-btn"     id="mr-cat-diaper" onclick="mrSetCat('diaper')" style="flex:1;min-width:60px;padding:10px 4px;font-size:13px;">🌿 기저귀</button>
-      <button class="opt-btn"     id="mr-cat-pump"   onclick="mrSetCat('pump')"   style="flex:1;min-width:60px;padding:10px 4px;font-size:13px;">🤱 유축</button>
-      <button class="opt-btn"     id="mr-cat-etc"    onclick="mrSetCat('etc')"    style="flex:1;min-width:60px;padding:10px 4px;font-size:13px;">📝 기타</button>
+      <button class="opt-btn sel" id="mr-cat-feed"   onclick="mrSetCat('feed')"   class="u-opt-sm2 opt-btn">🍼 수유</button>
+      <button class="opt-btn"     id="mr-cat-sleep"  onclick="mrSetCat('sleep')"  class="u-opt-sm2 opt-btn">😴 수면</button>
+      <button class="opt-btn"     id="mr-cat-diaper" onclick="mrSetCat('diaper')" class="u-opt-sm2 opt-btn">🌿 기저귀</button>
+      <button class="opt-btn"     id="mr-cat-pump"   onclick="mrSetCat('pump')"   class="u-opt-sm2 opt-btn">🤱 유축</button>
+      <button class="opt-btn"     id="mr-cat-etc"    onclick="mrSetCat('etc')"    class="u-opt-sm2 opt-btn">📝 기타</button>
     </div>
     <span class="field-label">시작 시각</span>
-    <input type="datetime-local" id="mr-start-time" aria-label="시작 시각" style="margin-bottom:12px;">
+    <input type="datetime-local" id="mr-start-time" aria-label="시작 시각" class="u-mb12">
     <div id="mr-end-wrap">
-      <span class="field-label">종료 시각 <span style="font-size:11px;color:#9ca3af;">(수유·수면·유축)</span></span>
-      <input type="datetime-local" id="mr-end-time" aria-label="종료 시각" style="margin-bottom:12px;">
+      <span class="field-label">종료 시각 <span class="u-hint">(수유·수면·유축)</span></span>
+      <input type="datetime-local" id="mr-end-time" aria-label="종료 시각" class="u-mb12">
     </div>
     <!-- 수유 세부 -->
     <div id="mr-feed-detail">
       <span class="field-label">수유 방법</span>
       <div class="opt-row" style="gap:8px;margin-bottom:12px;">
-        <button class="opt-btn sel" id="mr-fe-breast" onclick="mrFeSel('breast')" style="flex:1;padding:10px 4px;font-size:13px;">모유</button>
-        <button class="opt-btn"     id="mr-fe-bottle" onclick="mrFeSel('bottle')" style="flex:1;padding:10px 4px;font-size:13px;">분유</button>
-        <button class="opt-btn"     id="mr-fe-both"   onclick="mrFeSel('both')"   style="flex:1;padding:10px 4px;font-size:13px;">혼합</button>
+        <button class="opt-btn sel" id="mr-fe-breast" onclick="mrFeSel('breast')" class="u-opt-sm opt-btn">모유</button>
+        <button class="opt-btn"     id="mr-fe-bottle" onclick="mrFeSel('bottle')" class="u-opt-sm opt-btn">분유</button>
+        <button class="opt-btn"     id="mr-fe-both"   onclick="mrFeSel('both')"   class="u-opt-sm opt-btn">혼합</button>
       </div>
       <div style="display:flex;gap:10px;margin-bottom:12px;" id="mr-side-wrap">
-        <div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">⬅️ 왼쪽 (분)</div>
-          <input type="number" id="mr-left-min" placeholder="0" min="0" max="120" oninput="mrCalcTotal()" style="width:100%;box-sizing:border-box;"></div>
-        <div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">➡️ 오른쪽 (분)</div>
-          <input type="number" id="mr-right-min" placeholder="0" min="0" max="120" oninput="mrCalcTotal()" style="width:100%;box-sizing:border-box;"></div>
+        <div class="u-flex1"><div class="u-label-sm">⬅️ 왼쪽 (분)</div>
+          <input type="number" id="mr-left-min" placeholder="0" min="0" max="120" oninput="mrCalcTotal()" class="u-input-full"></div>
+        <div class="u-flex1"><div class="u-label-sm">➡️ 오른쪽 (분)</div>
+          <input type="number" id="mr-right-min" placeholder="0" min="0" max="120" oninput="mrCalcTotal()" class="u-input-full"></div>
       </div>
       <span class="field-label" id="mr-ml-label" style="opacity:0.4;">분유량 (ml)</span>
       <input type="number" id="mr-ml" placeholder="예: 80" min="0" max="500" disabled
@@ -2551,26 +2600,26 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
     <div id="mr-diaper-detail" style="display:none;">
       <span class="field-label">기저귀 종류</span>
       <div class="opt-row" style="gap:8px;margin-bottom:12px;">
-        <button class="opt-btn sel" id="mr-dp-pee"  onclick="mrDpSel('소변')"      style="flex:1;padding:10px 4px;font-size:13px;">💧 소변</button>
-        <button class="opt-btn"     id="mr-dp-poo"  onclick="mrDpSel('대변')"      style="flex:1;padding:10px 4px;font-size:13px;">💩 대변</button>
-        <button class="opt-btn"     id="mr-dp-both" onclick="mrDpSel('소변+대변')" style="flex:1;padding:10px 4px;font-size:13px;">둘다</button>
+        <button class="opt-btn sel" id="mr-dp-pee"  onclick="mrDpSel('소변')"      class="u-opt-sm opt-btn">💧 소변</button>
+        <button class="opt-btn"     id="mr-dp-poo"  onclick="mrDpSel('대변')"      class="u-opt-sm opt-btn">💩 대변</button>
+        <button class="opt-btn"     id="mr-dp-both" onclick="mrDpSel('소변+대변')" class="u-opt-sm opt-btn">둘다</button>
       </div>
     </div>
     <!-- 유축 세부 -->
     <div id="mr-pump-detail" style="display:none;">
       <div style="display:flex;gap:10px;margin-bottom:12px;">
-        <div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">⬅️ 왼쪽 (ml)</div>
-          <input type="number" id="mr-pump-L" placeholder="0" min="0" max="500" oninput="mrPumpTotal()" style="width:100%;box-sizing:border-box;"></div>
-        <div style="flex:1;"><div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">➡️ 오른쪽 (ml)</div>
-          <input type="number" id="mr-pump-R" placeholder="0" min="0" max="500" oninput="mrPumpTotal()" style="width:100%;box-sizing:border-box;"></div>
+        <div class="u-flex1"><div class="u-label-sm">⬅️ 왼쪽 (ml)</div>
+          <input type="number" id="mr-pump-L" placeholder="0" min="0" max="500" oninput="mrPumpTotal()" class="u-input-full"></div>
+        <div class="u-flex1"><div class="u-label-sm">➡️ 오른쪽 (ml)</div>
+          <input type="number" id="mr-pump-R" placeholder="0" min="0" max="500" oninput="mrPumpTotal()" class="u-input-full"></div>
       </div>
       <div style="font-size:12px;color:#7a5600;font-weight:700;margin-bottom:12px;" id="mr-pump-total-label">총합: 0 ml</div>
     </div>
     <!-- 기타 세부 -->
     <div id="mr-etc-detail" style="display:none;">
       <span class="field-label">제목</span>
-      <input type="text" id="mr-etc-title" placeholder="예: 목욕, 외출, 예방접종..." style="margin-bottom:12px;">
-      <span class="field-label">메모 <span style="font-size:11px;color:#9ca3af;">(선택)</span></span>
+      <input type="text" id="mr-etc-title" placeholder="예: 목욕, 외출, 예방접종..." class="u-mb12">
+      <span class="field-label">메모 <span class="u-hint">(선택)</span></span>
       <textarea id="mr-etc-memo" rows="2" placeholder="간단한 메모..."
         style="width:100%;box-sizing:border-box;padding:10px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;resize:none;margin-bottom:12px;"></textarea>
     </div>
@@ -2582,7 +2631,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
 </div>
 
 <div class="modal-bg" id="modal-mom-detail" role="dialog" aria-modal="true" aria-label="엄마 케어 상세">
-  <div class="modal" style="max-height:85vh;overflow-y:auto;">
+  <div class="modal u-modal-scroll">
     <div class="modal-handle"></div>
     <button class="modal-close-x" aria-label="닫기" onclick="closeModal('mom-detail')">✕</button>
     <div id="mom-detail-content"></div>
@@ -2659,7 +2708,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
       <div style="font-size:11px;color:#9ca3af;margin-top:8px;line-height:1.5;">
         코드를 카카오톡으로 보내면 아빠가 앱에서 직접 입력할 수 있어요
       </div>
-      <button class="invite-gen-btn" onclick="generateInviteCode()" style="margin-top:8px;">새 코드 생성</button>
+      <button class="invite-gen-btn" onclick="generateInviteCode()" class="u-mt8">새 코드 생성</button>
     </div>
 <div class="modal-actions" style="margin-top:14px;">
       <button class="btn-save" aria-label="저장" onclick="closeModal('invite')">닫기</button>
@@ -2709,10 +2758,10 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
     <h2>🍼 수유 기록</h2>
     <span class="field-label">수유 방법</span>
     <div class="opt-row" style="gap:6px;flex-wrap:wrap;">
-      <button class="opt-btn sel" id="feed-t-breast" onclick="selOpt('feed-t','breast');feedTypeChange('breast')" style="flex:1;min-width:56px;font-size:13px;">모유</button>
-      <button class="opt-btn"    id="feed-t-bottle" onclick="selOpt('feed-t','bottle');feedTypeChange('bottle')" style="flex:1;min-width:56px;font-size:13px;">분유</button>
-      <button class="opt-btn"    id="feed-t-both"   onclick="selOpt('feed-t','both');feedTypeChange('both')"     style="flex:1;min-width:56px;font-size:13px;">혼합</button>
-      <button class="opt-btn"    id="feed-t-pump"   onclick="selOpt('feed-t','pump');feedTypeChange('pump')"     style="flex:1;min-width:56px;font-size:13px;">🤱유축</button>
+      <button class="opt-btn sel" id="feed-t-breast" onclick="selOpt('feed-t','breast');feedTypeChange('breast')" class="u-opt-sm3 opt-btn">모유</button>
+      <button class="opt-btn"    id="feed-t-bottle" onclick="selOpt('feed-t','bottle');feedTypeChange('bottle')" class="u-opt-sm3 opt-btn">분유</button>
+      <button class="opt-btn"    id="feed-t-both"   onclick="selOpt('feed-t','both');feedTypeChange('both')"     class="u-opt-sm3 opt-btn">혼합</button>
+      <button class="opt-btn"    id="feed-t-pump"   onclick="selOpt('feed-t','pump');feedTypeChange('pump')"     class="u-opt-sm3 opt-btn">🤱유축</button>
     </div>
 
     <!-- 모유/혼합: 분 입력 -->
@@ -2724,7 +2773,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
     <!-- 분유/혼합: ml 입력 -->
     <div id="feed-bottle-wrap" style="display:none;margin-top:12px;">
       <span class="field-label">분유량 (ml)</span>
-      <input type="number" id="feed-ml" aria-label="분유량 ml" placeholder="예: 120" min="0" max="500" style="margin-bottom:0;">
+      <input type="number" id="feed-ml" aria-label="분유량 ml" placeholder="예: 120" min="0" max="500" style="margin-bottom:0">
     </div>
 
     <!-- 유축: ml 입력 -->
@@ -2737,7 +2786,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
     </div>
 
     <span class="field-label" style="margin-top:12px;">기록 시각</span>
-    <input type="datetime-local" id="feed-time" aria-label="수유 기록 시각" style="margin-bottom:12px;">
+    <input type="datetime-local" id="feed-time" aria-label="수유 기록 시각" class="u-mb12">
     <div class="modal-actions">
       <button class="btn-cancel" aria-label="취소" onclick="closeModal('feed');fmtReset()">취소</button>
       <button class="btn-save" aria-label="저장" onclick="saveFeed()">저장</button>
@@ -2748,7 +2797,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
 
 <!-- ═══════════ 유축 모달 ═══════════ -->
 <div class="modal-bg" id="modal-pump" role="dialog" aria-modal="true" aria-label="유축 기록">
-  <div class="modal" style="max-height:85vh;overflow-y:auto;">
+  <div class="modal u-modal-scroll">
     <div class="modal-handle"></div>
     <button class="modal-close-x" aria-label="닫기" onclick="closePumpModal()">✕</button>
     <h2>🤱 유축 기록</h2>
@@ -2775,19 +2824,19 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
 
     <span class="field-label">유축량</span>
     <div style="display:flex;gap:8px;align-items:flex-end;margin-bottom:12px;">
-      <div style="flex:1;">
-        <div style="font-size:11px;font-weight:700;color:#7c3aaf;margin-bottom:4px;">⬅️ 왼쪽 (ml)</div>
-        <input type="number" id="pump-L-ml" aria-label="왼쪽 유축량 ml" placeholder="예: 80" min="0" max="500" oninput="pumpCalcTotal()" style="width:100%;box-sizing:border-box;">
+      <div class="u-flex1">
+        <div class="u-label-sm-purple">⬅️ 왼쪽 (ml)</div>
+        <input type="number" id="pump-L-ml" aria-label="왼쪽 유축량 ml" placeholder="예: 80" min="0" max="500" oninput="pumpCalcTotal()" class="u-input-full">
       </div>
-      <div style="flex:1;">
-        <div style="font-size:11px;font-weight:700;color:#7c3aaf;margin-bottom:4px;">➡️ 오른쪽 (ml)</div>
-        <input type="number" id="pump-R-ml" aria-label="오른쪽 유축량 ml" placeholder="예: 70" min="0" max="500" oninput="pumpCalcTotal()" style="width:100%;box-sizing:border-box;">
+      <div class="u-flex1">
+        <div class="u-label-sm-purple">➡️ 오른쪽 (ml)</div>
+        <input type="number" id="pump-R-ml" aria-label="오른쪽 유축량 ml" placeholder="예: 70" min="0" max="500" oninput="pumpCalcTotal()" class="u-input-full">
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-      <div style="flex:1;">
-        <div style="font-size:11px;font-weight:700;color:#7c3aaf;margin-bottom:4px;">📊 총합 (ml)</div>
-        <input type="number" id="pump-total-ml" aria-label="유축 총합 ml" placeholder="또는 총합만 입력" min="0" max="1000" oninput="pumpSetTotal()" style="width:100%;box-sizing:border-box;">
+      <div class="u-flex1">
+        <div class="u-label-sm-purple">📊 총합 (ml)</div>
+        <input type="number" id="pump-total-ml" aria-label="유축 총합 ml" placeholder="또는 총합만 입력" min="0" max="1000" oninput="pumpSetTotal()" class="u-input-full">
       </div>
       <div style="padding-top:20px;font-size:20px;font-weight:800;color:#7c3aaf;" id="pump-total-display">= 0 ml</div>
     </div>
@@ -2901,31 +2950,31 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
     <h2>🍼 수유 완료</h2>
     <span class="field-label">수유 방법</span>
     <div class="opt-row" style="gap:8px;margin-bottom:16px;">
-      <button class="opt-btn sel" id="fe-breast" onclick="feSel('breast')" style="flex:1;padding:12px 6px;font-size:14px;">모유</button>
-      <button class="opt-btn" id="fe-bottle" onclick="feSel('bottle')" style="flex:1;padding:12px 6px;font-size:14px;">분유</button>
-      <button class="opt-btn" id="fe-both" onclick="feSel('both')" style="flex:1;padding:12px 6px;font-size:14px;">혼합</button>
+      <button class="opt-btn sel" id="fe-breast" onclick="feSel('breast')" class="u-opt-lg opt-btn">모유</button>
+      <button class="opt-btn" id="fe-bottle" onclick="feSel('bottle')" class="u-opt-lg opt-btn">분유</button>
+      <button class="opt-btn" id="fe-both" onclick="feSel('both')" class="u-opt-lg opt-btn">혼합</button>
     </div>
 
 
 
     <span class="field-label">수유 시간</span>
     <div id="fe-side-wrap" style="display:flex;gap:10px;margin-bottom:12px;">
-      <div style="flex:1;">
-        <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">⬅️ 왼쪽 (분)</div>
+      <div class="u-flex1">
+        <div class="u-label-sm">⬅️ 왼쪽 (분)</div>
         <input type="number" id="fe-left-min" aria-label="왼쪽 수유 시간 분" placeholder="예: 10" min="0" max="120"
-          oninput="feCalcTotal()" style="width:100%;box-sizing:border-box;">
+          oninput="feCalcTotal()" class="u-input-full">
       </div>
-      <div style="flex:1;">
-        <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">➡️ 오른쪽 (분)</div>
+      <div class="u-flex1">
+        <div class="u-label-sm">➡️ 오른쪽 (분)</div>
         <input type="number" id="fe-right-min" aria-label="오른쪽 수유 시간 분" placeholder="예: 10" min="0" max="120"
-          oninput="feCalcTotal()" style="width:100%;box-sizing:border-box;">
+          oninput="feCalcTotal()" class="u-input-full">
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-      <div style="flex:1;">
-        <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">📊 총합 (분)</div>
+      <div class="u-flex1">
+        <div class="u-label-sm">📊 총합 (분)</div>
         <input type="number" id="fe-min" aria-label="수유 총합 분" placeholder="자동계산" min="0" max="240"
-          oninput="feSetTotal()" style="width:100%;box-sizing:border-box;">
+          oninput="feSetTotal()" class="u-input-full">
       </div>
       <div style="padding-top:18px;font-size:14px;font-weight:800;color:#7a5600;" id="fe-total-display">= 0 분</div>
     </div>
@@ -2935,7 +2984,7 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
         disabled style="margin-bottom:12px;opacity:0.35;cursor:not-allowed;background:#f3f4f6;">
     </div>
     <span class="field-label">기록 시각</span>
-    <input type="datetime-local" id="fe-time" aria-label="수유 완료 시각" style="margin-bottom:12px;">
+    <input type="datetime-local" id="fe-time" aria-label="수유 완료 시각" class="u-mb12">
     <div class="modal-actions">
       <button class="btn-cancel" aria-label="취소" onclick="closeFeedEndModal()">취소</button>
       <button class="btn-save" aria-label="저장" onclick="saveFeedEnd()">완료</button>
@@ -2949,8 +2998,8 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
     <h2>🤱 유축 완료</h2>
     <span class="field-label">유축량 (선택)</span>
     <div style="display:flex;gap:8px;margin-bottom:16px;">
-      <input type="number" id="pe-L" placeholder="왼쪽 (ml)" min="0" max="500" style="flex:1;">
-      <input type="number" id="pe-R" placeholder="오른쪽 (ml)" min="0" max="500" style="flex:1;">
+      <input type="number" id="pe-L" placeholder="왼쪽 (ml)" min="0" max="500" class="u-flex1">
+      <input type="number" id="pe-R" placeholder="오른쪽 (ml)" min="0" max="500" class="u-flex1">
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" aria-label="취소" onclick="closePumpEndModal()">취소</button>
@@ -2968,15 +3017,15 @@ body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color:
     <div class="opt-row" style="gap:8px;">
       <button class="opt-btn sel" id="diaper-t-wet" onclick="selOpt('diaper-t','wet')"
         style="flex:1;padding:14px 8px;font-size:15px;">
-        💧<br><span style="font-size:12px;">소변</span>
+        💧<br><span class="u-text12">소변</span>
       </button>
       <button class="opt-btn" id="diaper-t-poop" onclick="selOpt('diaper-t','poop')"
         style="flex:1;padding:14px 8px;font-size:15px;">
-        💩<br><span style="font-size:12px;">대변</span>
+        💩<br><span class="u-text12">대변</span>
       </button>
       <button class="opt-btn" id="diaper-t-both" onclick="selOpt('diaper-t','both')"
         style="flex:1;padding:14px 8px;font-size:15px;">
-        💧💩<br><span style="font-size:12px;">둘 다</span>
+        💧💩<br><span class="u-text12">둘 다</span>
       </button>
     </div>
     <span class="field-label">기록 시각</span>
@@ -3461,7 +3510,7 @@ function renderPatternAnalysis() {
     <div class="pattern-grid">
       <div class="pattern-card">
         <div class="pattern-card-label">하루 평균</div>
-        <div class="pattern-card-value">${avgFeed}<span style="font-size:13px;font-weight:600;"> 회</span></div>
+        <div class="pattern-card-value">${avgFeed}<span class="u-text13-600"> 회</span></div>
         <div class="pattern-card-sub">권장 ${recFeed}회/일</div>
       </div>
       <div class="pattern-card">
@@ -3471,14 +3520,14 @@ function renderPatternAnalysis() {
       </div>
       <div class="pattern-card wide">
         <div class="pattern-card-label">시간대별 수유 빈도</div>
-        <div class="pattern-bar-wrap" style="margin-top:8px;">${feedBarHtml}</div>
+        <div class="pattern-bar-wrap u-mt8">${feedBarHtml}</div>
       </div>
     </div>
     <div style="font-size:11px;font-weight:700;color:#9ca3af;letter-spacing:0.05em;margin:4px 0 6px;">😴 수면 패턴 · 최근 7일</div>
     <div class="pattern-grid">
       <div class="pattern-card">
         <div class="pattern-card-label">하루 평균 수면</div>
-        <div class="pattern-card-value">${avgSleepH}<span style="font-size:13px;font-weight:600;"> h</span></div>
+        <div class="pattern-card-value">${avgSleepH}<span class="u-text13-600"> h</span></div>
         <div class="pattern-card-sub">권장 ${recSleep}시간/일</div>
       </div>
       <div class="pattern-card">
@@ -3491,17 +3540,17 @@ function renderPatternAnalysis() {
     <div class="pattern-grid">
       <div class="pattern-card">
         <div class="pattern-card-label">💧 소변</div>
-        <div class="pattern-card-value">${peeCount}<span style="font-size:13px;font-weight:600;"> 회</span></div>
+        <div class="pattern-card-value">${peeCount}<span class="u-text13-600"> 회</span></div>
         <div class="pattern-card-sub">평균 ${(peeCount/activeDays).toFixed(1)}회/일</div>
       </div>
       <div class="pattern-card">
         <div class="pattern-card-label">💩 대변</div>
-        <div class="pattern-card-value">${poopCount}<span style="font-size:13px;font-weight:600;"> 회</span></div>
+        <div class="pattern-card-value">${poopCount}<span class="u-text13-600"> 회</span></div>
         <div class="pattern-card-sub">평균 ${(poopCount/activeDays).toFixed(1)}회/일</div>
       </div>
       <div class="pattern-card">
         <div class="pattern-card-label">하루 평균</div>
-        <div class="pattern-card-value">${avgDiaper}<span style="font-size:13px;font-weight:600;"> 회</span></div>
+        <div class="pattern-card-value">${avgDiaper}<span class="u-text13-600"> 회</span></div>
         <div class="pattern-card-sub">총 ${diapers7.length}회 · 7일</div>
       </div>
     </div>
@@ -3548,7 +3597,7 @@ function renderMomCarePage() {
       return `<div class="mom-grid-card mom-card-warn"
         onclick="openMomDetail('${secId}')">
         <div class="mom-grid-emoji">${sec.icon}</div>
-        <div style="flex:1;">
+        <div class="u-flex1">
           <div class="mom-grid-title mom-warn-title">⚠️ ${sec.title}</div>
           <div class="mom-grid-count mom-warn-count">${sec.items.length}가지 증상 확인</div>
         </div>
@@ -4991,13 +5040,13 @@ function renderDadScreen(readonly) {
       const done = !!checks[item.id];
       const praise = PRAISE_MSGS[(idx + section.length) % PRAISE_MSGS.length];
       const clickAttr = readonly ? '' : ' onclick="toggleDadCheck(\'' + item.id + '\')"';
-      return '<div class="dad-check-item' + (done ? ' done' : '') + '"' + clickAttr + '>' +
-        '<div class="dad-checkbox' + (done ? ' checked' : '') + '"></div>' +
+      return '<div class="dad-check-item' + (done ? ' done' : '') + "' + clickAttr + '>'" +
+        '<div class="dad-checkbox' + (done ? ' checked' : '') + '></div>' +
         '<div class="dad-check-info">' +
-        '<div class="dad-check-title' + (done ? ' done-text' : '') + '">' + item.title + '</div>' +
+        '<div class="dad-check-title' + (done ? ' done-text' : '') + '>' + item.title + '</div>' +
         '<div class="dad-check-desc">' + item.desc.replace(/\n/g,'<br>') + '</div>' +
         (done ? '<div class="dad-praise">' + praise + '</div>' : '') +
-        '<span class="dad-check-tag ' + (done ? 'done-tag' : item.tag) + '">' +
+        '<span class="dad-check-tag ' + (done ? 'done-tag' : item.tag) + '>' +
           (done ? '✅ 완료' : tagLabels[item.tag]) +
         '</span>' +
         '</div></div>';
@@ -5010,15 +5059,15 @@ function renderDadScreen(readonly) {
       evEl.innerHTML = DAD_EVENTS.map((item, idx) => {
         const done = !!checks[item.id];
         const praise = EVENT_PRAISE[idx % EVENT_PRAISE.length];
-        return '<div class="dad-event-item' + (done ? ' done' : '') + '" onclick="toggleDadCheck(\'' + item.id + '\')">' +
-          '<div class="dad-event-checkbox' + (done ? ' checked' : '') + '"></div>' +
+        return '<div class="dad-event-item' + (done ? ' done' : '') + ' onclick="toggleDadCheck(\'' + item.id + '\')">' +
+          '<div class="dad-event-checkbox' + (done ? ' checked' : '') + '></div>' +
           '<div class="dad-event-info">' +
           '<div style="font-size:16px;font-weight:700;color:' + (done?'#be185d':'#1a1a1a') + ';line-height:1.5;letter-spacing:-0.02em;">' + item.title + '</div>' +
           (done
             ? '<div style="font-size:13px;color:#be185d;font-weight:600;margin-top:6px;">' + praise + '</div>'
             : '<div style="font-size:13px;color:#6b7280;margin-top:6px;line-height:1.7;word-break:keep-all;font-weight:400;">' + item.desc.replace(/\n/g,'<br>') + '</div>'
           ) +
-          '<span class="dad-event-tag ' + (done ? 'done-tag' : '') + '">' + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
+          '<span class="dad-event-tag ' + (done ? 'done-tag' : '') + ">'" + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
           '</div></div>';
       }).join('');
     }
@@ -5041,13 +5090,13 @@ function renderDadTabChecklist() {
     el.innerHTML = DAD_ITEMS[section].map((item, idx) => {
       const done = !!checks[item.id];
       const praise = PRAISE_MSGS[(idx + section.length) % PRAISE_MSGS.length];
-      return '<div class="dad-check-item' + (done ? ' done' : '') + '" onclick="toggleDadTabCheck(\'' + item.id + '\')">' +
-        '<div class="dad-checkbox' + (done ? ' checked' : '') + '"></div>' +
+      return '<div class="dad-check-item' + (done ? ' done' : '') + ' onclick="toggleDadTabCheck(\'' + item.id + '\')">' +
+        '<div class="dad-checkbox' + (done ? ' checked' : '') + '></div>' +
         '<div class="dad-check-info">' +
-        '<div class="dad-check-title' + (done ? ' done-text' : '') + '">' + item.title + '</div>' +
+        '<div class="dad-check-title' + (done ? ' done-text' : '') + '>' + item.title + '</div>' +
         '<div class="dad-check-desc">' + item.desc.replace(/\n/g,'<br>') + '</div>' +
         (done ? '<div class="dad-praise">' + praise + '</div>' : '') +
-        '<span class="dad-check-tag ' + (done ? 'done-tag' : item.tag) + '">' +
+        '<span class="dad-check-tag ' + (done ? 'done-tag' : item.tag) + '>' +
           (done ? '✅ 완료' : tagLabels[item.tag]) + '</span>' +
         '</div></div>';
     }).join('');
@@ -5059,13 +5108,13 @@ function renderDadTabChecklist() {
     evEl.innerHTML = DAD_EVENTS.map((item, idx) => {
       const done = !!checks[item.id];
       const praise = EVENT_PRAISE[idx % EVENT_PRAISE.length];
-      return '<div class="dad-event-item' + (done ? ' done' : '') + '" onclick="toggleDadTabCheck(\'' + item.id + '\')" style="padding:18px 16px;border-bottom:1px solid #fce7f3;">' +
-        '<div class="dad-event-checkbox' + (done ? ' checked' : '') + '"></div>' +
+      return '<div class="dad-event-item' + (done ? ' done' : '') + ' onclick="toggleDadTabCheck(\'' + item.id + '\')" style="padding:18px 16px;border-bottom:1px solid #fce7f3;">' +
+        '<div class="dad-event-checkbox' + (done ? ' checked' : '') + '></div>' +
         '<div class="dad-event-info">' +
         '<div style="font-size:16px;font-weight:700;color:' + (done?'#f472b6':(isDark?'#f0ead8':'#1a1a1a')) + ';line-height:1.5;letter-spacing:-0.02em;">' + item.title + '</div>' +
         (done ? '<div style="font-size:13px;color:' + (isDark?'#f472b6':'#be185d') + ';font-weight:600;margin-top:6px;">' + praise + '</div>'
                : '<div style="font-size:13px;color:' + descClr + ';margin-top:6px;line-height:1.7;word-break:keep-all;">' + item.desc.replace(/\n/g,'<br>') + '</div>') +
-        '<span class="dad-event-tag ' + (done ? 'done-tag' : '') + '">' + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
+        '<span class="dad-event-tag ' + (done ? 'done-tag' : '') + ">'" + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
         '</div></div>';
     }).join('');
   }
@@ -5471,7 +5520,7 @@ function renderGuideList() {
       const body = s.text.replace(/【.+?】\s*/, '');
       return `<div class="guide-story-step">
         <div class="guide-story-num" style="background:${col.numBg};">${stepNum}</div>
-        <div style="flex:1;">
+        <div class="u-flex1">
           ${title ? `<div style="font-size:12px;font-weight:800;color:${col.numBg};margin-bottom:3px;">${title}</div>` : ''}
           <div class="guide-story-step-text">${body}</div>
         </div>
@@ -5483,7 +5532,7 @@ function renderGuideList() {
       onclick="toggleGuideCard('${item.id}')">
       <div class="guide-story-header">
         <div class="guide-story-emoji">${item.icon}</div>
-        <div style="flex:1;">
+        <div class="u-flex1">
           <div class="guide-story-title">${item.title}</div>
           <div class="guide-story-sub">${item.subtitle}</div>
           <span class="guide-story-tag" style="background:${col.numBg}22;color:${col.numBg};">
@@ -6253,7 +6302,7 @@ function renderVaccineList() {
       '<div class="vaccine-checkbox' + (done?' checked':'') + '"></div>' +
       '<div style="flex:1;min-width:0;">' +
         '<div class="vaccine-name">' + v.name + '</div>' +
-        (v.desc ? '<div style="font-size:11px;color:#9ca3af;">' + v.desc + '</div>' : '') +
+        (v.desc ? '<div class="u-hint">' + v.desc + '</div>' : '') +
       '</div>' +
       '<div class="vaccine-age-badge">' + v.age + '</div>' +
       (done ? '<div class="vaccine-done-text">✅</div>' : '') +
@@ -7725,7 +7774,7 @@ function showSiriGuideModal() {
     <div style="background:#f8f9fa;border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
       <div>
         <div style="font-size:14px;font-weight:700;color:#1a1a1a;">${s.label}</div>
-        <div style="font-size:11px;color:#9ca3af;">Hey Siri, "${s.phrase}"</div>
+        <div class="u-hint">Hey Siri, "${s.phrase}"</div>
       </div>
       <button onclick="copySiriUrl('${s.url}','${s.phrase}')"
         style="padding:6px 12px;background:#000;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">
@@ -7793,7 +7842,7 @@ function showAssistantGuideModal() {
     <div style="background:#f8f9fa;border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
       <div>
         <div style="font-size:14px;font-weight:700;color:#1a1a1a;">${s.label}</div>
-        <div style="font-size:11px;color:#9ca3af;">Hey Google, "${s.phrase}"</div>
+        <div class="u-hint">Hey Google, "${s.phrase}"</div>
       </div>
       <button onclick="copyAssistantUrl('${s.url}','${s.phrase}')"
         style="padding:6px 12px;background:#4285f4;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">
