@@ -7473,6 +7473,7 @@ function goToPage(n) {
   updatePageLabel(currentPage);
   // 새로고침 시 복원을 위해 페이지 저장
   try { sessionStorage.setItem('nuri_last_page', String(currentPage)); } catch(e) {}
+  if (currentPage === 3) { try { updateTodayWidget(); } catch(e) {} }
   if (currentPage === 4) setTimeout(() => { renderMainChart(); renderPatternAnalysis(); }, 100);
   if (currentPage === 5) setTimeout(() => { renderGrowthChart(); renderGrowthTable(); }, 100);
   if (currentPage === 6) { try { renderMilestoneList(); } catch(e){} }
@@ -8131,16 +8132,22 @@ function startSession(type) {
     addRecord({ type:'pump', time:nowLocal(), title:'유축 시작', sub:'유축 중', icon:'🤱', cat:'pump' });
     speak('유축 시작을 기록했어요 🤱');
   } else if (type === 'feed') {
-    if (feedingStart) { speak('이미 수유 중이에요.'); return; }
+    if (feedingStart) {
+      // 이미 수유 중 → 타이머 모달 다시 열기
+      speak('수유 중이에요.');
+      try { openFeedTimerModal(); } catch(e) {}
+      return;
+    }
     feedingStart = now;
     localStorage.setItem('baby_feeding', now.toISOString());
-    // 기존 수유 시작 기록 제거 후 새로 추가
     var todayS = new Date(Date.now()+9*3600*1000).toISOString().slice(0,10);
     for (var si=records.length-1; si>=0; si--) {
       if (records[si].cat==='feed' && records[si].title==='수유 시작' && records[si].time && records[si].time.slice(0,10)===todayS) records.splice(si,1);
     }
     addRecord({ type:'feed', time:nowLocal(), title:'수유 시작', sub:'수유 중', icon:'🍼', cat:'feed' });
     speak('수유 시작을 기록했어요 🍼');
+    // 타이머 모달 열기 (약간 지연: DOM 업데이트 후)
+    setTimeout(function(){ try { openFeedTimerModal(); } catch(e) { console.warn('타이머모달:', e); } }, 50);
   } else if (type === 'diaper') {
     selOpts['diaper-t'] = 'wet';
     ['wet','poop','both'].forEach(v => {
@@ -8304,19 +8311,16 @@ function endSession(type) {
     addRecord({ type:'pump', time:nowLocal(), title:'유축', sub:pDurStr, icon:'🤱', cat:'pump', _startTime:pStStr, _durMin:pDur });
     speak('유축 완료.');
   } else if (type === 'feed') {
-    const fSt = feedingStart instanceof Date ? feedingStart : new Date(feedingStart);
-    const fDur = Math.round((now - fSt) / 60000);
-    const fDurStr = (Math.floor(fDur/60)>0?Math.floor(fDur/60)+'시간 ':'')+fDur%60+'분';
-    const fStStr = new Date(fSt.getTime()+9*3600*1000).toISOString().slice(0,16);
-    feedingStart = null;
-    localStorage.setItem('baby_feeding', '');
-    // '수유 시작' 기록 제거 후 '수유'로 교체
-    const todayKST2 = nowLocal().slice(0,10);
-    for (let ri2=records.length-1; ri2>=0; ri2--) {
-      if (records[ri2].cat==='feed' && records[ri2].title==='수유 시작' && String(records[ri2].time||'').slice(0,10)===todayKST2) records.splice(ri2,1);
+    // 타이머 모달이 열려있으면 ftiEnd()로 처리 (타이머 시간 자동입력)
+    const timerModal = document.getElementById('modal-feed-timer');
+    if (timerModal && timerModal.classList.contains('open')) {
+      ftiEnd();
+      return;
     }
-    addRecord({ type:'feed', time:nowLocal(), title:'수유', sub:fDurStr, icon:'🍼', cat:'feed', _startTime:fStStr, _durMin:fDur });
-    speak('수유 완료.');
+    // 타이머 모달 없이 종료 시 → 수유 완료 모달 열기
+    openFeedEndModal();
+    speak('수유 종료. 기록을 완료해주세요.');
+    return;
   }
   updateQuickBtns();
   renderTimeline();
@@ -9103,7 +9107,7 @@ function updateTodayWidget() {
   };
 
   // 수유
-  const feedRecs = todayRecs.filter(r => r.cat==='feed');
+  const feedRecs = todayRecs.filter(r => r.cat==='feed' && r.title!=='수유 시작');
   const lastFeed = feedRecs[0];
   const el = id => document.getElementById(id);
   if(el('widget-feed-count')) el('widget-feed-count').textContent = feedRecs.length+'회';
