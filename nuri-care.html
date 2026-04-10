@@ -1436,6 +1436,8 @@ body.dark #modal-delete-confirm [style*="background:#fff5f5"] {
       <div class="onboarding-dot"></div>
       <div class="onboarding-dot"></div>
       <div class="onboarding-dot"></div>
+      <div class="onboarding-dot"></div>
+      <div class="onboarding-dot"></div>
     </div>
     <div class="onboarding-step active" id="ob-0">
       <div class="onboarding-icon">🍼</div>
@@ -1457,6 +1459,38 @@ body.dark #modal-delete-confirm [style*="background:#fff5f5"] {
       <div class="onboarding-desc">"수유 완료", "기저귀 갈았어"<br>말 한 마디로 자동 기록돼요.<br>새벽 수유할 때 특히 유용해요 🌙</div>
     </div>
     <div class="onboarding-step" id="ob-3">
+      <div class="onboarding-icon">🎙️</div>
+      <div class="onboarding-title">홈화면에 추가하면 더 편해요</div>
+      <div class="onboarding-desc">
+        홈화면에서 앱 아이콘을 누르면<br>
+        <strong>음성 인식이 바로 시작</strong>돼요!<br><br>
+        <span style="font-size:13px;color:#7a5600;">지금 홈화면에 추가할까요?</span>
+      </div>
+      <button onclick="obAddToHome()" style="margin-top:14px;width:100%;padding:14px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;">
+        📱 홈화면에 추가하기
+      </button>
+      <button onclick="obNext()" style="margin-top:8px;width:100%;padding:10px;background:none;color:#9ca3af;border:none;font-size:13px;cursor:pointer;">
+        나중에 하기
+      </button>
+    </div>
+    <div class="onboarding-step" id="ob-4">
+      <div class="onboarding-icon">⚡</div>
+      <div class="onboarding-title">Siri & Google 음성 단축키</div>
+      <div class="onboarding-desc">
+        <strong>"수유 시작"</strong> 한마디로<br>앱 없이 바로 기록해요!<br><br>
+        <span style="font-size:13px;color:#7a5600;">아래에서 바로 설정할 수 있어요 👇</span>
+      </div>
+      <button onclick="obSetupSiri()" style="margin-top:14px;width:100%;padding:14px;background:#000;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+        🍎 Siri 단축어 설정하기
+      </button>
+      <button onclick="obSetupAssistant()" style="margin-top:8px;width:100%;padding:14px;background:#4285f4;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;">
+        🤖 Google Assistant 설정하기
+      </button>
+      <button onclick="obNext()" style="margin-top:8px;width:100%;padding:10px;background:none;color:#9ca3af;border:none;font-size:13px;cursor:pointer;">
+        나중에 하기
+      </button>
+    </div>
+    <div class="onboarding-step" id="ob-5">
       <div class="onboarding-icon">💾</div>
       <div class="onboarding-title">데이터는 이 기기에 저장돼요</div>
       <div class="onboarding-desc">소중한 기록을 지키려면<br><strong>설정 → 데이터 백업</strong>을 주기적으로 해주세요.<br>폰을 바꾸기 전에 꼭 백업하세요! ⚠️</div>
@@ -2191,15 +2225,30 @@ body.dark #modal-delete-confirm [style*="background:#fff5f5"] {
             <div id="fb-sync-status"></div>
           </div>
 
-          <!-- 화면 유지 & 음성 단축키 -->
-          <div class="feature-section-title">🎙️ 음성 단축키 설정</div>
+          <!-- 음성 단축키 -->
+          <div class="feature-section-title">⚡ 음성 단축키 · 홈화면 추가</div>
           <div class="chart-wrap" style="padding:14px 16px;">
-            <div style="font-size:13px;color:#555;margin-bottom:10px;line-height:1.6;">
-              Siri / Google Assistant로 앱을 열지 않고<br>음성으로 바로 기록할 수 있어요!
+            <div style="font-size:13px;color:var(--text-sub,#555);margin-bottom:12px;line-height:1.7;">
+              홈화면에서 아이콘 탭 → <strong>음성 인식 즉시 시작</strong><br>
+              Siri / Google에 등록 → <strong>앱 없이 말 한마디로 기록</strong>
             </div>
-            <button class="export-btn" onclick="openShortcutModal()" style="margin-bottom:0;">
-              🎙️ Siri · Google Assistant 설정하기
-            </button>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+              <button onclick="obAddToHome()" style="padding:12px 8px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;line-height:1.5;">
+                📱 홈화면<br>추가하기
+              </button>
+              <button onclick="showSiriGuideModal()" style="padding:12px 8px;background:#000;color:#fff;border:none;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;line-height:1.5;">
+                🍎 Siri<br>단축어 설정
+              </button>
+              <button onclick="showAssistantGuideModal()" style="padding:12px 8px;background:#4285f4;color:#fff;border:none;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;line-height:1.5;">
+                🤖 Google<br>Assistant 설정
+              </button>
+              <button onclick="openShortcutModal()" style="padding:12px 8px;background:var(--card-bg,#fff);color:var(--text-main,#1a1a1a);border:1.5px solid var(--border-color,#e0e0e0);border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;line-height:1.5;">
+                🎙️ 앱 내<br>음성 설정
+              </button>
+            </div>
+            <div style="font-size:11px;color:var(--text-sub,#9ca3af);line-height:1.6;text-align:center;">
+              설정 후: "Hey Siri, 수유 시작" / "Hey Google, 기저귀 갈았어"
+            </div>
           </div>
 
           <!-- 화면 설정 -->
@@ -2233,8 +2282,7 @@ body.dark #modal-delete-confirm [style*="background:#fff5f5"] {
             <button onclick="confirmReset()" style="width:100%;padding:12px;background:none;border:1.5px solid #fecaca;border-radius:10px;color:#ef4444;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;">
               ⛔ 모든 데이터 초기화
             </button>
-            <a href="mailto:hmw0106@naver.com?subject=누리케어 데이터 삭제 요청&body=삭제를 요청합니다."
-              style="display:block;width:100%;padding:12px;background:none;border:1.5px solid #e5e7eb;border-radius:10px;color:#6b7280;font-size:13px;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;box-sizing:border-box;">
+            <a href="/cdn-cgi/l/email-protection#83ebeef4b3b2b3b5c3ede2f5e6f1ade0eceebcf0f6e1e9e6e0f7be680b0768252f6f3f036f1537a3680e336f1e376e0733a36f012e6f231fa36f19176f312ea5e1ece7fabe6f012e6f231f68263fa36f19176f312e6e162a68080b680827ad" style="display:block;width:100%;padding:12px;background:none;border:1.5px solid #e5e7eb;border-radius:10px;color:#6b7280;font-size:13px;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;box-sizing:border-box;">
               📧 이메일로 삭제 요청 (앱스토어 정책)
             </a>
           </div>
@@ -2822,7 +2870,7 @@ body.dark #modal-delete-confirm [style*="background:#fff5f5"] {
     </div>
   </div>
 </div>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script>
@@ -7304,13 +7352,236 @@ function showOnboarding() {
 
 function obNext() {
   obStep++;
-  const total = 4;
+  const total = 6;
   if (obStep >= total) { obFinish(); return; }
   document.querySelectorAll('.onboarding-step').forEach((el,i) => el.classList.toggle('active', i===obStep));
   document.querySelectorAll('.onboarding-dot').forEach((el,i) => el.classList.toggle('active', i===obStep));
   const btn = document.getElementById('ob-btn');
-  if (btn) btn.textContent = obStep === total-1 ? '시작하기 🍼' : '다음';
+  // 홈화면 추가, Siri/Assistant 단계에는 기본 버튼 숨김
+  if (btn) {
+    if (obStep === 3 || obStep === 4) {
+      btn.style.display = 'none';
+    } else {
+      btn.style.display = '';
+      btn.textContent = obStep === total-1 ? '시작하기 🍼' : '다음';
+    }
+  }
 }
+
+// ── 홈화면 추가 ──
+let _deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _deferredPrompt = e;
+});
+
+function obAddToHome() {
+  if (_deferredPrompt) {
+    // Android Chrome: 설치 프롬프트 표시
+    _deferredPrompt.prompt();
+    _deferredPrompt.userChoice.then(() => {
+      _deferredPrompt = null;
+      obNext();
+    });
+  } else {
+    // iOS Safari or already installed: 안내 모달 표시
+    showHomeAddGuide();
+  }
+}
+
+function showHomeAddGuide() {
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isAndroid = /Android/.test(navigator.userAgent);
+  let msg = '';
+  if (isIOS) {
+    msg = `📱 Safari에서 홈화면 추가하는 방법:
+
+1. 하단 공유 버튼 (□↑) 탭
+2. "홈 화면에 추가" 선택
+3. "추가" 탭
+
+✅ 다음부터 아이콘 탭 → 음성 자동 시작!`;
+  } else if (isAndroid) {
+    msg = `📱 Chrome에서 홈화면 추가하는 방법:
+
+1. 우상단 ⋮ 메뉴 탭
+2. "앱 설치" 또는 "홈 화면에 추가" 선택
+3. "설치" 탭
+
+✅ 다음부터 아이콘 탭 → 음성 자동 시작!`;
+  } else {
+    msg = `홈화면에 추가하면 음성이 자동으로 시작돼요!
+
+브라우저 메뉴 → 홈화면에 추가`;
+  }
+  openHomeAddModal(msg, isIOS);
+}
+
+function openHomeAddModal(msg, isIOS) {
+  // 기존 모달 있으면 제거
+  const old = document.getElementById('home-add-modal');
+  if (old) old.remove();
+  const el = document.createElement('div');
+  el.id = 'home-add-modal';
+  el.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:flex-end;';
+  el.innerHTML = `
+    <div style="background:#fff;border-radius:24px 24px 0 0;padding:28px 24px 48px;width:100%;max-width:480px;margin:0 auto;">
+      <div style="font-size:28px;text-align:center;margin-bottom:12px;">${isIOS ? '📱' : '🤖'}</div>
+      <div style="font-size:16px;font-weight:800;color:#1a1a1a;margin-bottom:16px;text-align:center;">홈화면에 추가하기</div>
+      <div style="background:#f8f9fa;border-radius:14px;padding:16px;font-size:13px;color:#374151;line-height:2;white-space:pre-line;margin-bottom:20px;">${msg}</div>
+      ${isIOS ? `<div style="text-align:center;margin-bottom:16px;">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007AFF'%3E%3Cpath d='M8 12l4-4 4 4M12 16V8'/%3E%3Crect x='3' y='14' width='18' height='7' rx='2'/%3E%3C/svg%3E" style="width:48px;" alt="공유"/>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;">아래 공유 버튼을 누르세요</div>
+      </div>` : ''}
+      <button onclick="document.getElementById('home-add-modal').remove();obNext();"
+        style="width:100%;padding:14px;background:#7a5600;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;">
+        완료 → 다음 단계
+      </button>
+    </div>`;
+  document.body.appendChild(el);
+}
+
+// ── Siri 단축어 설정 ──
+function obSetupSiri() {
+  showSiriGuideModal();
+}
+
+function showSiriGuideModal() {
+  const old = document.getElementById('siri-guide-modal');
+  if (old) old.remove();
+
+  // Siri 단축어 URL (누리케어 앱 URL + action 파라미터)
+  const appUrl = window.location.href.split('?')[0];
+  const shortcuts = [
+    { label: '🍼 수유 시작', url: appUrl + '?action=feed', phrase: '수유 시작' },
+    { label: '😴 수면 시작', url: appUrl + '?action=sleep', phrase: '수면 시작' },
+    { label: '🌿 기저귀',   url: appUrl + '?action=diaper', phrase: '기저귀 갈았어' },
+    { label: '🤱 유축 시작', url: appUrl + '?action=pump', phrase: '유축 시작' },
+  ];
+
+  const cardsHtml = shortcuts.map(s => `
+    <div style="background:#f8f9fa;border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:14px;font-weight:700;color:#1a1a1a;">${s.label}</div>
+        <div style="font-size:11px;color:#9ca3af;">Hey Siri, "${s.phrase}"</div>
+      </div>
+      <button onclick="copySiriUrl('${s.url}','${s.phrase}')"
+        style="padding:6px 12px;background:#000;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">
+        복사
+      </button>
+    </div>`).join('');
+
+  const el = document.createElement('div');
+  el.id = 'siri-guide-modal';
+  el.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:flex-end;overflow-y:auto;';
+  el.innerHTML = `
+    <div style="background:#fff;border-radius:24px 24px 0 0;padding:28px 24px 48px;width:100%;max-width:480px;margin:0 auto;">
+      <div style="font-size:28px;text-align:center;margin-bottom:8px;">🍎 Siri 단축어 설정</div>
+      <div style="font-size:13px;color:#6b7280;text-align:center;margin-bottom:20px;line-height:1.6;">
+        단계: 복사 → iOS 단축어 앱 → 새 단축어 →<br>
+        "URL 열기" 액션 → 붙여넣기 → Siri 문구 설정
+      </div>
+      ${cardsHtml}
+      <div style="background:#fffbeb;border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:#92400e;line-height:1.6;">
+        💡 <strong>단축어 앱</strong>이 없다면 App Store에서 무료로 다운받으세요.<br>
+        설정 후 "Hey Siri, 수유 시작" 이라고 말하면 앱이 열리면서 바로 기록돼요!
+      </div>
+      <button onclick="document.getElementById('siri-guide-modal').remove();"
+        style="width:100%;padding:14px;background:#000;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:8px;">
+        단축어 앱 열기
+      </button>
+      <button onclick="document.getElementById('siri-guide-modal').remove();obNext();"
+        style="width:100%;padding:10px;background:none;color:#9ca3af;border:none;font-size:13px;cursor:pointer;">
+        나중에 하기
+      </button>
+    </div>`;
+  document.body.appendChild(el);
+
+  // 단축어 앱 열기 버튼 연결
+  el.querySelector('button').onclick = () => {
+    window.open('shortcuts://', '_blank');
+    setTimeout(() => { document.getElementById('siri-guide-modal')?.remove(); }, 500);
+  };
+}
+
+function copySiriUrl(url, phrase) {
+  navigator.clipboard.writeText(url).then(() => {
+    showToast('📋 복사됐어요! 단축어 앱에서 "URL 열기"에 붙여넣으세요');
+  }).catch(() => {
+    prompt('아래 URL을 복사하세요:', url);
+  });
+}
+
+// ── Google Assistant 설정 ──
+function obSetupAssistant() {
+  showAssistantGuideModal();
+}
+
+function showAssistantGuideModal() {
+  const old = document.getElementById('assistant-guide-modal');
+  if (old) old.remove();
+  const appUrl = window.location.href.split('?')[0];
+  const shortcuts = [
+    { label: '🍼 수유 시작', url: appUrl + '?action=feed', phrase: '수유 시작' },
+    { label: '😴 수면 시작', url: appUrl + '?action=sleep', phrase: '수면 시작' },
+    { label: '🌿 기저귀',   url: appUrl + '?action=diaper', phrase: '기저귀 갈았어' },
+    { label: '🤱 유축 시작', url: appUrl + '?action=pump', phrase: '유축 시작' },
+  ];
+  const cardsHtml = shortcuts.map(s => `
+    <div style="background:#f8f9fa;border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:14px;font-weight:700;color:#1a1a1a;">${s.label}</div>
+        <div style="font-size:11px;color:#9ca3af;">Hey Google, "${s.phrase}"</div>
+      </div>
+      <button onclick="copyAssistantUrl('${s.url}','${s.phrase}')"
+        style="padding:6px 12px;background:#4285f4;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">
+        복사
+      </button>
+    </div>`).join('');
+
+  const el = document.createElement('div');
+  el.id = 'assistant-guide-modal';
+  el.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:flex-end;overflow-y:auto;';
+  el.innerHTML = `
+    <div style="background:#fff;border-radius:24px 24px 0 0;padding:28px 24px 48px;width:100%;max-width:480px;margin:0 auto;">
+      <div style="font-size:28px;text-align:center;margin-bottom:8px;">🤖 Google Assistant 루틴</div>
+      <div style="font-size:13px;color:#6b7280;text-align:center;margin-bottom:20px;line-height:1.6;">
+        단계: 복사 → Google 앱 → Routines →<br>새 루틴 → "Open website" → 붙여넣기 → 음성 명령 설정
+      </div>
+      ${cardsHtml}
+      <div style="background:#e8f0fe;border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:#1a73e8;line-height:1.6;">
+        💡 Google 앱 → Routines (루틴) →  새 루틴 만들기<br>
+        → 음성 명령 입력 → "앱/사이트 열기" → URL 붙여넣기
+      </div>
+      <button onclick="window.open('googlegmail://','_blank') || window.open('https://assistant.google.com/','_blank');"
+        style="width:100%;padding:14px;background:#4285f4;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:8px;">
+        Google Assistant 열기
+      </button>
+      <button onclick="document.getElementById('assistant-guide-modal').remove();obNext();"
+        style="width:100%;padding:10px;background:none;color:#9ca3af;border:none;font-size:13px;cursor:pointer;">
+        나중에 하기
+      </button>
+    </div>`;
+  document.body.appendChild(el);
+}
+
+function copyAssistantUrl(url, phrase) {
+  navigator.clipboard.writeText(url).then(() => {
+    showToast('📋 복사됐어요! Google 루틴에서 "사이트 열기"에 붙여넣으세요');
+  }).catch(() => { prompt('아래 URL을 복사하세요:', url); });
+}
+
+function showToast(msg) {
+  const old = document.getElementById('_toast');
+  if (old) old.remove();
+  const el = document.createElement('div');
+  el.id = '_toast';
+  el.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:99999;white-space:nowrap;max-width:90vw;text-align:center;';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
 
 // ── enterApp 통합 (모든 기능 초기화) ──
 // loadData: localStorage 우선 (동기), IndexedDB는 백그라운드에서 보완
@@ -7350,8 +7621,51 @@ function loadData() {
   });
 }
 
+function handleUrlAction() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const action = params.get('action');
+    if (!action) return;
+    // URL 파라미터 제거 (히스토리 정리)
+    window.history.replaceState({}, '', window.location.pathname);
+    // 앱 진입 후 약간 딜레이로 액션 실행
+    setTimeout(() => {
+      switch(action) {
+        case 'feed':
+          startSession('feed');
+          showToast('🍼 수유 기록 시작!');
+          goToPage(2);
+          break;
+        case 'sleep':
+          startSession('sleep');
+          showToast('😴 수면 기록 시작!');
+          goToPage(2);
+          break;
+        case 'diaper':
+          openModal('diaper');
+          showToast('🌿 기저귀 기록');
+          goToPage(2);
+          break;
+        case 'pump':
+          openModal('pump');
+          showToast('🤱 유축 기록 시작!');
+          goToPage(2);
+          break;
+        case 'voice':
+          goToPage(2);
+          setTimeout(() => {
+            const btn = document.getElementById('main-mic-btn');
+            if (btn) btn.click();
+          }, 500);
+          break;
+      }
+    }, 800);
+  } catch(e) { console.warn('URL action 처리 실패:', e); }
+}
+
 function enterApp() {
   sessionStorage.setItem('nuri_in_app', '1');
+  handleUrlAction();
 
   try { loadData(); } catch(e) { console.warn('loadData:', e); }
   try { loadGrowthData(); } catch(e) {}
@@ -8694,11 +9008,4 @@ function fbRenderStatus() {
   }
   const famId = localStorage.getItem('fb_family_id') || '-';
   const role = localStorage.getItem('fb_user_role') || 'mom';
-  el.innerHTML = `<span style="color:#16a34a;">🔥 Firebase 연결됨 · ${role === 'dad' ? '아빠' : '엄마'} 모드</span>
-    <div style="font-size:10px;color:#9ca3af;margin-top:2px;">가족 ID: ${famId.slice(-8)}</div>`;
-}
-
-appStart(); // 역할 기억 기반 자동 라우팅
-</script>
-</body>
-</html>
+  el.innerHTML = `<span style="color:#16a34a;">🔥 Firebase 연결됨 · ${role === 'dad' ? '아�
