@@ -1323,6 +1323,96 @@ body:not(.dark) .dad-event-tag { background: #fce7f3 !important; color: #be185d 
 body:not(.dark) .dad-check-title { color: #1a1a1a !important; }
 body:not(.dark) .dad-check-desc  { color: #555555 !important; }
 body:not(.dark) .dad-section-title { color: #7a5600 !important; }
+
+/* ══════════════════════════════════════
+   엄마케어 카드 - CSS 클래스 기반 (인라인 스타일 의존 제거)
+══════════════════════════════════════ */
+
+/* 라이트 카드 팔레트 */
+.mom-card-pink   { background: linear-gradient(135deg,#fff0f6,#fce7f3); border-top: 3px solid #db277733; }
+.mom-card-blue   { background: linear-gradient(135deg,#eff6ff,#dbeafe); border-top: 3px solid #2563eb33; }
+.mom-card-green  { background: linear-gradient(135deg,#f0fdf4,#dcfce7); border-top: 3px solid #16a34a33; }
+.mom-card-purple { background: linear-gradient(135deg,#fdf4ff,#f3e8ff); border-top: 3px solid #9333ea33; }
+.mom-card-yellow { background: linear-gradient(135deg,#fffbeb,#fef9c3); border-top: 3px solid #d9770633; }
+.mom-card-orange { background: linear-gradient(135deg,#fff7ed,#ffedd5); border-top: 3px solid #ea580c33; }
+.mom-card-amber  { background: linear-gradient(135deg,#fefce8,#fef9c3); border-top: 3px solid #ca8a0433; }
+.mom-card-teal   { background: linear-gradient(135deg,#f0fdfa,#ccfbf1); border-top: 3px solid #0d948833; }
+.mom-card-warn   { background: linear-gradient(135deg,#fff1f2,#ffe4e6); border-left: 4px solid #dc2626; grid-column: 1/-1; display:flex; align-items:center; gap:14px; text-align:left; padding:16px 18px; border-top: none; }
+
+/* 카드 텍스트 색상 */
+.mom-count-pink   { color: #db2777; }
+.mom-count-blue   { color: #2563eb; }
+.mom-count-green  { color: #16a34a; }
+.mom-count-purple { color: #9333ea; }
+.mom-count-yellow { color: #d97706; }
+.mom-count-orange { color: #ea580c; }
+.mom-count-amber  { color: #ca8a04; }
+.mom-count-teal   { color: #0d9488; }
+
+/* warn 카드 전용 */
+.mom-warn-title  { font-size: 15px; font-weight: 700; color: #dc2626; }
+.mom-warn-count  { font-size: 13px; color: #dc2626; margin-top: 4px; }
+.mom-warn-arrow  { font-size: 18px; color: #dc2626; opacity: 0.5; }
+
+/* 디테일 모달 */
+.mom-detail-header { display:flex; align-items:center; gap:12px; margin-bottom:18px; padding-bottom:14px; border-bottom:2px solid #f0e8d0; }
+.mom-detail-header-warn { border-bottom-color: #fca5a5; }
+.mom-detail-title   { font-size:17px; font-weight:800; color:#1a1a1a; margin-bottom:2px; }
+.mom-detail-sub     { font-size:12px; color:#7a5600; font-weight:600; }
+.mom-detail-sub-warn { color: #dc2626; }
+.mom-dot-normal  { background: #7a5600; }
+.mom-dot-warn    { background: #dc2626; }
+.mom-warn-note   { background:#fff1f2; border-radius:10px; padding:12px 14px; margin-top:10px; font-size:13px; color:#dc2626; font-weight:600; line-height:1.6; border-left:3px solid #dc2626; }
+
+/* ── 다크모드 엄마케어 카드 ── */
+body.dark .mom-card-pink   { background: linear-gradient(135deg,#2a1520,#3a1a28); border-top-color: #f472b666; }
+body.dark .mom-card-blue   { background: linear-gradient(135deg,#0f1a2a,#1a2a3a); border-top-color: #60a5fa66; }
+body.dark .mom-card-green  { background: linear-gradient(135deg,#0a2010,#162a18); border-top-color: #4ade8066; }
+body.dark .mom-card-purple { background: linear-gradient(135deg,#1a0f25,#2a1535); border-top-color: #c084fc66; }
+body.dark .mom-card-yellow { background: linear-gradient(135deg,#1a1500,#2a2000); border-top-color: #fbbf2466; }
+body.dark .mom-card-orange { background: linear-gradient(135deg,#1a1008,#2a1a10); border-top-color: #fb923c66; }
+body.dark .mom-card-amber  { background: linear-gradient(135deg,#1a1200,#2a1e00); border-top-color: #fcd34d66; }
+body.dark .mom-card-teal   { background: linear-gradient(135deg,#0a1a18,#102a25); border-top-color: #2dd4bf66; }
+body.dark .mom-card-warn   { background: linear-gradient(135deg,#2a0f10,#3a1515); border-left-color: #f87171; }
+
+body.dark .mom-count-pink   { color: #f472b6; }
+body.dark .mom-count-blue   { color: #60a5fa; }
+body.dark .mom-count-green  { color: #4ade80; }
+body.dark .mom-count-purple { color: #c084fc; }
+body.dark .mom-count-yellow { color: #fbbf24; }
+body.dark .mom-count-orange { color: #fb923c; }
+body.dark .mom-count-amber  { color: #fcd34d; }
+body.dark .mom-count-teal   { color: #2dd4bf; }
+
+body.dark .mom-warn-title  { color: #f87171; }
+body.dark .mom-warn-count  { color: #f87171; }
+body.dark .mom-warn-arrow  { color: #f87171; }
+body.dark .mom-detail-title  { color: #f0ead8; }
+body.dark .mom-detail-sub    { color: #c8a870; }
+body.dark .mom-detail-sub-warn { color: #f87171; }
+body.dark .mom-detail-header { border-bottom-color: #3d3628; }
+body.dark .mom-detail-header-warn { border-bottom-color: #7f1d1d; }
+body.dark .mom-dot-normal  { background: #c8a870; }
+body.dark .mom-dot-warn    { background: #f87171; }
+body.dark .mom-warn-note   { background: #2a0f10; color: #f87171; border-left-color: #f87171; }
+body.dark .mom-detail-text { color: #c8b898; }
+
+/* ══ 아빠 이벤트 뱃지 라이트모드 강제 보호 ══ */
+body:not(.dark) .dad-event-tag,
+body:not(.dark) .dad-event-tag.done-tag {
+  background: #fce7f3 !important;
+  color: #be185d !important;
+}
+body:not(.dark) .dad-check-tag { background: revert !important; color: revert !important; }
+body:not(.dark) .dad-check-tag.done-tag { background: #dcfce7 !important; color: #16a34a !important; }
+body:not(.dark) .dad-check-tag.urgent { background: #eff6ff !important; color: #c0410f !important; }
+body:not(.dark) .dad-check-tag.soon   { background: #fff7ed !important; color: #8a6d00 !important; }
+body:not(.dark) .dad-check-tag.prep   { background: #f0fdf4 !important; color: #1d7a3a !important; }
+
+/* 다크 이벤트 뱃지 */
+body.dark .dad-event-tag { background: #2a1a28 !important; color: #f9a8d4 !important; }
+body.dark .dad-event-tag.done-tag { background: #1a2a18 !important; color: #86efac !important; }
+
 </style>
 </head>
 <body style="visibility:hidden;">
@@ -3018,28 +3108,23 @@ function openMomDetail(secIdEncoded) {
   const sec = allSections.find(s => s.title === secTitle);
   if (!sec) return;
 
-  const dotColor = sec.warn ? '#dc2626' : (p.birthType === 'csection' ? '#9333ea' : '#db2777');
+  const isWarn = !!sec.warn;
   const itemsHtml = sec.items.map(item =>
     `<div class="mom-detail-item">
-      <div class="mom-detail-dot" style="background:${dotColor};"></div>
+      <div class="mom-detail-dot ${isWarn ? 'mom-dot-warn' : 'mom-dot-normal'}"></div>
       <div class="mom-detail-text">${item}</div>
     </div>`
   ).join('');
 
-  const warnNote = sec.warn
-    ? `<div style="background:#fff1f2;border-radius:10px;padding:12px 14px;margin-top:10px;font-size:13px;color:#dc2626;font-weight:600;line-height:1.6;border-left:3px solid #dc2626;">
-        ⚠️ 위 증상이 나타나면 지체 없이 병원을 방문하세요.
-      </div>` : '';
+  const warnNote = isWarn
+    ? `<div class="mom-warn-note">⚠️ 위 증상이 나타나면 지체 없이 병원을 방문하세요.</div>` : '';
 
-  const isDark = document.body.classList.contains('dark');
-  const titleColor = isDark ? '#f0ead8' : '#1a1a1a';
-  const textColor  = isDark ? '#c8a870' : '#374151';
   document.getElementById('mom-detail-content').innerHTML = `
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:14px;border-bottom:2px solid ${dotColor}44;">
+    <div class="mom-detail-header ${isWarn ? 'mom-detail-header-warn' : ''}">
       <div style="font-size:36px;line-height:1;">${sec.icon}</div>
       <div>
-        <h2 style="font-size:17px;font-weight:800;color:${titleColor};margin-bottom:2px;">${sec.title}</h2>
-        <div style="font-size:12px;color:${dotColor};font-weight:600;">${sec.items.length}가지 정보</div>
+        <h2 class="mom-detail-title">${sec.title}</h2>
+        <div class="mom-detail-sub ${isWarn ? 'mom-detail-sub-warn' : ''}">${sec.items.length}가지 정보</div>
       </div>
     </div>
     ${itemsHtml}
@@ -3220,78 +3305,43 @@ function renderMomCarePage() {
   const p = raw ? JSON.parse(raw) : {};
   const birthType = p.birthType || 'natural';
   const careData = MOM_CARE[birthType] || MOM_CARE.natural;
-  const isCs = birthType === 'csection';
-  const isDark = document.body.classList.contains('dark');
 
   const badgeEl = document.getElementById('mom-birth-type-badge');
   if (badgeEl) badgeEl.innerHTML = '<span class="mom-birth-badge ' + careData.cls + '">' + careData.label + ' 산모</span>';
 
-  // 라이트/다크 카드 팔레트 완전 분리
-  const LIGHT_COLORS = [
-    { bg:'linear-gradient(135deg,#fff0f6,#fce7f3)', accent:'#db2777' },
-    { bg:'linear-gradient(135deg,#eff6ff,#dbeafe)', accent:'#2563eb' },
-    { bg:'linear-gradient(135deg,#f0fdf4,#dcfce7)', accent:'#16a34a' },
-    { bg:'linear-gradient(135deg,#fdf4ff,#f3e8ff)', accent:'#9333ea' },
-    { bg:'linear-gradient(135deg,#fffbeb,#fef9c3)', accent:'#d97706' },
-    { bg:'linear-gradient(135deg,#fff7ed,#ffedd5)', accent:'#ea580c' },
-    { bg:'linear-gradient(135deg,#fefce8,#fef9c3)', accent:'#ca8a04' },
-    { bg:'linear-gradient(135deg,#f0fdfa,#ccfbf1)', accent:'#0d9488' },
-  ];
-  const DARK_COLORS = [
-    { bg:'linear-gradient(135deg,#2a1520,#3a1a28)', accent:'#f472b6' },
-    { bg:'linear-gradient(135deg,#0f1a2a,#1a2a3a)', accent:'#60a5fa' },
-    { bg:'linear-gradient(135deg,#0a2010,#162a18)', accent:'#4ade80' },
-    { bg:'linear-gradient(135deg,#1a0f25,#2a1535)', accent:'#c084fc' },
-    { bg:'linear-gradient(135deg,#1a1500,#2a2000)', accent:'#fbbf24' },
-    { bg:'linear-gradient(135deg,#1a1008,#2a1a10)', accent:'#fb923c' },
-    { bg:'linear-gradient(135deg,#2a0f10,#3a1515)', accent:'#f87171' },
-    { bg:'linear-gradient(135deg,#0a1a18,#102a25)', accent:'#2dd4bf' },
-  ];
-  const cardColors = isDark ? DARK_COLORS : LIGHT_COLORS;
-  const titleColor = isDark ? '#f0ead8' : '#1a1a1a';
-  const subColor   = isDark ? '#a89880' : '#6b7280';
-
+  // 컬러 팔레트 (CSS 클래스용 이름)
+  const colorNames = ['pink','blue','green','purple','yellow','orange','amber','teal'];
   const allSections = [...(careData.sections || []), ...(MOM_CARE.common || [])];
   let colorIdx = 0;
 
   const gridHtml = allSections.map(sec => {
-    const col = sec.warn
-      ? (isDark
-          ? { bg:'linear-gradient(135deg,#2a0f10,#3a1515)', accent:'#f87171' }
-          : { bg:'linear-gradient(135deg,#fff1f2,#ffe4e6)', accent:'#dc2626' })
-      : cardColors[colorIdx++ % cardColors.length];
     const secId = encodeURIComponent(sec.title);
-    const warnClass = sec.warn ? ' warn' : '';
     if (sec.warn) {
-      return `<div class="mom-grid-card${warnClass}" style="background:${col.bg};border-left:4px solid ${col.accent};"
+      return `<div class="mom-grid-card mom-card-warn"
         onclick="openMomDetail('${secId}')">
         <div class="mom-grid-emoji">${sec.icon}</div>
         <div style="flex:1;">
-          <div class="mom-grid-title" style="color:${titleColor};">⚠️ ${sec.title}</div>
-          <div class="mom-grid-count" style="color:${col.accent};">${sec.items.length}가지 증상 확인</div>
+          <div class="mom-grid-title mom-warn-title">⚠️ ${sec.title}</div>
+          <div class="mom-grid-count mom-warn-count">${sec.items.length}가지 증상 확인</div>
         </div>
-        <div style="font-size:18px;color:${col.accent};opacity:0.5;">▶</div>
+        <div class="mom-warn-arrow">▶</div>
       </div>`;
     }
-    return `<div class="mom-grid-card" style="background:${col.bg};border-top:3px solid ${col.accent}33;"
+    const colorName = colorNames[colorIdx++ % colorNames.length];
+    return `<div class="mom-grid-card mom-card-${colorName}"
       onclick="openMomDetail('${secId}')">
       <div class="mom-grid-emoji">${sec.icon}</div>
-      <div class="mom-grid-title" style="color:${titleColor};">${sec.title}</div>
-      <div class="mom-grid-count" style="color:${col.accent};">${sec.items.length}가지 정보 →</div>
+      <div class="mom-grid-title">${sec.title}</div>
+      <div class="mom-grid-count mom-count-${colorName}">${sec.items.length}가지 정보 →</div>
     </div>`;
   }).join('');
 
   document.getElementById('mom-care-content').innerHTML =
     '<div class="mom-grid">' + gridHtml + '</div>';
 
-  // 커뮤니티 검색 칩
   const communityBox = document.getElementById('community-search-box');
   if (communityBox) communityBox.style.display = 'block';
-  const chips = [
-    '신생아 황달', '모유수유', '분유 추천', '수면교육',
-    '영아산통', '이유식', '예방접종', '기저귀 발진',
-    '배앓이', '신생아 목욕'
-  ];
+  const chips = ['신생아 황달','모유수유','분유 추천','수면교육','영아산통','이유식','예방접종','기저귀 발진','배앓이','신생아 목욕'];
   const chipsEl = document.getElementById('community-chips');
   if (chipsEl) chipsEl.innerHTML = chips.map(c =>
     '<span class="community-chip" onclick="setCommunityQuery(\'' + c + '\')">' + c + '</span>'
@@ -4764,7 +4814,7 @@ function renderDadTabChecklist() {
         '<div style="font-size:16px;font-weight:700;color:' + (done?'#f472b6':(isDark?'#f0ead8':'#1a1a1a')) + ';line-height:1.5;letter-spacing:-0.02em;">' + item.title + '</div>' +
         (done ? '<div style="font-size:13px;color:' + (isDark?'#f472b6':'#be185d') + ';font-weight:600;margin-top:6px;">' + praise + '</div>'
                : '<div style="font-size:13px;color:' + descClr + ';margin-top:6px;line-height:1.7;word-break:keep-all;">' + item.desc.replace(/\n/g,'<br>') + '</div>') +
-        '<span style="font-size:11px;background:' + (isDark?(done?'#3d1a2a':'#2a1a28'):(done?'#fce7f3':'#fce7f3')) + ';color:' + (isDark?(done?'#f472b6':'#f9a8d4'):'#be185d') + ';border-radius:10px;padding:2px 8px;font-weight:700;display:inline-block;margin-top:6px;">' + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
+        '<span class="dad-event-tag ' + (done ? 'done-tag' : '') + '">' + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
         '</div></div>';
     }).join('');
   }
