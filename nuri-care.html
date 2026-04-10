@@ -1435,6 +1435,10 @@ body.dark #today-summary-widget > div:nth-child(4) { background: linear-gradient
 body.dark #widget-feed-count, body.dark #widget-sleep-time,
 body.dark #widget-diaper-count, body.dark #widget-pump-total { color: #f0ead8 !important; }
 
+
+/* 엄마몰래 뱃지 - 항상 라이트 */
+body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color: #9d174d !important; }
+
 </style>
 </head>
 <body style="visibility:hidden;">
@@ -2241,7 +2245,7 @@ body.dark #widget-diaper-count, body.dark #widget-pump-total { color: #f0ead8 !i
             <div class="dad-check-card" id="dad-tab-checklist-prep"></div>
           </div>
           <div class="dad-section">
-            <div style="font-size:16px;font-weight:800;color:#be185d;margin-bottom:12px;display:flex;align-items:center;gap:8px;letter-spacing:-0.02em;">💝 아내를 위한 이벤트 <span style="font-size:11px;font-weight:600;color:#9d174d;background:#fce7f3;padding:2px 8px;border-radius:10px;">😉 엄마 몰래</span></div>
+            <div style="font-size:16px;font-weight:800;color:#be185d;margin-bottom:12px;display:flex;align-items:center;gap:8px;letter-spacing:-0.02em;">💝 아내를 위한 이벤트 <span style="font-size:11px;font-weight:600;color:#9d174d !important;background:#fce7f3 !important;padding:2px 8px;border-radius:10px;">😉 엄마 몰래</span></div>
             <div class="dad-event-card" id="dad-tab-checklist-events"></div>
           </div>
           <button onclick="openGuide('app')" style="width:100%;padding:14px;background:#fff;border:1.5px solid #e0e0e0;border-radius:14px;font-size:14px;font-weight:700;color:#555;cursor:pointer;margin-top:8px;">
@@ -2366,56 +2370,7 @@ body.dark #widget-diaper-count, body.dark #widget-pump-total { color: #f0ead8 !i
 <!-- ═══════════ 엄마 케어 상세 모달 ═══════════ -->
 <!-- ── 모달: 아빠 기록 ── -->
 <!-- ── 모달: 수유 타이머 (시작 시) ── -->
-<div class="modal-bg" id="modal-feed-timer">
-  <div class="modal" style="max-height:85vh;overflow-y:auto;">
-    <div class="modal-handle"></div>
-    <h2>🍼 수유 중</h2>
 
-    <!-- 수유 방법 선택 -->
-    <span class="field-label">수유 방법</span>
-    <div class="opt-row" style="gap:8px;margin-bottom:16px;">
-      <button class="opt-btn sel" id="fti-breast" onclick="ftiSetType('breast')">모유</button>
-      <button class="opt-btn"    id="fti-bottle" onclick="ftiSetType('bottle')">분유</button>
-      <button class="opt-btn"    id="fti-both"   onclick="ftiSetType('both')">혼합</button>
-    </div>
-
-    <!-- 타이머 영역 (모유/혼합만) -->
-    <div id="fti-timer-area">
-      <div style="display:flex;gap:10px;margin-bottom:12px;">
-        <div id="fti-left-card" style="flex:1;background:#fff;border:2px solid #e5e7eb;border-radius:14px;padding:12px 8px;text-align:center;transition:all 0.2s;">
-          <div style="font-size:10px;font-weight:700;color:#9ca3af;margin-bottom:4px;">⬅️ 왼쪽</div>
-          <div id="fti-left-disp" style="font-size:24px;font-weight:900;color:#9ca3af;font-family:monospace;letter-spacing:1px;transition:color 0.2s;">00:00:00</div>
-          <button id="fti-left-btn" onclick="ftiToggle('left')"
-            style="margin-top:7px;width:100%;padding:7px 0;background:#e5e7eb;color:#6b7280;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;">시작</button>
-        </div>
-        <div id="fti-right-card" style="flex:1;background:#fff;border:2px solid #e5e7eb;border-radius:14px;padding:12px 8px;text-align:center;transition:all 0.2s;">
-          <div style="font-size:10px;font-weight:700;color:#9ca3af;margin-bottom:4px;">➡️ 오른쪽</div>
-          <div id="fti-right-disp" style="font-size:24px;font-weight:900;color:#9ca3af;font-family:monospace;letter-spacing:1px;transition:color 0.2s;">00:00:00</div>
-          <button id="fti-right-btn" onclick="ftiToggle('right')"
-            style="margin-top:7px;width:100%;padding:7px 0;background:#e5e7eb;color:#6b7280;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;">시작</button>
-        </div>
-      </div>
-      <div style="text-align:center;margin-bottom:12px;">
-        <button onclick="ftiReset()" style="font-size:12px;color:#9ca3af;background:none;border:none;cursor:pointer;">⟳ 초기화</button>
-        <span style="font-size:11px;color:#c8a870;margin-left:10px;">⚡ 정지하면 시간 자동 입력</span>
-      </div>
-    </div>
-
-    <!-- 분유 선택 시 안내 -->
-    <div id="fti-bottle-area" style="display:none;background:#fff7ed;border-radius:12px;padding:14px;margin-bottom:16px;text-align:center;">
-      <div style="font-size:28px;margin-bottom:6px;">🍼</div>
-      <div style="font-size:14px;font-weight:700;color:#c2410c;">분유 수유 중</div>
-      <div style="font-size:12px;color:#9ca3af;margin-top:4px;">종료 시 ml를 입력할 수 있어요</div>
-    </div>
-
-    <button onclick="ftiEnd()" style="width:100%;padding:15px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;letter-spacing:-0.02em;">
-      수유 종료 →
-    </button>
-    <button onclick="ftiCancel()" style="width:100%;padding:10px;background:none;color:#9ca3af;border:none;font-size:13px;cursor:pointer;margin-top:4px;">
-      취소
-    </button>
-  </div>
-</div>
 
 <div class="modal-bg" id="modal-dad-record">
   <div class="modal" style="max-height:85vh;overflow-y:auto;">
@@ -2736,9 +2691,10 @@ body.dark #widget-diaper-count, body.dark #widget-pump-total { color: #f0ead8 !i
     <h2>🍼 수유 기록</h2>
     <span class="field-label">수유 방법</span>
     <div class="opt-row">
-      <button class="opt-btn sel" id="feed-t-breast" onclick="selOpt('feed-t','breast');feedShowTimer()">모유</button>
-      <button class="opt-btn" id="feed-t-bottle" onclick="selOpt('feed-t','bottle');feedHideTimer()">분유</button>
-      <button class="opt-btn" id="feed-t-both" onclick="selOpt('feed-t','both');feedShowTimer()">혼합</button>
+      <button class="opt-btn sel" id="feed-t-breast" onclick="selOpt('feed-t','breast');feedTypeChange('breast')">모유</button>
+      <button class="opt-btn" id="feed-t-bottle" onclick="selOpt('feed-t','bottle');feedTypeChange('bottle')">분유</button>
+      <button class="opt-btn" id="feed-t-both" onclick="selOpt('feed-t','both');feedTypeChange('both')">혼합</button>
+      <button class="opt-btn" id="feed-t-pump" onclick="selOpt('feed-t','pump');feedTypeChange('pump')">🤱유축</button>
     </div>
 
     <!-- 수유 타이머 (모유/혼합 전용) -->
@@ -2766,6 +2722,10 @@ body.dark #widget-diaper-count, body.dark #widget-pump-total { color: #f0ead8 !i
     <span class="field-label" id="feed-ml-label" style="opacity:0.35;">분유량 (ml, 선택)</span>
     <input type="number" id="feed-ml" placeholder="예: 80" min="0" max="500"
       style="margin-bottom:12px;opacity:0.35;cursor:not-allowed;background:#f3f4f6;" disabled>
+    <div id="feed-pump-wrap" style="display:none;">
+      <span class="field-label">🤱 유축 수유량 (ml) <span style="font-size:11px;color:#9ca3af;">(유축 모유 수유 시 입력)</span></span>
+      <input type="number" id="feed-pump-ml" placeholder="예: 80" min="0" max="500" style="margin-bottom:12px;">
+    </div>
     <span class="field-label">기록 시각</span>
     <input type="datetime-local" id="feed-time" style="margin-bottom:12px;">
     <div class="modal-actions">
@@ -2777,17 +2737,31 @@ body.dark #widget-diaper-count, body.dark #widget-pump-total { color: #f0ead8 !i
 
 <!-- ═══════════ 유축 모달 ═══════════ -->
 <div class="modal-bg" id="modal-pump">
-  <div class="modal">
+  <div class="modal" style="max-height:85vh;overflow-y:auto;">
     <div class="modal-handle"></div>
     <button class="modal-close-x" onclick="closePumpModal()">✕</button>
     <h2>🤱 유축 기록</h2>
-    <div style="text-align:center;margin-bottom:16px;">
-      <div id="pump-timer-display" style="font-size:36px;font-weight:800;color:#7c3aaf;letter-spacing:2px;font-variant-numeric:tabular-nums;">00:00:00</div>
-      <div style="display:flex;justify-content:center;gap:8px;margin-top:8px;">
-        <button id="pump-timer-btn" onclick="pumpTimerToggle()" style="padding:6px 16px;border-radius:20px;border:none;background:#7c3aaf;color:#fff;font-size:13px;font-weight:700;cursor:pointer;touch-action:manipulation;">시작</button>
-        <button onclick="pumpTimerReset()" style="padding:6px 16px;border-radius:20px;border:1px solid #d8b4fe;background:#fff;color:#7c3aaf;font-size:13px;font-weight:700;cursor:pointer;touch-action:manipulation;">초기화</button>
+
+    <!-- 유축 타이머 (좌/우 분리) -->
+    <div style="background:#f9f0ff;border:1.5px solid #e9d5ff;border-radius:14px;padding:14px;margin-bottom:14px;text-align:center;">
+      <div style="font-size:11px;font-weight:700;color:#7c3aaf;margin-bottom:10px;letter-spacing:0.04em;">⏱️ 유축 타이머</div>
+      <div style="display:flex;gap:10px;margin-bottom:10px;">
+        <div id="pump-left-card" style="flex:1;background:#fff;border:2px solid #e5e7eb;border-radius:12px;padding:10px 6px;text-align:center;transition:all 0.2s;">
+          <div style="font-size:10px;font-weight:700;color:#9ca3af;margin-bottom:4px;">⬅️ 왼쪽</div>
+          <div id="pump-left-disp" style="font-size:22px;font-weight:900;color:#9ca3af;font-family:monospace;letter-spacing:1px;transition:color 0.2s;">00:00:00</div>
+          <button id="pump-left-btn" onclick="pumpSideToggle('left')"
+            style="margin-top:7px;width:100%;padding:7px 0;background:#e5e7eb;color:#6b7280;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;">시작</button>
+        </div>
+        <div id="pump-right-card" style="flex:1;background:#fff;border:2px solid #e5e7eb;border-radius:12px;padding:10px 6px;text-align:center;transition:all 0.2s;">
+          <div style="font-size:10px;font-weight:700;color:#9ca3af;margin-bottom:4px;">➡️ 오른쪽</div>
+          <div id="pump-right-disp" style="font-size:22px;font-weight:900;color:#9ca3af;font-family:monospace;letter-spacing:1px;transition:color 0.2s;">00:00:00</div>
+          <button id="pump-right-btn" onclick="pumpSideToggle('right')"
+            style="margin-top:7px;width:100%;padding:7px 0;background:#e5e7eb;color:#6b7280;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;">시작</button>
+        </div>
       </div>
+      <button onclick="pumpSideReset()" style="font-size:11px;color:#9ca3af;background:none;border:none;cursor:pointer;">⟳ 초기화</button>
     </div>
+
     <span class="field-label">유축량</span>
     <div style="display:flex;gap:8px;align-items:flex-end;margin-bottom:12px;">
       <div style="flex:1;">
@@ -2814,6 +2788,7 @@ body.dark #widget-diaper-count, body.dark #widget-pump-total { color: #f0ead8 !i
     </div>
   </div>
 </div>
+
 
 <!-- ═══════════ 프로필 수정 모달 ═══════════ -->
 <div class="modal-bg" id="modal-profile-edit">
@@ -3843,6 +3818,8 @@ function openModal(type) {
   if (type === 'sleep') { document.getElementById('sleep-start').value = now; document.getElementById('sleep-end').value = now; selOpt('sleep-t', 'start'); }
   if (type === 'diaper') { document.getElementById('diaper-time').value = now; }
   if (type === 'pump') {
+    // 타이머 초기화
+    try { pumpSideReset(); } catch(e) {}
     // 왼쪽/오른쪽 초기화 + 현재시간 설정
     const lEl = document.getElementById('pump-L-ml');
     const rEl = document.getElementById('pump-R-ml');
@@ -3875,6 +3852,13 @@ function saveFeed() {
   if (modal) modal.classList.remove('open');
   try {
     const m = selOpts['feed-t'] || 'breast';
+    // 유축 수유 처리
+    if (m === 'pump') {
+      const pumpMl = parseInt(document.getElementById('feed-pump-ml')?.value||'0')||0;
+      const sub = pumpMl ? '유축 수유 '+pumpMl+'ml' : '유축 수유';
+      addRecord({ type:'feed', cat:'feed', icon:'🤱', title:'수유', sub, feedType:'pump', pumpMl, time:document.getElementById('feed-time')?.value||nowLocal() });
+      return;
+    }
     const min = document.getElementById('feed-min')?.value || '';
     const mlEl = document.getElementById('feed-ml');
     const ml = (mlEl && !mlEl.disabled && mlEl.value) ? mlEl.value : '';
@@ -5603,7 +5587,7 @@ document.addEventListener('visibilitychange', async () => {
 const URL_ACTIONS = {
   'pump_start':   () => startSession('pump'),
   'pump_end':     () => endSession('pump'),
-  'feed_start':   () => { startSession('feed'); setTimeout(()=>{ try{openFeedTimerModal();}catch(e){} },50); },
+  'feed_start':   () => startSession('feed'),
   'feed_end':     () => endSession('feed'),
   'sleep_start':  () => startSession('sleep'),
   'sleep_end':    () => endSession('sleep'),
@@ -8133,10 +8117,7 @@ function startSession(type) {
     speak('유축 시작을 기록했어요 🤱');
   } else if (type === 'feed') {
     if (feedingStart) {
-      // 이미 수유 중 → 타이머 모달 다시 열기
-      speak('수유 중이에요.');
-      try { openFeedTimerModal(); } catch(e) {}
-      return;
+      speak('이미 수유 중이에요.'); return;
     }
     feedingStart = now;
     localStorage.setItem('baby_feeding', now.toISOString());
@@ -8176,28 +8157,77 @@ let _pumpTimerMs = 0;      // 누적 ms (화면 꺼져도 유지)
 let _pumpTimerStart = null;  // 시작 시각 (Date.now())
 let _pumpTimerRunning = false;
 
-function pumpTimerToggle() {
-  const btn = document.getElementById('pump-timer-btn');
-  if (_pumpTimerRunning) {
-    // 정지 - 경과 시간 누적
-    _pumpTimerMs += Date.now() - _pumpTimerStart;
-    _pumpTimerStart = null;
-    _pumpTimerRunning = false;
-    clearInterval(_pumpTimerInterval);
-    _pumpTimerInterval = null;
-    if (btn) { btn.textContent = '재개'; btn.style.background = '#7c3aaf'; }
+// ── 유축 좌/우 타이머 ──
+let _pumpSL=0, _pumpSR=0, _pumpSLStart=null, _pumpSRStart=null;
+let _pumpSInterval=null, _pumpSActive=null;
+
+function pumpSideToggle(side) {
+  const isL=side==='left';
+  const running=isL?_pumpSLStart:_pumpSRStart;
+  const other=isL?'right':'left';
+  if(running) {
+    const el=Date.now()-(isL?_pumpSLStart:_pumpSRStart);
+    if(isL){_pumpSL+=el;_pumpSLStart=null;}else{_pumpSR+=el;_pumpSRStart=null;}
+    _pumpSActive=null;
+    pumpSideCard('left',false); pumpSideCard('right',false);
+    clearInterval(_pumpSInterval); _pumpSInterval=null;
+    pumpSideTick();
     timerReleaseWakeLock();
   } else {
-    // 시작/재개 - 시작 시각 기록
-    _pumpTimerStart = Date.now();
-    _pumpTimerRunning = true;
-    if (btn) { btn.textContent = '정지'; btn.style.background = '#dc2626'; }
-    _pumpTimerInterval = setInterval(_pumpTimerTick, 20);
-    _pumpTimerTick(); // 즉시 한 번 업데이트
-    // 화면 유지 자동 활성화
+    if(_pumpSActive&&_pumpSActive!==side) pumpSideToggle(_pumpSActive);
+    if(isL) _pumpSLStart=Date.now(); else _pumpSRStart=Date.now();
+    _pumpSActive=side;
+    pumpSideCard(side,true); pumpSideCard(other,false);
+    if(!_pumpSInterval) _pumpSInterval=setInterval(pumpSideTick,20);
     timerRequestWakeLock();
   }
 }
+
+function pumpSideCard(side,active) {
+  const card=document.getElementById('pump-'+side+'-card');
+  const btn=document.getElementById('pump-'+side+'-btn');
+  const disp=document.getElementById('pump-'+side+'-disp');
+  const running=side==='left'?!!_pumpSLStart:!!_pumpSRStart;
+  if(card){
+    card.style.background=running?'#faf0ff':'#fff';
+    card.style.borderColor=running?'#7c3aaf':'#e5e7eb';
+    card.style.boxShadow=active?'0 0 0 3px #e9d5ff66':'';
+  }
+  if(disp) disp.style.color=running?'#7c3aaf':'#9ca3af';
+  if(btn){
+    btn.textContent=running?'정지':'시작';
+    btn.style.background=running?'#7c3aaf':'#e5e7eb';
+    btn.style.color=running?'#fff':'#6b7280';
+  }
+}
+
+function pumpSideTick() {
+  const fmt=ms=>{
+    const ts=Math.floor(ms/1000),mm=Math.floor(ts/60),ss=ts%60,cs=Math.floor((ms%1000)/10);
+    return String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0')+':'+String(cs).padStart(2,'0');
+  };
+  const nL=_pumpSLStart?_pumpSL+(Date.now()-_pumpSLStart):_pumpSL;
+  const nR=_pumpSRStart?_pumpSR+(Date.now()-_pumpSRStart):_pumpSR;
+  const dL=document.getElementById('pump-left-disp');
+  const dR=document.getElementById('pump-right-disp');
+  if(dL) dL.textContent=fmt(nL);
+  if(dR) dR.textContent=fmt(nR);
+  if(!_pumpSLStart&&!_pumpSRStart){clearInterval(_pumpSInterval);_pumpSInterval=null;}
+}
+
+function pumpSideReset() {
+  clearInterval(_pumpSInterval); _pumpSInterval=null;
+  _pumpSL=0; _pumpSR=0; _pumpSLStart=null; _pumpSRStart=null; _pumpSActive=null;
+  ['left','right'].forEach(s=>{
+    pumpSideCard(s,false);
+    const d=document.getElementById('pump-'+s+'-disp');
+    if(d) d.textContent='00:00:00';
+  });
+}
+
+// 기존 pumpTimerToggle은 호환성 유지용으로 남김
+function pumpTimerToggle() { pumpSideToggle(_pumpSActive==='right'?'right':'left'); }
+
 
 function _pumpTimerTick() {
   const elapsed = _pumpTimerMs + (_pumpTimerStart ? Date.now() - _pumpTimerStart : 0);
@@ -8413,15 +8443,25 @@ function feSel(t) {
 let _fmtL=0, _fmtR=0, _fmtLStart=null, _fmtRStart=null;
 let _fmtInterval=null, _fmtActive=null;
 
-function feedShowTimer() {
-  const el=document.getElementById('feed-modal-timer');
-  if(el) el.style.display='';
+function feedShowTimer() {}  // 레거시 호환
+function feedHideTimer() {}  // 레거시 호환
+function feedTypeChange(type) {
+  const pumpWrap=document.getElementById('feed-pump-wrap');
+  const sideWrap=document.getElementById('fe-side-wrap');
+  const mlWrap=document.getElementById('fe-ml-wrap');
+  const timerWrap=document.getElementById('feed-modal-timer');
+  if(timerWrap) timerWrap.style.display='none';
+  if(pumpWrap) pumpWrap.style.display=type==='pump'?'':'none';
+  if(sideWrap) sideWrap.style.display=type==='pump'?'none':(type==='bottle'?'none':'');
+  if(mlWrap) {
+    const mlEl=document.getElementById('fe-ml');
+    const mlLabel=document.getElementById('fe-ml-label');
+    const isMilk=type==='bottle'||type==='both';
+    if(mlEl){mlEl.disabled=!isMilk;mlEl.style.opacity=isMilk?'1':'0.35';mlEl.style.background=isMilk?'':'#f3f4f6';mlEl.style.cursor=isMilk?'':'not-allowed';}
+    if(mlLabel) mlLabel.style.opacity=isMilk?'1':'0.4';
+  }
 }
-function feedHideTimer() {
-  const el=document.getElementById('feed-modal-timer');
-  if(el) el.style.display='none';
-  fmtReset();
-}
+
 
 function fmtToggle(side) {
   const isL=side==='left';
@@ -8886,9 +8926,8 @@ function quickStartAction(type) {
         openFeedEndModal();
       }
     } else {
-      // 시작 - 타이머 모달 열기
+      // 시작
       startSession('feed');
-      openFeedTimerModal();
     }
   } else if (type === 'sleep') {
     if (sleepingStart) {
@@ -9101,45 +9140,54 @@ function updateTodayWidget() {
     const m = Math.floor(diff/60000);
     if (m < 1) return '방금';
     if (m < 60) return m+'분 전';
-    return Math.floor(m/60)+'시간 '+( m%60 ? (m%60)+'분 ' : '') + '전';
+    return Math.floor(m/60)+'시간 '+(m%60?m%60+'분 ':'')+'전';
   };
-
-  // 수유
-  const feedRecs = todayRecs.filter(r => r.cat==='feed' && r.title!=='수유 시작');
-  const lastFeed = feedRecs[0];
   const el = id => document.getElementById(id);
-  if(el('widget-feed-count')) el('widget-feed-count').textContent = feedRecs.length+'회';
-  if(el('widget-feed-last')) el('widget-feed-last').textContent = lastFeed ? fmt(lastFeed.time) : '기록 없음';
 
-  // 수면 - 오늘 총 수면시간
+  // 수유 - 모유시간 / 유축ml / 분유ml 분리
+  const feedRecs = todayRecs.filter(r => r.cat==='feed' && r.title!=='수유 시작');
+  const breastMin = feedRecs.filter(r=>r.feedType==='breast'||r.feedType==='both')
+    .reduce((a,r)=>a+(parseInt(r.Lmin||0)+parseInt(r.Rmin||0)||parseInt(r._durMin||0)||0),0);
+  const pumpMlTotal = feedRecs.filter(r=>r.feedType==='pump').reduce((a,r)=>a+(r.pumpMl||0),0);
+  const bottleMlTotal = feedRecs.filter(r=>r.feedType==='bottle'||r.feedType==='both')
+    .reduce((a,r)=>a+(parseInt(r.ml||0)),0);
+  const lastFeed = feedRecs[0];
+
+  if(el('widget-feed-count')) {
+    let txt = feedRecs.length+'회';
+    const parts=[];
+    if(breastMin>0) parts.push('모유 '+breastMin+'분');
+    if(pumpMlTotal>0) parts.push('유축 '+pumpMlTotal+'ml');
+    if(bottleMlTotal>0) parts.push('분유 '+bottleMlTotal+'ml');
+    el('widget-feed-count').textContent = parts.length ? feedRecs.length+'회' : feedRecs.length+'회';
+    if(el('widget-feed-last')) el('widget-feed-last').textContent = parts.length ? parts.join(' · ') : (lastFeed ? fmt(lastFeed.time) : '기록 없음');
+  }
+
+  // 수면 - h+m 모두 표시
   const sleepRecs = todayRecs.filter(r => r.cat==='sleep' && r._startTime);
-  let totalSleepMin = 0;
-  sleepRecs.forEach(r => {
-    const ms = new Date(r.time)-new Date(r._startTime);
-    if (ms>0) totalSleepMin += Math.floor(ms/60000);
+  let totalSleepMin=0;
+  sleepRecs.forEach(r=>{
+    const ms=new Date(r.time)-new Date(r._startTime);
+    if(ms>0) totalSleepMin+=Math.floor(ms/60000);
   });
-  const sleepH = Math.floor(totalSleepMin/60);
-  const sleepM = totalSleepMin%60;
+  const sleepH=Math.floor(totalSleepMin/60), sleepM=totalSleepMin%60;
   if(el('widget-sleep-time')) el('widget-sleep-time').textContent =
-    sleepH>0 ? sleepH+'h'+(sleepM?sleepM+'m':'') : (sleepM?sleepM+'m':'0h');
-  const lastSleep = todayRecs.filter(r=>r.cat==='sleep')[0];
-  if(el('widget-sleep-last')) el('widget-sleep-last').textContent = lastSleep ? fmt(lastSleep.time) : '기록 없음';
+    totalSleepMin===0 ? '0분' : (sleepH>0 ? sleepH+'h '+sleepM+'m' : sleepM+'분');
+  const lastSleep=todayRecs.filter(r=>r.cat==='sleep')[0];
+  if(el('widget-sleep-last')) el('widget-sleep-last').textContent=lastSleep?fmt(lastSleep.time):'기록 없음';
 
   // 기저귀
-  const diaperRecs = todayRecs.filter(r => r.cat==='diaper');
-  const lastDiaper = diaperRecs[0];
-  if(el('widget-diaper-count')) el('widget-diaper-count').textContent = diaperRecs.length+'회';
-  if(el('widget-diaper-last')) el('widget-diaper-last').textContent = lastDiaper ? fmt(lastDiaper.time) : '기록 없음';
+  const diaperRecs=todayRecs.filter(r=>r.cat==='diaper');
+  if(el('widget-diaper-count')) el('widget-diaper-count').textContent=diaperRecs.length+'회';
+  if(el('widget-diaper-last')) el('widget-diaper-last').textContent=diaperRecs[0]?fmt(diaperRecs[0].time):'기록 없음';
 
   // 유축
-  const pumpRecs = todayRecs.filter(r => r.cat==='pump');
-  const totalPump = pumpRecs.reduce((a,r) => a+(r.total||0), 0);
-  const lastPump = pumpRecs[0];
-  if(el('widget-pump-total')) el('widget-pump-total').textContent = totalPump ? totalPump+'ml' : '0ml';
-  if(el('widget-pump-last')) el('widget-pump-last').textContent = lastPump ? fmt(lastPump.time) : '기록 없음';
-
-  // 다크모드 위젯 카드 텍스트 색 (CSS로 처리)
+  const pumpRecs=todayRecs.filter(r=>r.cat==='pump');
+  const totalPump=pumpRecs.reduce((a,r)=>a+(r.total||r.Lml||0)+(r.Rml||0),0);
+  if(el('widget-pump-total')) el('widget-pump-total').textContent=totalPump?totalPump+'ml':'0ml';
+  if(el('widget-pump-last')) el('widget-pump-last').textContent=pumpRecs[0]?fmt(pumpRecs[0].time):'기록 없음';
 }
+
 
 function updateStatus() {
   const feed = records.find(r => r.cat === 'feed' && (r.title === '수유 완료' || r.title === '수유'));
