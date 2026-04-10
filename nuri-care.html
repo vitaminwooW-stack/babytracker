@@ -1248,7 +1248,7 @@ body.dark #dad-sleep-detail p { color: #a89880 !important; }
 
 
 /* ══ 라이트모드 엄마케어 카드 보호 ══ */
-body:not(.dark) .mom-grid-card { color: inherit; }
+body:not(.dark) .mom-grid-card { color: #1a1a1a; }
 
 /* ══ 다크모드 엄마케어 warn 카드 ══ */
 body.dark .mom-grid-card.warn { background: linear-gradient(135deg,#2a0f10,#3a1515) !important; }
@@ -1304,6 +1304,25 @@ body.dark #community-search-box { background: #2a2520 !important; border-color: 
 body.dark .community-search-title { color: #f0ead8 !important; }
 body.dark .community-chip { background: #1a2535 !important; color: #60a5fa !important; border-color: #1e3a5a !important; }
 
+
+/* ══ 라이트모드 카드 배경 강제 보호 ══ */
+body:not(.dark) .mom-grid-card[style*="#2a"],
+body:not(.dark) .mom-grid-card[style*="#1a"],
+body:not(.dark) .mom-grid-card[style*="#0a"],
+body:not(.dark) .mom-grid-card[style*="#0f"] { background: #fff0f6 !important; }
+body:not(.dark) .dad-event-card { background: #ffffff !important; border-color: #e5e7eb !important; }
+body:not(.dark) .dad-event-item { background: transparent !important; color: #1a1a1a !important; }
+body:not(.dark) .dad-check-card { background: #ffffff !important; border-color: #e5e7eb !important; }
+body:not(.dark) .dad-check-item { background: transparent !important; color: #1a1a1a !important; }
+body:not(.dark) .dad-check-tag { background: revert !important; color: revert !important; }
+body:not(.dark) .dad-check-tag.urgent { background: #eff6ff !important; color: #c0410f !important; }
+body:not(.dark) .dad-check-tag.soon   { background: #fff7ed !important; color: #8a6d00 !important; }
+body:not(.dark) .dad-check-tag.prep   { background: #f0fdf4 !important; color: #1d7a3a !important; }
+body:not(.dark) .dad-check-tag.done-tag { background: #dcfce7 !important; color: #16a34a !important; }
+body:not(.dark) .dad-event-tag { background: #fce7f3 !important; color: #be185d !important; }
+body:not(.dark) .dad-check-title { color: #1a1a1a !important; }
+body:not(.dark) .dad-check-desc  { color: #555555 !important; }
+body:not(.dark) .dad-section-title { color: #7a5600 !important; }
 </style>
 </head>
 <body style="visibility:hidden;">
@@ -4745,7 +4764,7 @@ function renderDadTabChecklist() {
         '<div style="font-size:16px;font-weight:700;color:' + (done?'#f472b6':(isDark?'#f0ead8':'#1a1a1a')) + ';line-height:1.5;letter-spacing:-0.02em;">' + item.title + '</div>' +
         (done ? '<div style="font-size:13px;color:' + (isDark?'#f472b6':'#be185d') + ';font-weight:600;margin-top:6px;">' + praise + '</div>'
                : '<div style="font-size:13px;color:' + descClr + ';margin-top:6px;line-height:1.7;word-break:keep-all;">' + item.desc.replace(/\n/g,'<br>') + '</div>') +
-        '<span style="font-size:11px;background:' + (done?'#fce7f3':'#fce7f3') + ';color:#be185d;border-radius:10px;padding:2px 8px;font-weight:700;display:inline-block;margin-top:6px;">' + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
+        '<span style="font-size:11px;background:' + (isDark?(done?'#3d1a2a':'#2a1a28'):(done?'#fce7f3':'#fce7f3')) + ';color:' + (isDark?(done?'#f472b6':'#f9a8d4'):'#be185d') + ';border-radius:10px;padding:2px 8px;font-weight:700;display:inline-block;margin-top:6px;">' + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
         '</div></div>';
     }).join('');
   }
