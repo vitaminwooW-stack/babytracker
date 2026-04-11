@@ -8174,100 +8174,74 @@ function showAssistantGuideModal() {
   const old = document.getElementById('assistant-guide-modal');
   if (old) old.remove();
 
-  const appUrl = window.location.href.split('?')[0];
-  const shortcuts = [
-    { label: '🍼 수유 시작', url: appUrl + '?action=feed',   phrase: '수유 시작' },
-    { label: '😴 수면 시작', url: appUrl + '?action=sleep',  phrase: '수면 시작' },
-    { label: '🌿 기저귀',   url: appUrl + '?action=diaper', phrase: '기저귀 갈았어' },
-    { label: '🤱 유축 시작', url: appUrl + '?action=pump',   phrase: '유축 시작' },
-  ];
-
-  const stepsHtml = `
-    <div style="background:#f0f7ff;border-radius:14px;padding:16px;margin-bottom:16px;">
-      <div style="font-size:13px;font-weight:800;color:#1a73e8;margin-bottom:14px;">📋 설정 순서 (6단계)</div>
-
-      <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;">
-        <div style="background:#1a73e8;color:#fff;border-radius:50%;min-width:22px;height:22px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;">1</div>
-        <div style="font-size:13px;color:#1a1a1a;line-height:1.6;">
-          아래 <strong>URL 복사</strong> 버튼을 눌러 링크를 복사해요
-        </div>
-      </div>
-
-      <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;">
-        <div style="background:#1a73e8;color:#fff;border-radius:50%;min-width:22px;height:22px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;">2</div>
-        <div style="font-size:13px;color:#1a1a1a;line-height:1.6;">
-          <strong>Google 앱</strong> 열기 → 우측 하단 <strong>점 3개(⋮)</strong> 탭<br>
-          → <strong>설정</strong> → <strong>Google 어시스턴트</strong>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;">
-        <div style="background:#1a73e8;color:#fff;border-radius:50%;min-width:22px;height:22px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;">3</div>
-        <div style="font-size:13px;color:#1a1a1a;line-height:1.6;">
-          <strong>루틴(Routines)</strong> 선택 → 우측 하단 <strong>+ 버튼</strong>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;">
-        <div style="background:#1a73e8;color:#fff;border-radius:50%;min-width:22px;height:22px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;">4</div>
-        <div style="font-size:13px;color:#1a1a1a;line-height:1.6;">
-          <strong>"내가 말할 때"</strong> → 음성 명령 직접 입력<br>
-          <span style="color:#1a73e8;font-size:12px;">예시: 수유 시작</span>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;">
-        <div style="background:#1a73e8;color:#fff;border-radius:50%;min-width:22px;height:22px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;">5</div>
-        <div style="font-size:13px;color:#1a1a1a;line-height:1.6;">
-          <strong>"작업 추가"</strong> → 검색창에 <strong>"website"</strong> 입력<br>
-          → <strong>"웹사이트 열기(Open website)"</strong> 선택<br>
-          <span style="background:#fff3cd;padding:2px 6px;border-radius:4px;font-size:11px;color:#856404;">⚠️ "앱/사이트 열기"가 안 보이면 검색창에 website 검색!</span>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:10px;align-items:flex-start;">
-        <div style="background:#16a34a;color:#fff;border-radius:50%;min-width:22px;height:22px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;">6</div>
-        <div style="font-size:13px;color:#1a1a1a;line-height:1.6;">
-          복사한 <strong>URL 붙여넣기</strong> → <strong>저장</strong><br>
-          <span style="color:#16a34a;font-size:12px;">✅ "Hey Google, 수유 시작" → 자동 기록!</span>
-        </div>
-      </div>
-    </div>`;
-
-  const cardsHtml = shortcuts.map(s => `
-    <div style="background:#f8f9fa;border:1px solid #e5e7eb;border-radius:12px;padding:12px 14px;margin-bottom:8px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-        <div style="font-size:14px;font-weight:700;color:#1a1a1a;">${s.label}</div>
-        <button onclick="copyAssistantUrl('${s.url}','${s.phrase}')"
-          style="padding:6px 14px;background:#1a73e8;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">
-          📋 URL 복사
-        </button>
-      </div>
-      <div style="font-size:11px;color:#6b7280;background:#fff;border-radius:6px;padding:6px 8px;border:1px solid #e5e7eb;">
-        음성: <strong style="color:#1a73e8">"Hey Google, ${s.phrase}"</strong>
-      </div>
-    </div>`).join('');
-
   const el = document.createElement('div');
   el.id = 'assistant-guide-modal';
   el.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:flex-end;';
   el.innerHTML = `
-    <div style="background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-width:480px;margin:0 auto;max-height:90vh;overflow-y:auto;">
+    <div style="background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-width:480px;margin:0 auto;max-height:88vh;overflow-y:auto;">
       <div style="width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:0 auto 20px;"></div>
-      <div style="font-size:20px;font-weight:800;text-align:center;margin-bottom:4px;color:#1a1a1a;">🤖 Google 루틴 설정</div>
+      <div style="font-size:20px;font-weight:800;text-align:center;margin-bottom:4px;">🤖 Android 음성 기록</div>
       <div style="font-size:12px;color:#6b7280;text-align:center;margin-bottom:20px;">
-        "Hey Google, 수유 시작" 한마디로 자동 기록
+        Android에서 빠르게 기록하는 방법
       </div>
-      ${stepsHtml}
-      <div style="font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:8px;">명령어별 URL 복사</div>
-      ${cardsHtml}
-      <button onclick="openGoogleAssistantApp()"
-        style="width:100%;padding:14px;background:#4285f4;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;margin-bottom:8px;">
-        🤖 Google 앱 열기
-      </button>
+
+      <!-- 방법 1: 앱 내 음성 (바로 됨) -->
+      <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:14px;padding:16px;margin-bottom:12px;">
+        <div style="font-size:13px;font-weight:800;color:#16a34a;margin-bottom:8px;">
+          ✅ 방법 1 · 앱 내 음성 (지금 바로 됨)
+        </div>
+        <div style="font-size:13px;color:#1a1a1a;line-height:1.8;">
+          1. 앱 홈화면에서 <strong>마이크 버튼</strong> 탭<br>
+          2. "수유 시작" / "기저귀 갈았어" 말하기<br>
+          3. 자동으로 기록됨!
+        </div>
+        <div style="background:#dcfce7;border-radius:8px;padding:8px 10px;margin-top:10px;font-size:12px;color:#15803d;">
+          💡 홈화면에 앱 추가해두면 아이콘 탭 → 바로 음성 시작
+        </div>
+      </div>
+
+      <!-- 방법 2: 빅스비 (갤럭시) -->
+      <div style="background:#fff7ed;border:1.5px solid #fdba74;border-radius:14px;padding:16px;margin-bottom:12px;">
+        <div style="font-size:13px;font-weight:800;color:#c2410c;margin-bottom:8px;">
+          ⭐ 방법 2 · 빅스비 루틴 (갤럭시 전용)
+        </div>
+        <div style="font-size:13px;color:#1a1a1a;line-height:1.8;">
+          1. <strong>빅스비 앱</strong> 열기<br>
+          2. 루틴 → + 추가 → 음성 명령<br>
+          3. <strong>"앱 열기"</strong> 액션 선택 → 누리케어 선택<br>
+          4. "빅스비, 수유 시작" 으로 바로 실행!
+        </div>
+      </div>
+
+      <!-- 방법 3: Siri (iPhone) -->
+      <div style="background:#f5f3ff;border:1.5px solid #c4b5fd;border-radius:14px;padding:16px;margin-bottom:12px;">
+        <div style="font-size:13px;font-weight:800;color:#6d28d9;margin-bottom:8px;">
+          🍎 방법 3 · Siri 단축어 (iPhone 전용)
+        </div>
+        <div style="font-size:13px;color:#1a1a1a;line-height:1.8;">
+          1. iPhone <strong>단축어 앱</strong> 열기<br>
+          2. + 새 단축어 → <strong>"URL 열기"</strong> 액션 추가<br>
+          3. URL 입력 후 Siri에 추가<br>
+          4. "Siri야, 수유 시작!" 으로 실행
+        </div>
+        <button onclick="showSiriGuideModal()"
+          style="width:100%;margin-top:10px;padding:10px;background:#6d28d9;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">
+          🍎 Siri 설정 자세히 보기
+        </button>
+      </div>
+
+      <!-- Google Assistant 안내 -->
+      <div style="background:#f1f5f9;border-radius:12px;padding:12px 14px;margin-bottom:16px;">
+        <div style="font-size:12px;color:#64748b;line-height:1.7;">
+          ℹ️ Google 어시스턴트 루틴은 PWA 앱을 직접 열기가<br>
+          Android 기기에서 불안정하게 작동해요.<br>
+          위 방법 1~2를 추천드려요.
+        </div>
+      </div>
+
       <button onclick="document.getElementById('assistant-guide-modal').remove()"
-        style="width:100%;padding:10px;background:none;color:#9ca3af;border:none;font-size:13px;cursor:pointer;">
-        닫기
+        style="width:100%;padding:14px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;">
+        확인
       </button>
     </div>`;
   document.body.appendChild(el);
