@@ -6335,8 +6335,8 @@ function renderGrowthChart() {
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
   const dark = document.body.classList.contains('dark');
-  const gridColor = dark ? '#3d3628' : '#f0e8d0';
-  const textColor = dark ? '#a89880' : '#6b7280';
+  const gridColor = dark ? '#4a3a28' : '#e5d8b8';
+  const textColor = dark ? '#d4c4a8' : '#374151';
   const bgColor   = dark ? '#1a1612' : '#fff';
   ctx.clearRect(0,0,W,H);
   ctx.fillStyle = bgColor;
@@ -6463,7 +6463,7 @@ function renderGrowthChart() {
   });
 
   // x축 날짜
-  ctx.fillStyle = textColor; ctx.font='9px sans-serif'; ctx.textAlign='center';
+  ctx.fillStyle = dark?'#c8b898':'#374151'; ctx.font='bold 11px sans-serif'; ctx.textAlign='center';
   dataRecs.forEach(r => {
     const x = xOf(new Date(r.date).getTime());
     const mo = r.date.slice(5,7)+'/'+ r.date.slice(8,10);
