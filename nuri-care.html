@@ -2090,6 +2090,15 @@ body.dark #growth-latest-text { color: #4ade80 !important; }
                   style="width:100%;box-sizing:border-box;border-radius:10px;border:1.5px solid #f0d060;padding:9px 12px;font-size:14px;">
               </div>
             </div>
+            <div style="display:flex;gap:8px;margin-bottom:12px;">
+              <div style="flex:1;">
+                <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">⭕ 머리둘레 (cm)</div>
+                <input type="number" id="growth-head" aria-label="머리둘레 cm"
+                  placeholder="예: 35.0" step="0.1" min="0" max="70"
+                  style="width:100%;box-sizing:border-box;border-radius:10px;border:1.5px solid #f0d060;padding:9px 12px;font-size:14px;">
+              </div>
+              <div style="flex:1;"></div>
+            </div>
             <button onclick="addGrowthRecord()"
               style="width:100%;padding:13px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:-0.02em;">
               📝 기록 추가
@@ -2106,9 +2115,11 @@ body.dark #growth-latest-text { color: #4ade80 !important; }
           <div style="font-size:13px;font-weight:800;color:var(--text-main,#1a1a1a);margin-bottom:10px;">📊 성장 추이</div>
           <div style="display:flex;gap:6px;margin-bottom:10px;">
             <button id="growth-tab-weight" class="chart-tab active" onclick="growthSetTab('weight')"
-              style="flex:1;padding:9px 0;border-radius:10px;font-size:13px;font-weight:700;">⚖️ 몸무게</button>
+              style="flex:1;padding:9px 0;border-radius:10px;font-size:12px;font-weight:700;">⚖️ 몸무게</button>
             <button id="growth-tab-height" class="chart-tab"        onclick="growthSetTab('height')"
-              style="flex:1;padding:9px 0;border-radius:10px;font-size:13px;font-weight:700;">📏 키</button>
+              style="flex:1;padding:9px 0;border-radius:10px;font-size:12px;font-weight:700;">📏 키</button>
+            <button id="growth-tab-head"   class="chart-tab"        onclick="growthSetTab('head')"
+              style="flex:1;padding:9px 0;border-radius:10px;font-size:12px;font-weight:700;">⭕ 머리</button>
           </div>
           <div style="background:var(--card-bg,#fff);border-radius:16px;border:1px solid var(--border-color,#f0f0f0);padding:14px;margin-bottom:16px;position:relative;">
             <canvas id="growth-chart" height="220"></canvas>
@@ -2120,10 +2131,11 @@ body.dark #growth-latest-text { color: #4ade80 !important; }
           <div style="background:var(--card-bg,#fff);border-radius:16px;border:1px solid var(--border-color,#f0f0f0);overflow:hidden;margin-bottom:20px;">
             <table class="growth-table" id="growth-table" style="width:100%;border-collapse:collapse;">
               <tr style="background:linear-gradient(135deg,#fffbf0,#fff7d6);">
-                <th style="padding:10px 12px;font-size:12px;color:#7a5600;text-align:left;">날짜</th>
-                <th style="padding:10px 12px;font-size:12px;color:#7a5600;text-align:center;">⚖️ 몸무게</th>
-                <th style="padding:10px 12px;font-size:12px;color:#7a5600;text-align:center;">📏 키</th>
-                <th style="padding:10px 4px;font-size:12px;color:#7a5600;text-align:center;"></th>
+                <th style="padding:10px 8px;font-size:11px;color:#7a5600;text-align:left;">날짜</th>
+                <th style="padding:10px 6px;font-size:11px;color:#7a5600;text-align:center;">⚖️ 몸무게</th>
+                <th style="padding:10px 6px;font-size:11px;color:#7a5600;text-align:center;">📏 키</th>
+                <th style="padding:10px 6px;font-size:11px;color:#7a5600;text-align:center;">⭕ 머리</th>
+                <th style="padding:10px 4px;font-size:11px;color:#7a5600;text-align:center;"></th>
               </tr>
             </table>
           </div>
@@ -3027,10 +3039,17 @@ body.dark #growth-latest-text { color: #4ade80 !important; }
     <div class="modal-handle"></div>
     <h2>🍼 수유 완료</h2>
     <span class="field-label">수유 방법</span>
-    <div class="opt-row" style="gap:8px;margin-bottom:16px;">
-      <button class="opt-btn sel" id="fe-breast" onclick="feSel('breast')" class="u-opt-lg opt-btn">모유</button>
-      <button class="opt-btn" id="fe-bottle" onclick="feSel('bottle')" class="u-opt-lg opt-btn">분유</button>
-      <button class="opt-btn" id="fe-both" onclick="feSel('both')" class="u-opt-lg opt-btn">혼합</button>
+    <div class="opt-row" style="gap:6px;flex-wrap:wrap;margin-bottom:16px;">
+      <button class="opt-btn sel" id="fe-breast" onclick="feSel('breast')" style="flex:1;min-width:56px;font-size:13px;">모유</button>
+      <button class="opt-btn" id="fe-bottle" onclick="feSel('bottle')" style="flex:1;min-width:56px;font-size:13px;">분유</button>
+      <button class="opt-btn" id="fe-both"   onclick="feSel('both')"   style="flex:1;min-width:56px;font-size:13px;">혼합</button>
+      <button class="opt-btn" id="fe-pump"   onclick="feSel('pump')"   style="flex:1;min-width:56px;font-size:13px;">🤱유축</button>
+    </div>
+    <!-- 유축 수유: ml 입력 -->
+    <div id="fe-pump-wrap" style="display:none;background:#f5f0ff;border:1.5px solid #e9d5ff;border-radius:12px;padding:12px;margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:700;color:#7c3aaf;margin-bottom:6px;">🤱 유축한 모유 수유량 (ml)</div>
+      <input type="number" id="fe-pump-ml" placeholder="예: 80" min="0" max="500"
+        style="width:100%;box-sizing:border-box;">
     </div>
 
 
@@ -3769,15 +3788,24 @@ function renderAppHeader() {
     if (days !== null) {
       // D+N 크게 표시
       const ddayEl = document.getElementById('app-baby-dday');
-      if (ddayEl) ddayEl.textContent = `D+${days}`;
+      // 태어난 지 N일째 형태로 표시
+      if (ddayEl) {
+        const babyName = p.name ? p.name + ' ' : '';
+        ddayEl.textContent = days === 0 ? '오늘 태어났어요 🎉'
+          : `태어난 지 ${days}일째`;
+      }
       작게
       let ageText;
-      if (days === 100)     ageText = `100일 축하해요 🎂`;
-      else if (days <= 7)   ageText = `태어난 지 ${days}일 🌱`;
-      else if (days <= 14)  ageText = `쑥쑥 자라는 중 🌿`;
-      else if (days <= 30)  ageText = `우리 아기 🍀`;
-      else if (days <= 100) ageText = `함께한 ${days}일 💛`;
-      else                  ageText = `하루하루 소중해요 🌸`;
+      if (days === 0)        ageText = `세상에 온 첫날이에요 🌟`;
+      else if (days === 100) ageText = `100일 축하해요 🎂`;
+      else if (days === 200) ageText = `200일! 멋진 아기 🏆`;
+      else if (days <= 7)    ageText = `신생아 시기예요 🌱`;
+      else if (days <= 14)   ageText = `하루하루 자라고 있어요 🌿`;
+      else if (days <= 30)   ageText = `쑥쑥 성장 중이에요 🍀`;
+      else if (days <= 60)   ageText = `웃음이 예뻐지는 시기예요 ☀️`;
+      else if (days <= 100)  ageText = `곧 100일이에요 💛`;
+      else if (days <= 365)  ageText = `${Math.floor(days/30)}개월 아기예요 💕`;
+      else                   ageText = `하루하루가 선물이에요 🌸`;
       document.getElementById('app-baby-age').textContent = ageText;
     }
   }
@@ -4567,7 +4595,7 @@ function renderTimeline() {
   const allMapped = records.map((r, i) => ({ ...r, _origIdx: i }));
   const todayRecs = (_tlFilter === 'all'
     ? allMapped
-    : allMapped.filter(r => r.time && r.time.slice(0,10) === todayKST)
+    : allMapped.filter(r => r.time && r.time.slice(0,10) === todayKST)  // r.time KST 기준 오늘
   ).filter(r => r.time).sort((a, b) => b.time.localeCompare(a.time));
 
   if (!todayRecs.length) {
@@ -6170,28 +6198,40 @@ function renderMainChart() {
 
 // ── 📏 성장 기록 ──
 let growthRecords = [];
+let _growthTab = 'weight';
 
 function growthSetTab(tab) {
-  ['weight','height'].forEach(t => {
+  _growthTab = tab;
+  ['weight','height','head'].forEach(t => {
     const btn = document.getElementById('growth-tab-'+t);
     if (btn) btn.classList.toggle('active', t===tab);
   });
   renderGrowthChart();
 }
 function addGrowthRecord() {
-  const date = document.getElementById('growth-date').value;
+  const date   = document.getElementById('growth-date').value;
   const weight = parseFloat(document.getElementById('growth-weight').value);
   const height = parseFloat(document.getElementById('growth-height').value);
-  if (!date) { alert('날짜를 입력해주세요.'); return; }
-  if (!weight && !height) { alert('몸무게 또는 키를 입력해주세요.'); return; }
-  growthRecords.unshift({ date, weight: weight||null, height: height||null });
-  growthRecords.sort((a,b) => new Date(b.date)-new Date(a.date));
+  const headEl = document.getElementById('growth-head');
+  const head   = headEl ? parseFloat(headEl.value) : NaN;
+  if (!date) { showToast('날짜를 입력해주세요'); return; }
+  if (!weight && !height && !head) { showToast('몸무게, 키 또는 머리둘레를 입력해주세요'); return; }
+  growthRecords.unshift({
+    date,
+    weight: isNaN(weight) ? null : weight,
+    height: isNaN(height) ? null : height,
+    head:   isNaN(head)   ? null : head,
+  });
+  growthRecords.sort((a,b) => b.date.localeCompare(a.date));
+  localStorage.setItem('growth_records', JSON.stringify(growthRecords));
   document.getElementById('growth-weight').value = '';
   document.getElementById('growth-height').value = '';
-  saveGrowthData();
-  renderGrowthChart();
+  if (headEl) headEl.value = '';
   renderGrowthTable();
+  renderGrowthChart();
+  showToast('✅ 성장 기록 추가됐어요!');
 }
+
 
 function renderGrowthChart() {
   const canvas = document.getElementById('growth-chart');
@@ -6349,11 +6389,12 @@ function renderGrowthTable() {
 
   const rows = growthRecords.map((r, i) =>
     '<tr style="border-bottom:1px solid var(--border-color,#f5f0e0);">' +
-    '<td style="padding:10px 12px;font-size:13px;color:var(--text-main,#333);">' + r.date + '</td>' +
-    '<td style="padding:10px 12px;font-size:13px;font-weight:700;color:#7a5600;text-align:center;">' + (r.weight ? r.weight+'kg' : '-') + '</td>' +
-    '<td style="padding:10px 12px;font-size:13px;font-weight:700;color:#1d4ed8;text-align:center;">' + (r.height ? r.height+'cm' : '-') + '</td>' +
-    '<td style="padding:10px 4px;text-align:center;">' +
-    '<button onclick="deleteGrowthRecord(' + i + ')" aria-label="삭제" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:16px;">🗑️</button></td></tr>'
+    '<td style="padding:9px 8px;font-size:12px;color:var(--text-main,#333);">' + r.date + '</td>' +
+    '<td style="padding:9px 6px;font-size:12px;font-weight:700;color:#7a5600;text-align:center;">' + (r.weight ? r.weight+'kg' : '-') + '</td>' +
+    '<td style="padding:9px 6px;font-size:12px;font-weight:700;color:#1d4ed8;text-align:center;">' + (r.height ? r.height+'cm' : '-') + '</td>' +
+    '<td style="padding:9px 6px;font-size:12px;font-weight:700;color:#7c3aaf;text-align:center;">' + (r.head ? r.head+'cm' : '-') + '</td>' +
+    '<td style="padding:9px 4px;text-align:center;">' +
+    '<button onclick="deleteGrowthRecord(' + i + ')" aria-label="삭제" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:15px;">🗑️</button></td></tr>'
   ).join('');
 
   const header = '<tr style="background:linear-gradient(135deg,#fffbf0,#fff7d6);">' +
@@ -8587,10 +8628,13 @@ function openFeedEndModal() {
 
 function feSel(t) {
   _feType = t;
-  ['breast','bottle','both'].forEach(function(v){
+  ['breast','bottle','both','pump'].forEach(function(v){
     var btn = document.getElementById('fe-'+v);
     if(btn) btn.classList.toggle('sel', v===t);
   });
+  // 유축 수유 wrap
+  const pumpWrap = document.getElementById('fe-pump-wrap');
+  if (pumpWrap) pumpWrap.style.display = (t==='pump') ? '' : 'none';
 
   // 분유량(ml): 분유/혼합만 활성화
   const isMilk = (t === 'bottle' || t === 'both');
@@ -8887,7 +8931,8 @@ function saveFeedEnd() {
   if (modal) { modal.classList.remove('open'); modal.style.display = ''; }
   try {
     var ft = _feType || 'breast';
-    var ftLabel = {breast:'모유',bottle:'분유',both:'혼합'}[ft] || '모유';
+    var ftLabel = {breast:'모유',bottle:'분유',both:'혼합',pump:'유축수유'}[ft] || '모유';
+    var pumpMl = ft==='pump' ? (parseInt(document.getElementById('fe-pump-ml')?.value||'0')||0) : 0;
 
     var feMinEl = document.getElementById('fe-min');
     var feTimeEl = document.getElementById('fe-time');
@@ -8908,25 +8953,34 @@ function saveFeedEnd() {
 
     // sub
     var sub = ftLabel;
-    if (durStr) sub += ' · ' + durStr;
-    if (ml) sub += ' · ' + ml + 'ml';
+    if (ft==='pump') {
+      if (pumpMl) sub += ' · ' + pumpMl + 'ml';
+    } else {
+      if (durStr) sub += ' · ' + durStr;
+      if (ml) sub += ' · ' + ml + 'ml';
+    }
 
     // feedingStart 클리어
     feedingStart = null;
     if (typeof feedingType !== 'undefined') feedingType = 'breast';
     localStorage.setItem('baby_feeding', '');
 
-    // ★ 오늘의 '수유 시작' 기록 전부 삭제 (addRecord 직전)
+    // ★ 수유 시작 기록 삭제 (오늘+어제 범위 - 자정 넘어가는 경우 대비)
     var todayKST = nowLocal().slice(0,10);
+    var yestDate = new Date(Date.now() + 9*3600*1000 - 86400*1000);
+    var yestKST  = yestDate.toISOString().slice(0,10);
     for (var ri = records.length-1; ri >= 0; ri--) {
       var rec = records[ri];
-      if (rec.cat==='feed' && rec.title==='수유 시작' && String(rec.time||'').slice(0,10) === todayKST) {
+      var recDay = String(rec.time||'').slice(0,10);
+      if (rec.cat==='feed' && rec.title==='수유 시작' && (recDay === todayKST || recDay === yestKST)) {
         records.splice(ri, 1);
       }
     }
 
+    const recIcon = ft==='pump' ? '🤱' : '🍼';
     addRecord({
-      type:'feed', time:recTime, title:'수유', sub:sub, icon:'🍼', cat:'feed',
+      type:'feed', time:recTime, title:'수유', sub:sub, icon:recIcon, cat:'feed',
+      feedType:ft, pumpMl:pumpMl||undefined,
       _startTime:startStr, _durMin:dur||undefined, feedType:ft, ml:ml||undefined
     });
 
@@ -9320,8 +9374,14 @@ function setVoiceBtn(active) { setVoiceBtnState(active); }
 
 // updateStatus에 세션 상태 포함
 function updateTodayWidget() {
-  const todayKST = new Date(Date.now()+9*3600*1000).toISOString().slice(0,10);
-  const todayRecs = records.filter(r=>r.time&&r.time.slice(0,10)===todayKST);
+  const nowMs = Date.now() + 9*3600*1000;
+  const todayKST = new Date(nowMs).toISOString().slice(0,10);
+  // 자정 넘어가는 기록 포함: r.time이 오늘 또는 _startTime이 어제인데 r.time이 오늘인 것
+  const todayRecs = records.filter(r => {
+    if (!r.time) return false;
+    const rDay = r.time.slice(0,10);
+    return rDay === todayKST;
+  });
   const fmt=d=>{
     if(!d) return '기록 없음';
     const diff=Date.now()-new Date(d).getTime(), m=Math.floor(diff/60000);
