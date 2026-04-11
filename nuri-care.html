@@ -2471,27 +2471,37 @@ body.dark .header-date { color: #c8a870; }
           <!-- 음성 단축키 -->
           <div class="feature-section-title">⚡ 음성 단축키 · 홈화면 추가</div>
           <div class="chart-wrap u-p1416">
-            <div style="font-size:13px;color:var(--text-sub,#555);margin-bottom:12px;line-height:1.7;">
-              홈화면에서 아이콘 탭 → <strong>음성 인식 즉시 시작</strong><br>
-              Siri / Google에 등록 → <strong>앱 없이 말 한마디로 기록</strong>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
-              <button onclick="obAddToHome()" style="padding:12px 8px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;line-height:1.5;">
-                📱 홈화면<br>추가하기
-              </button>
-              <button onclick="showSiriGuideModal()" style="padding:12px 8px;background:#000;color:#fff;border:none;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;line-height:1.5;">
-                🍎 Siri<br>단축어 설정
-              </button>
-              <button onclick="showAssistantGuideModal()" style="padding:12px 8px;background:#4285f4;color:#fff;border:none;border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;line-height:1.5;">
-                🤖 Google<br>Assistant 설정
-              </button>
-              <button onclick="openShortcutModal()" style="padding:12px 8px;background:var(--card-bg,#fff);color:var(--text-main,#1a1a1a);border:1.5px solid var(--border-color,#e0e0e0);border-radius:12px;font-size:12px;font-weight:700;cursor:pointer;line-height:1.5;">
-                🎙️ 앱 내<br>음성 설정
+            <!-- STEP 1: 앱 설치 안내 -->
+            <div style="background:linear-gradient(135deg,#fff7ed,#ffedd5);border-radius:12px;padding:12px 14px;margin-bottom:12px;border-left:4px solid #f97316;">
+              <div style="font-size:12px;font-weight:800;color:#c2410c;margin-bottom:4px;">📲 STEP 1 · 앱 설치 (필수)</div>
+              <div style="font-size:12px;color:#7a5600;line-height:1.7;">
+                앱스토어(iOS) 또는 플레이스토어(Android)에서<br>
+                <strong>누리케어</strong> 검색 → 설치 → 홈화면에 추가
+              </div>
+              <button onclick="obAddToHome()" style="margin-top:8px;width:100%;padding:10px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">
+                📱 홈화면에 추가하기
               </button>
             </div>
-            <div style="font-size:11px;color:var(--text-sub,#9ca3af);line-height:1.6;text-align:center;">
-              설정 후: "Hey Siri, 수유 시작" / "Hey Google, 기저귀 갈았어"
+            <!-- STEP 2: 음성 단축키 -->
+            <div style="background:var(--card-bg,#fff);border:1.5px solid var(--border-color,#e5e7eb);border-radius:12px;padding:12px 14px;margin-bottom:12px;">
+              <div style="font-size:12px;font-weight:800;color:#1a1a1a;margin-bottom:8px;">🎙️ STEP 2 · 음성 단축키 등록 <span style="font-size:10px;color:#9ca3af;font-weight:400;">(선택)</span></div>
+              <div style="font-size:12px;color:var(--text-sub,#555);margin-bottom:10px;line-height:1.6;">
+                등록하면 <strong>앱 없이도 말 한마디</strong>로 기록돼요<br>
+                <span style="color:#9ca3af;">"Hey Siri, 수유 시작" / "Hey Google, 기저귀 갈았어"</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <button onclick="showSiriGuideModal()" style="padding:12px 8px;background:#000;color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;line-height:1.5;">
+                  🍎 Siri<br><span style="font-size:10px;font-weight:400;">iPhone 사용자</span>
+                </button>
+                <button onclick="showAssistantGuideModal()" style="padding:12px 8px;background:#4285f4;color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;line-height:1.5;">
+                  🤖 Google<br><span style="font-size:10px;font-weight:400;">Android 사용자</span>
+                </button>
+              </div>
             </div>
+            <!-- 앱 내 음성 -->
+            <button onclick="openShortcutModal()" style="width:100%;padding:10px 14px;background:var(--card-bg,#fff);color:var(--text-main,#1a1a1a);border:1.5px solid var(--border-color,#e0e0e0);border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;text-align:left;">
+              🎙️ 앱 내 음성 명령어 확인하기 →
+            </button>
           </div>
 
           <!-- 화면 설정 -->
@@ -7647,6 +7657,8 @@ async function executeDelete() {
     try { renderGrowthTable(); } catch(e) {}
     try { renderGrowthChart(); } catch(e) {}
     try { renderAppHeader(); } catch(e) {}
+  // 앱 완전 재시작 기준: localStorage의 last_page 제거
+  try { localStorage.removeItem('last_page'); } catch(e) {}
     try { updateStatus(); } catch(e) {}
     try { updateQuickBtns(); } catch(e) {}
     try { renderPatternClock(); } catch(e) {}
@@ -7803,8 +7815,7 @@ function updatePageLabel(n) {
 
 function goToPage(n) {
   currentPage = Math.max(0, Math.min(10, n));
-  // 마지막 페이지 저장 (새로고침 복구용)
-  try { localStorage.setItem('last_page', String(currentPage)); } catch(e) {}
+  // 새로고침 복구용 저장 (앱 완전 종료 시 sessionStorage 자동 소멸)
   try { sessionStorage.setItem('nuri_last_page', String(currentPage)); } catch(e) {}
   if (n===3) try { renderPatternClock(); } catch(e) {}
   if (n===4) try { renderScoreCard(); renderPatternAnalysis(); updateChart(); } catch(e) {}
@@ -7821,8 +7832,7 @@ function goToPage(n) {
     if (qn) qn.classList.toggle('active', i === currentPage);
   }
   updatePageLabel(currentPage);
-  // 새로고침 시 복원을 위해 페이지 저장
-  try { sessionStorage.setItem('nuri_last_page', String(currentPage)); } catch(e) {}
+  // 페이지 저장 없음 → 재실행 시 항상 메인(2)
   if (currentPage === 3) { try { updateTodayWidget(); } catch(e) {} }
   if (currentPage === 4) setTimeout(() => { renderMainChart(); renderPatternAnalysis(); }, 100);
   if (currentPage === 5) setTimeout(() => { renderGrowthChart(); renderGrowthTable(); }, 100);
@@ -7992,30 +8002,50 @@ function obAddToHome() {
 
 function showHomeAddGuide() {
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const isAndroid = /Android/.test(navigator.userAgent);
-  let msg = '';
+  const el = document.getElementById('home-add-guide-modal');
+  if (el) el.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'home-add-guide-modal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+
   if (isIOS) {
-    msg = `📱 Safari에서 홈화면 추가하는 방법:
-
-1. 하단 공유 버튼 (□↑) 탭
-2. "홈 화면에 추가" 선택
-3. "추가" 탭
-
-✅ 다음부터 아이콘 탭 → 음성 자동 시작!`;
-  } else if (isAndroid) {
-    msg = `📱 Chrome에서 홈화면 추가하는 방법:
-
-1. 우상단 ⋮ 메뉴 탭
-2. "앱 설치" 또는 "홈 화면에 추가" 선택
-3. "설치" 탭
-
-✅ 다음부터 아이콘 탭 → 음성 자동 시작!`;
+    modal.innerHTML = `
+      <div style="background:#fff;border-radius:20px;padding:28px 24px;width:100%;max-width:400px;">
+        <div style="font-size:32px;text-align:center;margin-bottom:12px;">📱</div>
+        <div style="font-size:18px;font-weight:800;text-align:center;margin-bottom:6px;color:#1a1a1a;">홈화면에 추가하기</div>
+        <div style="font-size:13px;color:#6b7280;text-align:center;margin-bottom:20px;">앱스토어 설치 후 Safari에서:</div>
+        <div style="background:#f8f9fa;border-radius:14px;padding:16px;margin-bottom:16px;line-height:2.0;">
+          <div style="font-size:14px;color:#1a1a1a;">1️⃣ 하단 <strong>공유 버튼</strong> (□↑) 탭</div>
+          <div style="font-size:14px;color:#1a1a1a;">2️⃣ <strong>"홈 화면에 추가"</strong> 선택</div>
+          <div style="font-size:14px;color:#1a1a1a;">3️⃣ <strong>"추가"</strong> 탭</div>
+          <div style="font-size:13px;color:#16a34a;margin-top:8px;">✅ 이후 아이콘 탭 → 음성 인식 자동 시작!</div>
+        </div>
+        <button onclick="document.getElementById('home-add-guide-modal').remove()"
+          style="width:100%;padding:14px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;">
+          확인
+        </button>
+      </div>`;
   } else {
-    msg = `홈화면에 추가하면 음성이 자동으로 시작돼요!
-
-브라우저 메뉴 → 홈화면에 추가`;
+    modal.innerHTML = `
+      <div style="background:#fff;border-radius:20px;padding:28px 24px;width:100%;max-width:400px;">
+        <div style="font-size:32px;text-align:center;margin-bottom:12px;">📱</div>
+        <div style="font-size:18px;font-weight:800;text-align:center;margin-bottom:6px;color:#1a1a1a;">홈화면에 추가하기</div>
+        <div style="font-size:13px;color:#6b7280;text-align:center;margin-bottom:20px;">플레이스토어 설치 후 Chrome에서:</div>
+        <div style="background:#f8f9fa;border-radius:14px;padding:16px;margin-bottom:16px;line-height:2.0;">
+          <div style="font-size:14px;color:#1a1a1a;">1️⃣ 우상단 <strong>⋮ 메뉴</strong> 탭</div>
+          <div style="font-size:14px;color:#1a1a1a;">2️⃣ <strong>"앱 설치"</strong> 또는 <strong>"홈 화면에 추가"</strong></div>
+          <div style="font-size:14px;color:#1a1a1a;">3️⃣ <strong>"설치"</strong> 탭</div>
+          <div style="font-size:13px;color:#16a34a;margin-top:8px;">✅ 이후 아이콘 탭 → 음성 인식 자동 시작!</div>
+        </div>
+        <button onclick="document.getElementById('home-add-guide-modal').remove()"
+          style="width:100%;padding:14px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;">
+          확인
+        </button>
+      </div>`;
   }
-  openHomeAddModal(msg, isIOS);
+  document.body.appendChild(modal);
+  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 }
 
 function openHomeAddModal(msg, isIOS) {
@@ -8117,6 +8147,29 @@ function obSetupAssistant() {
   showAssistantGuideModal();
 }
 
+function openGoogleAssistantApp() {
+  const isAndroid = /Android/.test(navigator.userAgent);
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  if (isAndroid) {
+    // Android: Google 앱 루틴 페이지로 직접 이동
+    const opened = window.open('intent://assistant.google.com/routines#Intent;scheme=https;package=com.google.android.googlequicksearchbox;end', '_blank');
+    if (!opened) window.open('https://assistant.google.com/', '_blank');
+  } else if (isIOS) {
+    // iOS: Google 앱 열기 시도
+    const timer = setTimeout(() => {
+      window.open('https://apps.apple.com/app/google/id284815942', '_blank');
+    }, 1500);
+    window.location.href = 'googlegmail://';
+    // Google Assistant 앱 시도
+    setTimeout(() => {
+      clearTimeout(timer);
+      window.open('https://assistant.google.com/', '_blank');
+    }, 500);
+  } else {
+    window.open('https://assistant.google.com/', '_blank');
+  }
+}
+
 function showAssistantGuideModal() {
   const old = document.getElementById('assistant-guide-modal');
   if (old) old.remove();
@@ -8152,9 +8205,9 @@ function showAssistantGuideModal() {
         💡 Google 앱 → Routines (루틴) →  새 루틴 만들기<br>
         → 음성 명령 입력 → "앱/사이트 열기" → URL 붙여넣기
       </div>
-      <button onclick="window.open('googlegmail://','_blank') || window.open('https://assistant.google.com/','_blank');"
+      <button onclick="openGoogleAssistantApp()"
         style="width:100%;padding:14px;background:#4285f4;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:8px;">
-        Google Assistant 열기
+        🤖 Google 앱 열기
       </button>
       <button onclick="document.getElementById('assistant-guide-modal').remove();obNext();"
         style="width:100%;padding:10px;background:none;color:#9ca3af;border:none;font-size:13px;cursor:pointer;">
@@ -8273,9 +8326,11 @@ function enterApp() {
   try { updateSleepBanner(); } catch(e) {}
 
   try { renderAppHeader(); } catch(e) {}
-  const savedPage = parseInt(sessionStorage.getItem('nuri_last_page') || localStorage.getItem('last_page') || '2');
-  const startPage = (savedPage >= 0 && savedPage <= 10) ? savedPage : 2;
-  try { goToPage(startPage); } catch(e) {}
+  // 새로고침: sessionStorage 복구 / 앱 재실행: sessionStorage 없음 → 메인(2)
+  try {
+    const sp = parseInt(sessionStorage.getItem('nuri_last_page') || '2');
+    goToPage((sp >= 0 && sp <= 10) ? sp : 2);
+  } catch(e) { goToPage(2); }
   try { setTimeout(initSwipe, 100); } catch(e) {}
 
   try { renderPhotoPage(); } catch(e) {}
