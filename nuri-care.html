@@ -140,8 +140,9 @@ input:focus { border-color: #bfdbfe; }
 .baby-name { font-size: 17px; font-weight: 700; color: #1a1a1a; }
 /* 헤더 D+N 강조 */
 .baby-dday {
-  font-size: 22px; font-weight: 900; color: #7a5600;
-  letter-spacing: -0.03em; line-height: 1;
+  font-family: 'Jua', 'Apple SD Gothic Neo', sans-serif;
+  font-size: 26px; font-weight: 400; color: #7a5600;
+  letter-spacing: 0.02em; line-height: 1.1;
 }
 .baby-dday-sub { font-size: 11px; color: #9ca3af; margin-top: 1px; font-weight: 500; }
 .app-header-top-right { display: flex; align-items: center; gap: 8px; }
@@ -1552,14 +1553,8 @@ body.dark #growth-latest-text { color: #4ade80 !important; }
 
 
 /* D+ 다크모드 */
-body.dark .baby-dday {
-  background: linear-gradient(135deg, #f0c060, #fbbf24);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-body.dark .baby-dday-d { color: #c8a070; }
-body.dark .baby-dday-sub { color: #7a6a5a; }
+body.dark .baby-dday { color: #f0c060; }
+body.dark .baby-dday-sub { color: #a89060; }
 
 </style>
   <!-- 귀여운 한국어 폰트 -->
@@ -3807,15 +3802,13 @@ function renderAppHeader() {
     if (days !== null) {
       // D+N 크게 표시
       const ddayEl = document.getElementById('app-baby-dday');
-      // 태어난 지 N일째 (메인) + D+N (서브)
+      // Main: D+N (Jua 폰트, 크게)
       if (ddayEl) {
-        ddayEl.textContent = days === 0 ? '오늘 태어났어요 🎉'
-          : `태어난 지 ${days}일째 🌸`;
+        ddayEl.textContent = `D+${days}`;
       }
+      // dplus 숨김 (통합)
       const dplusEl = document.getElementById('app-baby-dplus');
-      if (dplusEl) {
-        dplusEl.textContent = days === 0 ? 'D+0' : `D+${days}`;
-      }
+      if (dplusEl) dplusEl.style.display = 'none';
       작게
       let ageText;
       if (days === 0)        ageText = `세상에 온 첫날이에요 🌟`;
@@ -3828,7 +3821,11 @@ function renderAppHeader() {
       else if (days <= 100)  ageText = `곧 100일이에요 💛`;
       else if (days <= 365)  ageText = `${Math.floor(days/30)}개월 아기예요 💕`;
       else                   ageText = `하루하루가 선물이에요 🌸`;
-      document.getElementById('app-baby-age').textContent = ageText;
+      const ageEl2 = document.getElementById('app-baby-age');
+      if (ageEl2) {
+        const dayStr = days===0 ? '오늘 태어났어요 🎉' : `태어난 지 ${days}일째`;
+        ageEl2.textContent = ageText ? dayStr + ' · ' + ageText : dayStr;
+      }
     }
   }
   const t = new Date();
@@ -7710,6 +7707,9 @@ function goToPage(n) {
   if (currentPage === 5) setTimeout(() => { renderGrowthChart(); renderGrowthTable(); }, 100);
   if (currentPage === 6) { try { renderMilestoneList(); } catch(e){} }
   if (currentPage === 7) { try { renderMomCarePage(); } catch(e){} }
+  if (currentPage === 10) {
+    setTimeout(() => { try { updateNotifBtnUI(); loadPinToggle(); } catch(e) {} }, 100);
+  }
   if (currentPage === 9) {
     renderDadTabChecklist();
     renderDadTodayRecords();
@@ -8192,8 +8192,21 @@ function enterApp() {
     try { checkNotifBanner(); } catch(e) {}
     try {
       if (localStorage.getItem('notif_permission') === '1') {
-        notifPermission = true;
-        scheduleNotifications();
+        // 브라우저 실제 권한 재확인
+        if ('Notification' in window && Notification.permission === 'granted') {
+          notifPermission = true;
+          scheduleNotifications();
+        } else if ('Notification' in window && Notification.permission === 'denied') {
+          // 권한 거부됨 → 저장값 초기화
+          localStorage.setItem('notif_permission', '0');
+          notifPermission = false;
+        } else {
+          // 권한 아직 요청 안됨(default) - 저장값 유지하되 재요청 유도
+          notifPermission = false;
+          localStorage.setItem('notif_permission', '0');
+        }
+        // 버튼 UI 즉시 반영
+        setTimeout(() => { try { updateNotifBtnUI(); } catch(e) {} }, 300);
       }
     } catch(e) {}
     try {
