@@ -8623,10 +8623,12 @@ function endSession(type) {
     const dur = Math.round((now - st) / 60000);
     const h = Math.floor(dur/60), m = dur%60;
     const sub = (h>0?h+'시간 ':'')+m+'분';
+    // _startTime: KST 형식으로 저장 (위젯 수면시간 계산용)
+    const stKST = new Date(st.getTime()+9*3600*1000).toISOString().slice(0,16);
     sleepingStart = null;
     localStorage.setItem('baby_sleeping', '');
     clearInterval(sleepTimer);
-    addRecord({ type:'sleep', time:nowLocal(), title:'기상', sub:'수면 '+sub, icon:'☀️', cat:'sleep' });
+    addRecord({ type:'sleep', time:nowLocal(), title:'기상', sub:'수면 '+sub, icon:'☀️', cat:'sleep', _startTime:stKST, _durMin:dur });
     speak('기상을 기록했어요.');
   } else if (type === 'pump') {
     const pSt = pumpingStart instanceof Date ? pumpingStart : new Date(pumpingStart);
@@ -9489,11 +9491,17 @@ function updateTodayWidget() {
   const sleepRecs=todayRecs.filter(r=>r.cat==='sleep'&&r._startTime);
   let totalSleepMin=0;
   sleepRecs.forEach(r=>{const ms=new Date(r.time)-new Date(r._startTime);if(ms>0)totalSleepMin+=Math.floor(ms/60000);});
+  // 현재 수면 중이면 진행 중인 시간도 포함
+  if(typeof sleepingStart!=='undefined'&&sleepingStart){
+    const nowSleepMs=Date.now()-new Date(sleepingStart).getTime();
+    if(nowSleepMs>0) totalSleepMin+=Math.floor(nowSleepMs/60000);
+  }
   const sleepH=Math.floor(totalSleepMin/60),sleepM=totalSleepMin%60;
   if(el('widget-sleep-time')) el('widget-sleep-time').textContent=
     totalSleepMin===0?'0분':(sleepH>0?sleepH+'h '+sleepM+'m':sleepM+'분');
   const lastSleep=todayRecs.filter(r=>r.cat==='sleep')[0];
-  if(el('widget-sleep-last')) el('widget-sleep-last').textContent=lastSleep?fmt(lastSleep.time):'기록 없음';
+  if(el('widget-sleep-last')) el('widget-sleep-last').textContent=
+    (typeof sleepingStart!=='undefined'&&sleepingStart)?'자는 중 😴':(lastSleep?fmt(lastSleep.time):'기록 없음');
 
   // ── 기저귀
   const diaperRecs=todayRecs.filter(r=>r.cat==='diaper');
