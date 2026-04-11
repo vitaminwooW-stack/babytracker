@@ -140,11 +140,14 @@ input:focus { border-color: #bfdbfe; }
 .baby-name { font-size: 17px; font-weight: 700; color: #1a1a1a; }
 /* 헤더 D+N 강조 */
 .baby-dday {
-  font-family: 'Jua', 'Apple SD Gothic Neo', sans-serif;
-  font-size: 26px; font-weight: 400; color: #7a5600;
-  letter-spacing: 0.02em; line-height: 1.1;
+  font-family: 'Jua', 'Apple SD Gothic Neo', sans-serif !important;
+  font-size: 26px !important;
+  font-weight: 400 !important;
+  color: #7a5600 !important;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
 }
-.baby-dday-sub { font-size: 11px; color: #9ca3af; margin-top: 1px; font-weight: 500; }
+
 .app-header-top-right { display: flex; align-items: center; gap: 8px; }
 .header-date { font-size: 11px; color: #9ca3af; }
 .app-header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
@@ -344,9 +347,18 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .modal-bg.drag-closing .modal { transition: none; touch-action: none; }
 .modal-bg.open { display: flex; }
 .modal { position: relative; background: #fff; border-radius: 16px 16px 0 0; padding: 24px 20px 40px; width: 100%; max-height: 92vh; overflow-y: auto; }
-.modal-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 20px; 
-  cursor: grab; touch-action: none; padding: 16px 0;
-  margin: -16px 0 4px; /* 터치 영역 확장 */
+.modal-handle {
+  width: 40px; height: 4px;
+  background: #e0e0e0; border-radius: 2px;
+  margin: 0 auto 16px;
+  cursor: grab; touch-action: none;
+  /* 터치 영역 확장 - 시각적으로는 4px, 터치는 넓게 */
+  position: relative;
+}
+.modal-handle::before {
+  content: '';
+  position: absolute;
+  top: -14px; left: -40px; right: -40px; bottom: -14px;
 }
 .modal h2 { font-size: 18px; font-weight: 700; margin-bottom: 18px; color: #1a1a1a; }
 .opt-row { display: flex; gap: 8px; }
@@ -1182,10 +1194,7 @@ body.dark .dad-progress-bar-wrap { background: #3d3628 !important; }
 /* ── 설정 ── */
 body.dark .feature-page { background: #1a1612 !important; }
 body.dark .chart-wrap { background: #2a2520 !important; border-color: #3d3628 !important; }
-body.dark .export-btn { background: #2a2520 !important; border-color: #3d3628 !important; color: #c8a870 !important; }
-body.dark .feature-section-title { color: #c8a870 !important; }
-body.dark .feature-page-title { color: #f0ead8 !important; }
-body.dark .feature-page-sub { color: #a89880 !important; }
+body.dark .export-btn { background: #2a2520 !important; border-color: #3d3628 !important; color: #c8a870 !important; }body.dark .feature-page-sub { color: #a89880 !important; }
 /* 토글 스위치 비활성 */
 body.dark input[type="checkbox"] { accent-color: #7a5600; }
 /* 앱 정보 카드 */
@@ -1221,13 +1230,7 @@ body.dark .mom-birth-badge    { opacity: 0.9; }
 
 body.dark .policy-page-header h2 { color: #f0ead8 !important; }
 body.dark .policy-page-header p  { color: #a89880 !important; }
-body.dark .policy-page { background: #1a1612 !important; }
-
-body.dark .feature-page-title { color: #f0ead8 !important; }
-body.dark .feature-section-title { color: #c8a870 !important; }
-
-
-/* ══ 커뮤니티 검색 다크모드 ══ */
+body.dark .policy-page { background: #1a1612 !important; }/* ══ 커뮤니티 검색 다크모드 ══ */
 body.dark .community-search-box { background: #2a2520 !important; border-color: #3d3628 !important; }
 body.dark .community-search-title { color: #f0ead8 !important; }
 body.dark .community-chip { background: #1a2535 !important; color: #60a5fa !important; border-color: #1e3a5a !important; }
@@ -1553,8 +1556,30 @@ body.dark #growth-latest-text { color: #4ade80 !important; }
 
 
 /* D+ 다크모드 */
-body.dark .baby-dday { color: #f0c060; }
-body.dark .baby-dday-sub { color: #a89060; }
+body.dark .baby-dday { color: #f0c060 !important; }
+body.dark .baby-dday-sub { color: #a89060 !important; }
+
+
+/* ══ baby-dday 완전 정의 ══ */
+.baby-dday {
+  font-family: 'Jua', 'Apple SD Gothic Neo', sans-serif !important;
+  font-size: 26px !important;
+  font-weight: 400 !important;
+  color: #7a5600 !important;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+}
+.baby-dday-sub {
+  font-family: 'Gowun Dodum', 'Apple SD Gothic Neo', sans-serif !important;
+  font-size: 12px !important;
+  color: #c8a070 !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  margin-top: 1px;
+}
+body.dark .baby-dday  { color: #f0c060 !important; }
+body.dark .baby-dday-sub { color: #a08050 !important; }
 
 </style>
   <!-- 귀여운 한국어 폰트 -->
@@ -1832,7 +1857,7 @@ body.dark .baby-dday-sub { color: #a89060; }
             <div class="baby-name" id="app-baby-name">아기</div>
             <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">
               <div class="baby-dday" id="app-baby-dday"></div>
-              <div class="baby-dday-sub" id="app-baby-age" style="white-space:nowrap;"></div>
+              <div class="baby-dday-sub" id="app-baby-age" style="white-space:nowrap;font-family:'Gowun Dodum',sans-serif;font-size:12px;color:#c8a070;"></div>
             </div>
             <div class="baby-dday-d" id="app-baby-dplus" style="display:none;"></div>
           </div>
@@ -3072,7 +3097,6 @@ body.dark .baby-dday-sub { color: #a89060; }
     </div>
 
 
-
     <span class="field-label">수유 시간</span>
     <div id="fe-side-wrap" style="display:flex;gap:10px;margin-bottom:12px;">
       <div class="u-flex1">
@@ -3173,7 +3197,6 @@ if ('serviceWorker' in navigator) {
           el.innerHTML = `<span>🆕 새 버전이 있어요!</span>
             <button onclick="location.reload()" style="background:#fff;color:#1d4ed8;border:none;
               border-radius:8px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;">
-              업데이트
             </button>`;
           document.body.appendChild(el);
         }
@@ -3290,7 +3313,7 @@ function closeDiaryWrite() {
 
 function saveDiaryEntry() {
   const text = document.getElementById('diary-text').value.trim();
-  if (!text && !diaryImgData) { alert('내용이나 사진을 추가해주세요.'); return; }
+  if (!text && !diaryImgData) { showToast('내용이나 사진을 추가해주세요'); return; }
   const now = new Date();
   const rawP = localStorage.getItem('baby_profile');
   let days = '';
@@ -3814,7 +3837,6 @@ function renderAppHeader() {
       // dplus 숨김 (통합)
       const dplusEl = document.getElementById('app-baby-dplus');
       if (dplusEl) dplusEl.style.display = 'none';
-      작게
       let ageText;
       if (days === 0)        ageText = `세상에 온 첫날이에요 🌟`;
       else if (days === 100) ageText = `100일 축하해요 🎂`;
@@ -3939,7 +3961,7 @@ function selectSide(side) {
 
 function addPumpMl() {
   const ml = parseFloat(document.getElementById('pump-ml-input').value);
-  if (!ml || ml <= 0) { alert('유축량을 입력해주세요.'); return; }
+  if (!ml || ml <= 0) { showToast('유축량을 입력해주세요'); return; }
   const side = selectedSide;
   const seconds = swSeconds;
   pumpSessions.push({ side, ml, seconds });
@@ -3980,9 +4002,8 @@ function removePumpSession(i) {
 }
 
 
-
 function savePump() {
-  if (!pumpSessions.length) { alert('유축 기록을 최소 하나 추가해주세요.'); return; }
+  if (!pumpSessions.length) { showToast('유축 기록을 최소 하나 추가해주세요'); return; }
   const time = document.getElementById('pump-time').value || nowLocal();
   const Lml = pumpSessions.filter(s => s.side === 'L').reduce((a, b) => a + b.ml, 0);
   const Rml = pumpSessions.filter(s => s.side === 'R').reduce((a, b) => a + b.ml, 0);
@@ -4369,7 +4390,6 @@ function renderPatternClock() {
   }
 
 
-
   // 중앙 텍스트 - 선택된 날짜 기준 D+일자 계산
   let displayDays = null;
   try {
@@ -4556,7 +4576,7 @@ function mrPumpTotal() {
 function saveManualRecord() {
   const el = id => document.getElementById(id);
   const startVal = el('mr-start-time').value;
-  if (!startVal) { alert('시작 시각을 입력해주세요'); return; }
+  if (!startVal) { showToast('시작 시각을 입력해주세요'); return; }
   const endVal = el('mr-end-time').value;
   const cat = _mrCat;
 
@@ -5753,7 +5773,7 @@ async function toggleWakeLock() {
   } else {
     // 활성화
     if (!('wakeLock' in navigator)) {
-      alert('이 브라우저는 화면 유지 기능을 지원하지 않아요.\n크롬 또는 Safari 최신 버전을 사용해주세요.');
+      showToast('화면 유지 기능이 지원되지 않아요. 크롬/Safari를 사용해주세요');
       return;
     }
     try {
@@ -5771,7 +5791,7 @@ async function toggleWakeLock() {
       }
       showVoiceToast('화면 유지 켜짐 ✅ 수유·유축 중 화면이 꺼지지 않아요', true);
     } catch(e) {
-      alert('화면 유지를 시작할 수 없어요. 잠금 화면을 해제 후 다시 시도해주세요.');
+      showToast('화면 유지를 시작할 수 없어요. 잠금 해제 후 시도해주세요');
     }
   }
 }
@@ -5988,7 +6008,7 @@ function copyInviteCode() {
 function _copyToClipboard(text) {
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text)
-      .then(() => alert('복사됐어요! 카카오톡에 붙여넣기 해주세요 💌'))
+      .then(() => showToast('복사됐어요! 카카오톡에 붙여넣기 해주세요 💌'))
       .catch(() => _fallbackCopy(text));
   } else {
     _fallbackCopy(text);
@@ -6002,7 +6022,7 @@ function _fallbackCopy(text) {
   el.select();
   document.execCommand('copy');
   document.body.removeChild(el);
-  alert('복사됐어요! 카카오톡에 붙여넣기 해주세요 💌');
+  showToast('복사됐어요! 카카오톡에 붙여넣기 해주세요 💌');
 }
 
 // ── 아빠 탭 연동 코드 입력 ──
@@ -6026,7 +6046,7 @@ function applyDadInviteCode() {
   // 찾지 못한 경우 (다른 기기) — 코드만 저장
   localStorage.setItem('dad_linked', input);
   _showDadLinkedState(null);
-  alert('코드가 저장됐어요.\n엄마와 같은 기기에서 앱을 열어야 기록이 보여요.\n\n(현재는 아빠 기록만 가능해요)');
+  showToast('코드가 저장됐어요! 같은 기기에서 앱을 열어주세요 (현재는 아빠 기록만 가능해요)');
 }
 
 function _applyInvitePayload(code, payloadStr) {
@@ -6048,11 +6068,11 @@ function _applyInvitePayload(code, payloadStr) {
     // 아빠 PIN 설정 안내
     if (!localStorage.getItem('baby_pin')) {
       setTimeout(() => {
-        alert(`연동 완료! 🎉\n${data.profile?.name || '아기'} 기록이 연결됐어요.\n\n앱 잠금을 위해 PIN을 설정해주세요.`);
+        showToast(`연동 완료! 🎉 ${data.profile?.name || '아기'} 기록이 연결됐어요.\n\n앱 잠금을 위해 PIN을 설정해주세요.`);
       }, 400);
     } else {
       setTimeout(() => {
-        alert(`연동 완료! 🎉\n${data.profile?.name || '아기'} 기록이 연결됐어요.`);
+        showToast(`연동 완료! 🎉 ${data.profile?.name || '아기'} 기록이 연결됐어요.`);
       }, 400);
     }
     renderDadTabChecklist();
@@ -6856,7 +6876,7 @@ function downloadFile(content, filename, type) {
 }
 
 function exportCSV() {
-  if (!records.length) { alert('내보낼 기록이 없어요.'); return; }
+  if (!records.length) { showToast('내보낼 기록이 없어요'); return; }
   const header = '날짜,시각,종류,제목,내용\n';
   const rows = records.map(r => {
     const d = new Date(r.time);
@@ -6871,14 +6891,14 @@ function exportCSV() {
 }
 
 function exportGrowthCSV() {
-  if (!growthRecords.length) { alert('성장 기록이 없어요.'); return; }
+  if (!growthRecords.length) { showToast('성장 기록이 없어요'); return; }
   const header = '날짜,몸무게(kg),키(cm)\n';
   const rows = growthRecords.map(r => [r.date, r.weight||'', r.height||''].join(',')).join('\n');
   downloadFile('\uFEFF' + header + rows, '누리케어_성장기록.csv', 'text/csv;charset=utf-8');
 }
 
 function exportDiaryTxt() {
-  if (!diaryEntries.length) { alert('일기가 없어요.'); return; }
+  if (!diaryEntries.length) { showToast('일기가 없어요'); return; }
   const content = diaryEntries.map(e => {
     const d = new Date(e.date);
     return '📔 ' + d.toLocaleDateString('ko-KR') + ' ' + d.toLocaleTimeString('ko-KR') +
@@ -7285,7 +7305,7 @@ function toggleVoice() {
 
   // 새로 시작
   if (!initVoice()) {
-    alert('이 브라우저에서는 음성 인식이 지원되지 않아요.\nChrome 또는 Safari를 사용해주세요.');
+    showToast('이 브라우저에서는 음성 인식이 지원되지 않아요. Chrome/Safari를 사용해주세요.');
     return;
   }
 
@@ -7446,7 +7466,7 @@ function handlePhotoUpload(e) {
         showBackupToast('📷 사진을 압축해서 저장했어요');
       }
       showBabyPhoto(resized);
-    } catch(e) { alert('사진 저장에 실패했어요. 다른 사진을 시도해보세요.'); }
+    } catch(e) { showToast('사진 저장에 실패했어요'); }
   };
   reader.readAsDataURL(file);
 }
@@ -7469,7 +7489,7 @@ function previewDiaryImg(e) {
 function clearTodayRecords() {
   const today = new Date().toDateString();
   const cnt = records.filter(r => new Date(r.time).toDateString() === today).length;
-  if (!cnt) { alert('오늘 기록이 없어요.'); return; }
+  if (!cnt) { showToast('오늘 기록이 없어요'); return; }
   if (!confirm(`오늘 기록 ${cnt}개를 삭제할까요?`)) return;
   records = records.filter(r => new Date(r.time).toDateString() !== today);
   saveData(); renderTimeline(); updateStatus();
@@ -7507,9 +7527,7 @@ async function executeDelete() {
       const fid = localStorage.getItem('family_id');
       if (fid && typeof firebase !== 'undefined' && firebase.database) {
         const db = firebase.database();
-        await db.ref('families/' + fid).remove();
-        console.log('Firebase 데이터 삭제 완료');
-      }
+        await db.ref('families/' + fid).remove();}
     } catch(e) { console.warn('Firebase 삭제 실패:', e); }
   }
 
@@ -7529,9 +7547,7 @@ async function executeDelete() {
       growthRecords = [];
       diaryEntries = [];
       saveData();
-    } catch(e) {}
-    console.log('로컬 데이터 삭제 완료');
-  }
+    } catch(e) {}}
 
   // ── UI 새로고침 ──
   setTimeout(() => {
@@ -7614,7 +7630,7 @@ function pinForgot() {
   if (!confirm('PIN을 잊으셨나요?\n\n확인: PIN만 재설정 (기존 기록 유지)\n취소: 계속 시도')) return;
   localStorage.removeItem('baby_pin');
   pinFailCount = 0;
-  alert('PIN이 초기화됐어요.\n기존 기록은 모두 유지돼요 ✅');
+  showToast('PIN이 초기화됐어요. 기존 기록은 유지돼요 ✅');
   initLogin();
 }
 
@@ -7735,7 +7751,6 @@ function goToPage(n) {
 let notifPermission = false;
 let sleepNotifTimer = null;
 let feedNotifTimer = null;
-
 
 
 function dismissNotifBanner() {
@@ -7963,7 +7978,6 @@ function showSiriGuideModal() {
       </div>
       <button onclick="copySiriUrl('${s.url}','${s.phrase}')"
         style="padding:6px 12px;background:#000;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">
-        복사
       </button>
     </div>`).join('');
 
@@ -8031,7 +8045,6 @@ function showAssistantGuideModal() {
       </div>
       <button onclick="copyAssistantUrl('${s.url}','${s.phrase}')"
         style="padding:6px 12px;background:#4285f4;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">
-        복사
       </button>
     </div>`).join('');
 
@@ -8726,8 +8739,7 @@ function feSel(t) {
 let _fmtL=0, _fmtR=0, _fmtLStart=null, _fmtRStart=null;
 let _fmtInterval=null, _fmtActive=null;
 
-function feedShowTimer() {}  // 레거시 호환
-function feedHideTimer() {}  // 레거시 호환
+
 function feedTypeChange(type) {
   const minWrap    = document.getElementById('feed-min-wrap');
   const bottleWrap = document.getElementById('feed-bottle-wrap');
@@ -8746,7 +8758,6 @@ function feedTypeChange(type) {
   if(mlEl && type!=='bottle' && type!=='both') mlEl.value='';
   if(pumpMlEl && type!=='pump') pumpMlEl.value='';
 }
-
 
 
 function fmtToggle(side) {
@@ -9486,7 +9497,6 @@ function updateTodayWidget() {
 }
 
 
-
 function updateStatus() {
   const feed = records.find(r => r.cat === 'feed' && (r.title === '수유 완료' || r.title === '수유'));
   const pump = records.find(r => r.cat === 'pump' && r.title === '유축 완료');
@@ -9521,7 +9531,6 @@ const DAD_RECORD_LABELS = {
 };
 
 // 아빠 기저귀 — 소변/대변 선택 후 기록
-
 
 
 function _openDadModal(type) {
@@ -9789,9 +9798,7 @@ function fbInit() {
     fbAuth = firebase.auth();
     // 익명 로그인 (앱 시작 시 자동)
     fbAuth.signInAnonymously().then(function(result) {
-      fbUid = result.user.uid;
-      console.log('Firebase 익명 로그인 완료. UID:', fbUid);
-    }).catch(function(e) {
+      fbUid = result.user.uid;}).catch(function(e) {
       console.warn('Firebase 익명 로그인 실패:', e);
     });
   } catch(e) {
