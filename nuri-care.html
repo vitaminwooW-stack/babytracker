@@ -132,7 +132,7 @@ input:focus { border-color: #bfdbfe; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
 /* ── 메인 앱 헤더 ── */
-.app-header { background: #fff; padding: 44px 16px 10px; box-shadow: 0 1px 0 #e5e7eb; flex-shrink: 0; }
+.app-header { background: #fff; padding: 44px 20px 10px; box-shadow: 0 1px 0 #e5e7eb; flex-shrink: 0; }
 .app-header-inner { max-width: 480px; margin: 0 auto; }
 .app-header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .app-header-left { display: flex; align-items: center; gap: 10px; }
@@ -1863,10 +1863,12 @@ body.dark .header-date { color: #c8a870; }
             <div class="baby-dday" id="app-baby-dday"></div>
             <div class="baby-dday-sub" id="app-baby-age"
               style="white-space:nowrap;font-family:'Gowun Dodum',sans-serif;font-size:11px;color:#c8a070;margin-top:1px;"></div>
+            <div class="baby-dday-sub" id="app-baby-age2"
+              style="white-space:nowrap;font-family:'Gowun Dodum',sans-serif;font-size:11px;color:#c8a070;"></div>
             <div class="baby-dday-d" id="app-baby-dplus" style="display:none;"></div>
           </div>
         </div>
-        <div class="app-header-top-right" style="padding-right:6px;">
+        <div class="app-header-top-right">
           <div class="header-date" id="app-date"></div>
         </div>
       </div>
@@ -3884,9 +3886,12 @@ function renderAppHeader() {
       else if (days <= 365)  ageText = `${Math.floor(days/30)}개월 아기예요 💕`;
       else                   ageText = `하루하루가 선물이에요 🌸`;
       const ageEl2 = document.getElementById('app-baby-age');
+      const ageEl3 = document.getElementById('app-baby-age2');
       if (ageEl2) {
-        const dayStr = days===0 ? '오늘 태어났어요 🎉' : `태어난 지 ${days}일째`;
-        ageEl2.textContent = ageText ? dayStr + ' · ' + ageText : dayStr;
+        ageEl2.textContent = days===0 ? '오늘 태어났어요 🎉' : `태어난 지 ${days}일째`;
+      }
+      if (ageEl3) {
+        ageEl3.textContent = ageText || '';
       }
     }
   }
