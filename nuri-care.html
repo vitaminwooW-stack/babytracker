@@ -8173,48 +8173,105 @@ function openGoogleAssistantApp() {
 function showAssistantGuideModal() {
   const old = document.getElementById('assistant-guide-modal');
   if (old) old.remove();
+
   const appUrl = window.location.href.split('?')[0];
   const shortcuts = [
-    { label: '🍼 수유 시작', url: appUrl + '?action=feed', phrase: '수유 시작' },
-    { label: '😴 수면 시작', url: appUrl + '?action=sleep', phrase: '수면 시작' },
+    { label: '🍼 수유 시작', url: appUrl + '?action=feed',   phrase: '수유 시작' },
+    { label: '😴 수면 시작', url: appUrl + '?action=sleep',  phrase: '수면 시작' },
     { label: '🌿 기저귀',   url: appUrl + '?action=diaper', phrase: '기저귀 갈았어' },
-    { label: '🤱 유축 시작', url: appUrl + '?action=pump', phrase: '유축 시작' },
+    { label: '🤱 유축 시작', url: appUrl + '?action=pump',   phrase: '유축 시작' },
   ];
-  const cardsHtml = shortcuts.map(s => `
-    <div style="background:#f8f9fa;border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
-      <div>
-        <div style="font-size:14px;font-weight:700;color:#1a1a1a;">${s.label}</div>
-        <div class="u-hint">Hey Google, "${s.phrase}"</div>
+
+  const stepsHtml = `
+    <div style="background:#f0f7ff;border-radius:14px;padding:16px;margin-bottom:16px;">
+      <div style="font-size:13px;font-weight:800;color:#1a73e8;margin-bottom:14px;">📋 설정 순서 (6단계)</div>
+
+      <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;">
+        <div style="background:#1a73e8;color:#fff;border-radius:50%;min-width:22px;height:22px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;">1</div>
+        <div style="font-size:13px;color:#1a1a1a;line-height:1.6;">
+          아래 <strong>URL 복사</strong> 버튼을 눌러 링크를 복사해요
+        </div>
       </div>
-      <button onclick="copyAssistantUrl('${s.url}','${s.phrase}')"
-        style="padding:6px 12px;background:#4285f4;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">
-      </button>
+
+      <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;">
+        <div style="background:#1a73e8;color:#fff;border-radius:50%;min-width:22px;height:22px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;">2</div>
+        <div style="font-size:13px;color:#1a1a1a;line-height:1.6;">
+          <strong>Google 앱</strong> 열기 → 우측 하단 <strong>점 3개(⋮)</strong> 탭<br>
+          → <strong>설정</strong> → <strong>Google 어시스턴트</strong>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;">
+        <div style="background:#1a73e8;color:#fff;border-radius:50%;min-width:22px;height:22px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;">3</div>
+        <div style="font-size:13px;color:#1a1a1a;line-height:1.6;">
+          <strong>루틴(Routines)</strong> 선택 → 우측 하단 <strong>+ 버튼</strong>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;">
+        <div style="background:#1a73e8;color:#fff;border-radius:50%;min-width:22px;height:22px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;">4</div>
+        <div style="font-size:13px;color:#1a1a1a;line-height:1.6;">
+          <strong>"내가 말할 때"</strong> → 음성 명령 직접 입력<br>
+          <span style="color:#1a73e8;font-size:12px;">예시: 수유 시작</span>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;">
+        <div style="background:#1a73e8;color:#fff;border-radius:50%;min-width:22px;height:22px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;">5</div>
+        <div style="font-size:13px;color:#1a1a1a;line-height:1.6;">
+          <strong>"작업 추가"</strong> → 검색창에 <strong>"website"</strong> 입력<br>
+          → <strong>"웹사이트 열기(Open website)"</strong> 선택<br>
+          <span style="background:#fff3cd;padding:2px 6px;border-radius:4px;font-size:11px;color:#856404;">⚠️ "앱/사이트 열기"가 안 보이면 검색창에 website 검색!</span>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:flex-start;">
+        <div style="background:#16a34a;color:#fff;border-radius:50%;min-width:22px;height:22px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;">6</div>
+        <div style="font-size:13px;color:#1a1a1a;line-height:1.6;">
+          복사한 <strong>URL 붙여넣기</strong> → <strong>저장</strong><br>
+          <span style="color:#16a34a;font-size:12px;">✅ "Hey Google, 수유 시작" → 자동 기록!</span>
+        </div>
+      </div>
+    </div>`;
+
+  const cardsHtml = shortcuts.map(s => `
+    <div style="background:#f8f9fa;border:1px solid #e5e7eb;border-radius:12px;padding:12px 14px;margin-bottom:8px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+        <div style="font-size:14px;font-weight:700;color:#1a1a1a;">${s.label}</div>
+        <button onclick="copyAssistantUrl('${s.url}','${s.phrase}')"
+          style="padding:6px 14px;background:#1a73e8;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">
+          📋 URL 복사
+        </button>
+      </div>
+      <div style="font-size:11px;color:#6b7280;background:#fff;border-radius:6px;padding:6px 8px;border:1px solid #e5e7eb;">
+        음성: <strong style="color:#1a73e8">"Hey Google, ${s.phrase}"</strong>
+      </div>
     </div>`).join('');
 
   const el = document.createElement('div');
   el.id = 'assistant-guide-modal';
-  el.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:flex-end;overflow-y:auto;';
+  el.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:flex-end;';
   el.innerHTML = `
-    <div style="background:#fff;border-radius:24px 24px 0 0;padding:28px 24px 48px;width:100%;max-width:480px;margin:0 auto;">
-      <div style="font-size:28px;text-align:center;margin-bottom:8px;">🤖 Google Assistant 루틴</div>
-      <div style="font-size:13px;color:#6b7280;text-align:center;margin-bottom:20px;line-height:1.6;">
-        단계: 복사 → Google 앱 → Routines →<br>새 루틴 → "Open website" → 붙여넣기 → 음성 명령 설정
+    <div style="background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-width:480px;margin:0 auto;max-height:90vh;overflow-y:auto;">
+      <div style="width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:0 auto 20px;"></div>
+      <div style="font-size:20px;font-weight:800;text-align:center;margin-bottom:4px;color:#1a1a1a;">🤖 Google 루틴 설정</div>
+      <div style="font-size:12px;color:#6b7280;text-align:center;margin-bottom:20px;">
+        "Hey Google, 수유 시작" 한마디로 자동 기록
       </div>
+      ${stepsHtml}
+      <div style="font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:8px;">명령어별 URL 복사</div>
       ${cardsHtml}
-      <div style="background:#e8f0fe;border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:#1a73e8;line-height:1.6;">
-        💡 Google 앱 → Routines (루틴) →  새 루틴 만들기<br>
-        → 음성 명령 입력 → "앱/사이트 열기" → URL 붙여넣기
-      </div>
       <button onclick="openGoogleAssistantApp()"
-        style="width:100%;padding:14px;background:#4285f4;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:8px;">
+        style="width:100%;padding:14px;background:#4285f4;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;margin-bottom:8px;">
         🤖 Google 앱 열기
       </button>
-      <button onclick="document.getElementById('assistant-guide-modal').remove();obNext();"
+      <button onclick="document.getElementById('assistant-guide-modal').remove()"
         style="width:100%;padding:10px;background:none;color:#9ca3af;border:none;font-size:13px;cursor:pointer;">
-        나중에 하기
+        닫기
       </button>
     </div>`;
   document.body.appendChild(el);
+  el.addEventListener('click', e => { if (e.target === el) el.remove(); });
 }
 
 function copyAssistantUrl(url, phrase) {
