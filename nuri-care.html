@@ -149,7 +149,7 @@ input:focus { border-color: #bfdbfe; }
 }
 
 .app-header-top-right { display: flex; align-items: center; gap: 8px; }
-.header-date { font-size: 11px; color: #9ca3af; }
+.header-date { font-size: 12px; font-weight: 600; color: #7a5600; font-family: 'Gowun Dodum', sans-serif; }
 .app-header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
 .app-header-actions::-webkit-scrollbar { display: none; }
 .hdr-btn { display: flex; align-items: center; gap: 4px; padding: 5px 11px; border-radius: 20px; border: 1.5px solid; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
@@ -1580,6 +1580,9 @@ body.dark .baby-dday-sub { color: #a89060 !important; }
 }
 body.dark .baby-dday  { color: #f0c060 !important; }
 body.dark .baby-dday-sub { color: #a08050 !important; }
+
+
+body.dark .header-date { color: #c8a870; }
 
 </style>
   <!-- 귀여운 한국어 폰트 -->
@@ -3126,7 +3129,7 @@ body.dark .baby-dday-sub { color: #a08050 !important; }
     <span class="field-label">기록 시각</span>
     <input type="datetime-local" id="fe-time" aria-label="수유 완료 시각" class="u-mb12">
     <div class="modal-actions">
-      <button class="btn-cancel" aria-label="취소" onclick="closeFeedEndModal()">취소</button>
+      <button class="btn-cancel" aria-label="취소" onclick="closeFeedEndModal(true)">취소</button>
       <button class="btn-save" aria-label="저장" onclick="saveFeedEnd()">완료</button>
     </div>
   </div>
@@ -3859,7 +3862,10 @@ function renderAppHeader() {
   const month = t.getMonth() + 1;
   const day = t.getDate();
   const dayNames = ['일','월','화','수','목','금','토'];
-  document.getElementById('app-date').textContent = `${month}월 ${day}일 ${dayNames[t.getDay()]}요일 🌸`;
+  const dateEl = document.getElementById('app-date');
+  const dow = ['일','월','화','수','목','금','토'][t.getDay()];
+  const seasonIcon = (month>=3&&month<=5)?'🌸':(month>=6&&month<=8)?'🌻':(month>=9&&month<=11)?'🍂':'❄️';
+  if (dateEl) dateEl.textContent = `${month}월 ${day}일 ${dow}요일 ${seasonIcon}`;
 }
 
 // ── 스톱워치 ──
@@ -8980,14 +8986,19 @@ function feSetTotal() {
   if (rEl && !rEl.disabled) rEl.value = '';
 }
 
-function closeFeedEndModal() {
+function closeFeedEndModal(cancelFeed) {
+  // cancelFeed=true 이면 수유 세션도 종료, false/undefined 이면 수유 유지
   feTimerStopAll();
-
   var mfe=document.getElementById('modal-feed-end');
   if(mfe){mfe.classList.remove('open');mfe.style.display='';}
-  feedingStart = null;
-  if(typeof feedingType !== 'undefined') feedingType = 'breast';
-  saveSessions(); updateQuickBtns(); renderTimeline(); updateStatus();
+  if (cancelFeed === true) {
+    // 수유 세션 취소 (취소 버튼)
+    feedingStart = null;
+    if(typeof feedingType !== 'undefined') feedingType = 'breast';
+    localStorage.setItem('baby_feeding', '');
+    saveSessions(); updateQuickBtns(); renderTimeline(); updateStatus();
+  }
+  // 드래그 닫기 or 단순 닫기 → 수유 세션 유지 (아무것도 안함)
 }
 
 function saveFeedEnd() {
@@ -10099,6 +10110,12 @@ function initModalDragClose() {
           modal.style.cssText = '';
           bg.style.background = '';
           bg.style.transition = '';
+          // 수유 완료 모달은 드래그 닫기 = 취소 (수유 세션 유지, 재오픈 없음)
+          // closeFeedEndModal은 호출하지 않음 → feedingStart 유지
+          // 단, 수유 완료 모달이 아닌 다른 모달의 경우 onDragClose 콜백 실행
+          if (bg.dataset && bg.dataset.onDragClose) {
+            try { window[bg.dataset.onDragClose](); } catch(e) {}
+          }
         }, 230);
       } else {
         modal.style.transition = 'transform 0.3s cubic-bezier(0.34,1.56,0.64,1)';
