@@ -148,7 +148,7 @@ input:focus { border-color: #bfdbfe; }
   line-height: 1.1;
 }
 
-.app-header-top-right { display: flex; align-items: flex-start; gap: 8px; flex-shrink: 0; }
+.app-header-top-right { display: flex; align-items: flex-start; gap: 8px; flex-shrink: 0; margin-right: 4px; }
 .header-date { font-size: 12px; font-weight: 600; color: #7a5600; font-family: 'Gowun Dodum', sans-serif; white-space: nowrap; }
 .app-header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
 .app-header-actions::-webkit-scrollbar { display: none; }
@@ -3147,6 +3147,37 @@ body.dark .header-date { color: #c8a870; }
     <div class="modal-actions">
       <button class="btn-cancel" aria-label="취소" onclick="closePumpEndModal()">취소</button>
       <button class="btn-save" aria-label="저장" onclick="savePumpEnd()">완료</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── 성장 기록 수정 모달 ── -->
+<div class="modal-bg" id="modal-growth-edit" role="dialog" aria-modal="true" aria-label="성장 기록 수정">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>📏 성장 기록 수정</h2>
+    <span class="field-label">날짜</span>
+    <input type="date" id="ge-date" style="margin-bottom:12px;width:100%;box-sizing:border-box;">
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <div style="flex:1;">
+        <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">⚖️ 몸무게 (kg)</div>
+        <input type="number" id="ge-weight" placeholder="예: 4.2" step="0.01" min="0" max="30" style="width:100%;box-sizing:border-box;">
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">📏 키 (cm)</div>
+        <input type="number" id="ge-height" placeholder="예: 52.3" step="0.1" min="0" max="120" style="width:100%;box-sizing:border-box;">
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <div style="flex:1;">
+        <div style="font-size:11px;font-weight:700;color:#7c3aaf;margin-bottom:4px;">⭕ 머리둘레 (cm)</div>
+        <input type="number" id="ge-head" placeholder="예: 35.0" step="0.1" min="0" max="70" style="width:100%;box-sizing:border-box;">
+      </div>
+      <div style="flex:1;"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="document.getElementById('modal-growth-edit').classList.remove('open')">취소</button>
+      <button class="btn-save" onclick="saveGrowthEdit()">저장</button>
     </div>
   </div>
 </div>
@@ -6450,8 +6481,9 @@ function renderGrowthTable() {
     '<td style="padding:9px 6px;font-size:12px;font-weight:700;color:#7a5600;text-align:center;">' + (r.weight ? r.weight+'kg' : '-') + '</td>' +
     '<td style="padding:9px 6px;font-size:12px;font-weight:700;color:#1d4ed8;text-align:center;">' + (r.height ? r.height+'cm' : '-') + '</td>' +
     '<td style="padding:9px 6px;font-size:12px;font-weight:700;color:#7c3aaf;text-align:center;">' + (r.head ? r.head+'cm' : '-') + '</td>' +
-    '<td style="padding:9px 4px;text-align:center;">' +
-    '<button onclick="deleteGrowthRecord(' + i + ')" aria-label="삭제" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:15px;">🗑️</button></td></tr>'
+    '<td style="padding:9px 4px;text-align:center;white-space:nowrap;">' +
+    '<button onclick="editGrowthRecord(' + i + ')" aria-label="수정" style="background:none;border:none;color:#7a5600;cursor:pointer;font-size:14px;margin-right:2px;">✏️</button>' +
+    '<button onclick="deleteGrowthRecord(' + i + ')" aria-label="삭제" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:14px;">🗑️</button></td></tr>'
   ).join('');
 
   const header = '<tr style="background:linear-gradient(135deg,#fffbf0,#fff7d6);">' +
@@ -6469,6 +6501,44 @@ function deleteGrowthRecord(i) {
   saveGrowthData();
   renderGrowthChart();
   renderGrowthTable();
+}
+
+let _growthEditIdx = -1;
+function editGrowthRecord(i) {
+  _growthEditIdx = i;
+  const r = growthRecords[i];
+  if (!r) return;
+  const d = document.getElementById('ge-date');
+  const w = document.getElementById('ge-weight');
+  const h = document.getElementById('ge-height');
+  const hd = document.getElementById('ge-head');
+  if (d) d.value = r.date || '';
+  if (w) w.value = r.weight || '';
+  if (h) h.value = r.height || '';
+  if (hd) hd.value = r.head || '';
+  document.getElementById('modal-growth-edit').classList.add('open');
+}
+
+function saveGrowthEdit() {
+  if (_growthEditIdx < 0) return;
+  const date   = document.getElementById('ge-date')?.value;
+  const weight = parseFloat(document.getElementById('ge-weight')?.value);
+  const height = parseFloat(document.getElementById('ge-height')?.value);
+  const head   = parseFloat(document.getElementById('ge-head')?.value);
+  if (!date) { showToast('날짜를 입력해주세요'); return; }
+  growthRecords[_growthEditIdx] = {
+    date,
+    weight: isNaN(weight) ? null : weight,
+    height: isNaN(height) ? null : height,
+    head:   isNaN(head)   ? null : head,
+  };
+  growthRecords.sort((a,b) => b.date.localeCompare(a.date));
+  saveGrowthData();
+  renderGrowthChart();
+  renderGrowthTable();
+  document.getElementById('modal-growth-edit').classList.remove('open');
+  showToast('✅ 성장 기록이 수정됐어요!');
+  _growthEditIdx = -1;
 }
 
 function saveGrowthData() { try { localStorage.setItem('growth_records', JSON.stringify(growthRecords)); } catch(e) {} }
