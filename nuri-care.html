@@ -132,7 +132,7 @@ input:focus { border-color: #bfdbfe; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
 /* ── 메인 앱 헤더 ── */
-.app-header { background: #fff; padding: 44px 16px 10px; box-shadow: 0 1px 0 #e5e7eb; flex-shrink: 0; }
+.app-header { background: #fff; padding: 44px 20px 10px; box-shadow: 0 1px 0 #e5e7eb; flex-shrink: 0; }
 .app-header-inner { max-width: 480px; margin: 0 auto; }
 .app-header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .app-header-left { display: flex; align-items: center; gap: 10px; }
@@ -6471,6 +6471,7 @@ function renderGrowthTable() {
     const parts = [];
     if (latest.weight) parts.push('⚖️ ' + latest.weight + 'kg');
     if (latest.height) parts.push('📏 ' + latest.height + 'cm');
+    if (latest.head)   parts.push('⭕ ' + latest.head + 'cm');
     badgeText.textContent = latest.date + '  ' + parts.join('  ');
     badge.style.display = '';
   } else if (badge) { badge.style.display = 'none'; }
@@ -6482,7 +6483,7 @@ function renderGrowthTable() {
     '<td style="padding:9px 6px;font-size:12px;font-weight:700;color:#1d4ed8;text-align:center;">' + (r.height ? r.height+'cm' : '-') + '</td>' +
     '<td style="padding:9px 6px;font-size:12px;font-weight:700;color:#7c3aaf;text-align:center;">' + (r.head ? r.head+'cm' : '-') + '</td>' +
     '<td style="padding:9px 4px;text-align:center;white-space:nowrap;">' +
-    '<button onclick="editGrowthRecord(' + i + ')" aria-label="수정" style="background:none;border:none;color:#7a5600;cursor:pointer;font-size:14px;margin-right:2px;">✏️</button>' +
+    '<button onclick="editGrowthRecord(' + i + ')" aria-label="수정" style="background:none;border:none;color:#7a5600;cursor:pointer;font-size:14px;margin-right:8px;">✏️</button>' +
     '<button onclick="deleteGrowthRecord(' + i + ')" aria-label="삭제" style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:14px;">🗑️</button></td></tr>'
   ).join('');
 
