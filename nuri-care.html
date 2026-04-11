@@ -148,8 +148,8 @@ input:focus { border-color: #bfdbfe; }
   line-height: 1.1;
 }
 
-.app-header-top-right { display: flex; align-items: center; gap: 8px; }
-.header-date { font-size: 12px; font-weight: 600; color: #7a5600; font-family: 'Gowun Dodum', sans-serif; }
+.app-header-top-right { display: flex; align-items: flex-start; gap: 8px; flex-shrink: 0; }
+.header-date { font-size: 12px; font-weight: 600; color: #7a5600; font-family: 'Gowun Dodum', sans-serif; white-space: nowrap; }
 .app-header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
 .app-header-actions::-webkit-scrollbar { display: none; }
 .hdr-btn { display: flex; align-items: center; gap: 4px; padding: 5px 11px; border-radius: 20px; border: 1.5px solid; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
@@ -10110,10 +10110,12 @@ function initModalDragClose() {
           modal.style.cssText = '';
           bg.style.background = '';
           bg.style.transition = '';
-          // 수유 완료 모달은 드래그 닫기 = 취소 (수유 세션 유지, 재오픈 없음)
-          // closeFeedEndModal은 호출하지 않음 → feedingStart 유지
-          // 단, 수유 완료 모달이 아닌 다른 모달의 경우 onDragClose 콜백 실행
-          if (bg.dataset && bg.dataset.onDragClose) {
+          // 드래그 닫기: 모달 ID에 따라 처리
+          const bgId = bg.id;
+          if (bgId === 'modal-feed-end') {
+            // 수유 완료 모달 드래그 닫기 = 수유 세션 완전 종료
+            try { closeFeedEndModal(true); } catch(e) {}
+          } else if (bg.dataset && bg.dataset.onDragClose) {
             try { window[bg.dataset.onDragClose](); } catch(e) {}
           }
         }, 230);
