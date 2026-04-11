@@ -339,11 +339,14 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .policy-link { display: block; text-align: center; font-size: 12px; color: #1d4ed8; margin-top: 14px; padding: 8px; background: #EBF4FF; border-radius: 8px; text-decoration: none; }
 .policy-notice { background: #fff7ed; border-radius: 12px; padding: 10px 14px; font-size: 12px; color: #8a6d00; margin-bottom: 16px; line-height: 1.6; }
 .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 400; align-items: flex-end; }
-.modal { transition: transform 0.15s ease; touch-action: pan-x; }
-.modal-bg.drag-closing .modal { transition: none; }
+.modal { transition: transform 0.15s ease; touch-action: pan-y; overflow-y: auto; }
+.modal-bg.drag-closing .modal { transition: none; touch-action: none; }
 .modal-bg.open { display: flex; }
 .modal { position: relative; background: #fff; border-radius: 16px 16px 0 0; padding: 24px 20px 40px; width: 100%; max-height: 92vh; overflow-y: auto; }
-.modal-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 20px; }
+.modal-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 20px; 
+  cursor: grab; touch-action: none; padding: 16px 0;
+  margin: -16px 0 4px; /* 터치 영역 확장 */
+}
 .modal h2 { font-size: 18px; font-weight: 700; margin-bottom: 18px; color: #1a1a1a; }
 .opt-row { display: flex; gap: 8px; }
 .opt-btn { flex: 1; padding: 10px 6px; border: 1px solid #d1d5db; border-radius: 8px; background: #fafafa; font-size: 14px; cursor: pointer; color: #555; font-weight: 500; touch-action: manipulation; }
@@ -1547,7 +1550,22 @@ body.dark #growth-latest-badge {
 }
 body.dark #growth-latest-text { color: #4ade80 !important; }
 
+
+/* D+ 다크모드 */
+body.dark .baby-dday {
+  background: linear-gradient(135deg, #f0c060, #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+body.dark .baby-dday-d { color: #c8a070; }
+body.dark .baby-dday-sub { color: #7a6a5a; }
+
 </style>
+  <!-- 귀여운 한국어 폰트 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
 </head>
 <body style="visibility:hidden;">
 <a href="#screen-app" class="skip-nav" aria-label="본문 바로가기">본문 바로가기</a>
@@ -1818,6 +1836,7 @@ body.dark #growth-latest-text { color: #4ade80 !important; }
           <div>
             <div class="baby-name" id="app-baby-name">아기</div>
             <div class="baby-dday" id="app-baby-dday"></div>
+            <div class="baby-dday-d" id="app-baby-dplus"></div>
             <div class="baby-dday-sub" id="app-baby-age"></div>
           </div>
         </div>
@@ -3788,11 +3807,14 @@ function renderAppHeader() {
     if (days !== null) {
       // D+N 크게 표시
       const ddayEl = document.getElementById('app-baby-dday');
-      // 태어난 지 N일째 형태로 표시
+      // 태어난 지 N일째 (메인) + D+N (서브)
       if (ddayEl) {
-        const babyName = p.name ? p.name + ' ' : '';
         ddayEl.textContent = days === 0 ? '오늘 태어났어요 🎉'
-          : `태어난 지 ${days}일째`;
+          : `태어난 지 ${days}일째 🌸`;
+      }
+      const dplusEl = document.getElementById('app-baby-dplus');
+      if (dplusEl) {
+        dplusEl.textContent = days === 0 ? 'D+0' : `D+${days}`;
       }
       작게
       let ageText;
@@ -9995,44 +10017,39 @@ function initModalDragClose() {
   document.querySelectorAll('.modal-bg').forEach(bg => {
     const modal = bg.querySelector('.modal');
     if (!modal) return;
+    const handle = modal.querySelector('.modal-handle');
+    if (!handle) return;  // handle 없으면 드래그 비활성
 
-    let startY=0, startX=0, curY=0, dragging=false, startTime=0;
-    const THRESHOLD = 100;
+    let startY=0, curY=0, dragging=false, startTime=0;
+    const THRESHOLD = 90;
 
-    // 모달 전체 상단 1/3 영역에서 드래그 시작 가능
-    modal.addEventListener('touchstart', e => {
+    // ── handle에서만 드래그 시작 ──
+    handle.addEventListener('touchstart', e => {
       if (!bg.classList.contains('open')) return;
-      const t = e.touches[0];
-      // 모달 내 input/textarea/button은 드래그 제외
-      const tag = e.target.tagName.toLowerCase();
-      if (['input','textarea','select','button'].includes(tag)) return;
-      const rect = modal.getBoundingClientRect();
-      // 상단 절반에서만 드래그 시작
-      if (t.clientY - rect.top > rect.height * 0.5) return;
-      startY = t.clientY; startX = t.clientX;
+      e.stopPropagation();
+      startY = e.touches[0].clientY;
       curY = 0; dragging = true; startTime = Date.now();
+      modal.style.transition = 'none';
     }, { passive: true });
 
-    modal.addEventListener('touchmove', e => {
+    handle.addEventListener('touchmove', e => {
       if (!dragging) return;
-      const t = e.touches[0];
-      const dy = t.clientY - startY;
-      const dx = Math.abs(t.clientX - startX);
-      if (dx > Math.abs(dy) && dx > 8) { dragging = false; return; }
-      if (dy < 0) return;
       e.stopPropagation();
+      const dy = e.touches[0].clientY - startY;
+      if (dy < 0) { curY = 0; return; }
       curY = dy;
       modal.style.transform = 'translateY(' + curY + 'px)';
       const p = Math.min(curY / THRESHOLD, 1);
-      bg.style.background = 'rgba(0,0,0,' + (0.45*(1-p*0.8)) + ')';
+      bg.style.background = 'rgba(0,0,0,' + (0.45 * (1 - p * 0.8)) + ')';
     }, { passive: true });
 
-    modal.addEventListener('touchend', e => {
+    handle.addEventListener('touchend', e => {
       if (!dragging) return;
       dragging = false;
       const elapsed = Date.now() - startTime;
-      const velocity = curY / (elapsed || 1);
-      const shouldClose = curY > THRESHOLD || (velocity > 0.4 && curY > 40);
+      const velocity = curY / Math.max(elapsed, 1);
+      const shouldClose = curY > THRESHOLD || (velocity > 0.5 && curY > 30);
+
       if (shouldClose) {
         modal.style.transition = 'transform 0.22s ease';
         modal.style.transform = 'translateY(110%)';
@@ -10041,22 +10058,24 @@ function initModalDragClose() {
         setTimeout(() => {
           bg.classList.remove('open');
           modal.style.cssText = '';
-          bg.style.cssText = '';
+          bg.style.background = '';
+          bg.style.transition = '';
         }, 230);
       } else {
-        modal.style.transition = 'transform 0.28s cubic-bezier(0.34,1.56,0.64,1)';
+        modal.style.transition = 'transform 0.3s cubic-bezier(0.34,1.56,0.64,1)';
         modal.style.transform = 'translateY(0)';
-        bg.style.transition = 'background 0.28s';
+        bg.style.transition = 'background 0.3s';
         bg.style.background = '';
         setTimeout(() => {
           modal.style.transition = '';
           bg.style.transition = '';
-        }, 300);
+        }, 320);
         curY = 0;
       }
     }, { passive: true });
   });
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
   try { initModalDragClose(); } catch(e) {}
