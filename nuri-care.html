@@ -1830,9 +1830,11 @@ body.dark .baby-dday-sub { color: #a89060; }
           <div class="baby-avatar" id="app-avatar">🍼</div>
           <div>
             <div class="baby-name" id="app-baby-name">아기</div>
-            <div class="baby-dday" id="app-baby-dday"></div>
-            <div class="baby-dday-d" id="app-baby-dplus"></div>
-            <div class="baby-dday-sub" id="app-baby-age"></div>
+            <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">
+              <div class="baby-dday" id="app-baby-dday"></div>
+              <div class="baby-dday-sub" id="app-baby-age" style="white-space:nowrap;"></div>
+            </div>
+            <div class="baby-dday-d" id="app-baby-dplus" style="display:none;"></div>
           </div>
         </div>
         <div class="app-header-top-right">
@@ -2905,6 +2907,9 @@ body.dark .baby-dday-sub { color: #a89060; }
     <div class="modal-handle"></div>
     <button class="modal-close-x" aria-label="닫기" onclick="closePumpModal()">✕</button>
     <h2>🤱 유축 기록</h2>
+    <div id="pump-timer-running-banner" style="display:none;background:#f0e8ff;border:1px solid #d8b4fe;border-radius:8px;padding:8px 12px;margin-bottom:12px;font-size:12px;font-weight:700;color:#7c3aaf;text-align:center;">
+      ⏱️ 타이머 진행 중 — 모달을 닫아도 타이머가 유지돼요
+    </div>
 
     <!-- 유축 타이머 (좌/우 분리) -->
     <div style="background:#f9f0ff;border:1.5px solid #e9d5ff;border-radius:14px;padding:14px;margin-bottom:14px;text-align:center;">
@@ -2947,7 +2952,7 @@ body.dark .baby-dday-sub { color: #a89060; }
     <span class="field-label">기록 시각</span>
     <input type="datetime-local" id="pump-time" aria-label="유축 기록 시각">
     <div class="modal-actions">
-      <button class="btn-cancel" aria-label="취소" onclick="closePumpModal()">취소</button>
+      <button class="btn-cancel" aria-label="취소" onclick="pumpSideReset();closePumpModal()">취소</button>
       <button class="btn-save" aria-label="저장" style="background:#7c3aaf;" onclick="savePumpSimple()">저장</button>
     </div>
   </div>
@@ -4004,8 +4009,15 @@ function openModal(type) {
   if (type === 'sleep') { document.getElementById('sleep-start').value = now; document.getElementById('sleep-end').value = now; selOpt('sleep-t', 'start'); }
   if (type === 'diaper') { document.getElementById('diaper-time').value = now; }
   if (type === 'pump') {
-    // 타이머 초기화
-    try { pumpSideReset(); } catch(e) {}
+    // 타이머가 진행 중이 아닐 때만 초기화
+    const pumpRunning = _pumpSLStart || _pumpSRStart;
+    if (!pumpRunning) { try { pumpSideReset(); } catch(e) {} }
+    else {
+      try { pumpSideTick(); } catch(e) {}
+      // 배너 표시
+      const banner=document.getElementById('pump-timer-running-banner');
+      if(banner) banner.style.display='';
+    }
     // 왼쪽/오른쪽 초기화 + 현재시간 설정
     const lEl = document.getElementById('pump-L-ml');
     const rEl = document.getElementById('pump-R-ml');
@@ -7685,6 +7697,9 @@ function updatePageLabel(n) {
 
 function goToPage(n) {
   currentPage = Math.max(0, Math.min(10, n));
+  // 마지막 페이지 저장 (새로고침 복구용)
+  try { localStorage.setItem('last_page', String(currentPage)); } catch(e) {}
+  try { sessionStorage.setItem('nuri_last_page', String(currentPage)); } catch(e) {}
   if (n===3) try { renderPatternClock(); } catch(e) {}
   if (n===4) try { renderScoreCard(); renderPatternAnalysis(); updateChart(); } catch(e) {}
   document.getElementById('swipe-container').style.transform =
@@ -8155,8 +8170,8 @@ function enterApp() {
   try { updateSleepBanner(); } catch(e) {}
 
   try { renderAppHeader(); } catch(e) {}
-  const savedPage = parseInt(sessionStorage.getItem('nuri_last_page') || '2');
-  const startPage = (savedPage >= 0 && savedPage <= 9) ? savedPage : 2;
+  const savedPage = parseInt(sessionStorage.getItem('nuri_last_page') || localStorage.getItem('last_page') || '2');
+  const startPage = (savedPage >= 0 && savedPage <= 10) ? savedPage : 2;
   try { goToPage(startPage); } catch(e) {}
   try { setTimeout(initSwipe, 100); } catch(e) {}
 
@@ -8445,6 +8460,9 @@ function pumpSideToggle(side) {
 }
 
 function pumpSideCard(side,active) {
+  // 배너 업데이트
+  const banner=document.getElementById('pump-timer-running-banner');
+  if(banner) banner.style.display=(_pumpSLStart||_pumpSRStart)?'':'none';
   const card=document.getElementById('pump-'+side+'-card');
   const btn=document.getElementById('pump-'+side+'-btn');
   const disp=document.getElementById('pump-'+side+'-disp');
@@ -8543,13 +8561,14 @@ function pumpSetTotal() {
 }
 
 function closePumpModal() {
-  pumpTimerReset();
+  // 타이머 진행 중이면 리셋하지 않음 (모달 재오픈 시 이어서 사용)
   const modal = document.getElementById('modal-pump');
   if (modal) modal.classList.remove('open');
 }
 
 function savePumpSimple() {
-  // 모달 먼저 닫기 (에러 관계없이)
+  // 저장 시 타이머 리셋 후 닫기
+  try { pumpSideReset(); } catch(e) {}
   closePumpModal();
   try {
     const L = parseInt(document.getElementById('pump-L-ml')?.value||'0')||0;
