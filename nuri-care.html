@@ -137,7 +137,7 @@ input:focus { border-color: #bfdbfe; }
 .app-header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .app-header-left { display: flex; align-items: center; gap: 10px; }
 .baby-avatar { width: 40px; height: 40px; border-radius: 12px; background: #fff7d6; border: 1px solid #e8d796; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-.baby-name { font-size: 17px; font-weight: 700; color: #1a1a1a; }
+.baby-name { font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 1px; }
 /* 헤더 D+N 강조 */
 .baby-dday {
   font-family: 'Jua', 'Apple SD Gothic Neo', sans-serif !important;
@@ -145,7 +145,8 @@ input:focus { border-color: #bfdbfe; }
   font-weight: 400 !important;
   color: #7a5600 !important;
   letter-spacing: 0.02em;
-  line-height: 1.1;
+  line-height: 1.0;
+  margin-bottom: 0;
 }
 
 .app-header-top-right { display: flex; align-items: flex-start; gap: 8px; flex-shrink: 0; margin-right: 4px; }
@@ -1567,7 +1568,8 @@ body.dark .baby-dday-sub { color: #a89060 !important; }
   font-weight: 400 !important;
   color: #7a5600 !important;
   letter-spacing: 0.02em;
-  line-height: 1.1;
+  line-height: 1.0;
+  margin-bottom: 0;
 }
 .baby-dday-sub {
   font-family: 'Gowun Dodum', 'Apple SD Gothic Neo', sans-serif !important;
@@ -1858,10 +1860,8 @@ body.dark .header-date { color: #c8a870; }
           <div class="baby-avatar" id="app-avatar">🍼</div>
           <div>
             <div class="baby-name" id="app-baby-name">아기</div>
-            <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">
-              <div class="baby-dday" id="app-baby-dday"></div>
-              <div class="baby-dday-sub" id="app-baby-age" style="white-space:nowrap;font-family:'Gowun Dodum',sans-serif;font-size:12px;color:#c8a070;"></div>
-            </div>
+            <div class="baby-dday" id="app-baby-dday"></div>
+            <div class="baby-dday-sub" id="app-baby-age" style="font-family:'Gowun Dodum',sans-serif;font-size:12px;color:#c8a070;margin-top:1px;"></div>
             <div class="baby-dday-d" id="app-baby-dplus" style="display:none;"></div>
           </div>
         </div>
