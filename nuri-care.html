@@ -132,7 +132,7 @@ input:focus { border-color: #bfdbfe; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
 /* ── 메인 앱 헤더 ── */
-.app-header { background: #fff; padding: 44px 20px 10px; box-shadow: 0 1px 0 #e5e7eb; flex-shrink: 0; }
+.app-header { background: #fff; padding: 44px 16px 10px; box-shadow: 0 1px 0 #e5e7eb; flex-shrink: 0; }
 .app-header-inner { max-width: 480px; margin: 0 auto; }
 .app-header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .app-header-left { display: flex; align-items: center; gap: 10px; }
@@ -149,7 +149,7 @@ input:focus { border-color: #bfdbfe; }
 }
 
 .app-header-top-right { display: flex; align-items: flex-start; gap: 8px; flex-shrink: 0; margin-right: 4px; }
-.header-date { font-size: 12px; font-weight: 600; color: #7a5600; font-family: 'Gowun Dodum', sans-serif; white-space: nowrap; }
+.header-date { font-size: 12px; font-weight: 600; color: #7a5600; font-family: 'Gowun Dodum', sans-serif; white-space: nowrap; padding-right: 16px; }
 .app-header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
 .app-header-actions::-webkit-scrollbar { display: none; }
 .hdr-btn { display: flex; align-items: center; gap: 4px; padding: 5px 11px; border-radius: 20px; border: 1.5px solid; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
@@ -6349,25 +6349,31 @@ function renderGrowthChart() {
     boy:  [49.9,54.7,58.4,61.4,63.9,65.9,67.6,69.2,70.6,72.0,73.3,74.5,75.7,78.0,80.2,82.3,84.2,86.0,87.8],
     girl: [49.1,53.7,57.1,59.8,62.1,64.0,65.7,67.3,68.7,70.1,71.5,72.8,74.0,76.3,78.5,80.7,82.7,84.6,86.5]
   };
+  // 머리둘레 평균 (대한소아과학회/WHO 기준, cm) - 0~18개월
+  // 0,1,2,3,4,5,6,7,8,9,10,11,12,15,18개월
+  const KR_HEAD = {
+    boy:  [34.5,37.3,39.1,40.5,41.6,42.6,43.3,44.0,44.5,45.0,45.4,45.8,46.1,47.0,47.8,48.4,48.9,49.3,49.7],
+    girl: [33.9,36.5,38.3,39.5,40.6,41.5,42.2,42.8,43.4,43.8,44.2,44.6,44.9,45.8,46.5,47.1,47.6,48.0,48.4]
+  };
   const gKey = gender==='boy' ? 'boy' : 'girl';
   const gColor = gender==='boy' ? '#60a5fa' : '#f472b6';
   const gLabel = gender==='boy' ? '남아' : '여아';
 
   const weights = sorted.filter(r=>r.weight);
   const heights = sorted.filter(r=>r.height);
+  const heads   = sorted.filter(r=>r.head);
   const pad = { top:20, right:16, bottom:30, left:40 };
   const cW = W - pad.left - pad.right;
   const cH = H - pad.top - pad.bottom;
 
-  // 탭 확인
-  const wTab = document.getElementById('growth-tab-weight');
-  const showWeight = !wTab || wTab.classList.contains('active');
+  // 탭 확인 (_growthTab 전역변수 사용)
+  const tab = _growthTab || 'weight';
 
-  const dataRecs = showWeight ? weights : heights;
-  const krAvg    = showWeight ? KR_WEIGHT[gKey] : KR_HEIGHT[gKey];
-  const unit     = showWeight ? 'kg' : 'cm';
-  const lineColor= showWeight ? '#c8860a' : '#7c3aaf';
-  const dotColor = showWeight ? '#7a5600' : '#6b21a8';
+  const dataRecs = tab==='weight' ? weights : tab==='height' ? heights : heads;
+  const krAvg    = tab==='weight' ? KR_WEIGHT[gKey] : tab==='height' ? KR_HEIGHT[gKey] : KR_HEAD[gKey];
+  const unit     = tab==='weight' ? 'kg' : 'cm';
+  const lineColor= tab==='weight' ? '#c8860a' : tab==='height' ? '#1d4ed8' : '#7c3aaf';
+  const dotColor = tab==='weight' ? '#7a5600' : tab==='height' ? '#1e40af' : '#6b21a8';
 
   if (!dataRecs.length) {
     ctx.fillStyle = textColor;
