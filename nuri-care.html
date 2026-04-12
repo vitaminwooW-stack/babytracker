@@ -206,8 +206,8 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .section-title-row .section-title { margin-bottom: 0; }
 
 /* ── 스와이프 ── */
-.swipe-container { display: flex; width: 1100%; height: 100%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
-.swipe-page { width: calc(100% / 11); height: 100%; flex-shrink: 0; overflow: hidden; }
+.swipe-container { display: flex; width: 1000%; height: 100%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
+.swipe-page { width: calc(100% / 10); height: 100%; flex-shrink: 0; overflow: hidden; }
 /* 사진 페이지(2번째)는 스크롤 없이 꽉 차게 */
 .swipe-page:nth-child(2) { overflow: hidden; }
 
@@ -2364,6 +2364,44 @@ body.dark .header-date { color: #c8a870; }
             </button>
           </div>
 
+          <!-- 폰 교체 가이드 -->
+          <div class="feature-section-title">📱 폰 교체 · 데이터 이전</div>
+          <div class="chart-wrap u-p1416" style="background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1.5px solid #fed7aa;">
+            <div style="font-size:13px;font-weight:800;color:#c2410c;margin-bottom:10px;">⚠️ 폰 바꾸기 전에 꼭 확인하세요!</div>
+
+            <!-- 방법 1: Firebase 연동 -->
+            <div style="background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:10px;">
+              <div style="font-size:13px;font-weight:800;color:#1a1a1a;margin-bottom:6px;">
+                ✅ 방법 1 · 초대 코드 연동 (추천)
+              </div>
+              <div style="font-size:12px;color:#6b7280;line-height:1.8;">
+                1. 현재 폰에서 <strong>상단 초대 버튼</strong> → 초대 코드 확인<br>
+                2. 새 폰에서 앱 설치 후 <strong>초대 코드 입력</strong><br>
+                3. 기록이 자동으로 동기화돼요 🎉
+              </div>
+            </div>
+
+            <!-- 방법 2: CSV 백업 -->
+            <div style="background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:10px;">
+              <div style="font-size:13px;font-weight:800;color:#1a1a1a;margin-bottom:6px;">
+                📁 방법 2 · CSV 파일로 백업
+              </div>
+              <div style="font-size:12px;color:#6b7280;line-height:1.8;">
+                1. 아래 <strong>"기록 데이터 CSV로 내보내기"</strong> 탭<br>
+                2. 파일을 클라우드(카카오톡 나에게 보내기 등)에 저장<br>
+                3. 새 폰에서 확인 가능 (재가져오기는 현재 미지원)
+              </div>
+              <div style="font-size:11px;color:#f97316;margin-top:6px;">
+                ⚠️ CSV는 조회용이에요. 가장 확실한 방법은 초대 코드 연동이에요.
+              </div>
+            </div>
+
+            <!-- 지금 바로 백업 버튼 -->
+            <button onclick="exportCSV()" style="width:100%;padding:12px;background:linear-gradient(135deg,#c2410c,#f97316);color:#fff;border:none;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;">
+              💾 지금 바로 기록 백업하기
+            </button>
+          </div>
+
           <!-- 화면 설정 -->
           <div class="feature-section-title">🌙 화면 설정</div>
           <div class="chart-wrap u-p1416">
@@ -3083,7 +3121,18 @@ body.dark .header-date { color: #c8a870; }
     </div>
   </div>
 </div>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">
+// ── 네트워크 상태 감지 ──
+window.addEventListener('online', () => {
+  showToast('🌐 인터넷에 연결됐어요');
+  try { if (fbDb) firebase.database().goOnline(); } catch(e) {}
+});
+window.addEventListener('offline', () => {
+  showToast('📴 오프라인 모드 — 기록은 계속 저장돼요');
+  try { if (fbDb) firebase.database().goOffline(); } catch(e) {}
+});
+
+</script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script data-cfasync="false">
@@ -9616,6 +9665,8 @@ function fbInit() {
     fbApp = firebase.initializeApp(FIREBASE_CONFIG);
     fbDb = firebase.database();
     fbAuth = firebase.auth();
+    // 오프라인 모드: 네트워크 없어도 localStorage에서 읽기
+    try { firebase.database.enableLogging(false); } catch(e) {}
     // 익명 로그인 (앱 시작 시 자동)
     fbAuth.signInAnonymously().then(function(result) {
       fbUid = result.user.uid;}).catch(function(e) {
