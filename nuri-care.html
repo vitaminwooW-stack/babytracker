@@ -1862,10 +1862,7 @@ body.dark .header-date { color: #c8a870; }
     <div class="app-header-inner">
       <div class="app-header-top">
         <div class="app-header-left">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-            <div class="baby-avatar" id="app-avatar" onclick="openBabyPicker()" style="cursor:pointer;" title="아기 선택">🍼</div>
-            <div id="avatar-hint-text" onclick="openBabyPicker()" style="font-size:9px;color:#c8a070;cursor:pointer;white-space:nowrap;font-family:'Gowun Dodum',sans-serif;">탭 → 추가</div>
-          </div>
+          <div class="baby-avatar" id="app-avatar" onclick="openBabyPicker()" style="cursor:pointer;position:relative;" title="아기 선택/추가">🍼</div>
           <div>
             <div class="baby-name" id="app-baby-name">아기</div>
             <div class="baby-dday" id="app-baby-dday"></div>
@@ -1884,6 +1881,9 @@ body.dark .header-date { color: #c8a870; }
         <button class="hdr-btn profile" onclick="openProfileEdit()">✏️ 프로필</button>
         
         <button class="hdr-btn invite"  onclick="openInviteModal()">💌 초대</button>
+        <button class="hdr-btn" id="hdr-add-baby-btn" onclick="openBabyPicker()"
+          style="background:#fff7d6;border-color:#f0d060;color:#7a5600;"
+          title="아기 전환/추가">👶 아기</button>
         <button class="hdr-btn" id="wake-lock-btn" onclick="toggleWakeLock()"
           title="화면 유지 (수유·유축 중 화면 꺼짐 방지)"
           style="background:#f9fafb;border-color:#e5e7eb;color:#6b7280;">
@@ -3204,54 +3204,39 @@ function loadBabies() {
   try {
     const b = localStorage.getItem('babies_list');
     if (b) babies = JSON.parse(b);
+    else babies = [];
   } catch(e) { babies = []; }
 
-  // 2. 마이그레이션: 기존 단일 프로필이 babies_list에 없으면 추가
-  // migration_done이어도 기존 profile이 babies에 없으면 재마이그레이션
-  const migDone = localStorage.getItem('migration_done');
-  const oldProfileExists = !!localStorage.getItem('baby_profile');
-  const hasOldProfileInBabies = oldProfileExists && babies.some(b => {
-    const prof = localStorage.getItem('baby_profile');
-    try { const p=JSON.parse(prof); return b.name===(p.name||'아기') && b.birthDate===p.birthDate; } catch(e){return false;}
-  });
-  if (!migDone || (oldProfileExists && !hasOldProfileInBabies)) {
-    const oldProfile = localStorage.getItem('baby_profile');
-    if (oldProfile) {
-      try {
-        const p = JSON.parse(oldProfile);
-        // 이미 같은 이름+생일의 아기가 없을 때만 추가
-        const alreadyExists = babies.some(b => b.name === (p.name||'아기') && b.birthDate === p.birthDate);
-        if (!alreadyExists) {
-          const id = generateBabyId();
-          const avatar = p.gender === 'boy' ? '👦' : p.gender === 'girl' ? '👧' : '👶';
-          babies.unshift({ id, name: p.name || '아기', birthDate: p.birthDate, gender: p.gender || 'unknown', avatar });
+  // 2. 기존 단일 프로필을 babies에 포함 (항상 체크)
+  const oldProfileStr = localStorage.getItem('baby_profile');
+  if (oldProfileStr) {
+    try {
+      const op = JSON.parse(oldProfileStr);
+      const opName = op.name || '아기';
+      const opBirth = op.birthDate || '';
+      // 이미 있는지 확인 (이름+생일 기준)
+      const exists = babies.some(b => b.name === opName && b.birthDate === opBirth);
+      if (!exists && opName && opBirth) {
+        const id = 'baby_legacy_' + (opBirth || Date.now()).replace(/-/g,'');
+        const avatar = op.gender === 'boy' ? '👦' : op.gender === 'girl' ? '👧' : '👶';
+        babies.unshift({ id, name: opName, birthDate: opBirth, gender: op.gender || 'unknown', avatar });
 
-          // 기존 데이터를 새 key로 복사
-          const migrateKeys = [
-            'baby_records','baby_sleeping','baby_feeding','baby_pumping',
-            'baby_profile','growth_records','diary_entries',
-            'milestone_checks','vaccine_checks','baby_photo','dad_checks'
-          ];
-          migrateKeys.forEach(key => {
-            const val = localStorage.getItem(key);
-            if (val) localStorage.setItem(key + '_' + id, val);
+        // 기존 데이터 복사 (한 번만)
+        const copyDoneKey = 'data_copied_' + id;
+        if (!localStorage.getItem(copyDoneKey)) {
+          ['baby_records','baby_sleeping','baby_feeding','baby_pumping',
+           'baby_profile','growth_records','diary_entries',
+           'milestone_checks','vaccine_checks','baby_photo','dad_checks'
+          ].forEach(key => {
+            const v = localStorage.getItem(key);
+            if (v) localStorage.setItem(key + '_' + id, v);
           });
-          idbGet('baby_records').then(val => {
-            if (val) idbSet('baby_records_' + id, val);
-          }).catch(() => {});
-
-          saveBabies();
-          // active_baby_id가 없을 때만 이 아기로 설정
-          if (!localStorage.getItem('active_baby_id')) {
-            activeBabyId = id;
-            localStorage.setItem('active_baby_id', id);
-          }
+          idbGet('baby_records').then(v => { if(v) idbSet('baby_records_'+id, v); }).catch(()=>{});
+          localStorage.setItem(copyDoneKey, '1');
         }
-        localStorage.setItem('migration_done', '1');
-      } catch(e) { localStorage.setItem('migration_done', '1'); }
-    } else {
-      localStorage.setItem('migration_done', '1');
-    }
+        saveBabies();
+      }
+    } catch(e) {}
   }
 
   // 3. 활성 아기 복구
@@ -4049,32 +4034,13 @@ function renderAppHeader() {
   const avatarEl = document.getElementById('app-avatar');
   if (avatarEl) {
     avatarEl.textContent = avatarMap[p.gender] || '🍼';
-    // 아기 수에 따른 힌트 표시
-    if (babies.length > 1) {
-      avatarEl.style.boxShadow = '0 0 0 2.5px #c8860a';
-      avatarEl.style.cursor = 'pointer';
-      // 배지 업데이트
-      let badge = document.getElementById('avatar-baby-badge');
-      if (!badge) {
-        badge = document.createElement('div');
-        badge.id = 'avatar-baby-badge';
-        badge.style.cssText = 'position:absolute;top:-4px;right:-4px;background:#c8860a;color:#fff;border-radius:50%;width:16px;height:16px;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;z-index:1;';
-        avatarEl.parentElement.style.position='relative';
-        avatarEl.parentElement.appendChild(badge);
-      }
-      badge.textContent = babies.length;
-      badge.style.display = 'flex';
-    } else {
-      avatarEl.style.boxShadow = '0 0 0 2px #f0d060';
-      avatarEl.style.cursor = 'pointer';
-      const badge = document.getElementById('avatar-baby-badge');
-      if (badge) badge.style.display = 'none';
+    // 아기 버튼 텍스트 업데이트
+    const addBabyBtn = document.getElementById('hdr-add-baby-btn');
+    if (addBabyBtn) {
+      addBabyBtn.textContent = babies.length > 1 ? '👶 ' + babies.length + '명' : '👶 아기';
     }
-    // 힌트 텍스트 업데이트
-    const hintEl = document.getElementById('avatar-hint-text');
-    if (hintEl) {
-      hintEl.textContent = babies.length > 1 ? babies.length + '명 ▾' : '탭 → 추가';
-    }
+    avatarEl.style.boxShadow = babies.length > 1 ? '0 0 0 2.5px #c8860a' : '0 0 0 2px #f0d060';
+
   }
 
   if (p.birthDate) {
@@ -5352,9 +5318,18 @@ function showBabyPhoto(data) {
 }
 
 function renderPhotoPage() {
-  const raw = localStorage.getItem(getBabyKey('baby_profile'));
-  if (!raw) return;
-  const p = JSON.parse(raw);
+  // babies 배열 우선, 없으면 localStorage 폴백
+  let p = null;
+  const ab = babies.find(b => b.id === activeBabyId);
+  if (ab) {
+    // babies 배열에서 기본 정보 + localStorage에서 상세 정보 병합
+    const raw = localStorage.getItem(getBabyKey('baby_profile'));
+    p = raw ? { ...ab, ...JSON.parse(raw) } : { name: ab.name, birthDate: ab.birthDate, gender: ab.gender };
+  } else {
+    const raw = localStorage.getItem(getBabyKey('baby_profile'));
+    if (!raw) return;
+    try { p = JSON.parse(raw); } catch(e) { return; }
+  }
   const name = p.name || '';
   let daysText = '';
   let chips = [];
