@@ -1862,7 +1862,10 @@ body.dark .header-date { color: #c8a870; }
     <div class="app-header-inner">
       <div class="app-header-top">
         <div class="app-header-left">
-          <div class="baby-avatar" id="app-avatar" onclick="openBabyPicker()" style="cursor:pointer;" title="아기 선택">🍼</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+            <div class="baby-avatar" id="app-avatar" onclick="openBabyPicker()" style="cursor:pointer;" title="아기 선택">🍼</div>
+            <div id="avatar-hint-text" onclick="openBabyPicker()" style="font-size:9px;color:#c8a070;cursor:pointer;white-space:nowrap;font-family:'Gowun Dodum',sans-serif;">탭 → 추가</div>
+          </div>
           <div>
             <div class="baby-name" id="app-baby-name">아기</div>
             <div class="baby-dday" id="app-baby-dday"></div>
@@ -3203,37 +3206,51 @@ function loadBabies() {
     if (b) babies = JSON.parse(b);
   } catch(e) { babies = []; }
 
-  // 2. 마이그레이션: 기존 단일 프로필 → 첫 번째 아기로 변환
-  if (babies.length === 0) {
-    // activeBabyId 없을 때 직접 'baby_profile' 키로 조회
+  // 2. 마이그레이션: 기존 단일 프로필이 babies_list에 없으면 추가
+  // migration_done이어도 기존 profile이 babies에 없으면 재마이그레이션
+  const migDone = localStorage.getItem('migration_done');
+  const oldProfileExists = !!localStorage.getItem('baby_profile');
+  const hasOldProfileInBabies = oldProfileExists && babies.some(b => {
+    const prof = localStorage.getItem('baby_profile');
+    try { const p=JSON.parse(prof); return b.name===(p.name||'아기') && b.birthDate===p.birthDate; } catch(e){return false;}
+  });
+  if (!migDone || (oldProfileExists && !hasOldProfileInBabies)) {
     const oldProfile = localStorage.getItem('baby_profile');
     if (oldProfile) {
       try {
         const p = JSON.parse(oldProfile);
-        const id = generateBabyId();
-        const avatar = p.gender === 'boy' ? '👦' : p.gender === 'girl' ? '👧' : '👶';
-        babies = [{ id, name: p.name || '아기', birthDate: p.birthDate, gender: p.gender || 'unknown', avatar }];
+        // 이미 같은 이름+생일의 아기가 없을 때만 추가
+        const alreadyExists = babies.some(b => b.name === (p.name||'아기') && b.birthDate === p.birthDate);
+        if (!alreadyExists) {
+          const id = generateBabyId();
+          const avatar = p.gender === 'boy' ? '👦' : p.gender === 'girl' ? '👧' : '👶';
+          babies.unshift({ id, name: p.name || '아기', birthDate: p.birthDate, gender: p.gender || 'unknown', avatar });
 
-        // ── 핵심: 기존 데이터를 새 key로 복사 ──
-        const migrateKeys = [
-          'baby_records', 'baby_sleeping', 'baby_feeding', 'baby_pumping',
-          'baby_profile', 'growth_records', 'diary_entries',
-          'milestone_checks', 'vaccine_checks', 'baby_photo', 'dad_checks'
-        ];
-        migrateKeys.forEach(key => {
-          const val = localStorage.getItem(key);
-          if (val) localStorage.setItem(key + '_' + id, val);
-        });
-        // IndexedDB도 마이그레이션
-        idbGet('baby_records').then(val => {
-          if (val) idbSet('baby_records_' + id, val);
-        }).catch(() => {});
+          // 기존 데이터를 새 key로 복사
+          const migrateKeys = [
+            'baby_records','baby_sleeping','baby_feeding','baby_pumping',
+            'baby_profile','growth_records','diary_entries',
+            'milestone_checks','vaccine_checks','baby_photo','dad_checks'
+          ];
+          migrateKeys.forEach(key => {
+            const val = localStorage.getItem(key);
+            if (val) localStorage.setItem(key + '_' + id, val);
+          });
+          idbGet('baby_records').then(val => {
+            if (val) idbSet('baby_records_' + id, val);
+          }).catch(() => {});
 
-        activeBabyId = id;
-        saveBabies();
-        localStorage.setItem('active_baby_id', id);
+          saveBabies();
+          // active_baby_id가 없을 때만 이 아기로 설정
+          if (!localStorage.getItem('active_baby_id')) {
+            activeBabyId = id;
+            localStorage.setItem('active_baby_id', id);
+          }
+        }
         localStorage.setItem('migration_done', '1');
-      } catch(e) {}
+      } catch(e) { localStorage.setItem('migration_done', '1'); }
+    } else {
+      localStorage.setItem('migration_done', '1');
     }
   }
 
@@ -3278,7 +3295,13 @@ function switchBaby(id) {
   try { updateStatus(); } catch(e) {}
   try { updateTodayWidget(); } catch(e) {}
   try { updateSleepBanner(); } catch(e) {}
+  // 일기 초기화
+  try { renderDiaryList(); } catch(e) {}
+  // 사진 초기화
+  try { renderPhotoPage(); } catch(e) {}
+  // 아빠탭 초기화
   try { renderDadTabChecklist(); } catch(e) {}
+  try { renderDadTodayRecords(); } catch(e) {}
 
   const baby = babies.find(b => b.id === id);
   showToast('👶 ' + (baby?.name || '아기') + '의 기록으로 전환됐어요');
@@ -4047,16 +4070,11 @@ function renderAppHeader() {
       const badge = document.getElementById('avatar-baby-badge');
       if (badge) badge.style.display = 'none';
     }
-    // 힌트 텍스트 (아기 이름 아래)
-    let hintEl = document.getElementById('avatar-hint-text');
-    if (!hintEl) {
-      hintEl = document.createElement('div');
-      hintEl.id = 'avatar-hint-text';
-      hintEl.style.cssText = "font-size:9px;color:#c8a070;text-align:center;margin-top:2px;cursor:pointer;";
-      hintEl.onclick = openBabyPicker;
-      avatarEl.parentElement.appendChild(hintEl);
+    // 힌트 텍스트 업데이트
+    const hintEl = document.getElementById('avatar-hint-text');
+    if (hintEl) {
+      hintEl.textContent = babies.length > 1 ? babies.length + '명 ▾' : '탭 → 추가';
     }
-    hintEl.textContent = babies.length > 1 ? babies.length + '명 ▾' : '탭 → 추가';
   }
 
   if (p.birthDate) {
@@ -5110,8 +5128,15 @@ function selEditBirthType(t) {
 }
 
 function openProfileEdit() {
-  const raw = localStorage.getItem(getBabyKey('baby_profile'));
-  if (!raw) return;
+  // 현재 아기 프로필 로드 (babies 배열 우선)
+  let raw = localStorage.getItem(getBabyKey('baby_profile'));
+  if (!raw) {
+    // babies 배열에서 현재 아기 정보로 기본값 구성
+    const ab = babies.find(b => b.id === activeBabyId);
+    if (ab) {
+      raw = JSON.stringify({ name: ab.name, birthDate: ab.birthDate, gender: ab.gender });
+    } else return;
+  }
   const p = JSON.parse(raw);
   document.getElementById('ep-name').value = p.name || '';
   document.getElementById('ep-birth-date').value = p.birthDate || '';
