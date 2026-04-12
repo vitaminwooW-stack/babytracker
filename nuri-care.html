@@ -2374,6 +2374,10 @@ body.dark .header-date { color: #c8a870; }
               id="setting-add-baby-btn">
               ＋ 아기 추가
             </button>
+            <!-- 출생 기념 카드 -->
+            <button onclick="openBirthCard()" style="width:100%;margin-top:10px;padding:13px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+              🎉 출생 기념 카드 만들기
+            </button>
           </div>
 
           <div class="feature-section-title">📱 폰 교체 · 데이터 이전</div>
@@ -2435,11 +2439,14 @@ body.dark .header-date { color: #c8a870; }
               </div>
             </div>
           </div>
-          <div class="feature-section-title">🔔 수유·수면 알림</div>
+          <div class="feature-section-title">🔔 수유·수면·기념일 알림</div>
           <div class="chart-wrap u-p1416">
             <div style="font-size:13px;color:var(--text-sub,#555);margin-bottom:10px;line-height:1.7;">
               수유 시간이 되거나 아기가 오래 깨있으면<br>
-              <strong>자동으로 알림</strong>을 보내드려요.
+              <strong>자동으로 알림</strong>을 보내드려요.<br>
+              <span style="font-size:11px;color:var(--text-sub,#9ca3af);">
+                🏥 퇴원 후 케어 알림 · 🎂 100일 알림도 자동 발송돼요
+              </span>
             </div>
             <button id="notif-req-btn" class="export-btn" onclick="requestNotifPermission()" style="margin-bottom:0">
               🔔 수유·수면 알림 켜기
@@ -3190,25 +3197,47 @@ function saveBabies() {
 }
 
 function loadBabies() {
+  // 1. babies_list 로드
   try {
     const b = localStorage.getItem('babies_list');
     if (b) babies = JSON.parse(b);
   } catch(e) { babies = []; }
 
-  // 마이그레이션: 기존 single 프로필이 있으면 첫 번째 아기로 변환
+  // 2. 마이그레이션: 기존 단일 프로필 → 첫 번째 아기로 변환
   if (babies.length === 0) {
-    const oldProfile = localStorage.getItem(getBabyKey('baby_profile'));
+    // activeBabyId 없을 때 직접 'baby_profile' 키로 조회
+    const oldProfile = localStorage.getItem('baby_profile');
     if (oldProfile) {
-      const p = JSON.parse(oldProfile);
-      const id = generateBabyId();
-      babies = [{ id, name: p.name || '아기', birthDate: p.birthDate, gender: p.gender || 'unknown', avatar: p.gender === 'boy' ? '👦' : '👧' }];
-      activeBabyId = id;
-      saveBabies();
-      localStorage.setItem('active_baby_id', id);
+      try {
+        const p = JSON.parse(oldProfile);
+        const id = generateBabyId();
+        const avatar = p.gender === 'boy' ? '👦' : p.gender === 'girl' ? '👧' : '👶';
+        babies = [{ id, name: p.name || '아기', birthDate: p.birthDate, gender: p.gender || 'unknown', avatar }];
+
+        // ── 핵심: 기존 데이터를 새 key로 복사 ──
+        const migrateKeys = [
+          'baby_records', 'baby_sleeping', 'baby_feeding', 'baby_pumping',
+          'baby_profile', 'growth_records', 'diary_entries',
+          'milestone_checks', 'vaccine_checks', 'baby_photo', 'dad_checks'
+        ];
+        migrateKeys.forEach(key => {
+          const val = localStorage.getItem(key);
+          if (val) localStorage.setItem(key + '_' + id, val);
+        });
+        // IndexedDB도 마이그레이션
+        idbGet('baby_records').then(val => {
+          if (val) idbSet('baby_records_' + id, val);
+        }).catch(() => {});
+
+        activeBabyId = id;
+        saveBabies();
+        localStorage.setItem('active_baby_id', id);
+        localStorage.setItem('migration_done', '1');
+      } catch(e) {}
     }
   }
 
-  // 활성 아기 복구
+  // 3. 활성 아기 복구
   const saved = localStorage.getItem('active_baby_id');
   if (saved && babies.find(b => b.id === saved)) {
     activeBabyId = saved;
@@ -3219,31 +3248,40 @@ function loadBabies() {
 }
 
 function switchBaby(id) {
+  if (!id || !babies.find(b => b.id === id)) {
+    showToast('아기 정보를 찾을 수 없어요'); return;
+  }
   // 현재 세션 저장
-  saveSessions();
-  saveData();
+  try { saveSessions(); } catch(e) {}
+  try { saveData(); } catch(e) {}
 
   activeBabyId = id;
   localStorage.setItem('active_baby_id', id);
 
-  // 새 아기 데이터 로드
+  // 초기화
   records = []; growthRecords = []; diaryEntries = [];
   sleepingStart = null; feedingStart = null; pumpingStart = null;
+  feedingType = 'breast';
 
-  loadData();
-  loadSessions();
-  loadDiary();
+  // 데이터 로드
+  try { loadData(); } catch(e) {}
+  try { loadSessions(); } catch(e) {}
+  try { loadDiary(); } catch(e) {}
   try { loadGrowthData(); } catch(e) {}
   try { loadMilestoneChecks(); } catch(e) {}
+  try { loadVaccineChecks(); } catch(e) {}
 
+  // UI 갱신
   renderAppHeader();
-  renderTimeline();
-  updateQuickBtns();
-  updateStatus();
-  updateTodayWidget();
+  try { renderTimeline(); } catch(e) {}
+  try { updateQuickBtns(); } catch(e) {}
+  try { updateStatus(); } catch(e) {}
+  try { updateTodayWidget(); } catch(e) {}
   try { updateSleepBanner(); } catch(e) {}
+  try { renderDadTabChecklist(); } catch(e) {}
 
-  showToast('👶 ' + (babies.find(b=>b.id===id)?.name || '아기') + ' 기록으로 전환됐어요');
+  const baby = babies.find(b => b.id === id);
+  showToast('👶 ' + (baby?.name || '아기') + '의 기록으로 전환됐어요');
   closeBabyPicker();
 }
 
@@ -3347,9 +3385,15 @@ function saveAddBaby() {
   const id = addBaby(name, birth, _addBabyGender);
   if (!id) return;
 
+  // 새 아기 프로필 저장
+  const newProfile = { name, birthDate: birth, gender: _addBabyGender || 'unknown' };
+  localStorage.setItem('baby_profile_' + id, JSON.stringify(newProfile));
+  // 빈 기록 초기화
+  localStorage.setItem('baby_records_' + id, '[]');
+
   closeAddBabyModal();
-  switchBaby(id);
   showToast('🎉 ' + name + ' 기록이 추가됐어요!');
+  switchBaby(id);
 }
 
 // ── 전역 변수 ──
@@ -3982,13 +4026,37 @@ function renderAppHeader() {
   const avatarEl = document.getElementById('app-avatar');
   if (avatarEl) {
     avatarEl.textContent = avatarMap[p.gender] || '🍼';
-    // 아기가 여러 명이면 탭 가능 표시
+    // 아기 수에 따른 힌트 표시
     if (babies.length > 1) {
-      avatarEl.style.boxShadow = '0 0 0 2px #c8860a';
-      avatarEl.title = '탭해서 아기 전환';
+      avatarEl.style.boxShadow = '0 0 0 2.5px #c8860a';
+      avatarEl.style.cursor = 'pointer';
+      // 배지 업데이트
+      let badge = document.getElementById('avatar-baby-badge');
+      if (!badge) {
+        badge = document.createElement('div');
+        badge.id = 'avatar-baby-badge';
+        badge.style.cssText = 'position:absolute;top:-4px;right:-4px;background:#c8860a;color:#fff;border-radius:50%;width:16px;height:16px;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;z-index:1;';
+        avatarEl.parentElement.style.position='relative';
+        avatarEl.parentElement.appendChild(badge);
+      }
+      badge.textContent = babies.length;
+      badge.style.display = 'flex';
     } else {
-      avatarEl.style.boxShadow = '';
+      avatarEl.style.boxShadow = '0 0 0 2px #f0d060';
+      avatarEl.style.cursor = 'pointer';
+      const badge = document.getElementById('avatar-baby-badge');
+      if (badge) badge.style.display = 'none';
     }
+    // 힌트 텍스트 (아기 이름 아래)
+    let hintEl = document.getElementById('avatar-hint-text');
+    if (!hintEl) {
+      hintEl = document.createElement('div');
+      hintEl.id = 'avatar-hint-text';
+      hintEl.style.cssText = "font-size:9px;color:#c8a070;text-align:center;margin-top:2px;cursor:pointer;";
+      hintEl.onclick = openBabyPicker;
+      avatarEl.parentElement.appendChild(hintEl);
+    }
+    hintEl.textContent = babies.length > 1 ? babies.length + '명 ▾' : '탭 → 추가';
   }
 
   if (p.birthDate) {
@@ -7587,14 +7655,17 @@ function goToPage(n) {
   if (currentPage === 5) setTimeout(() => { renderGrowthChart(); renderGrowthTable(); }, 100);
   if (currentPage === 6) { try { renderMilestoneList(); } catch(e){} }
   if (currentPage === 7) { try { renderMomCarePage(); } catch(e){} }
+  if (currentPage === 8) {
+    // 아빠 탭
+    setTimeout(() => {
+      try { renderDadTabChecklist(); renderDadTodayRecords(); } catch(e) {}
+    }, 100);
+  }
   if (currentPage === 9) {
+    // 설정 탭
     setTimeout(() => {
       try { updateNotifBtnUI(); loadPinToggle(); renderSettingBabyList(); } catch(e) {}
     }, 150);
-  }
-  if (currentPage === 9) {
-    renderDadTabChecklist();
-    renderDadTodayRecords();
   }
 }
 
@@ -7619,18 +7690,21 @@ function checkNotifBanner() {
   if (el) el.style.display = 'flex';
 }
 
+// 특별 알림 타이머
+let specialNotifTimer = null;
+
 function scheduleNotifications() {
   if (!notifPermission) return;
   clearTimeout(sleepNotifTimer);
   clearTimeout(feedNotifTimer);
+  clearTimeout(specialNotifTimer);
   const days = getBabyAgeDays ? getBabyAgeDays() : 0;
 
-  // ── 수유 알림: 마지막 수유 후 일정 시간 ──
+  // ── 수유 알림 ──
   const lastFeed = records.find(r => r.cat === 'feed' && r.title === '수유');
   if (lastFeed && !feedingStart) {
     const elapsed = Date.now() - new Date(lastFeed.time).getTime();
-    // 신생아: 2~3시간, 2개월 이상: 3~4시간
-    const intervalMin = days < 60 ? 150 : 210; // 2.5h or 3.5h
+    const intervalMin = days < 60 ? 150 : 210;
     const targetMs = intervalMin * 60000 - elapsed;
     if (targetMs > 0 && targetMs < 4 * 3600000) {
       feedNotifTimer = setTimeout(() => {
@@ -7640,7 +7714,7 @@ function scheduleNotifications() {
     }
   }
 
-  // ── 수면 알림: 깨있는 시간이 너무 길면 ──
+  // ── 수면 알림 ──
   const lastSleep = records.find(r => r.cat === 'sleep' && r.title === '기상');
   if (lastSleep && !sleepingStart) {
     const awakeMs = Date.now() - new Date(lastSleep.time).getTime();
@@ -7653,6 +7727,59 @@ function scheduleNotifications() {
       }, targetMs);
     }
   }
+
+  // ── 퇴원/조리원 케어 알림 ──
+  scheduleSpecialMilestoneNotifs(days);
+}
+
+function scheduleSpecialMilestoneNotifs(days) {
+  try {
+    const raw = localStorage.getItem(getBabyKey('baby_profile'));
+    if (!raw) return;
+    const p = JSON.parse(raw);
+    const hospital = p.hospital || '';
+    const center   = p.center   || '';
+    const babyName = p.name || '아기';
+
+    const now = Date.now();
+    const birthMs = p.birthDate ? new Date(p.birthDate).getTime() : 0;
+    if (!birthMs) return;
+
+    // ── 퇴원 후 케어 알림 (출생 후 3일, 5일, 7일, 14일) ──
+    const milestones = [
+      { day: 3,  title: '🏥 퇴원 준비',
+        body: `${babyName}가 태어난 지 3일째예요. ${hospital ? hospital+'에서 ' : ''}퇴원 전 신생아 검사 결과를 꼭 확인하세요!` },
+      { day: 5,  title: '🌡️ 신생아 황달 확인',
+        body: `${babyName} D+5. 황달이 심해지면 소아과 방문이 필요해요. 눈 흰자위와 피부 색깔을 확인해보세요.` },
+      { day: 7,  title: '👩‍⚕️ 산후 1주 체크',
+        body: `${babyName}가 태어난 지 1주일이 됐어요! ${center ? center+'에서 ' : ''}엄마 회복과 아기 체중 증가를 확인해보세요 💪` },
+      { day: 14, title: '📋 신생아 검진 예약',
+        body: `${babyName} D+14. 생후 2주 검진 예약을 잊지 마세요! ${hospital ? hospital+' 또는 ' : ''}가까운 소아과에서 확인할 수 있어요.` },
+      { day: 30, title: '🎉 한 달 축하해요!',
+        body: `${babyName}가 세상에 온 지 한 달이 됐어요! 1개월 영유아 검진 시기예요. 소아과 예약해보세요 🍼` },
+      { day: 100, title: '🎂 100일 축하해요!',
+        body: `${babyName} 100일을 축하해요! 벌써 이렇게 컸네요. 오늘 기념사진 찍어두세요 📸` },
+    ];
+
+    for (const m of milestones) {
+      const targetMs = birthMs + m.day * 86400000;
+      const diff = targetMs - now;
+      // 당일 오전 9시에 알림 (±12시간 내에 있을 때만)
+      const todayStart = new Date(); todayStart.setHours(9,0,0,0);
+      const todayAlertMs = todayStart.getTime() - now;
+
+      if (days === m.day) {
+        // 오늘이 해당 날짜 - 오전 9시에 알림 (지났으면 즉시)
+        const delay = Math.max(todayAlertMs, 0);
+        if (delay < 12 * 3600000) {
+          specialNotifTimer = setTimeout(() => {
+            sendNotif(m.title, m.body);
+          }, delay);
+          break; // 하루에 하나만
+        }
+      }
+    }
+  } catch(e) {}
 }
 
 function sendNotif(title, body) {
@@ -9336,7 +9463,7 @@ function startDadRefreshTimer() {
   dadRefreshTimer = setInterval(async () => {
     if (currentPage === 8) {
       try {
-        // IndexedDB에서 최신 기록 로드
+        // 아빠탭 - IndexedDB에서 최신 기록 로드
         const raw = await idbGet(getBabyKey('baby_records'));
         if (raw) {
           const parsed = JSON.parse(raw);
@@ -10232,6 +10359,193 @@ function renderSettingBabyList() {
   const addBtn = document.getElementById('setting-add-baby-btn');
   if (addBtn) addBtn.style.display = babies.length >= 3 ? 'none' : '';
 }
+
+// ══════════════════════════════════════
+// 출생 기념 카드
+// ══════════════════════════════════════
+function openBirthCard() {
+  const raw = localStorage.getItem(getBabyKey('baby_profile'));
+  if (!raw) { showToast('프로필을 먼저 등록해주세요'); return; }
+  const p = JSON.parse(raw);
+
+  const days = p.birthDate ? Math.floor((Date.now()-new Date(p.birthDate).getTime())/86400000) : null;
+  const gender = p.gender === 'boy' ? '👦' : p.gender === 'girl' ? '👧' : '👶';
+  const genderText = p.gender === 'boy' ? '아들' : p.gender === 'girl' ? '딸' : '';
+  const weightText = p.weight ? p.weight + 'kg' : '';
+  const heightText = p.height ? p.height + 'cm' : '';
+  const timeText = p.birthTime ? p.birthTime + ' 출생' : '';
+  const hospitalText = p.hospital || '';
+  const centerText = p.center || '';
+  const birthTypeText = p.birthType === 'natural' ? '자연분만' : p.birthType === 'cesarean' ? '제왕절개' : '';
+
+  const old = document.getElementById('birth-card-modal');
+  if (old) old.remove();
+
+  const el = document.createElement('div');
+  el.id = 'birth-card-modal';
+  el.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+
+  const isDark = document.body.classList.contains('dark');
+
+  el.innerHTML = `
+    <div style="width:100%;max-width:380px;">
+      <!-- 카드 -->
+      <div id="birth-card-content" style="
+        background:linear-gradient(145deg,#fffdf0,#fff7d6,#ffeaa7);
+        border-radius:24px;
+        padding:32px 28px;
+        box-shadow:0 20px 60px rgba(0,0,0,0.3);
+        position:relative;
+        overflow:hidden;
+      ">
+        <!-- 배경 장식 -->
+        <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,200,50,0.15);border-radius:50%;"></div>
+        <div style="position:absolute;bottom:-20px;left:-20px;width:80px;height:80px;background:rgba(255,180,30,0.1);border-radius:50%;"></div>
+
+        <!-- 헤더 -->
+        <div style="text-align:center;margin-bottom:24px;position:relative;">
+          <div style="font-size:52px;margin-bottom:8px;">${gender}</div>
+          <div style="font-size:22px;font-weight:900;color:#7a5600;letter-spacing:-0.02em;font-family:'Jua',sans-serif;">
+            ${p.name}${genderText ? ' ' + genderText : ''}
+          </div>
+          <div style="font-size:13px;color:#c8a070;margin-top:4px;font-family:'Gowun Dodum',sans-serif;">
+            ${p.birthDate ? p.birthDate.replace(/-/g,'. ') : ''} ${timeText}
+          </div>
+          ${days !== null ? `<div style="display:inline-block;margin-top:8px;background:#7a5600;color:#fff;border-radius:20px;padding:4px 16px;font-size:13px;font-weight:800;font-family:'Jua',sans-serif;">D+${days}</div>` : ''}
+        </div>
+
+        <!-- 구분선 -->
+        <div style="border-top:1.5px dashed #f0d060;margin-bottom:20px;"></div>
+
+        <!-- 출생 정보 그리드 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:${(hospitalText||centerText)?'20px':'0'};">
+          ${weightText ? `
+          <div style="background:rgba(255,255,255,0.7);border-radius:12px;padding:12px;text-align:center;">
+            <div style="font-size:11px;color:#9ca3af;margin-bottom:4px;font-weight:600;">출생 몸무게</div>
+            <div style="font-size:20px;font-weight:900;color:#7a5600;">${weightText}</div>
+          </div>` : ''}
+          ${heightText ? `
+          <div style="background:rgba(255,255,255,0.7);border-radius:12px;padding:12px;text-align:center;">
+            <div style="font-size:11px;color:#9ca3af;margin-bottom:4px;font-weight:600;">출생 키</div>
+            <div style="font-size:20px;font-weight:900;color:#1d4ed8;">${heightText}</div>
+          </div>` : ''}
+          ${birthTypeText ? `
+          <div style="background:rgba(255,255,255,0.7);border-radius:12px;padding:12px;text-align:center;">
+            <div style="font-size:11px;color:#9ca3af;margin-bottom:4px;font-weight:600;">분만 방식</div>
+            <div style="font-size:15px;font-weight:800;color:#374151;">${birthTypeText}</div>
+          </div>` : ''}
+        </div>
+
+        <!-- 병원/조리원 정보 -->
+        ${(hospitalText||centerText) ? `
+        <div style="background:rgba(255,255,255,0.6);border-radius:14px;padding:14px 16px;margin-bottom:4px;">
+          ${hospitalText ? `
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:${centerText?'8px':'0'};">
+            <span style="font-size:16px;">🏥</span>
+            <div>
+              <div style="font-size:10px;color:#9ca3af;font-weight:600;">출산 병원</div>
+              <div style="font-size:14px;font-weight:800;color:#374151;">${hospitalText}</div>
+            </div>
+          </div>` : ''}
+          ${centerText ? `
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:16px;">🏠</span>
+            <div>
+              <div style="font-size:10px;color:#9ca3af;font-weight:600;">산후조리원</div>
+              <div style="font-size:14px;font-weight:800;color:#374151;">${centerText}</div>
+            </div>
+          </div>` : ''}
+        </div>` : ''}
+
+        <!-- 하단 브랜드 -->
+        <div style="margin-top:20px;text-align:center;border-top:1px solid rgba(200,160,70,0.3);padding-top:14px;">
+          <div style="font-size:11px;color:#c8a070;font-family:'Gowun Dodum',sans-serif;">
+            🍼 누리케어로 소중한 순간을 기록 중
+          </div>
+        </div>
+      </div>
+
+      <!-- 버튼 -->
+      <div style="display:flex;gap:10px;margin-top:16px;">
+        <button onclick="shareBirthCard()" style="flex:1;padding:14px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;">
+          📤 공유하기
+        </button>
+        <button onclick="document.getElementById('birth-card-modal').remove()" style="padding:14px 20px;background:rgba(255,255,255,0.9);color:#374151;border:none;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;">
+          닫기
+        </button>
+      </div>
+    </div>`;
+
+  document.body.appendChild(el);
+  el.addEventListener('click', e => { if(e.target===el) el.remove(); });
+}
+
+async function shareBirthCard() {
+  const card = document.getElementById('birth-card-content');
+  if (!card) return;
+
+  try {
+    // html2canvas 없으면 텍스트 공유로 폴백
+    if (typeof html2canvas === 'undefined') {
+      await shareTextBirthCard();
+      return;
+    }
+    showToast('📸 카드 이미지 생성 중...');
+    const canvas = await html2canvas(card, {
+      scale: 2, useCORS: true,
+      backgroundColor: null,
+      logging: false
+    });
+    canvas.toBlob(async blob => {
+      if (!blob) { await shareTextBirthCard(); return; }
+      const file = new File([blob], 'nuricare-birth.png', { type: 'image/png' });
+      if (navigator.share && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: '탄생을 축하해요 🍼',
+          files: [file]
+        });
+      } else {
+        // 다운로드
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'nuricare-birth-card.png';
+        a.click();
+        showToast('✅ 카드가 저장됐어요!');
+      }
+    }, 'image/png');
+  } catch(e) {
+    await shareTextBirthCard();
+  }
+}
+
+async function shareTextBirthCard() {
+  const raw = localStorage.getItem(getBabyKey('baby_profile'));
+  if (!raw) return;
+  const p = JSON.parse(raw);
+  const days = p.birthDate ? Math.floor((Date.now()-new Date(p.birthDate).getTime())/86400000) : null;
+  const lines = [
+    '🍼 ' + p.name + ' 탄생을 축하해요!',
+    '─────────────────',
+    p.birthDate ? '📅 ' + p.birthDate.replace(/-/g,'. ') + (p.birthTime?' '+p.birthTime:'') : '',
+    p.weight ? '⚖️ 출생 체중: ' + p.weight + 'kg' : '',
+    p.height ? '📏 출생 키: ' + p.height + 'cm' : '',
+    p.hospital ? '🏥 출산 병원: ' + p.hospital : '',
+    p.center ? '🏠 산후조리원: ' + p.center : '',
+    days !== null ? 'D+' + days + ' · 누리케어로 기록 중 🌸' : '',
+  ].filter(Boolean).join('\n');
+
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: p.name + ' 탄생 🍼', text: lines });
+    } else {
+      await navigator.clipboard.writeText(lines);
+      showToast('📋 카드 내용이 복사됐어요! 붙여넣기 해보세요');
+    }
+  } catch(e) {
+    showToast('공유가 지원되지 않아요. 스크린샷을 찍어보세요 📸');
+  }
+}
+
 </script>
 <!-- ── 아기 선택 팝업 ── -->
 <div id="baby-picker-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)closeBabyPicker()">
