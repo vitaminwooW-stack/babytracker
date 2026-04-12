@@ -1597,73 +1597,108 @@ body.dark .header-date { color: #c8a870; }
 
 <!-- ═══════════ 온보딩 오버레이 ═══════════ -->
 <div id="onboarding-overlay" style="display:none;">
-  <div class="onboarding-card">
+  <div class="onboarding-card" style="padding:32px 24px 44px;">
+
+    <!-- 진행 도트 - 3개 -->
     <div class="onboarding-dots" id="ob-dots">
       <div class="onboarding-dot active"></div>
       <div class="onboarding-dot"></div>
       <div class="onboarding-dot"></div>
-      <div class="onboarding-dot"></div>
-      <div class="onboarding-dot"></div>
-      <div class="onboarding-dot"></div>
     </div>
+
+    <!-- STEP 1: 핵심 가치 소개 -->
     <div class="onboarding-step active" id="ob-0">
-      <div class="onboarding-icon">🍼</div>
-      <div class="onboarding-title">누리케어에 오신 것을 환영해요!</div>
-      <div class="onboarding-desc">수유·수면·기저귀를 기록하고<br>아기의 패턴을 한눈에 파악해요.<br>아빠와 함께 사용할 수 있어요 💛</div>
+      <div class="onboarding-icon" style="font-size:56px;margin-bottom:16px;">🍼</div>
+      <div class="onboarding-title" style="font-size:22px;font-weight:900;margin-bottom:6px;">누리케어에 오신 것을<br>환영해요!</div>
+      <div class="onboarding-desc" style="margin-bottom:24px;">신생아 육아, 이제 기록이 쉬워져요</div>
+
+      <!-- 3가지 핵심 기능 카드 -->
+      <div style="display:flex;flex-direction:column;gap:10px;text-align:left;margin-bottom:4px;">
+        <div style="display:flex;align-items:center;gap:14px;background:#fffbf0;border:1.5px solid #f0d060;border-radius:14px;padding:14px 16px;">
+          <div style="font-size:28px;flex-shrink:0;">⏱️</div>
+          <div>
+            <div style="font-size:14px;font-weight:800;color:#1a1a1a;margin-bottom:2px;">수유·수면·기저귀 기록</div>
+            <div style="font-size:12px;color:#6b7280;line-height:1.5;">버튼 하나로 타이머 시작·종료<br>오늘의 패턴을 한눈에 파악</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:14px;padding:14px 16px;">
+          <div style="font-size:28px;flex-shrink:0;">🎙️</div>
+          <div>
+            <div style="font-size:14px;font-weight:800;color:#1a1a1a;margin-bottom:2px;">음성 한 마디로 기록</div>
+            <div style="font-size:12px;color:#6b7280;line-height:1.5;">"수유 시작", "기저귀 갈았어"<br>새벽에도 화면 안 봐도 돼요 🌙</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;background:#fdf4ff;border:1.5px solid #e9d5ff;border-radius:14px;padding:14px 16px;">
+          <div style="font-size:28px;flex-shrink:0;">👨‍👩‍👧</div>
+          <div>
+            <div style="font-size:14px;font-weight:800;color:#1a1a1a;margin-bottom:2px;">아빠와 함께 기록</div>
+            <div style="font-size:12px;color:#6b7280;line-height:1.5;">초대 코드로 연결하면<br>엄마·아빠 모두 같은 기록 공유</div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- STEP 2: 아기 프로필 직접 입력 -->
     <div class="onboarding-step" id="ob-1">
-      <div class="onboarding-icon">👆</div>
-      <div class="onboarding-title">좌우로 스와이프해서 이동해요</div>
-      <div class="onboarding-desc">
-        ← 일기 · 사진<br>
-        <strong>🍼 루틴 기록</strong> (시작 화면)<br>
-        통계 · 성장 · 마일스톤 · 엄마케어 · 복지 · 설정 →
+      <div class="onboarding-icon" style="font-size:48px;margin-bottom:12px;">👶</div>
+      <div class="onboarding-title" style="font-size:20px;font-weight:900;margin-bottom:4px;">우리 아기를 소개해줘요</div>
+      <div class="onboarding-desc" style="margin-bottom:16px;font-size:13px;">입력하면 D+일수와 성장 평균이<br>자동으로 계산돼요</div>
+
+      <!-- 이름 -->
+      <div style="margin-bottom:12px;text-align:left;">
+        <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:4px;">👶 아기 이름 (또는 태명)</div>
+        <input type="text" id="ob-name" placeholder="예: 허지은"
+          style="width:100%;box-sizing:border-box;padding:13px 14px;border:1.5px solid #f0d060;border-radius:12px;font-size:15px;font-family:inherit;outline:none;"
+          oninput="obNameCheck()">
+      </div>
+
+      <!-- 생년월일 -->
+      <div style="margin-bottom:12px;text-align:left;">
+        <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:4px;">🎂 태어난 날</div>
+        <input type="date" id="ob-birth"
+          style="width:100%;box-sizing:border-box;padding:13px 14px;border:1.5px solid #f0d060;border-radius:12px;font-size:15px;font-family:inherit;outline:none;">
+      </div>
+
+      <!-- 성별 -->
+      <div style="margin-bottom:16px;text-align:left;">
+        <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:6px;">💕 성별</div>
+        <div style="display:flex;gap:8px;">
+          <button id="ob-girl" onclick="obSelGender('girl')"
+            style="flex:1;padding:11px;border:1.5px solid #f0d060;border-radius:12px;font-size:14px;font-weight:700;background:#fff;cursor:pointer;color:#1a1a1a;">
+            👧 여아
+          </button>
+          <button id="ob-boy" onclick="obSelGender('boy')"
+            style="flex:1;padding:11px;border:1.5px solid #f0d060;border-radius:12px;font-size:14px;font-weight:700;background:#fff;cursor:pointer;color:#1a1a1a;">
+            👦 남아
+          </button>
+        </div>
+      </div>
+
+      <!-- 오류 메시지 -->
+      <div id="ob-profile-err" style="font-size:12px;color:#ef4444;margin-bottom:4px;min-height:16px;"></div>
+
+      <div style="font-size:11px;color:#9ca3af;text-align:center;">
+        언제든 상단 ✏️ 프로필에서 수정할 수 있어요
       </div>
     </div>
+
+    <!-- STEP 3: 시작하기 -->
     <div class="onboarding-step" id="ob-2">
-      <div class="onboarding-icon">🎙️</div>
-      <div class="onboarding-title">음성으로 기록할 수 있어요</div>
-      <div class="onboarding-desc">"수유 완료", "기저귀 갈았어"<br>말 한 마디로 자동 기록돼요.<br>새벽 수유할 때 특히 유용해요 🌙</div>
-    </div>
-    <div class="onboarding-step" id="ob-3">
-      <div class="onboarding-icon">🎙️</div>
-      <div class="onboarding-title">홈화면에 추가하면 더 편해요</div>
-      <div class="onboarding-desc">
-        홈화면에서 앱 아이콘을 누르면<br>
-        <strong>음성 인식이 바로 시작</strong>돼요!<br><br>
-        <span style="font-size:13px;color:#7a5600;">지금 홈화면에 추가할까요?</span>
-      </div>
-      <button onclick="obAddToHome()" style="margin-top:14px;width:100%;padding:14px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;">
+      <div class="onboarding-icon" style="font-size:56px;margin-bottom:16px;">🌟</div>
+      <div class="onboarding-title" style="font-size:22px;font-weight:900;margin-bottom:6px;">이제 시작해볼까요?</div>
+      <div class="onboarding-desc" style="margin-bottom:20px;">홈화면에 추가하면<br>아이콘 탭 → 음성 바로 시작!</div>
+      <button onclick="obAddToHome()" style="width:100%;padding:14px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:8px;">
         📱 홈화면에 추가하기
       </button>
-      <button onclick="obNext()" style="margin-top:8px;width:100%;padding:10px;background:none;color:#9ca3af;border:none;font-size:13px;cursor:pointer;">
-        나중에 하기
+      <button onclick="obNext()" style="width:100%;padding:10px;background:none;color:#9ca3af;border:none;font-size:13px;cursor:pointer;">
+        나중에 할게요
       </button>
     </div>
-    <div class="onboarding-step" id="ob-4">
-      <div class="onboarding-icon">⚡</div>
-      <div class="onboarding-title">Siri & Google 음성 단축키</div>
-      <div class="onboarding-desc">
-        <strong>"수유 시작"</strong> 한마디로<br>앱 없이 바로 기록해요!<br><br>
-        <span style="font-size:13px;color:#7a5600;">아래에서 바로 설정할 수 있어요 👇</span>
-      </div>
-      <button onclick="obSetupSiri()" style="margin-top:14px;width:100%;padding:14px;background:#000;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
-        🍎 Siri 단축어 설정하기
-      </button>
-      <button onclick="obSetupAssistant()" style="margin-top:8px;width:100%;padding:14px;background:#4285f4;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;">
-        🤖 Google Assistant 설정하기
-      </button>
-      <button onclick="obNext()" style="margin-top:8px;width:100%;padding:10px;background:none;color:#9ca3af;border:none;font-size:13px;cursor:pointer;">
-        나중에 하기
-      </button>
-    </div>
-    <div class="onboarding-step" id="ob-5">
-      <div class="onboarding-icon">💾</div>
-      <div class="onboarding-title">데이터는 이 기기에 저장돼요</div>
-      <div class="onboarding-desc">소중한 기록을 지키려면<br><strong>설정 → 데이터 백업</strong>을 주기적으로 해주세요.<br>폰을 바꾸기 전에 꼭 백업하세요! ⚠️</div>
-    </div>
-    <button class="onboarding-btn" id="ob-btn" onclick="obNext()">다음</button>
+
+    <!-- 하단 버튼 -->
+    <button class="onboarding-btn" id="ob-btn" onclick="obNext()" style="margin-top:20px;">다음</button>
     <span class="onboarding-skip" onclick="obSkip()">건너뛰기</span>
+
   </div>
 </div>
 
@@ -2168,9 +2203,14 @@ body.dark .header-date { color: #c8a870; }
             <button id="growth-tab-head"   class="chart-tab"        onclick="growthSetTab('head')"
               style="flex:1;padding:9px 0;border-radius:10px;font-size:12px;font-weight:700;">⭕ 머리</button>
           </div>
-          <div style="background:var(--card-bg,#fff);border-radius:16px;border:1px solid var(--border-color,#f0f0f0);padding:14px;margin-bottom:16px;position:relative;">
+          <div style="background:var(--card-bg,#fff);border-radius:16px;border:1px solid var(--border-color,#f0f0f0);padding:14px;margin-bottom:6px;position:relative;">
             <canvas id="growth-chart" height="220"></canvas>
             <div id="growth-empty" class="chart-empty" style="display:none;">아직 기록이 없어요</div>
+          </div>
+          <div style="text-align:right;padding:0 4px;margin-bottom:14px;">
+            <span style="font-size:10px;color:var(--text-sub,#9ca3af);">
+              📊 평균 데이터 출처: 대한소아과학회 · WHO 성장 기준 (0~18개월)
+            </span>
           </div>
 
           <!-- 기록 목록 -->
@@ -7965,21 +8005,49 @@ function showOnboarding() {
 }
 
 function obNext() {
+  // STEP 1 → 2: 프로필 저장 시도
+  if (obStep === 1) {
+    const name  = (document.getElementById('ob-name')?.value || '').trim();
+    const birth = document.getElementById('ob-birth')?.value || '';
+    const err   = document.getElementById('ob-profile-err');
+    if (!name)  { if(err) err.textContent='아기 이름을 입력해주세요 🍼'; return; }
+    if (!birth) { if(err) err.textContent='태어난 날을 선택해주세요 📅'; return; }
+    // 프로필 저장
+    const existing = JSON.parse(localStorage.getItem('baby_profile') || '{}');
+    const profile = { ...existing, name, birthDate: birth, gender: _obGender || 'unknown' };
+    localStorage.setItem('baby_profile', JSON.stringify(profile));
+    if(err) err.textContent = '';
+    // 헤더 즉시 갱신
+    try { renderAppHeader(); } catch(e) {}
+  }
+
   obStep++;
-  const total = 6;
+  const total = 3;
   if (obStep >= total) { obFinish(); return; }
   document.querySelectorAll('.onboarding-step').forEach((el,i) => el.classList.toggle('active', i===obStep));
   document.querySelectorAll('.onboarding-dot').forEach((el,i) => el.classList.toggle('active', i===obStep));
   const btn = document.getElementById('ob-btn');
-  // 홈화면 추가, Siri/Assistant 단계에는 기본 버튼 숨김
   if (btn) {
-    if (obStep === 3 || obStep === 4) {
+    if (obStep === 2) {
       btn.style.display = 'none';
     } else {
       btn.style.display = '';
-      btn.textContent = obStep === total-1 ? '시작하기 🍼' : '다음';
+      btn.textContent = '다음';
     }
   }
+}
+
+let _obGender = 'unknown';
+function obSelGender(g) {
+  _obGender = g;
+  const girl = document.getElementById('ob-girl');
+  const boy  = document.getElementById('ob-boy');
+  if (girl) { girl.style.background = g==='girl' ? '#fce7f3' : '#fff'; girl.style.borderColor = g==='girl' ? '#f472b6' : '#f0d060'; }
+  if (boy)  { boy.style.background  = g==='boy'  ? '#eff6ff' : '#fff'; boy.style.borderColor  = g==='boy'  ? '#60a5fa' : '#f0d060'; }
+}
+function obNameCheck() {
+  const err = document.getElementById('ob-profile-err');
+  if (err) err.textContent = '';
 }
 
 // ── 홈화면 추가 ──
@@ -8607,9 +8675,15 @@ function appStart() {
 function obFinish() {
   document.getElementById('onboarding-overlay').style.display = 'none';
   localStorage.setItem('onboarding_done', '1');
-  // PIN 설정 없이 바로 프로필 입력으로
+  // 온보딩에서 이미 저장됨 → 바로 enterApp
   const hasProfile = !!localStorage.getItem('baby_profile');
-  if (hasProfile) { enterApp(); } else { showScreen('profile'); }
+  if (hasProfile) {
+    enterApp();
+    // 헤더에 아기 이름+D+ 표시
+    try { renderAppHeader(); } catch(e) {}
+  } else {
+    showScreen('profile');
+  }
 }
 
 function obSkip() {
