@@ -8353,7 +8353,7 @@ function loadData() {
     if (s && s.trim()) {
       const d = new Date(s);
       if (!isNaN(d.getTime())) { sleepingStart = d; updateSleepBanner(); }
-      else { sleepingStart = null; localStorage.removeItem('baby_sleeping'); }
+      else { sleepingStart = null; localStorage.removeItem(getBabyKey('baby_sleeping')); }
     }
   } catch(e) { sleepingStart = null; }
 
@@ -8648,13 +8648,13 @@ function startSession(type) {
       return;
     }
     sleepingStart = now;
-    localStorage.setItem('baby_sleeping', now.toISOString());
+    localStorage.setItem(getBabyKey('baby_sleeping'), now.toISOString());
     addRecord({ type:'sleep', time:nowLocal(), title:'수면 시작', sub:'자는 중', icon:'😴', cat:'sleep' });
     speak('수면 시작을 기록했어요 😴');
   } else if (type === 'pump') {
     if (pumpingStart) { speak('이미 유축 중이에요.'); return; }
     pumpingStart = now;
-    localStorage.setItem('baby_pumping', now.toISOString());
+    localStorage.setItem(getBabyKey('baby_pumping'), now.toISOString());
     addRecord({ type:'pump', time:nowLocal(), title:'유축 시작', sub:'유축 중', icon:'🤱', cat:'pump' });
     speak('유축 시작을 기록했어요 🤱');
   } else if (type === 'feed') {
@@ -8662,7 +8662,7 @@ function startSession(type) {
       speak('이미 수유 중이에요.'); return;
     }
     feedingStart = now;
-    localStorage.setItem('baby_feeding', now.toISOString());
+    localStorage.setItem(getBabyKey('baby_feeding'), now.toISOString());
     var todayS = new Date(Date.now()+9*3600*1000).toISOString().slice(0,10);
     for (var si=records.length-1; si>=0; si--) {
       if (records[si].cat==='feed' && records[si].title==='수유 시작' && records[si].time && records[si].time.slice(0,10)===todayS) records.splice(si,1);
@@ -8873,7 +8873,7 @@ function endSession(type) {
     // _startTime: KST 형식으로 저장 (위젯 수면시간 계산용)
     const stKST = new Date(st.getTime()+9*3600*1000).toISOString().slice(0,16);
     sleepingStart = null;
-    localStorage.setItem('baby_sleeping', '');
+    localStorage.setItem(getBabyKey('baby_sleeping'), '');
     clearInterval(sleepTimer);
     addRecord({ type:'sleep', time:nowLocal(), title:'기상', sub:'수면 '+sub, icon:'☀️', cat:'sleep', _startTime:stKST, _durMin:dur });
     speak('기상을 기록했어요.');
@@ -8883,7 +8883,7 @@ function endSession(type) {
     const pDurStr = (Math.floor(pDur/60)>0?Math.floor(pDur/60)+'시간 ':'')+pDur%60+'분';
     const pStStr = new Date(pSt.getTime()+9*3600*1000).toISOString().slice(0,16);
     pumpingStart = null;
-    localStorage.setItem('baby_pumping', '');
+    localStorage.setItem(getBabyKey('baby_pumping'), '');
     addRecord({ type:'pump', time:nowLocal(), title:'유축', sub:pDurStr, icon:'🤱', cat:'pump', _startTime:pStStr, _durMin:pDur });
     speak('유축 완료.');
   } else if (type === 'feed') {
@@ -9244,7 +9244,7 @@ function closeFeedEndModal(cancelFeed) {
     // 수유 세션 취소 (취소 버튼)
     feedingStart = null;
     if(typeof feedingType !== 'undefined') feedingType = 'breast';
-    localStorage.setItem('baby_feeding', '');
+    localStorage.setItem(getBabyKey('baby_feeding'), '');
     saveSessions(); updateQuickBtns(); renderTimeline(); updateStatus();
   }
   // 드래그 닫기 or 단순 닫기 → 수유 세션 유지 (아무것도 안함)
@@ -9288,7 +9288,7 @@ function saveFeedEnd() {
     // feedingStart 클리어
     feedingStart = null;
     if (typeof feedingType !== 'undefined') feedingType = 'breast';
-    localStorage.setItem('baby_feeding', '');
+    localStorage.setItem(getBabyKey('baby_feeding'), '');
 
     // ★ 수유 시작 기록 삭제 (오늘+어제 범위 - 자정 넘어가는 경우 대비)
     var todayKST = nowLocal().slice(0,10);
@@ -9313,7 +9313,7 @@ function saveFeedEnd() {
   } catch(e) {
     console.warn('saveFeedEnd err:', e);
     feedingStart=null;
-    localStorage.setItem('baby_feeding','');
+    localStorage.setItem(getBabyKey('baby_feeding'),'');
   }
   updateQuickBtns(); renderTimeline(); updateStatus(); setVoiceBtnState(false);
 }
@@ -9477,7 +9477,7 @@ function ftiCancel() {
   document.getElementById('modal-feed-timer').classList.remove('open');
   // 수유 세션 취소
   feedingStart=null;
-  localStorage.removeItem('baby_feeding');
+  localStorage.removeItem(getBabyKey('baby_feeding'));
   try{updateStatus();updateQuickBtns();}catch(e){}
   timerReleaseWakeLock();
 }
@@ -10154,13 +10154,13 @@ function fbApplyRemoteData(data) {
     }
     if (data.sessions) {
       // 수면만 Firebase 동기화. 수유/유축은 로컬 상태 우선 (Firebase가 덮어쓰면 종료 후 되살아남)
-      if (data.sessions.sleeping !== undefined) localStorage.setItem('baby_sleeping', data.sessions.sleeping);
+      if (data.sessions.sleeping !== undefined) localStorage.setItem(getBabyKey('baby_sleeping'), data.sessions.sleeping);
       // 유축/수유: 현재 로컬이 null(종료됨)이면 Firebase 값 무시
       if (data.sessions.pumping !== undefined && pumpingStart !== null) {
-        localStorage.setItem('baby_pumping', data.sessions.pumping);
+        localStorage.setItem(getBabyKey('baby_pumping'), data.sessions.pumping);
       }
       if (data.sessions.feeding !== undefined && feedingStart !== null) {
-        localStorage.setItem('baby_feeding', data.sessions.feeding);
+        localStorage.setItem(getBabyKey('baby_feeding'), data.sessions.feeding);
       }
     }
     if (data.milestones) {
