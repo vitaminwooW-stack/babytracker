@@ -4898,6 +4898,8 @@ function saveManualRecord() {
 
   closeManualRecord();
   addRecord(rec);
+  // 위젯 즉시 갱신 (addRecord 내부에도 있지만 명시적 호출)
+  try { updateTodayWidget(); } catch(e) {}
 }
 
 
@@ -9521,7 +9523,8 @@ let dadRefreshTimer = null;
 function startSessionTimer() {
   clearInterval(sessionTimer);
   sessionTimer = setInterval(() => {
-      updateQuickBtns();
+    updateQuickBtns();        // 수유/수면/유축 진행 시간 갱신
+    try { updateTodayWidget(); } catch(e) {}  // 위젯 4장 실시간 갱신
   }, 10000);
 }
 
@@ -9557,7 +9560,8 @@ function updateQuickBtns() {
 
   function elapsedStr(start) {
     const ms = Date.now() - new Date(start).getTime();
-    const h = Math.floor(ms/3600000), m = Math.floor((ms%3600000)/60000);
+    const totalMin = Math.round(ms / 60000);  // round로 통일
+    const h = Math.floor(totalMin / 60), m = totalMin % 60;
     return (h>0?h+'시간 ':'')+m+'분';
   }
 
