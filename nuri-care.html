@@ -3239,13 +3239,19 @@ function loadBabies() {
     } catch(e) {}
   }
 
-  // 3. 활성 아기 복구
-  const saved = localStorage.getItem('active_baby_id');
+  // 3. 활성 아기 복구 (sessionStorage 우선 → localStorage 폴백)
+  const savedSession = sessionStorage.getItem('active_baby_id');
+  const savedLocal   = localStorage.getItem('active_baby_id');
+  const saved = savedSession || savedLocal;
   if (saved && babies.find(b => b.id === saved)) {
     activeBabyId = saved;
+    // 둘 다 동기화
+    localStorage.setItem('active_baby_id', saved);
+    sessionStorage.setItem('active_baby_id', saved);
   } else if (babies.length > 0) {
     activeBabyId = babies[0].id;
     localStorage.setItem('active_baby_id', activeBabyId);
+    sessionStorage.setItem('active_baby_id', activeBabyId);
   }
 }
 
@@ -3253,40 +3259,47 @@ function switchBaby(id) {
   if (!id || !babies.find(b => b.id === id)) {
     showToast('아기 정보를 찾을 수 없어요'); return;
   }
-  // 현재 세션 저장
+
+  // 현재 데이터 저장
   try { saveSessions(); } catch(e) {}
   try { saveData(); } catch(e) {}
 
+  // 활성 아기 변경 (localStorage + sessionStorage 모두 저장)
   activeBabyId = id;
   localStorage.setItem('active_baby_id', id);
+  sessionStorage.setItem('active_baby_id', id);
 
-  // 초기화
-  records = []; growthRecords = []; diaryEntries = [];
-  sleepingStart = null; feedingStart = null; pumpingStart = null;
+  // 전역 변수 초기화
+  records = [];
+  growthRecords = [];
+  diaryEntries = [];
+  sleepingStart = null;
+  feedingStart = null;
+  pumpingStart = null;
   feedingType = 'breast';
 
-  // 데이터 로드
+  // 새 아기 데이터 로드
   try { loadData(); } catch(e) {}
   try { loadSessions(); } catch(e) {}
   try { loadDiary(); } catch(e) {}
   try { loadGrowthData(); } catch(e) {}
   try { loadMilestoneChecks(); } catch(e) {}
-  try { loadVaccineChecks(); } catch(e) {}
 
-  // UI 갱신
-  renderAppHeader();
+  // UI 전체 갱신
+  try { renderAppHeader(); } catch(e) {}
+  try { renderPhotoPage(); } catch(e) {}
+  try { renderDiaryList(); } catch(e) {}
   try { renderTimeline(); } catch(e) {}
   try { updateQuickBtns(); } catch(e) {}
   try { updateStatus(); } catch(e) {}
   try { updateTodayWidget(); } catch(e) {}
   try { updateSleepBanner(); } catch(e) {}
-  // 일기 초기화
-  try { renderDiaryList(); } catch(e) {}
-  // 사진 초기화
-  try { renderPhotoPage(); } catch(e) {}
-  // 아빠탭 초기화
   try { renderDadTabChecklist(); } catch(e) {}
   try { renderDadTodayRecords(); } catch(e) {}
+  try { renderGrowthChart(); } catch(e) {}
+  try { renderGrowthTable(); } catch(e) {}
+  try { renderMilestoneList(); } catch(e) {}
+  try { renderVaccineList(); } catch(e) {}
 
   const baby = babies.find(b => b.id === id);
   showToast('👶 ' + (baby?.name || '아기') + '의 기록으로 전환됐어요');
@@ -8351,6 +8364,9 @@ function handleUrlAction() {
 function enterApp() {
   sessionStorage.setItem('nuri_in_app', '1');
   handleUrlAction();
+
+  // ★ 반드시 먼저: 아기 목록 + activeBabyId 설정
+  try { loadBabies(); } catch(e) {}
 
   try { loadData(); } catch(e) { console.warn('loadData:', e); }
   try { loadGrowthData(); } catch(e) {}
