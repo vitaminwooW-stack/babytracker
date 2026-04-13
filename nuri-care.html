@@ -1561,6 +1561,8 @@ body.dark .header-date { color: #c8a870; }
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+  <!-- html2canvas: 출생기념카드 이미지 저장용 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body style="visibility:hidden;">
 <a href="#screen-app" class="skip-nav" aria-label="본문 바로가기">본문 바로가기</a>
@@ -10463,6 +10465,8 @@ function openBirthCard() {
         box-shadow:0 20px 60px rgba(0,0,0,0.3);
         position:relative;
         overflow:hidden;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact;
       ">
         <!-- 배경 장식 -->
         <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,200,50,0.15);border-radius:50%;"></div>
@@ -10533,8 +10537,8 @@ function openBirthCard() {
 
       <!-- 버튼 -->
       <div style="display:flex;gap:10px;margin-top:16px;">
-        <button onclick="shareBirthCard()" style="flex:1;padding:14px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;">
-          📤 공유하기
+        <button onclick="shareBirthCard()" style="flex:1;padding:14px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+          📲 카톡·인스타 공유
         </button>
         <button onclick="document.getElementById('birth-card-modal').remove()" style="padding:14px 20px;background:rgba(255,255,255,0.9);color:#374151;border:none;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;">
           닫기
@@ -10550,36 +10554,66 @@ async function shareBirthCard() {
   const card = document.getElementById('birth-card-content');
   if (!card) return;
 
+  const shareBtn = document.querySelector('#birth-card-modal button[onclick*="shareBirthCard"]');
+  const origText = shareBtn ? shareBtn.innerHTML : '';
+
   try {
-    // html2canvas 없으면 텍스트 공유로 폴백
-    if (typeof html2canvas === 'undefined') {
-      await shareTextBirthCard();
+    // 로딩 표시
+    if (shareBtn) shareBtn.innerHTML = '⏳ 이미지 생성 중...';
+    showToast('📸 카드 이미지를 만들고 있어요...');
+
+    // html2canvas로 카드 이미지 생성
+    const canvas = await html2canvas(card, {
+      scale: 3,              // 고해상도 (카톡 썸네일 선명하게)
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: null,
+      logging: false,
+      removeContainer: true,
+      imageTimeout: 5000,
+    });
+
+    if (shareBtn) shareBtn.innerHTML = origText;
+
+    // PNG Blob 생성
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
+    if (!blob) throw new Error('blob 생성 실패');
+
+    // 아기 이름
+    const ab = babies.find(b => b.id === activeBabyId);
+    const babyName = ab?.name || '아기';
+    const fileName = `${babyName}_탄생기념_누리케어.png`;
+    const file = new File([blob], fileName, { type: 'image/png' });
+
+    // ── 공유 시도 순서 ──
+
+    // 1순위: 네이티브 파일 공유 (카카오톡, 인스타 등 직접 전송)
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        title: `${babyName} 탄생을 축하해요 🍼`,
+        text: `누리케어로 기록 중인 ${babyName}의 탄생 기념 카드예요 💕`,
+        files: [file],
+      });
       return;
     }
-    showToast('📸 카드 이미지 생성 중...');
-    const canvas = await html2canvas(card, {
-      scale: 2, useCORS: true,
-      backgroundColor: null,
-      logging: false
-    });
-    canvas.toBlob(async blob => {
-      if (!blob) { await shareTextBirthCard(); return; }
-      const file = new File([blob], 'nuricare-birth.png', { type: 'image/png' });
-      if (navigator.share && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          title: '탄생을 축하해요 🍼',
-          files: [file]
-        });
-      } else {
-        // 다운로드
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'nuricare-birth-card.png';
-        a.click();
-        showToast('✅ 카드가 저장됐어요!');
-      }
-    }, 'image/png');
+
+    // 2순위: 이미지 다운로드 (카메라롤 저장 후 카톡 전송)
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+
+    // 다운로드 후 안내 토스트
+    showToast('✅ 이미지가 저장됐어요! 카메라롤에서 카톡으로 보내세요 📲');
+
   } catch(e) {
+    if (shareBtn) shareBtn.innerHTML = origText;
+    console.warn('이미지 공유 실패, 텍스트 폴백:', e);
+    // 최후 폴백: 텍스트 공유
     await shareTextBirthCard();
   }
 }
