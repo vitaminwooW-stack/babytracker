@@ -4436,10 +4436,10 @@ function addRecord(r) {
   saveData();
   renderTimeline();
   updateStatus();
-  try { renderPatternClock(); } catch(e) {}
-
-  if (typeof _pushRecordToFirebase === 'function') _pushRecordToFirebase(r);
+  updateQuickBtns();           // ★ 위젯 4장 즉시 갱신
   try { updateTodayWidget(); } catch(e) {}
+  try { renderPatternClock(); } catch(e) {}
+  if (typeof _pushRecordToFirebase === 'function') _pushRecordToFirebase(r);
 }
 
 // ── 한국 시간 (KST = UTC+9) — 기기 시간대 무관하게 항상 KST ──
@@ -4859,14 +4859,16 @@ function saveManualRecord() {
       sub, time: endVal||startVal,
       _startTime: endVal ? startVal : undefined,
       Lmin: L||undefined, Rmin: R||undefined, ml: ml||undefined,
-      feedType: _mrFeSel
+      feedType: _mrFeSel,
+      _manual: true
     };
   } else if (cat === 'sleep') {
     rec = {
       type:'sleep', cat:'sleep', icon:'😴', title:'기상',
       time: endVal||startVal,
       _startTime: endVal ? startVal : undefined,
-      sub: endVal ? '' : '수면 기록'
+      sub: endVal ? '' : '수면 기록',
+      _manual: true  // 수동 기록 플래그 - 현재 수면 세션에 영향 없음
     };
   } else if (cat === 'diaper') {
     rec = {
@@ -4929,10 +4931,17 @@ function renderTimeline() {
     if (usedIdx.has(i)) return;
 
     // 완료 기록 → 짝이 되는 시작 기록 찾기
+    // _manual 기록은 현재 진행중 세션(sleepingStart 등)과 매칭하지 않음
     if (r.cat in endTitles && endTitles[r.cat].includes(r.title)) {
-      const startIdx = todayRecs.findIndex((s, si) =>
-        si > i && !usedIdx.has(si) && s.cat === r.cat && s.title === startTitles[r.cat]
-      );
+      const startIdx = todayRecs.findIndex((s, si) => {
+        if (si <= i || usedIdx.has(si)) return false;
+        if (s.cat !== r.cat || s.title !== startTitles[r.cat]) return false;
+        // 수동 기록이 현재 진행중 수면 세션과 매칭되는 것 방지
+        if (r._manual && r.cat === 'sleep' && sleepingStart) return false;
+        if (r._manual && r.cat === 'feed'  && feedingStart)  return false;
+        if (r._manual && r.cat === 'pump'  && pumpingStart)  return false;
+        return true;
+      });
       if (startIdx !== -1) {
         usedIdx.add(i);
         usedIdx.add(startIdx);
