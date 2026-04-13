@@ -3264,12 +3264,12 @@ function switchBaby(id) {
   try { saveSessions(); } catch(e) {}
   try { saveData(); } catch(e) {}
 
-  // 활성 아기 변경 (localStorage + sessionStorage 모두 저장)
+  // 활성 아기 변경
   activeBabyId = id;
   localStorage.setItem('active_baby_id', id);
   sessionStorage.setItem('active_baby_id', id);
 
-  // 전역 변수 초기화
+  // 전역 변수 완전 초기화
   records = [];
   growthRecords = [];
   diaryEntries = [];
@@ -3285,21 +3285,28 @@ function switchBaby(id) {
   try { loadGrowthData(); } catch(e) {}
   try { loadMilestoneChecks(); } catch(e) {}
 
-  // UI 전체 갱신
+  // ── 즉시 UI 갱신 (동기) ──
   try { renderAppHeader(); } catch(e) {}
-  try { renderPhotoPage(); } catch(e) {}
-  try { renderDiaryList(); } catch(e) {}
+  try { renderPhotoPage(); } catch(e) {}   // 사진 초기화 포함
+  try { renderDiaryList(); } catch(e) {}   // 일기 초기화
   try { renderTimeline(); } catch(e) {}
   try { updateQuickBtns(); } catch(e) {}
   try { updateStatus(); } catch(e) {}
   try { updateTodayWidget(); } catch(e) {}
   try { updateSleepBanner(); } catch(e) {}
-  try { renderDadTabChecklist(); } catch(e) {}
-  try { renderDadTodayRecords(); } catch(e) {}
-  try { renderGrowthChart(); } catch(e) {}
-  try { renderGrowthTable(); } catch(e) {}
-  try { renderMilestoneList(); } catch(e) {}
-  try { renderVaccineList(); } catch(e) {}
+
+  // ── 약간 지연 후 (무거운 렌더) ──
+  setTimeout(() => {
+    try { renderGrowthChart(); } catch(e) {}
+    try { renderGrowthTable(); } catch(e) {}
+    try { renderMilestoneList(); } catch(e) {}
+    try { renderVaccineList(); } catch(e) {}
+    try { renderDadTabChecklist(); } catch(e) {}
+    try { renderDadTodayRecords(); } catch(e) {}
+    try { renderMainChart(); } catch(e) {}
+    try { renderPatternAnalysis(); } catch(e) {}
+    try { renderMomCarePage(); } catch(e) {}
+  }, 100);
 
   const baby = babies.find(b => b.id === id);
   showToast('👶 ' + (baby?.name || '아기') + '의 기록으로 전환됐어요');
@@ -3307,8 +3314,8 @@ function switchBaby(id) {
 }
 
 function addBaby(name, birthDate, gender) {
-  if (babies.length >= 3) {
-    showToast('최대 3명까지 등록할 수 있어요');
+  if (babies.length >= 5) {
+    showToast('최대 5명까지 등록할 수 있어요');
     return false;
   }
   const id = generateBabyId();
@@ -3356,13 +3363,13 @@ function renderBabyPicker() {
   }).join('');
 
   // 추가 버튼
-  const addBtn = babies.length < 3
+  const addBtn = babies.length < 5
     ? `<button onclick="openAddBabyModal()"
         style="width:100%;padding:13px;background:none;border:2px dashed ${isDark?'#5a4a10':'#f0d060'};
           border-radius:14px;font-size:14px;font-weight:700;color:${isDark?'#c8a870':'#7a5600'};cursor:pointer;">
-        ＋ 아기 추가 (${babies.length}/3)
+        ＋ 아기 추가 (${babies.length}/5)
       </button>`
-    : `<div style="text-align:center;font-size:12px;color:${subC};padding:8px;">최대 3명까지 등록 가능해요</div>`;
+    : `<div style="text-align:center;font-size:12px;color:${subC};padding:8px;">최대 5명까지 등록 가능해요</div>`;
 
   list.innerHTML += addBtn;
 }
@@ -5380,9 +5387,17 @@ function renderPhotoPage() {
       '<div style="font-size:13px;color:#a07830;margin-top:16px;">탭해서 사진 추가하기</div>';
   }
 
+  // ★ 먼저 기존 사진 숨기기 (아기 전환 시 이전 사진 제거)
+  const imgEl = document.getElementById('baby-photo-img');
+  const phEl  = document.getElementById('photo-placeholder');
+  if (imgEl) { imgEl.src = ''; imgEl.style.display = 'none'; }
+  if (phEl)  { phEl.style.display = ''; }
+
   // 저장된 사진 불러오기
   const saved = localStorage.getItem(getBabyKey('baby_photo'));
-  if (saved) showBabyPhoto(saved);
+  if (saved) {
+    showBabyPhoto(saved);
+  }
 }
 
 // ── 아빠 체크리스트 데이터 ──
@@ -10373,7 +10388,7 @@ function renderSettingBabyList() {
   }).join('');
 
   const addBtn = document.getElementById('setting-add-baby-btn');
-  if (addBtn) addBtn.style.display = babies.length >= 3 ? 'none' : '';
+  if (addBtn) addBtn.style.display = babies.length >= 5 ? 'none' : '';
 }
 
 // ══════════════════════════════════════
@@ -10577,7 +10592,7 @@ async function shareTextBirthCard() {
 <div id="add-baby-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)closeAddBabyModal()">
   <div style="background:var(--card-bg,#fff);border-radius:20px;padding:28px 24px;width:100%;max-width:400px;">
     <div style="font-size:20px;font-weight:900;text-align:center;margin-bottom:4px;color:var(--text-main,#1a1a1a);">👶 아기 추가</div>
-    <div style="font-size:12px;color:#9ca3af;text-align:center;margin-bottom:20px;">최대 3명까지 등록 가능해요</div>
+    <div style="font-size:12px;color:#9ca3af;text-align:center;margin-bottom:20px;">최대 5명까지 등록 가능해요</div>
 
     <div style="margin-bottom:12px;">
       <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:4px;">이름 (또는 태명)</div>
