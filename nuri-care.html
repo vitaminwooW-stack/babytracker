@@ -3310,6 +3310,8 @@ function switchBaby(id) {
 
   const baby = babies.find(b => b.id === id);
   showToast('👶 ' + (baby?.name || '아기') + '의 기록으로 전환됐어요');
+  // 설정 아기관리 목록도 즉시 갱신
+  try { renderSettingBabyList(); } catch(e) {}
   closeBabyPicker();
 }
 
@@ -3344,7 +3346,7 @@ function renderBabyPicker() {
   const subC   = isDark ? '#a89880' : '#6b7280';
 
   list.innerHTML = babies.map(b => {
-    const days = b.birthDate ? Math.floor((Date.now()-new Date(b.birthDate).getTime())/86400000) : null;
+    const days = b.birthDate ? calcBabyDays(b.birthDate) : null;
     const isActive = b.id === activeBabyId;
     return `<div onclick="switchBaby('${b.id}')"
       style="display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;margin-bottom:8px;cursor:pointer;
@@ -4071,18 +4073,41 @@ function renderAppHeader() {
       const dplusEl = document.getElementById('app-baby-dplus');
       if (dplusEl) dplusEl.style.display = 'none';
       let ageText;
-      if (days === 0)        ageText = `세상에 온 첫날이에요 🌟`;
-      else if (days === 100) ageText = `100일 축하해요 🎂`;
-      else if (days === 200) ageText = `200일! 멋진 아기 🏆`;
+      // 1년 이상: N년 M개월 표시
+      const ageYears  = Math.floor(days / 365);
+      const ageMonths = Math.floor((days % 365) / 30);
+      if      (days === 0)   ageText = `세상에 온 첫날이에요 🌟`;
+      else if (days === 7)   ageText = `태어난 지 일주일이 됐어요 🌿`;
+      else if (days === 14)  ageText = `2주가 됐어요! 아기가 엄마를 알아봐요 👀`;
+      else if (days === 30)  ageText = `한 달이 됐어요! 미소 짓기 시작해요 😊`;
+      else if (days === 50)  ageText = `50일! 목을 가누기 시작해요 💪`;
+      else if (days === 100) ageText = `100일 축하해요 🎂 귀한 하루하루였어요`;
+      else if (days === 150) ageText = `150일! 뒤집기 도전하는 시기예요 🤸`;
+      else if (days === 200) ageText = `200일! 이제 혼자 앉기 시작해요 🌟`;
+      else if (days === 250) ageText = `250일! 기어다니기 시작할 거예요 🐣`;
+      else if (days === 300) ageText = `300일! 혼자 서기 도전 중이에요 🌈`;
+      else if (days === 365) ageText = `첫 번째 생일 축하해요 🎉🎂`;
       else if (days <= 7)    ageText = `신생아 시기예요 🌱`;
       else if (days <= 14)   ageText = `하루하루 자라고 있어요 🌿`;
       else if (days <= 30)   ageText = `쑥쑥 성장 중이에요 🍀`;
       else if (days <= 60)   ageText = `웃음이 예뻐지는 시기예요 ☀️`;
       else if (days <= 100)  ageText = `곧 100일이에요 💛`;
-      else if (days <= 365)  ageText = `${Math.floor(days/30)}개월 아기예요 💕`;
-      else                   ageText = `하루하루가 선물이에요 🌸`;
+      else if (days <= 150)  ageText = `뒤집기·목 가누기 시기예요 🤸`;
+      else if (days <= 200)  ageText = `앉기·손 뻗기 연습 중이에요 🙌`;
+      else if (days <= 270)  ageText = `기기·서기 연습하는 시기예요 🚶`;
+      else if (days <= 365)  ageText = `곧 첫 생일이에요 🎂`;
+      else if (ageYears === 1 && ageMonths === 0) ageText = `돌잔치 축하해요 🎊`;
+      else if (ageYears >= 1 && ageMonths === 0)  ageText = `${ageYears}살이 됐어요 🎉`;
+      else if (ageYears >= 1) ageText = `${ageYears}년 ${ageMonths}개월 아기예요 💕`;
+      else                    ageText = `${Math.floor(days/30)}개월 아기예요 💕`;
+      // 태어난 지 표시 - 1년 이상은 "N년 M개월째"
+      let dayStr;
+      if (days === 0)       dayStr = '오늘 태어났어요 🎉';
+      else if (days < 365)  dayStr = `태어난 지 ${days}일째`;
+      else if (ageMonths === 0) dayStr = `태어난 지 ${ageYears}년째`;
+      else                  dayStr = `태어난 지 ${ageYears}년 ${ageMonths}개월째`;
       const ageEl2 = document.getElementById('app-baby-age');
-      if (ageEl2) ageEl2.textContent = days===0 ? '오늘 태어났어요 🎉' : `태어난 지 ${days}일째`;
+      if (ageEl2) ageEl2.textContent = dayStr;
       const ageEl3 = document.getElementById('app-baby-age2');
       if (ageEl3) ageEl3.textContent = ageText || '';
     }
@@ -6902,12 +6927,13 @@ const SLEEP_RECS = [
 function calcBabyDays(birthDateStr) {
   if (!birthDateStr) return null;
   try {
+    // YYYY-MM-DD 파싱 (로컬 자정 기준 - UTC 오프셋 영향 없음)
     const parts = birthDateStr.split('-');
-    const birth = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
-    const today = new Date();
-    const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const diff = Math.floor((todayMidnight - birth) / 86400000);
-    return diff + 1;
+    const birth = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]), 0, 0, 0, 0);
+    const t = new Date();
+    const today = new Date(t.getFullYear(), t.getMonth(), t.getDate(), 0, 0, 0, 0);
+    const diff = Math.round((today.getTime() - birth.getTime()) / 86400000);
+    return diff + 1; // 태어난 날 = 1일째
   } catch(e) { return null; }
 }
 
@@ -10371,7 +10397,7 @@ function renderSettingBabyList() {
   if (!el) return;
   const isDark = document.body.classList.contains('dark');
   el.innerHTML = babies.map(b => {
-    const days = b.birthDate ? Math.floor((Date.now()-new Date(b.birthDate).getTime())/86400000) : null;
+    const days = b.birthDate ? calcBabyDays(b.birthDate) : null;
     const isActive = b.id === activeBabyId;
     return `<div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;margin-bottom:8px;
         background:${isActive?(isDark?'#3d3628':'#fff7d6'):(isDark?'#2a2520':'#f9f6f0')};
@@ -10395,11 +10421,20 @@ function renderSettingBabyList() {
 // 출생 기념 카드
 // ══════════════════════════════════════
 function openBirthCard() {
-  const raw = localStorage.getItem(getBabyKey('baby_profile'));
-  if (!raw) { showToast('프로필을 먼저 등록해주세요'); return; }
-  const p = JSON.parse(raw);
+  // babies 배열 우선 (birthDate 정확도 보장)
+  let p = null;
+  const ab = babies.find(b => b.id === activeBabyId);
+  if (ab) {
+    const raw = localStorage.getItem(getBabyKey('baby_profile'));
+    p = raw ? { ...ab, ...JSON.parse(raw) } : { name: ab.name, birthDate: ab.birthDate, gender: ab.gender };
+  } else {
+    const raw = localStorage.getItem(getBabyKey('baby_profile'));
+    if (!raw) { showToast('프로필을 먼저 등록해주세요'); return; }
+    try { p = JSON.parse(raw); } catch(e) { return; }
+  }
+  if (!p) { showToast('프로필을 먼저 등록해주세요'); return; }
 
-  const days = p.birthDate ? Math.floor((Date.now()-new Date(p.birthDate).getTime())/86400000) : null;
+  const days = p.birthDate ? calcBabyDays(p.birthDate) : null;
   const gender = p.gender === 'boy' ? '👦' : p.gender === 'girl' ? '👧' : '👶';
   const genderText = p.gender === 'boy' ? '아들' : p.gender === 'girl' ? '딸' : '';
   const weightText = p.weight ? p.weight + 'kg' : '';
@@ -10553,7 +10588,7 @@ async function shareTextBirthCard() {
   const raw = localStorage.getItem(getBabyKey('baby_profile'));
   if (!raw) return;
   const p = JSON.parse(raw);
-  const days = p.birthDate ? Math.floor((Date.now()-new Date(p.birthDate).getTime())/86400000) : null;
+  const days = p.birthDate ? calcBabyDays(p.birthDate) : null;
   const lines = [
     '🍼 ' + p.name + ' 탄생을 축하해요!',
     '─────────────────',
