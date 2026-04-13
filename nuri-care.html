@@ -9759,7 +9759,12 @@ function updateTodayWidget() {
 
   // ── 유축
   const pumpRecs=todayRecs.filter(r=>r.cat==='pump');
-  const totalPump=pumpRecs.reduce((a,r)=>a+(r.total||0)+(r.Lml||0)+(r.Rml||0),0);
+  const totalPump=pumpRecs.reduce((a,r)=>{
+    // total이 있으면 total만 사용 (Lml+Rml이 이미 합산된 값)
+    if (r.total) return a + r.total;
+    // total 없으면 Lml+Rml로 계산
+    return a + (r.Lml||0) + (r.Rml||0);
+  },0);
   if(el('widget-pump-total')) el('widget-pump-total').textContent=totalPump?totalPump+'ml':'0ml';
   if(el('widget-pump-last')) el('widget-pump-last').textContent=pumpRecs[0]?fmt(pumpRecs[0].time):'기록 없음';
 }
