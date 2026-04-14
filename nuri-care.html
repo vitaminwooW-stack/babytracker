@@ -2314,9 +2314,7 @@ body.dark .header-date { color: #c8a870; }
             <div style="font-size:16px;font-weight:800;color:#be185d;margin-bottom:12px;display:flex;align-items:center;gap:8px;letter-spacing:-0.02em;">💝 아내를 위한 이벤트 <span style="font-size:11px;font-weight:600;color:#9d174d !important;background:#fce7f3 !important;padding:2px 8px;border-radius:10px;">😉 엄마 몰래</span></div>
             <div class="dad-event-card" id="dad-tab-checklist-events"></div>
           </div>
-          <button onclick="" style="width:100%;padding:14px;background:#fff;border:1.5px solid #e0e0e0;border-radius:14px;font-size:14px;font-weight:700;color:#555;cursor:pointer;margin-top:8px;">
-            📚 신생아 케어 가이드 보기
-          </button>
+
         </div>
       </div>
 
@@ -5590,6 +5588,8 @@ function renderDadTabChecklist() {
         '</div></div>';
     }).join('');
   }
+
+  updateDadProgress();
 }
 
 
@@ -5615,8 +5615,10 @@ function updateDadProgress() {
   const total = allItems.length;
   const done = allItems.filter(i => checks[i.id]).length;
   const pct = total > 0 ? Math.round(done / total * 100) : 0;
-  document.getElementById('dad-progress-bar').style.width = pct + '%';
-  document.getElementById('dad-progress-text').textContent = done + ' / ' + total;
+  const pb = document.getElementById('dad-tab-progress-bar') || document.getElementById('dad-progress-bar');
+  const pt = document.getElementById('dad-tab-progress-text') || document.getElementById('dad-progress-text');
+  if (pb) pb.style.width = pct + '%';
+  if (pt) pt.textContent = done + ' / ' + total;
 }
 
 // ── 정책 체크 ──
