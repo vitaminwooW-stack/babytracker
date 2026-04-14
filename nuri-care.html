@@ -2643,7 +2643,7 @@ body.dark .header-date { color: #c8a870; }
     <span class="field-label">시작 시각</span>
     <input type="datetime-local" id="mr-start-time" aria-label="시작 시각" class="u-mb12">
     <div id="mr-end-wrap">
-      <span class="field-label">종료 시각 <span class="u-hint">(수유·수면·유축)</span></span>
+      <span class="field-label">종료 시각 <span class="u-hint">(수면 종료 시각)</span></span>
       <input type="datetime-local" id="mr-end-time" aria-label="종료 시각" class="u-mb12">
     </div>
     <!-- 수유 세부 -->
@@ -4780,7 +4780,8 @@ function mrSetCat(cat) {
   el('mr-pump-detail').style.display   = cat==='pump'   ? '' : 'none';
   el('mr-etc-detail').style.display    = cat==='etc'    ? '' : 'none';
   // 종료 시각: 수유/수면/유축만
-  el('mr-end-wrap').style.display = ['feed','sleep','pump'].includes(cat) ? '' : 'none';
+  // 종료 시각: 수면에만 표시
+  el('mr-end-wrap').style.display = cat === 'sleep' ? '' : 'none';
 }
 
 function mrFeSel(type) {
@@ -4839,7 +4840,7 @@ function saveManualRecord() {
   const el = id => document.getElementById(id);
   const startVal = el('mr-start-time').value;
   if (!startVal) { showToast('시작 시각을 입력해주세요'); return; }
-  const endVal = el('mr-end-time').value;
+  const endVal = el('mr-end-time').value;  // 수면에서만 사용
   const cat = _mrCat;
 
   let rec = {};
@@ -4856,37 +4857,45 @@ function saveManualRecord() {
           : (totalMin>0 ? '모유 왼쪽 '+L+'분 · 오른쪽 '+R+'분' : '모유'));
     rec = {
       type:'feed', cat:'feed', icon:'🍼', title:'수유',
-      sub, time: endVal||startVal,
-      _startTime: endVal ? startVal : undefined,
+      sub, time: startVal,       // 수유는 시작시각 = 기록 시각
       Lmin: L||undefined, Rmin: R||undefined, ml: ml||undefined,
       feedType: _mrFeSel,
       _manual: true
     };
+
   } else if (cat === 'sleep') {
+    // 수면: 시작시각 ~ 종료시각
+    // 유효성: 종료시각이 있으면 시작시각보다 나중이어야 함
+    if (endVal && endVal <= startVal) {
+      showToast('종료 시각이 시작 시각보다 나중이어야 해요'); return;
+    }
     rec = {
       type:'sleep', cat:'sleep', icon:'😴', title:'기상',
-      time: endVal||startVal,
-      _startTime: endVal ? startVal : undefined,
+      time: endVal || startVal,          // 종료시각 (없으면 시작시각)
+      _startTime: endVal ? startVal : undefined,  // 시작시각
       sub: endVal ? '' : '수면 기록',
-      _manual: true  // 수동 기록 플래그 - 현재 수면 세션에 영향 없음
+      _manual: true
     };
+
   } else if (cat === 'diaper') {
     rec = {
       type:'diaper', cat:'diaper', icon:'🌿', title:'기저귀',
       sub: _mrDpSel, time: startVal
     };
+
   } else if (cat === 'pump') {
     const L = parseInt(el('mr-pump-L')?.value||'0')||0;
     const R = parseInt(el('mr-pump-R')?.value||'0')||0;
     const total = L+R;
     let sub = total>0 ? '총 '+total+'ml' : '유축 완료';
-    if (total>0 && (L>0||R>0)) sub += '\n왼쪽 '+L+'ml · 오른쪽 '+R+'ml';
+    if (total>0 && (L>0||R>0)) sub += ' · 왼쪽 '+L+'ml · 오른쪽 '+R+'ml';
     rec = {
       type:'pump', cat:'pump', icon:'🤱', title:'유축',
-      sub, time: endVal||startVal,
-      _startTime: endVal ? startVal : undefined,
-      Lml: L||undefined, Rml: R||undefined, total: total||undefined
+      sub, time: startVal,       // 유축도 시작시각 = 기록 시각
+      Lml: L||undefined, Rml: R||undefined, total: total||undefined,
+      _manual: true
     };
+
   } else {
     const title = el('mr-etc-title')?.value?.trim() || '기록';
     const memo  = el('mr-etc-memo')?.value?.trim()  || '';
@@ -4898,7 +4907,6 @@ function saveManualRecord() {
 
   closeManualRecord();
   addRecord(rec);
-  // 위젯 즉시 갱신 (addRecord 내부에도 있지만 명시적 호출)
   try { updateTodayWidget(); } catch(e) {}
 }
 
