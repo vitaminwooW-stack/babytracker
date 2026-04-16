@@ -1565,6 +1565,98 @@ body.dark .baby-dday-sub { color: #a08050 !important; }
 
 body.dark .header-date { color: #c8a870; }
 
+
+/* ── 다크모드 보완 (2차) ── */
+
+/* 사진 페이지 플레이스홀더 */
+body.dark .photo-placeholder {
+  background: linear-gradient(160deg, #1a1612 0%, #2a2218 100%) !important;
+}
+body.dark .ph-icon { filter: brightness(0.7); }
+body.dark .no-photo-info .baby-dname { color: #f0ead8 !important; }
+
+/* 성장기록 날짜 select */
+body.dark #growth-date {
+  background: #2a2520 !important;
+  border-color: #5a4a10 !important;
+  color: #f0ead8 !important;
+}
+
+/* 성장기록 머리둘레 input */
+body.dark #growth-head {
+  background: #2a2520 !important;
+  border-color: #5a4a10 !important;
+  color: #f0ead8 !important;
+}
+
+/* 설정 페이지 인라인 스타일 카드들 */
+body.dark .chart-wrap {
+  background: #2a2520 !important;
+  border-color: #3d3628 !important;
+  color: #f0ead8 !important;
+}
+
+/* 설정 - 음성단축키 STEP 카드 */
+body.dark .chart-wrap [style*="background:#fff7ed"],
+body.dark .chart-wrap [style*="background: #fff7ed"],
+body.dark .chart-wrap [style*="background:#fffbf0"],
+body.dark .chart-wrap [style*="background:#f0f9ff"],
+body.dark .chart-wrap [style*="background:#fff"] {
+  background: #2a2520 !important;
+  border-color: #3d3628 !important;
+}
+
+/* 헤더 날짜 색상 */
+body.dark #app-date { color: #c8a870; }
+body.dark .app-date { color: #c8a870; }
+
+/* 탭바 */
+body.dark .quick-nav-bar { background: #1a1612 !important; border-top-color: #3d3628 !important; }
+
+/* 아기선택 모달 */
+body.dark #baby-picker-modal > div,
+body.dark #add-baby-modal > div {
+  background: #2a2520 !important;
+}
+body.dark #baby-picker-modal input,
+body.dark #add-baby-modal input {
+  background: #1a1612 !important;
+  color: #f0ead8 !important;
+  border-color: #5a4a10 !important;
+}
+
+/* 온보딩 카드 */
+body.dark .onboarding-card {
+  background: #2a2520 !important;
+}
+body.dark .onboarding-title { color: #f0ead8 !important; }
+body.dark .onboarding-desc { color: #a89880 !important; }
+
+/* 직접입력 모달 */
+body.dark #modal-manual-record .modal {
+  background: #2a2520 !important;
+}
+
+/* 폰교체/아기관리 인라인 카드 */
+body.dark [style*="background:#fff;border-radius:12px"],
+body.dark [style*="background: #fff;border-radius:12px"],
+body.dark [style*="background:#fffbeb"],
+body.dark [style*="background:#f0f7ff"] {
+  background: #1e1a15 !important;
+  border-color: #3d3628 !important;
+  color: #f0ead8 !important;
+}
+
+/* 아빠탭 체크리스트 카드 */
+body.dark .dad-item-card {
+  background: #2a2520 !important;
+  border-color: #3d3628 !important;
+}
+
+/* 코치카드 */
+body.dark .coach-card-wrap {
+  background: #2a2520 !important;
+}
 </style>
   <!-- 귀여운 한국어 폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3338,7 +3430,11 @@ function addBaby(name, birthDate, gender) {
 
 function openBabyPicker() {
   const el = document.getElementById('baby-picker-modal');
-  if (el) { renderBabyPicker(); el.style.display = 'flex'; }
+  if (el) {
+    renderBabyPicker();
+    el.style.display = 'flex';
+    setTimeout(initBabyPickerDrag, 50);
+  }
 }
 
 function closeBabyPicker() {
@@ -8575,9 +8671,7 @@ function appStart() {
       if (splash) splash.classList.add('fade-out');
       setTimeout(() => {
         if (splash) splash.style.display = 'none';
-        if (localStorage.getItem('onboarding_done') !== '1') {
-          localStorage.setItem('onboarding_done', '1');
-        }
+        // onboarding_done 여기서 설정하지 않음 → initLogin이 판단
         initLogin();
       }, 750);
     }, delay);
@@ -10740,6 +10834,41 @@ function showGoodbyeScreen() {
       try { showOnboarding(); showScreen('app'); } catch(e) { location.reload(); }
     }, 600);
   }, 3500);
+}
+
+
+// ── 아기선택 모달 드래그 닫기 ──
+function initBabyPickerDrag() {
+  const handle = document.getElementById('baby-picker-handle');
+  const sheet  = document.getElementById('baby-picker-sheet');
+  const modal  = document.getElementById('baby-picker-modal');
+  if (!handle || !sheet || !modal) return;
+
+  let startY=0, curY=0, dragging=false;
+  handle.addEventListener('touchstart', e => {
+    startY=e.touches[0].clientY; curY=0; dragging=true;
+    sheet.style.transition='none';
+  }, {passive:true});
+  handle.addEventListener('touchmove', e => {
+    if (!dragging) return;
+    const dy=e.touches[0].clientY-startY;
+    if (dy<0) return;
+    curY=dy; sheet.style.transform='translateY('+curY+'px)';
+    modal.style.background='rgba(0,0,0,'+(0.55*(1-Math.min(curY/200,1)*0.8))+')';
+  }, {passive:true});
+  handle.addEventListener('touchend', () => {
+    if (!dragging) return; dragging=false;
+    if (curY>100) {
+      sheet.style.transition='transform 0.22s ease';
+      sheet.style.transform='translateY(110%)';
+      setTimeout(()=>{ closeBabyPicker(); sheet.style.transform=''; sheet.style.transition=''; }, 230);
+    } else {
+      sheet.style.transition='transform 0.3s cubic-bezier(0.34,1.56,0.64,1)';
+      sheet.style.transform='translateY(0)';
+      modal.style.background='rgba(0,0,0,0.55)';
+      setTimeout(()=>{ sheet.style.transition=''; },320);
+    }
+  }, {passive:true});
 }
 
 </script>
