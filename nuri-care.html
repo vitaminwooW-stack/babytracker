@@ -835,6 +835,15 @@ body.dark .qnav-btn.active::after { background: #c8a870; }
 .page-dots { display:none; }
 .page-nav { display:none; }
 
+@keyframes heartbeat {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+@keyframes bounce {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-6px); }
+}
+
 /* ── 스플래시 화면 ── */
 #screen-splash {
   position: fixed; inset: 0; z-index: 9999;
@@ -7567,13 +7576,9 @@ async function executeDelete() {
     try { updateStatus(); } catch(e) {}
     try { updateQuickBtns(); } catch(e) {}
     try { renderPatternClock(); } catch(e) {}
-    // 온보딩으로 이동
+    // 감사 화면 표시 후 온보딩으로 이동
     if (delLocal) {
-      setTimeout(() => {
-        try { showScreen('onboarding'); } catch(e) {
-          location.reload();
-        }
-      }, 500);
+      showGoodbyeScreen();
     }
   }, 300);
 }
@@ -7645,7 +7650,9 @@ function initLogin() {
   // PIN 사용 안함 설정이면 바로 앱으로
   const pinEnabled = localStorage.getItem('pin_enabled') === '1';
   const savedPin   = localStorage.getItem('baby_pin');
-  const hasProfile = !!localStorage.getItem(getBabyKey('baby_profile'));
+  // baby_profile: 구버전 키 또는 아기별 키 둘 다 확인
+  const hasProfile = !!localStorage.getItem('baby_profile') ||
+    !!(localStorage.getItem('babies_list') && JSON.parse(localStorage.getItem('babies_list') || '[]').length > 0);
 
   if (!pinEnabled || !savedPin) {
     // PIN 없음 → 프로필 있으면 바로 앱, 없으면 온보딩
@@ -10399,8 +10406,8 @@ function initModalDragClose() {
           // 드래그 닫기: 모달 ID에 따라 처리
           const bgId = bg.id;
           if (bgId === 'modal-feed-end') {
-            // 수유 완료 모달 드래그 닫기 = 수유 세션 완전 종료
-            try { closeFeedEndModal(true); } catch(e) {}
+            // 수유 완료 모달 드래그 닫기 = 모달만 닫기, 수유 세션 유지
+            try { closeFeedEndModal(false); } catch(e) {}
           } else if (bg.dataset && bg.dataset.onDragClose) {
             try { window[bg.dataset.onDragClose](); } catch(e) {}
           }
@@ -10684,6 +10691,55 @@ async function shareTextBirthCard() {
   } catch(e) {
     showToast('공유가 지원되지 않아요. 스크린샷을 찍어보세요 📸');
   }
+}
+
+
+function showGoodbyeScreen() {
+  const el = document.createElement('div');
+  el.id = 'goodbye-screen';
+  el.style.cssText = [
+    'position:fixed;inset:0;z-index:99999;',
+    'background:linear-gradient(160deg,#fffdf2 0%,#fff7d6 50%,#f6e6a8 100%);',
+    'display:flex;flex-direction:column;align-items:center;justify-content:center;',
+    'padding:40px 32px;text-align:center;'
+  ].join('');
+
+  el.innerHTML = `
+    <div style="font-size:72px;margin-bottom:24px;animation:heartbeat 1.2s ease-in-out infinite;">🍼</div>
+    <div style="font-size:26px;font-weight:900;color:#7a5600;margin-bottom:8px;font-family:'Jua',sans-serif;letter-spacing:-0.02em;">
+      누리케어
+    </div>
+    <div style="font-size:15px;color:#c8860a;font-weight:700;margin-bottom:28px;">
+      소중한 육아 기록 앱
+    </div>
+    <div style="width:48px;height:2px;background:#f0d060;border-radius:2px;margin-bottom:28px;"></div>
+    <div style="font-size:16px;font-weight:800;color:#7a5600;margin-bottom:12px;">
+      그동안 함께해 주셔서 감사했어요 💛
+    </div>
+    <div style="font-size:13px;color:#a07830;line-height:1.8;margin-bottom:36px;word-break:keep-all;">
+      아기와 함께한 소중한 순간들이<br>
+      마음속에 늘 남아있기를 바라요 🌸<br>
+      언제든 다시 돌아오세요!
+    </div>
+    <div style="font-size:12px;color:#c8a070;margin-bottom:8px;">잠시 후 처음 화면으로 이동해요</div>
+    <div style="display:flex;gap:6px;justify-content:center;">
+      <div style="width:8px;height:8px;border-radius:50%;background:#f0d060;animation:bounce 0.8s 0s ease-in-out infinite alternate;"></div>
+      <div style="width:8px;height:8px;border-radius:50%;background:#f0d060;animation:bounce 0.8s 0.2s ease-in-out infinite alternate;"></div>
+      <div style="width:8px;height:8px;border-radius:50%;background:#f0d060;animation:bounce 0.8s 0.4s ease-in-out infinite alternate;"></div>
+    </div>
+  `;
+
+  document.body.appendChild(el);
+
+  // 3.5초 후 온보딩으로 이동
+  setTimeout(() => {
+    el.style.transition = 'opacity 0.6s ease';
+    el.style.opacity = '0';
+    setTimeout(() => {
+      el.remove();
+      try { showOnboarding(); showScreen('app'); } catch(e) { location.reload(); }
+    }, 600);
+  }, 3500);
 }
 
 </script>
