@@ -1741,6 +1741,32 @@ body.dark #delete-confirm-input {
   color: #f0ead8 !important;
   border-color: #fecaca !important;
 }
+
+/* ── 프로필 화면 다크모드 ── */
+body.dark .page-wrap { background: #1a1612 !important; }
+body.dark .profile-header { background: #1a1612 !important; }
+body.dark .profile-card { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .profile-card input,
+body.dark .profile-card select,
+body.dark .profile-card textarea {
+  background: #1a1612 !important;
+  color: #f0ead8 !important;
+  border-color: #5a4a10 !important;
+}
+body.dark .profile-card .field-label { color: #c8a870 !important; }
+body.dark .opt-btn { background: #2a2520 !important; color: #f0ead8 !important; border-color: #5a4a10 !important; }
+body.dark .opt-btn.sel { background: #7a5600 !important; color: #fff !important; border-color: #c8860a !important; }
+body.dark .btn-primary { background: linear-gradient(135deg,#7a5600,#c8860a) !important; }
+body.dark .profile-card .u-hint { color: #a89880 !important; }
+body.dark p.u-sub { color: #a89880 !important; }
+body.dark .profile-section-title { color: #c8a870 !important; }
+body.dark .profile-section-toggle { background: #2a2520 !important; color: #c8a870 !important; border-color: #5a4a10 !important; }
+
+/* ── 온보딩 화면 (screen 시스템) ── */
+#onboarding-overlay.screen { background: #fff8e8; }
+#onboarding-overlay.screen.active { display: flex; flex-direction: column; justify-content: flex-end; }
+body.dark #onboarding-overlay.screen { background: #1a1612; }
+body.dark #onboarding-overlay .onboarding-card { background: #2a2520 !important; }
 </style>
   <!-- 귀여운 한국어 폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1753,7 +1779,7 @@ body.dark #delete-confirm-input {
 <a href="#screen-app" class="skip-nav" aria-label="본문 바로가기">본문 바로가기</a>
 
 <!-- ═══════════ 온보딩 오버레이 ═══════════ -->
-<div id="onboarding-overlay" style="display:none;">
+<div id="onboarding-overlay" class="screen" style="background:#fff8e8;align-items:flex-end;">
   <div class="onboarding-card" style="padding:32px 24px 44px;">
 
     <!-- 진행 도트 - 3개 -->
@@ -7839,9 +7865,8 @@ function initLogin() {
     if (hasProfile) {
       enterApp();
     } else {
-      // 프로필 없으면 항상 온보딩 표시 (최초 실행)
+      // 프로필 없으면 온보딩 표시
       showOnboarding();
-      showScreen('app');
     }
     return;
   }
@@ -8107,16 +8132,15 @@ function updateNotifBtnUI() {
 let obStep = 0;
 
 function showOnboarding() {
-  if (localStorage.getItem('onboarding_done') === '1') return;
-  const el = document.getElementById('onboarding-overlay');
-  if (!el) return;
-  el.style.display = 'flex';
-  // obStep 초기화
   obStep = 0;
   document.querySelectorAll('.onboarding-step').forEach((s,i) => s.classList.toggle('active', i===0));
   document.querySelectorAll('.onboarding-dot').forEach((d,i) => d.classList.toggle('active', i===0));
   const btn = document.getElementById('ob-btn');
   if (btn) { btn.style.display = ''; btn.textContent = '다음'; }
+  // screen 시스템으로 표시
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('onboarding-overlay');
+  if (el) el.classList.add('active');
 }
 
 function obNext() {
@@ -10976,6 +11000,37 @@ function initBabyPickerDrag() {
     }
   }, {passive:true});
 }
+
+
+// ── 온보딩 스와이프 ──
+(function(){
+  let _obTouchX=0, _obDragging=false;
+  function obTouchStart(e){ _obTouchX=e.touches[0].clientX; _obDragging=true; }
+  function obTouchEnd(e){
+    if(!_obDragging) return; _obDragging=false;
+    const dx=e.changedTouches[0].clientX - _obTouchX;
+    if(Math.abs(dx)<50) return;
+    if(dx<0) { // 왼쪽 → 다음
+      const btn=document.getElementById('ob-btn');
+      if(btn && btn.style.display!=='none') btn.click();
+    } else { // 오른쪽 → 이전
+      if(obStep>0){
+        obStep--;
+        document.querySelectorAll('.onboarding-step').forEach((s,i)=>s.classList.toggle('active',i===obStep));
+        document.querySelectorAll('.onboarding-dot').forEach((d,i)=>d.classList.toggle('active',i===obStep));
+        const btn=document.getElementById('ob-btn');
+        if(btn){ btn.style.display=''; btn.textContent=obStep===2?'':obStep===1?'다음':'다음'; }
+      }
+    }
+  }
+  document.addEventListener('DOMContentLoaded',()=>{
+    const card=document.querySelector('.onboarding-card');
+    if(card){
+      card.addEventListener('touchstart',obTouchStart,{passive:true});
+      card.addEventListener('touchend',obTouchEnd,{passive:true});
+    }
+  });
+})();
 
 </script>
 <!-- ── 아기 선택 팝업 ── -->
