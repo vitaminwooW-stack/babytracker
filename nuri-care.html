@@ -1657,6 +1657,90 @@ body.dark .dad-item-card {
 body.dark .coach-card-wrap {
   background: #2a2520 !important;
 }
+
+/* ── 다크모드 3차 보완 ── */
+
+/* 사진 페이지 전체 */
+body.dark .photo-page { background: #1a1612 !important; }
+body.dark .baby-photo-placeholder { background: linear-gradient(160deg, #1e1a15 0%, #2a2218 100%) !important; }
+body.dark .photo-info-chip { background: #2a2520 !important; color: #c8a870 !important; }
+body.dark .no-photo-name { color: #f0ead8 !important; }
+body.dark .no-photo-days { color: #a89880 !important; }
+
+/* 원형 차트 내부 */
+body.dark canvas { filter: none; }
+
+/* 아빠 탭 dad-item */
+body.dark .dad-item { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .dad-item-title { color: #f0ead8 !important; }
+body.dark .dad-item-desc { color: #a89880 !important; }
+body.dark .dad-section-title { color: #c8a870 !important; }
+
+/* 설정 인라인 카드 - STEP 1 (오렌지 배경) */
+body.dark .chart-wrap [style*="background:linear-gradient(135deg,#fff7ed"],
+body.dark .chart-wrap [style*="background: linear-gradient(135deg, #fff7ed"],
+body.dark [class*="chart-wrap"][style*="linear-gradient"] {
+  background: #2a1f10 !important;
+  border-color: #5a3a10 !important;
+}
+
+/* 설정 음성명령 카드 (흰 배경) */
+body.dark .chart-wrap > div[style*="background:#fff"],
+body.dark .chart-wrap > div[style*="background: #fff"] {
+  background: #1e1a15 !important;
+  color: #f0ead8 !important;
+}
+
+/* 아기 추가 모달 */
+body.dark #add-baby-modal > div {
+  background: #2a2520 !important;
+  color: #f0ead8 !important;
+}
+body.dark #add-baby-name,
+body.dark #add-baby-birth,
+body.dark #ob-name,
+body.dark #ob-birth {
+  background: #1a1612 !important;
+  color: #f0ead8 !important;
+  border-color: #5a4a10 !important;
+}
+body.dark #add-baby-girl,
+body.dark #add-baby-boy {
+  background: #2a2520 !important;
+  color: #f0ead8 !important;
+  border-color: #5a4a10 !important;
+}
+
+/* 생활패턴 일/주 탭 */
+body.dark .pattern-tab-btn { background: #2a2520 !important; color: #a89880 !important; }
+body.dark .pattern-tab-btn.active { background: #7a5600 !important; color: #fff !important; }
+
+/* 온보딩 카드 내부 (기능 소개 카드 3장) */
+body.dark .onboarding-card [style*="background:#fffbf0"],
+body.dark .onboarding-card [style*="background:#f0f9ff"],
+body.dark .onboarding-card [style*="background:#fdf4ff"],
+body.dark .onboarding-card [style*="background:#fff7d6"] {
+  background: #2a2520 !important;
+  border-color: #5a4a10 !important;
+}
+
+/* 온보딩 입력 필드 */
+body.dark #ob-name,
+body.dark #ob-birth,
+body.dark #ob-girl,
+body.dark #ob-boy {
+  background: #2a2520 !important;
+  color: #f0ead8 !important;
+  border-color: #5a4a10 !important;
+}
+body.dark #ob-profile-err { color: #f87171 !important; }
+
+/* 삭제 확인 입력창 */
+body.dark #delete-confirm-input {
+  background: #2a2520 !important;
+  color: #f0ead8 !important;
+  border-color: #fecaca !important;
+}
 </style>
   <!-- 귀여운 한국어 폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -7755,12 +7839,9 @@ function initLogin() {
     if (hasProfile) {
       enterApp();
     } else {
-      if (localStorage.getItem('onboarding_done') !== '1') {
-        showOnboarding();
-        showScreen('app');
-      } else {
-        showScreen('profile');
-      }
+      // 프로필 없으면 항상 온보딩 표시 (최초 실행)
+      showOnboarding();
+      showScreen('app');
     }
     return;
   }
@@ -8027,7 +8108,15 @@ let obStep = 0;
 
 function showOnboarding() {
   if (localStorage.getItem('onboarding_done') === '1') return;
-  document.getElementById('onboarding-overlay').style.display = 'flex';
+  const el = document.getElementById('onboarding-overlay');
+  if (!el) return;
+  el.style.display = 'flex';
+  // obStep 초기화
+  obStep = 0;
+  document.querySelectorAll('.onboarding-step').forEach((s,i) => s.classList.toggle('active', i===0));
+  document.querySelectorAll('.onboarding-dot').forEach((d,i) => d.classList.toggle('active', i===0));
+  const btn = document.getElementById('ob-btn');
+  if (btn) { btn.style.display = ''; btn.textContent = '다음'; }
 }
 
 function obNext() {
@@ -10825,13 +10914,30 @@ function showGoodbyeScreen() {
 
   document.body.appendChild(el);
 
-  // 3.5초 후 온보딩으로 이동
+  // 3.5초 후 스플래시 → 온보딩
   setTimeout(() => {
     el.style.transition = 'opacity 0.6s ease';
     el.style.opacity = '0';
     setTimeout(() => {
       el.remove();
-      try { showOnboarding(); showScreen('app'); } catch(e) { location.reload(); }
+      // 스플래시 재표시 후 온보딩
+      const splash = document.getElementById('screen-splash');
+      if (splash) {
+        splash.style.display = 'flex';
+        splash.style.opacity = '1';
+        splash.classList.remove('fade-out');
+        setTimeout(() => {
+          splash.classList.add('fade-out');
+          setTimeout(() => {
+            splash.style.display = 'none';
+            showOnboarding();
+            showScreen('app');
+          }, 700);
+        }, 1200);
+      } else {
+        showOnboarding();
+        showScreen('app');
+      }
     }, 600);
   }, 3500);
 }
