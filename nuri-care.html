@@ -2048,8 +2048,8 @@ body.dark #onboarding-overlay.screen {
       <div class="onboarding-desc" style="margin-bottom:24px;font-size:14px;line-height:1.7;">아기 정보를 입력하면<br>D+일수와 맞춤 코칭이 시작돼요</div>
       <div style="background:var(--ob-card-bg,#fffbf0);border:1.5px solid #f0d060;border-radius:16px;padding:20px;text-align:center;margin-bottom:16px;">
         <div style="font-size:32px;margin-bottom:8px;">🍼✨</div>
-        <div style="font-size:14px;font-weight:800;color:var(--ob-txt,#7a5600);margin-bottom:4px;">누리케어 브랜드 · 광고 없는 공간</div>
-        <div style="font-size:12px;color:var(--ob-sub,#9a8060);">소중한 육아 기록을 한 곳에 모아요</div>
+        <div style="font-size:14px;font-weight:800;color:var(--ob-txt,#7a5600);margin-bottom:4px;">소중한 순간을 기록해요</div>
+        <div style="font-size:12px;color:var(--ob-sub,#9a8060);">D+일수부터 성장까지 한 곳에서</div>
       </div>
       <button onclick="obFinish()" style="width:100%;padding:15px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;margin-bottom:8px;box-shadow:0 4px 16px rgba(200,134,10,0.3);">
         🍼 아기 정보 입력하기
@@ -3871,6 +3871,23 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   const target = document.getElementById('screen-' + id);
   if (target) target.classList.add('active');
+  // 프로필 입력 화면으로 이동 시 폼 초기화
+  if (id === 'profile') { try { clearProfileForm(); } catch(e) {} }
+}
+
+function clearProfileForm() {
+  const ids = ['p-name','p-birth-date','p-birth-time','p-weight','p-height','p-region','p-hospital','p-center'];
+  ids.forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  // 성별 초기화
+  if (typeof selectedGender !== 'undefined') selectedGender = '';
+  if (typeof selectedBirthType !== 'undefined') selectedBirthType = 'natural';
+  // 선택 버튼 초기화
+  document.querySelectorAll('#screen-profile .opt-btn.sel').forEach(b => b.classList.remove('sel'));
+  document.querySelectorAll('#screen-profile .opt-btn').forEach(b => {
+    if (b.dataset.val === 'natural') b.classList.add('sel');
+  });
+  const err = document.getElementById('profile-error');
+  if (err) err.textContent = '';
 }
 
 // ── PIN 로그인 ──
