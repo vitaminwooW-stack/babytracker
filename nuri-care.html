@@ -1785,6 +1785,64 @@ body.dark #onboarding-overlay .onboarding-card { background: #2a2520 !important;
   box-shadow: 0 20px 60px rgba(0,0,0,0.12);
 }
 body.dark #onboarding-overlay.screen { background: #1a1612 !important; }
+
+/* ── 다크모드 4차 보완 ── */
+
+/* 온보딩 배경 및 카드 */
+body.dark #onboarding-overlay.screen { background: #1a1612 !important; }
+body.dark .onboarding-card {
+  background: #2a2520 !important;
+  color: #f0ead8 !important;
+}
+body.dark .onboarding-title { color: #f0ead8 !important; }
+body.dark .onboarding-desc { color: #a89880 !important; }
+body.dark .onboarding-dot { background: #3d3628 !important; }
+body.dark .onboarding-dot.active { background: #c8860a !important; }
+body.dark .onboarding-btn { background: linear-gradient(135deg,#7a5600,#c8860a) !important; }
+body.dark .onboarding-skip { color: #6b5a3e !important; }
+
+/* 온보딩 기능 소개 카드 3장 */
+body.dark .onboarding-card [style*="background:#fffbf0"],
+body.dark .onboarding-card [style*="background:#f0f9ff"],
+body.dark .onboarding-card [style*="background:#fdf4ff"] {
+  background: #1e1a15 !important;
+  border-color: #5a4a10 !important;
+  color: #f0ead8 !important;
+}
+body.dark .onboarding-card [style*="font-weight:800;color:#1a1a1a"] {
+  color: #f0ead8 !important;
+}
+body.dark .onboarding-card [style*="color:#6b7280"] {
+  color: #a89880 !important;
+}
+
+/* 성장 기록 chart-wrap 배경 */
+body.dark [class*="chart-wrap"] {
+  background: #2a2520 !important;
+  border-color: #3d3628 !important;
+}
+body.dark .chart-wrap {
+  background: #2a2520 !important;
+  border-color: #3d3628 !important;
+}
+
+/* 성장기록 입력 영역 강제 */
+body.dark .feature-page .chart-wrap,
+body.dark .feature-page [class="chart-wrap"],
+body.dark .feature-page [class="chart-wrap u-p1416"] {
+  background: #2a2520 !important;
+  border-color: #3d3628 !important;
+}
+
+/* 수유/수면 위젯카드 */
+body.dark .qb-card { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .qb-label { color: #f0ead8 !important; }
+body.dark .qb-time { color: #a89880 !important; }
+
+/* 헤더 버튼들 */
+body.dark .hdr-btn { background: #2a2520 !important; border-color: #3d3628 !important; color: #f0ead8 !important; }
+body.dark .hdr-btn.invite { background: #3d2010 !important; border-color: #c8860a !important; color: #f0d060 !important; }
+body.dark #hdr-add-baby-btn { background: #2a2010 !important; border-color: #5a4a10 !important; color: #c8a870 !important; }
 </style>
   <!-- 귀여운 한국어 폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1891,8 +1949,8 @@ body.dark #onboarding-overlay.screen { background: #1a1612 !important; }
       <button onclick="obAddToHome()" style="width:100%;padding:14px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:8px;">
         📱 홈화면에 추가하기
       </button>
-      <button onclick="obNext()" style="width:100%;padding:10px;background:none;color:#9ca3af;border:none;font-size:13px;cursor:pointer;">
-        나중에 할게요
+      <button onclick="obFinish()" style="width:100%;padding:12px;background:none;color:#9ca3af;border:none;font-size:14px;font-weight:600;cursor:pointer;">
+        🍼 바로 시작하기
       </button>
     </div>
 
@@ -3416,6 +3474,14 @@ if ('serviceWorker' in navigator) {
 let babies = [];        // [{id, name, birthDate, gender, avatar}]
 let activeBabyId = '';  // 현재 선택된 아기 ID
 
+
+// ── 프로필 존재 여부 (전역) ──
+function hasProfileNow() {
+  return !!localStorage.getItem('baby_profile') ||
+    !!(localStorage.getItem('babies_list') &&
+       JSON.parse(localStorage.getItem('babies_list')||'[]').length > 0) ||
+    !!(activeBabyId && localStorage.getItem(getBabyKey('baby_profile')));
+}
 function getBabyKey(key) {
   return activeBabyId ? key + '_' + activeBabyId : key;
 }
@@ -8798,12 +8864,7 @@ function appStart() {
 
   const hasAction = new URLSearchParams(window.location.search).has('action');
 
-  // 프로필 존재 여부 (loadBabies 이후에 체크)
-  function hasProfileNow() {
-    return !!localStorage.getItem('baby_profile') ||
-      !!(localStorage.getItem('babies_list') &&
-         JSON.parse(localStorage.getItem('babies_list')||'[]').length > 0);
-  }
+  // 프로필 체크: 전역 hasProfileNow() 사용
 
   function showSplashThenLogin() {
     const delay = hasAction ? 300 : 1500;
@@ -8818,7 +8879,7 @@ function appStart() {
 
   // 새로고침 감지 — 이미 앱에 진입했었으면 바로 앱으로
   const wasInApp = sessionStorage.getItem('nuri_in_app');
-  if (wasInApp === '1' && hasProfileNow()) {
+  if (wasInApp === '1' && hasProfileNow() && localStorage.getItem('onboarding_done') === '1') {
     if (splash) splash.style.display = 'none';
     enterApp();
     if (hasAction) setTimeout(checkURLAction, 300);
@@ -8838,13 +8899,12 @@ function appStart() {
 
 // 온보딩 후 PIN으로 (obFinish, obSkip에서 호출)
 function obFinish() {
-  document.getElementById('onboarding-overlay').style.display = 'none';
+  // onboarding screen 비활성화
+  const obEl = document.getElementById('onboarding-overlay');
+  if (obEl) obEl.classList.remove('active');
   localStorage.setItem('onboarding_done', '1');
-  // loadBabies로 activeBabyId 확실히 설정 후 enterApp
   try { loadBabies(); } catch(e) {}
-  const hasProfile = !!localStorage.getItem(getBabyKey('baby_profile'))
-                  || !!localStorage.getItem('baby_profile');
-  if (hasProfile) {
+  if (hasProfileNow()) {
     enterApp();
     try { renderAppHeader(); } catch(e) {}
   } else {
@@ -8853,10 +8913,11 @@ function obFinish() {
 }
 
 function obSkip() {
-  document.getElementById('onboarding-overlay').style.display = 'none';
+  const obEl = document.getElementById('onboarding-overlay');
+  if (obEl) obEl.classList.remove('active');
   localStorage.setItem('onboarding_done', '1');
-  const hasProfile = !!localStorage.getItem(getBabyKey('baby_profile'));
-  if (hasProfile) { enterApp(); } else { showScreen('profile'); }
+  try { loadBabies(); } catch(e) {}
+  if (hasProfileNow()) { enterApp(); } else { showScreen('profile'); }
 }
 
 function updateSettingsRoleUI() {
@@ -11030,29 +11091,56 @@ function initBabyPickerDrag() {
 
 // ── 온보딩 스와이프 ──
 (function(){
-  let _obTouchX=0, _obDragging=false;
-  function obTouchStart(e){ _obTouchX=e.touches[0].clientX; _obDragging=true; }
+  let _obTouchX=0, _obTouchY=0, _obSwiping=false, _obLocked=false;
+
+  function obTouchStart(e){
+    _obTouchX=e.touches[0].clientX;
+    _obTouchY=e.touches[0].clientY;
+    _obSwiping=false;
+  }
+
+  function obTouchMove(e){
+    if(_obLocked) return;
+    const dx=e.touches[0].clientX-_obTouchX;
+    const dy=e.touches[0].clientY-_obTouchY;
+    // 수평 스와이프 감지
+    if(!_obSwiping && Math.abs(dx)>Math.abs(dy) && Math.abs(dx)>10) {
+      _obSwiping=true;
+    }
+  }
+
   function obTouchEnd(e){
-    if(!_obDragging) return; _obDragging=false;
-    const dx=e.changedTouches[0].clientX - _obTouchX;
-    if(Math.abs(dx)<50) return;
-    if(dx<0) { // 왼쪽 → 다음
-      const btn=document.getElementById('ob-btn');
-      if(btn && btn.style.display!=='none') btn.click();
-    } else { // 오른쪽 → 이전
+    if(!_obSwiping || _obLocked) return;
+    const dx=e.changedTouches[0].clientX-_obTouchX;
+    if(Math.abs(dx)<60) return;
+
+    _obLocked=true;  // 중복 실행 방지
+    setTimeout(()=>{ _obLocked=false; }, 400);
+
+    if(dx<0) {
+      // 왼쪽 → 다음 (obNext 직접 호출, click 이벤트 우회)
+      const total=3;
+      if(obStep<total-1) { obNext(); }
+    } else {
+      // 오른쪽 → 이전
       if(obStep>0){
         obStep--;
         document.querySelectorAll('.onboarding-step').forEach((s,i)=>s.classList.toggle('active',i===obStep));
         document.querySelectorAll('.onboarding-dot').forEach((d,i)=>d.classList.toggle('active',i===obStep));
         const btn=document.getElementById('ob-btn');
-        if(btn){ btn.style.display=''; btn.textContent=obStep===2?'':obStep===1?'다음':'다음'; }
+        if(btn){
+          btn.style.display='';
+          btn.textContent='다음';
+        }
       }
     }
   }
+
   document.addEventListener('DOMContentLoaded',()=>{
     const card=document.querySelector('.onboarding-card');
     if(card){
       card.addEventListener('touchstart',obTouchStart,{passive:true});
+      card.addEventListener('touchmove',obTouchMove,{passive:true});
       card.addEventListener('touchend',obTouchEnd,{passive:true});
     }
   });
