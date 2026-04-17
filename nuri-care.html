@@ -8550,10 +8550,15 @@ function openFeedEndModal() {
     if (feMl) { feMl.value = ''; feMl.disabled=true; feMl.style.opacity='0.35'; feMl.style.background='#f3f4f6'; feMl.style.cursor='not-allowed'; }
     var mlLabel = document.getElementById('fe-ml-label');
     if (mlLabel) mlLabel.style.opacity = '0.4';
-    ['breast','bottle','both'].forEach(function(v) {
+    // 모든 버튼 sel 제거 후 breast만 선택
+    ['breast','bottle','both','pump'].forEach(function(v) {
       var btn = document.getElementById('fe-'+v);
-      if (btn) btn.classList.toggle('sel', v==='breast');
+      if (btn) btn.classList.remove('sel');
     });
+    var breastBtn = document.getElementById('fe-breast');
+    if (breastBtn) breastBtn.classList.add('sel');
+    // feSel로 연동 UI도 초기화 (유축 wrap 숨김, 분유 비활성화 등)
+    try { feSel('breast'); } catch(e2) {}
   } catch(e) { console.warn('openFeedEndModal init:', e); }
 
   // 이유식 병행 섹션 표시 (D+120~449)
@@ -10583,59 +10588,65 @@ function _showResetChoiceCard() {
 
 // ── 아기선택 모달 드래그 닫기 ──
 function initBabyPickerDrag() {
-  const handle = document.getElementById('baby-picker-handle');
-  const sheet  = document.getElementById('baby-picker-sheet');
-  const modal  = document.getElementById('baby-picker-modal');
-  if (!handle || !sheet || !modal) return;
+  const sheet = document.getElementById('baby-picker-sheet');
+  const modal = document.getElementById('baby-picker-modal');
+  if (!sheet || !modal) return;
 
-  // 이전 이벤트 제거 (중복 방지)
-  const newHandle = handle.cloneNode(true);
-  handle.parentNode.replaceChild(newHandle, handle);
+  // 기존 이벤트 제거 (cloneNode)
+  const newSheet = sheet.cloneNode(true);
+  sheet.parentNode.replaceChild(newSheet, sheet);
+  const ns = document.getElementById('baby-picker-sheet'); // 새 sheet 참조
 
-  let startY = 0, curY = 0, dragging = false;
+  let startY = 0, curY = 0, active = false;
 
-  newHandle.addEventListener('touchstart', function(e) {
-    startY = e.touches[0].clientY;
-    curY = 0;
-    dragging = true;
-    sheet.style.transition = 'none';
-    e.stopPropagation();
-  }, { passive: true });
-
-  newHandle.addEventListener('touchmove', function(e) {
-    if (!dragging) return;
-    const dy = e.touches[0].clientY - startY;
-    if (dy < 0) return; // 위로는 이동 안함
+  function onStart(clientY) {
+    startY = clientY; curY = 0; active = true;
+    ns.style.transition = 'none';
+  }
+  function onMove(clientY) {
+    if (!active) return;
+    const dy = clientY - startY;
+    if (dy < 0) return;
     curY = dy;
-    sheet.style.transform = 'translateY(' + curY + 'px)';
-    // 배경 페이드
-    const alpha = Math.max(0, 0.55 * (1 - curY / 300));
-    modal.style.background = 'rgba(0,0,0,' + alpha + ')';
-  }, { passive: true });
-
-  newHandle.addEventListener('touchend', function() {
-    if (!dragging) return;
-    dragging = false;
+    ns.style.transform = 'translateY(' + curY + 'px)';
+    modal.style.background = 'rgba(0,0,0,' + Math.max(0, 0.55 - curY / 400) + ')';
+  }
+  function onEnd() {
+    if (!active) return;
+    active = false;
     if (curY > 60) {
-      // 닫기: 아래로 슬라이드 후 제거
-      sheet.style.transition = 'transform 0.28s cubic-bezier(0.4,0,0.6,1)';
-      sheet.style.transform = 'translateY(100%)';
-      modal.style.transition = 'background 0.28s';
+      ns.style.transition = 'transform 0.25s ease';
+      ns.style.transform = 'translateY(110%)';
+      modal.style.transition = 'background 0.25s';
       modal.style.background = 'rgba(0,0,0,0)';
       setTimeout(() => {
         closeBabyPicker();
-        sheet.style.transition = '';
-        sheet.style.transform = '';
+        ns.style.transition = '';
+        ns.style.transform = '';
         modal.style.transition = '';
-      }, 290);
+      }, 260);
     } else {
-      // 복귀
-      sheet.style.transition = 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1)';
-      sheet.style.transform = 'translateY(0)';
+      ns.style.transition = 'transform 0.28s cubic-bezier(0.34,1.56,0.64,1)';
+      ns.style.transform = 'translateY(0)';
       modal.style.background = 'rgba(0,0,0,0.55)';
-      setTimeout(() => { sheet.style.transition = ''; }, 280);
+      setTimeout(() => { ns.style.transition = ''; }, 300);
+    }
+  }
+
+  // sheet 상단 80px에서 드래그 시작 (핸들 포함)
+  ns.addEventListener('touchstart', function(e) {
+    const rect = ns.getBoundingClientRect();
+    if (e.touches[0].clientY - rect.top < 80) {
+      onStart(e.touches[0].clientY);
     }
   }, { passive: true });
+
+  ns.addEventListener('touchmove', function(e) {
+    onMove(e.touches[0].clientY);
+  }, { passive: true });
+
+  ns.addEventListener('touchend', onEnd, { passive: true });
+  ns.addEventListener('touchcancel', onEnd, { passive: true });
 }
 
 // ── 온보딩 스와이프 ──
