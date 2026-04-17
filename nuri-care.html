@@ -3772,20 +3772,25 @@ function closeAddBabyModal() {
 function selAddBabyGender(g) {
   _addBabyGender = g;
   const isDark = document.body.classList.contains('dark');
-  const unsel = isDark ? '#2a2520' : '#fff';
+  const unselBg   = isDark ? '#2a2520' : '#fff';
+  const unselTxt  = isDark ? '#a89880' : '#9ca3af';
   const girl = document.getElementById('add-baby-girl');
   const boy  = document.getElementById('add-baby-boy');
   if (girl) {
-    girl.style.background  = g==='girl' ? '#fce7f3' : unsel;
-    girl.style.borderColor = g==='girl' ? '#f472b6' : '#f0d060';
-    girl.style.color       = g==='girl' ? '#be185d' : (isDark?'#f0ead8':'#374151');
-    girl.style.transform   = g==='girl' ? 'scale(1.05)' : 'scale(1)';
+    const sel = g==='girl';
+    girl.style.background  = sel ? (isDark?'#3d1a2e':'#fce7f3') : unselBg;
+    girl.style.borderColor = sel ? '#f472b6' : (isDark?'#3d2535':'#f0d0e8');
+    girl.style.color       = sel ? '#f472b6' : unselTxt;
+    girl.style.transform   = sel ? 'scale(1.06)' : 'scale(1)';
+    girl.style.boxShadow   = sel ? '0 4px 16px rgba(244,114,182,0.35)' : 'none';
   }
   if (boy) {
-    boy.style.background   = g==='boy' ? '#eff6ff' : unsel;
-    boy.style.borderColor  = g==='boy' ? '#60a5fa' : '#f0d060';
-    boy.style.color        = g==='boy' ? '#1d4ed8' : (isDark?'#f0ead8':'#374151');
-    boy.style.transform    = g==='boy' ? 'scale(1.05)' : 'scale(1)';
+    const sel = g==='boy';
+    boy.style.background   = sel ? (isDark?'#1a2a3d':'#eff6ff') : unselBg;
+    boy.style.borderColor  = sel ? '#60a5fa' : (isDark?'#253545':'#d0e0f0');
+    boy.style.color        = sel ? '#60a5fa' : unselTxt;
+    boy.style.transform    = sel ? 'scale(1.06)' : 'scale(1)';
+    boy.style.boxShadow    = sel ? '0 4px 16px rgba(96,165,250,0.35)' : 'none';
   }
 }
 
@@ -11195,11 +11200,38 @@ function _showResetChoiceCard() {
 
   document.getElementById('prc-yes').onclick = () => {
     wrap.style.opacity='0'; wrap.style.transition='opacity 0.3s';
-    setTimeout(() => { wrap.remove(); showOnboarding(); showScreen('app'); }, 300);
+    setTimeout(() => {
+      wrap.remove();
+      // 온보딩으로 이동 (새 아기 등록)
+      localStorage.removeItem('onboarding_done');
+      showOnboarding();
+      showScreen('app');
+    }, 300);
   };
   document.getElementById('prc-no').onclick = () => {
     wrap.style.opacity='0'; wrap.style.transition='opacity 0.3s';
-    setTimeout(() => { wrap.remove(); showOnboarding(); showScreen('app'); }, 300);
+    setTimeout(() => {
+      wrap.remove();
+      // 앱 나가기: PWA/앱이면 window.close, 웹이면 안내 표시
+      try {
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.close();
+        }
+      } catch(e) {}
+      // 닫기 실패 시 홈 스크린 안내
+      setTimeout(() => {
+        const isDark = document.body.classList.contains('dark');
+        const toast = document.createElement('div');
+        toast.textContent = '홈 버튼을 눌러 앱을 종료해주세요 😊';
+        toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:'+(isDark?'#2a2520':'#1a1a1a')+';color:#fff;padding:12px 20px;border-radius:12px;font-size:13px;font-weight:600;z-index:99999;white-space:nowrap;';
+        document.body.appendChild(toast);
+        setTimeout(()=>toast.remove(), 3000);
+        // 폴백: 온보딩 대기화면 표시
+        showOnboarding(); showScreen('app');
+      }, 400);
+    }, 300);
   };
 }
 
@@ -11211,51 +11243,43 @@ function initBabyPickerDrag() {
   const modal  = document.getElementById('baby-picker-modal');
   if (!handle || !sheet || !modal) return;
 
-  let startY=0, curY=0, dragging=false, startX=0;
+  let startY=0, startX=0, curY=0, active=false;
 
-  function onStart(clientX, clientY) {
-    startY=clientY; startX=clientX; curY=0; dragging=true;
-    sheet.style.transition='none';
-  }
-  function onMove(clientX, clientY) {
-    if (!dragging) return;
-    const dy=clientY-startY;
-    const dx=Math.abs(clientX-startX);
-    if (dy<0 || dx>dy) return; // 위로 드래그 or 수평이면 무시
+  function dragStart(x,y){ startX=x; startY=y; curY=0; active=true; sheet.style.transition='none'; }
+  function dragMove(x,y){
+    if(!active) return;
+    const dy=y-startY, dx=Math.abs(x-startX);
+    if(dx>dy+5 || dy<0){ active=false; return; } // 수평 스와이프 or 위로 → 취소
     curY=dy;
-    sheet.style.transform='translateY('+curY+'px)';
-    const alpha=0.55*(1-Math.min(curY/250,1)*0.9);
-    modal.style.background='rgba(0,0,0,'+alpha+')';
+    sheet.style.transform='translateY('+dy+'px)';
+    modal.style.background='rgba(0,0,0,'+(0.55-dy/600)+')';
   }
-  function onEnd() {
-    if (!dragging) return; dragging=false;
-    if (curY>80) {
-      sheet.style.transition='transform 0.25s ease';
-      sheet.style.transform='translateY(100%)';
-      setTimeout(()=>{ closeBabyPicker(); sheet.style.transform=''; sheet.style.transition=''; }, 260);
+  function dragEnd(){
+    if(!active) return; active=false;
+    if(curY>60){
+      sheet.style.transition='transform 0.22s ease';
+      sheet.style.transform='translateY(110%)';
+      setTimeout(()=>{ closeBabyPicker(); sheet.style.transform=''; sheet.style.transition=''; },230);
     } else {
-      sheet.style.transition='transform 0.3s cubic-bezier(0.34,1.56,0.64,1)';
+      sheet.style.transition='transform 0.28s cubic-bezier(0.34,1.56,0.64,1)';
       sheet.style.transform='translateY(0)';
       modal.style.background='rgba(0,0,0,0.55)';
-      setTimeout(()=>{ sheet.style.transition=''; },320);
+      setTimeout(()=>{ sheet.style.transition=''; },300);
     }
   }
 
-  // 터치 이벤트
-  handle.addEventListener('touchstart', e=>{ onStart(e.touches[0].clientX, e.touches[0].clientY); }, {passive:true});
-  handle.addEventListener('touchmove',  e=>{ onMove(e.touches[0].clientX, e.touches[0].clientY); }, {passive:true});
-  handle.addEventListener('touchend',   ()=>{ onEnd(); }, {passive:true});
+  // 핸들: 가장 중요, 넓은 영역
+  handle.addEventListener('touchstart', e=>dragStart(e.touches[0].clientX,e.touches[0].clientY),{passive:true});
+  handle.addEventListener('touchmove',  e=>dragMove(e.touches[0].clientX,e.touches[0].clientY),{passive:true});
+  handle.addEventListener('touchend',   dragEnd,{passive:true});
 
-  // sheet 상단 20% 영역도 드래그 감지
+  // 시트 상단 70px도 감지
   sheet.addEventListener('touchstart', e=>{
-    const rect=sheet.getBoundingClientRect();
-    const relY=e.touches[0].clientY-rect.top;
-    if(relY<60) onStart(e.touches[0].clientX, e.touches[0].clientY);
-  }, {passive:true});
-  sheet.addEventListener('touchmove', e=>{
-    if(dragging) onMove(e.touches[0].clientX, e.touches[0].clientY);
-  }, {passive:true});
-  sheet.addEventListener('touchend', ()=>{ if(dragging) onEnd(); }, {passive:true});
+    if(e.touches[0].clientY-sheet.getBoundingClientRect().top<70)
+      dragStart(e.touches[0].clientX,e.touches[0].clientY);
+  },{passive:true});
+  sheet.addEventListener('touchmove', e=>{ if(active) { e.preventDefault && null; dragMove(e.touches[0].clientX,e.touches[0].clientY); } },{passive:true});
+  sheet.addEventListener('touchend', dragEnd,{passive:true});
 }
 
 
@@ -11319,11 +11343,17 @@ function initBabyPickerDrag() {
 </script>
 <!-- ── 아기 선택 팝업 ── -->
 <div id="baby-picker-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)closeBabyPicker()">
-  <div style="background:var(--card-bg,#fff);border-radius:24px 24px 0 0;padding:24px 20px 44px;width:100%;max-width:480px;">
-    <div style="width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:0 auto 20px;"></div>
-    <div style="font-size:18px;font-weight:900;color:var(--text-main,#1a1a1a);margin-bottom:16px;text-align:center;">👶 아기 선택</div>
+  <div id="baby-picker-sheet" style="background:var(--card-bg,#fff);border-radius:24px 24px 0 0;padding:0 20px 44px;width:100%;max-width:480px;position:relative;">
+    <!-- 드래그 핸들 -->
+    <div id="baby-picker-handle" style="padding:16px 0 4px;text-align:center;cursor:grab;-webkit-user-select:none;user-select:none;">
+      <div style="width:48px;height:5px;background:#d0d0d0;border-radius:3px;display:inline-block;"></div>
+    </div>
+    <!-- X 닫기 버튼 -->
+    <button onclick="closeBabyPicker()" aria-label="닫기"
+      style="position:absolute;top:12px;right:16px;width:32px;height:32px;border-radius:50%;background:var(--border-color,#f0f0f0);border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-sub,#9ca3af);font-weight:700;line-height:1;">✕</button>
+    <!-- 제목 -->
+    <div style="font-size:18px;font-weight:900;color:var(--text-main,#1a1a1a);margin-bottom:16px;text-align:center;padding-top:4px;">👶 아기 선택</div>
     <div id="baby-picker-list"></div>
-    <button onclick="closeBabyPicker()" style="width:100%;margin-top:12px;padding:12px;background:none;border:none;font-size:14px;color:#9ca3af;cursor:pointer;">닫기</button>
   </div>
 </div>
 
@@ -11349,8 +11379,8 @@ function initBabyPickerDrag() {
       <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:6px;">💕 성별</div>
       <div style="display:flex;gap:8px;">
         <button id="add-baby-girl" onclick="selAddBabyGender('girl')"
-          style="flex:1;padding:11px;border:1.5px solid #f0d060;border-radius:12px;font-size:14px;font-weight:700;background:var(--card-bg,#fff);cursor:pointer;color:var(--text-main,#1a1a1a);">
-          👧 여아
+          style="flex:1;padding:14px 8px;border:2px solid #f0d0e8;border-radius:14px;font-size:15px;font-weight:700;background:var(--card-bg,#fff);cursor:pointer;color:var(--text-main,#1a1a1a);transition:all 0.18s;line-height:1.4;text-align:center;">
+          👧<br><span style="font-size:13px;">여아</span>
         </button>
         <button id="add-baby-boy" onclick="selAddBabyGender('boy')"
           style="flex:1;padding:11px;border:1.5px solid #f0d060;border-radius:12px;font-size:14px;font-weight:700;background:var(--card-bg,#fff);cursor:pointer;color:var(--text-main,#1a1a1a);">
