@@ -1858,6 +1858,65 @@ body.dark
   box-shadow: 0 20px 60px rgba(0,0,0,0.12);
 }
 body.dark 
+
+/* ── 성장기록 카드 ── */
+.growth-input-card {
+  background: linear-gradient(135deg,#fffbf0,#fff7d6);
+  border: 1.5px solid #f0d060;
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.growth-card-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #7a5600;
+  margin-bottom: 12px;
+}
+.growth-field-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #7a5600;
+  margin-bottom: 4px;
+}
+.growth-input-field {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 1.5px solid #f0d060;
+  padding: 9px 12px;
+  font-size: 14px;
+  background: #fff;
+  color: #1a1a1a;
+}
+/* 다크모드 */
+body.dark .growth-input-card {
+  background: #2a2520;
+  border-color: #5a4a10;
+}
+body.dark .growth-card-title {
+  color: #c8a870;
+}
+body.dark .growth-field-label {
+  color: #a89880;
+}
+body.dark .growth-input-field {
+  background: #1a1612;
+  color: #f0ead8;
+  border-color: #5a4a10;
+}
+body.dark #growth-date,
+body.dark #growth-weight,
+body.dark #growth-height,
+body.dark #growth-head {
+  background: #1a1612;
+  color: #f0ead8;
+  border-color: #5a4a10;
+}
+/* 성장기록 전체 배경 */
+body.dark .swipe-page .feature-page { background: #1a1612 !important; }
+body.dark .feature-page-title { color: #f0ead8 !important; }
+body.dark .feature-page-sub { color: #a89880 !important; }
 </style>
   <!-- 귀여운 한국어 폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2430,22 +2489,21 @@ body.dark
           <div class="feature-page-sub">키·몸무게를 기록하고 한국 평균과 비교해요</div>
 
           <!-- 새 기록 입력 카드 -->
-          <div style="background:linear-gradient(135deg,#fffbf0,#fff7d6);border:1.5px solid #f0d060;border-radius:18px;padding:16px;margin-bottom:16px;">
-            <div style="font-size:13px;font-weight:800;color:#7a5600;margin-bottom:12px;">✏️ 새 기록 추가</div>
-            <input type="date" id="growth-date" aria-label="성장 기록 날짜"
-              style="width:100%;box-sizing:border-box;margin-bottom:10px;border-radius:10px;border:1.5px solid #f0d060;padding:9px 12px;font-size:14px;background:#fff;">
+          <div id="growth-input-card" class="growth-input-card">
+            <div class="growth-card-title">✏️ 새 기록 추가</div>
+            <input type="date" id="growth-date" aria-label="성장 기록 날짜" class="growth-input-field" style="margin-bottom:10px;">
             <div style="display:flex;gap:8px;margin-bottom:12px;">
               <div style="flex:1;">
-                <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">⚖️ 몸무게 (kg)</div>
+                <div class="growth-field-label">⚖️ 몸무게 (kg)</div>
                 <input type="number" id="growth-weight" aria-label="몸무게 kg"
                   placeholder="예: 4.2" step="0.01" min="0" max="30"
-                  style="width:100%;box-sizing:border-box;border-radius:10px;border:1.5px solid #f0d060;padding:9px 12px;font-size:14px;">
+                  class="growth-input-field">
               </div>
               <div style="flex:1;">
-                <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">📏 키 (cm)</div>
+                <div class="growth-field-label">📏 키 (cm)</div>
                 <input type="number" id="growth-height" aria-label="키 cm"
                   placeholder="예: 52.3" step="0.1" min="0" max="120"
-                  style="width:100%;box-sizing:border-box;border-radius:10px;border:1.5px solid #f0d060;padding:9px 12px;font-size:14px;">
+                  class="growth-input-field">
               </div>
             </div>
             <div style="display:flex;gap:8px;margin-bottom:12px;">
@@ -2453,7 +2511,7 @@ body.dark
                 <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">⭕ 머리둘레 (cm)</div>
                 <input type="number" id="growth-head" aria-label="머리둘레 cm"
                   placeholder="예: 35.0" step="0.1" min="0" max="70"
-                  style="width:100%;box-sizing:border-box;border-radius:10px;border:1.5px solid #f0d060;padding:9px 12px;font-size:14px;">
+                  class="growth-input-field">
               </div>
               <div style="flex:1;"></div>
             </div>
@@ -3394,11 +3452,11 @@ body.dark
     <input type="date" id="ge-date" style="margin-bottom:12px;width:100%;box-sizing:border-box;">
     <div style="display:flex;gap:8px;margin-bottom:12px;">
       <div style="flex:1;">
-        <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">⚖️ 몸무게 (kg)</div>
+        <div class="growth-field-label">⚖️ 몸무게 (kg)</div>
         <input type="number" id="ge-weight" placeholder="예: 4.2" step="0.01" min="0" max="30" style="width:100%;box-sizing:border-box;">
       </div>
       <div style="flex:1;">
-        <div style="font-size:11px;font-weight:700;color:#7a5600;margin-bottom:4px;">📏 키 (cm)</div>
+        <div class="growth-field-label">📏 키 (cm)</div>
         <input type="number" id="ge-height" placeholder="예: 52.3" step="0.1" min="0" max="120" style="width:100%;box-sizing:border-box;">
       </div>
     </div>
@@ -3713,10 +3771,22 @@ function closeAddBabyModal() {
 
 function selAddBabyGender(g) {
   _addBabyGender = g;
+  const isDark = document.body.classList.contains('dark');
+  const unsel = isDark ? '#2a2520' : '#fff';
   const girl = document.getElementById('add-baby-girl');
   const boy  = document.getElementById('add-baby-boy');
-  if (girl) { girl.style.background = g==='girl'?'#fce7f3':''; girl.style.borderColor = g==='girl'?'#f472b6':'#f0d060'; }
-  if (boy)  { boy.style.background  = g==='boy' ?'#eff6ff':''; boy.style.borderColor  = g==='boy' ?'#60a5fa':'#f0d060'; }
+  if (girl) {
+    girl.style.background  = g==='girl' ? '#fce7f3' : unsel;
+    girl.style.borderColor = g==='girl' ? '#f472b6' : '#f0d060';
+    girl.style.color       = g==='girl' ? '#be185d' : (isDark?'#f0ead8':'#374151');
+    girl.style.transform   = g==='girl' ? 'scale(1.05)' : 'scale(1)';
+  }
+  if (boy) {
+    boy.style.background   = g==='boy' ? '#eff6ff' : unsel;
+    boy.style.borderColor  = g==='boy' ? '#60a5fa' : '#f0d060';
+    boy.style.color        = g==='boy' ? '#1d4ed8' : (isDark?'#f0ead8':'#374151');
+    boy.style.transform    = g==='boy' ? 'scale(1.05)' : 'scale(1)';
+  }
 }
 
 function saveAddBaby() {
@@ -11057,25 +11127,21 @@ function showGoodbyeScreen() {
 
   document.body.appendChild(el);
 
-  // 3.5초 후 스플래시 → 온보딩
+  // 3.5초 후 스플래시 → 선택 화면
   setTimeout(() => {
     el.style.transition = 'opacity 0.6s ease';
     el.style.opacity = '0';
     setTimeout(() => {
       el.remove();
-      // 스플래시 재표시 후 온보딩
+      // 스플래시 재표시
       const splash = document.getElementById('screen-splash');
       if (splash) {
         splash.style.display = 'flex';
         splash.style.opacity = '1';
         splash.classList.remove('fade-out');
+        // 1.2초 후 스플래시 아래에 선택 카드 표시
         setTimeout(() => {
-          splash.classList.add('fade-out');
-          setTimeout(() => {
-            splash.style.display = 'none';
-            showOnboarding();
-            showScreen('app');
-          }, 700);
+          showPostResetChoice(splash);
         }, 1200);
       } else {
         showOnboarding();
@@ -11083,6 +11149,58 @@ function showGoodbyeScreen() {
       }
     }, 600);
   }, 3500);
+}
+
+// 리셋 후 선택 화면 (스플래시 위에 표시)
+function showPostResetChoice(splash) {
+  // 스플래시 페이드아웃 후 선택 화면
+  if (splash) {
+    splash.classList.add('fade-out');
+    setTimeout(() => { splash.style.display = 'none'; _showResetChoiceCard(); }, 700);
+  } else {
+    _showResetChoiceCard();
+  }
+}
+
+function _showResetChoiceCard() {
+  const isDark = document.body.classList.contains('dark');
+  const splashBg = isDark
+    ? 'linear-gradient(160deg,#1a1612 0%,#2a2218 50%,#1e1a14 100%)'
+    : 'linear-gradient(160deg,#fffdf2 0%,#fff7d6 50%,#f6e6a8 100%)';
+  const txt    = isDark ? '#f0ead8' : '#7a5600';
+  const sub    = isDark ? '#a89880' : '#9a7040';
+  const cardBg = isDark ? '#2a2520' : '#ffffff';
+  const border = isDark ? '#3d3628' : '#f0ece4';
+
+  const wrap = document.createElement('div');
+  wrap.id = 'post-reset-wrap';
+  wrap.style.cssText = 'position:fixed;inset:0;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;background:' + splashBg + ';';
+
+  wrap.innerHTML =
+    // 누리케어 로고 영역 (스플래시처럼)
+    '<div style="display:flex;flex-direction:column;align-items:center;margin-bottom:40px;">' +
+      '<div style="font-size:64px;margin-bottom:16px;animation:splashPop 0.5s both;">🍼</div>' +
+      '<div style="font-size:28px;font-weight:900;color:' + txt + ';letter-spacing:-0.02em;">누리케어</div>' +
+      '<div style="font-size:13px;color:' + sub + ';margin-top:4px;">소중한 육아 기록 앱</div>' +
+    '</div>' +
+    // 선택 카드
+    '<div style="background:' + cardBg + ';border-radius:24px;padding:28px 24px;width:100%;max-width:360px;box-shadow:0 20px 60px rgba(0,0,0,0.15);border:1px solid ' + border + ';">' +
+      '<div style="font-size:18px;font-weight:900;color:' + txt + ';text-align:center;margin-bottom:8px;">새로 시작할까요? 👶</div>' +
+      '<div style="font-size:13px;color:' + sub + ';text-align:center;margin-bottom:24px;line-height:1.6;">새 아기 정보를 등록하면<br>바로 기록을 시작할 수 있어요</div>' +
+      '<button id="prc-yes" style="width:100%;padding:15px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;margin-bottom:10px;box-shadow:0 4px 16px rgba(200,134,10,0.3);">👶 네, 새 아기 등록하기</button>' +
+      '<button id="prc-no" style="width:100%;padding:13px;background:none;color:' + sub + ';border:1.5px solid ' + border + ';border-radius:14px;font-size:13px;font-weight:600;cursor:pointer;">아직은 괜찮아요</button>' +
+    '</div>';
+
+  document.body.appendChild(wrap);
+
+  document.getElementById('prc-yes').onclick = () => {
+    wrap.style.opacity='0'; wrap.style.transition='opacity 0.3s';
+    setTimeout(() => { wrap.remove(); showOnboarding(); showScreen('app'); }, 300);
+  };
+  document.getElementById('prc-no').onclick = () => {
+    wrap.style.opacity='0'; wrap.style.transition='opacity 0.3s';
+    setTimeout(() => { wrap.remove(); showOnboarding(); showScreen('app'); }, 300);
+  };
 }
 
 
@@ -11093,31 +11211,51 @@ function initBabyPickerDrag() {
   const modal  = document.getElementById('baby-picker-modal');
   if (!handle || !sheet || !modal) return;
 
-  let startY=0, curY=0, dragging=false;
-  handle.addEventListener('touchstart', e => {
-    startY=e.touches[0].clientY; curY=0; dragging=true;
+  let startY=0, curY=0, dragging=false, startX=0;
+
+  function onStart(clientX, clientY) {
+    startY=clientY; startX=clientX; curY=0; dragging=true;
     sheet.style.transition='none';
-  }, {passive:true});
-  handle.addEventListener('touchmove', e => {
+  }
+  function onMove(clientX, clientY) {
     if (!dragging) return;
-    const dy=e.touches[0].clientY-startY;
-    if (dy<0) return;
-    curY=dy; sheet.style.transform='translateY('+curY+'px)';
-    modal.style.background='rgba(0,0,0,'+(0.55*(1-Math.min(curY/200,1)*0.8))+')';
-  }, {passive:true});
-  handle.addEventListener('touchend', () => {
+    const dy=clientY-startY;
+    const dx=Math.abs(clientX-startX);
+    if (dy<0 || dx>dy) return; // 위로 드래그 or 수평이면 무시
+    curY=dy;
+    sheet.style.transform='translateY('+curY+'px)';
+    const alpha=0.55*(1-Math.min(curY/250,1)*0.9);
+    modal.style.background='rgba(0,0,0,'+alpha+')';
+  }
+  function onEnd() {
     if (!dragging) return; dragging=false;
-    if (curY>100) {
-      sheet.style.transition='transform 0.22s ease';
-      sheet.style.transform='translateY(110%)';
-      setTimeout(()=>{ closeBabyPicker(); sheet.style.transform=''; sheet.style.transition=''; }, 230);
+    if (curY>80) {
+      sheet.style.transition='transform 0.25s ease';
+      sheet.style.transform='translateY(100%)';
+      setTimeout(()=>{ closeBabyPicker(); sheet.style.transform=''; sheet.style.transition=''; }, 260);
     } else {
       sheet.style.transition='transform 0.3s cubic-bezier(0.34,1.56,0.64,1)';
       sheet.style.transform='translateY(0)';
       modal.style.background='rgba(0,0,0,0.55)';
       setTimeout(()=>{ sheet.style.transition=''; },320);
     }
+  }
+
+  // 터치 이벤트
+  handle.addEventListener('touchstart', e=>{ onStart(e.touches[0].clientX, e.touches[0].clientY); }, {passive:true});
+  handle.addEventListener('touchmove',  e=>{ onMove(e.touches[0].clientX, e.touches[0].clientY); }, {passive:true});
+  handle.addEventListener('touchend',   ()=>{ onEnd(); }, {passive:true});
+
+  // sheet 상단 20% 영역도 드래그 감지
+  sheet.addEventListener('touchstart', e=>{
+    const rect=sheet.getBoundingClientRect();
+    const relY=e.touches[0].clientY-rect.top;
+    if(relY<60) onStart(e.touches[0].clientX, e.touches[0].clientY);
   }, {passive:true});
+  sheet.addEventListener('touchmove', e=>{
+    if(dragging) onMove(e.touches[0].clientX, e.touches[0].clientY);
+  }, {passive:true});
+  sheet.addEventListener('touchend', ()=>{ if(dragging) onEnd(); }, {passive:true});
 }
 
 
