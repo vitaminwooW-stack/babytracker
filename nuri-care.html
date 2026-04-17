@@ -485,7 +485,7 @@ body.dark .app-header, body.dark .timeline-card, body.dark .status-card,
 body.dark .photo-page, body.dark .swipe-page { background: #1a1612; }
 body.dark .s-label, body.dark .baby-age, body.dark .header-date, body.dark .t-sub,
 
-body.dark .baby-name, body.dark .t-title, body.dark .guide-card-title,
+body.dark .baby-name, body.dark .t-title, body.dark .guide-card-title { color: #f0ead8; }
 
 body.dark input, body.dark textarea { background: #2a2520; border-color: #3d3628; color: #f0ead8; }
 body.dark .opt-btn { background: #2a2520; border-color: #3d3628; color: #f0ead8; }
@@ -1977,6 +1977,36 @@ body.dark #onboarding-overlay.screen {
   --ob-txt: #c8a870;
   --ob-sub: #8a7860;
 }
+
+/* ── 육아일기 다크모드 ── */
+body.dark .diary-entry {
+  background: #2a2520 !important;
+  border-color: #3d3628 !important;
+}
+body.dark .diary-entry-body {
+  background: #2a2520 !important;
+}
+body.dark .diary-entry-text {
+  color: #f0ead8 !important;
+}
+body.dark .diary-entry-date,
+body.dark .diary-entry-meta {
+  color: #a89880 !important;
+}
+body.dark .diary-day-badge {
+  background: #3d3020 !important;
+  color: #c8a870 !important;
+}
+body.dark .diary-edit-btn {
+  background: #2a2520 !important;
+  border-color: #3d3628 !important;
+  color: #c8a870 !important;
+}
+body.dark .diary-delete-btn {
+  background: #2a1515 !important;
+  border-color: #5a2020 !important;
+  color: #f87171 !important;
+}
 </style>
   <!-- 귀여운 한국어 폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2198,7 +2228,7 @@ body.dark #onboarding-overlay.screen {
     </div>
     <div class="profile-card">
       <span class="field-label">이름 또는 태명 *</span>
-      <input type="text" id="p-name" placeholder="예: 하준이, 콩이">
+      <input type="text" id="p-name" placeholder="예: 하준이, 콩이" autocomplete="off">
       <span class="field-label">성별</span>
       <div class="opt-row">
         <button class="opt-btn sel" id="gender-boy" onclick="selGender('boy')">👦 남자아이</button>
@@ -2208,21 +2238,21 @@ body.dark #onboarding-overlay.screen {
       <div class="row2">
         <div>
           <span class="field-label">태어난 날짜 *</span>
-          <input type="date" id="p-birth-date">
+          <input type="date" id="p-birth-date" autocomplete="off">
         </div>
         <div>
           <span class="field-label">태어난 시각</span>
-          <input type="time" id="p-birth-time">
+          <input type="time" id="p-birth-time" autocomplete="off">
         </div>
       </div>
       <div class="row2">
         <div>
           <span class="field-label">몸무게 (kg)</span>
-          <input type="number" id="p-weight" placeholder="예: 3.2" step="0.01" min="0" max="20">
+          <input type="number" id="p-weight" autocomplete="off" placeholder="예: 3.2" step="0.01" min="0" max="20">
         </div>
         <div>
           <span class="field-label">키 (cm)</span>
-          <input type="number" id="p-height" placeholder="예: 50" step="0.1" min="0" max="120">
+          <input type="number" id="p-height" autocomplete="off" placeholder="예: 50" step="0.1" min="0" max="120">
         </div>
       </div>
     </div>
@@ -2236,11 +2266,11 @@ body.dark #onboarding-overlay.screen {
         <button class="opt-btn" id="birth-type-csection" onclick="selBirthType('csection')">💜 제왕절개</button>
       </div>
       <span class="field-label">지역 (시/도)</span>
-      <input type="text" id="p-region" placeholder="예: 서울, 경기, 부산">
+      <input type="text" id="p-region" placeholder="예: 서울, 경기, 부산" autocomplete="off">
       <span class="field-label">출산 병원</span>
-      <input type="text" id="p-hospital" placeholder="예: 제일병원, 서울아산병원">
+      <input type="text" id="p-hospital" placeholder="예: 제일병원, 서울아산병원" autocomplete="off">
       <span class="field-label">산후조리원 (선택)</span>
-      <input type="text" id="p-center" placeholder="예: 미즈메디 산후조리원">
+      <input type="text" id="p-center" placeholder="예: 미즈메디 산후조리원" autocomplete="off">
     </div>
     <button class="btn-primary" onclick="saveProfile()">저장하고 시작하기 →</button>
     <p id="profile-error" style="color:#e05555;font-size:13px;text-align:center;margin-top:10px;min-height:20px;"></p>
@@ -3951,6 +3981,27 @@ function saveProfile() {
   };
   localStorage.setItem(getBabyKey('baby_profile'), JSON.stringify(profile));
   err.textContent = '';
+
+  // 출생 몸무게/키가 있으면 성장 기록 초기값으로 저장
+  if (profile.weight || profile.height) {
+    try {
+      const growthKey = getBabyKey('baby_growth');
+      const existing = JSON.parse(localStorage.getItem(growthKey) || '[]');
+      // 출생일 기록이 없으면 추가
+      const hasBirthRecord = existing.some(r => r.date === profile.birthDate && r.isBirth);
+      if (!hasBirthRecord && profile.birthDate) {
+        existing.unshift({
+          date: profile.birthDate,
+          weight: profile.weight ? parseFloat(profile.weight) : null,
+          height: profile.height ? parseFloat(profile.height) : null,
+          isBirth: true,
+          note: '출생 기록'
+        });
+        localStorage.setItem(growthKey, JSON.stringify(existing));
+      }
+    } catch(e) {}
+  }
+
   enterApp();
 }
 
