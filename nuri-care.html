@@ -1917,6 +1917,54 @@ body.dark #growth-head {
 body.dark .swipe-page .feature-page { background: #1a1612 !important; }
 body.dark .feature-page-title { color: #f0ead8 !important; }
 body.dark .feature-page-sub { color: #a89880 !important; }
+
+/* ── ob-1 (아기 소개) 다크모드 ── */
+body.dark #ob-1 .onboarding-title,
+body.dark #ob-1 .onboarding-icon { color: #f0ead8; }
+body.dark #ob-1 .onboarding-desc { color: #a89880; }
+
+/* 라벨 - 인라인 color:#7a5600을 다크에서 override */
+body.dark #ob-1 [style*="color:#7a5600"] { color: #c8a870 !important; }
+body.dark #ob-1 [style*="color: #7a5600"] { color: #c8a870 !important; }
+
+/* ob-name, ob-birth 입력 필드 */
+body.dark #ob-name,
+body.dark #ob-birth {
+  background: #1a1612 !important;
+  color: #f0ead8 !important;
+  border-color: #5a4a10 !important;
+}
+body.dark #ob-name::placeholder { color: #6b5a3e !important; }
+
+/* 성별 버튼 기본 상태 (다크) */
+body.dark #ob-girl,
+body.dark #ob-boy {
+  background: #2a2520 !important;
+  border-color: #3d3628 !important;
+  color: #6b5a4e !important;
+}
+
+/* 힌트 텍스트 */
+body.dark #ob-1 [style*="color:#9ca3af"],
+body.dark #ob-1 [style*="color: #9ca3af"] { color: #6b5a3e !important; }
+
+/* 온보딩 카드 전체 배경 확실히 */
+body.dark .onboarding-card {
+  background: #2a2520 !important;
+  color: #f0ead8 !important;
+}
+body.dark .onboarding-title { color: #f0ead8 !important; }
+body.dark .onboarding-desc { color: #a89880 !important; }
+body.dark .onboarding-skip { color: #5a4a3e !important; }
+body.dark .onboarding-btn {
+  background: linear-gradient(135deg,#7a5600,#c8860a) !important;
+  color: #fff !important;
+}
+body.dark .onboarding-dot { background: #3d3628 !important; }
+body.dark .onboarding-dot.active { background: #c8860a !important; }
+
+/* onboarding-overlay 배경 */
+body.dark #onboarding-overlay.screen { background: #1a1612 !important; }
 </style>
   <!-- 귀여운 한국어 폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11252,48 +11300,57 @@ function _showResetChoiceCard() {
 
 // ── 아기선택 모달 드래그 닫기 ──
 function initBabyPickerDrag() {
-  const handle = document.getElementById('baby-picker-handle');
-  const sheet  = document.getElementById('baby-picker-sheet');
-  const modal  = document.getElementById('baby-picker-modal');
-  if (!handle || !sheet || !modal) return;
+  const sheet = document.getElementById('baby-picker-sheet');
+  const modal = document.getElementById('baby-picker-modal');
+  if (!sheet || !modal) return;
 
-  let startY=0, startX=0, curY=0, active=false;
+  let startY=0, curY=0, active=false, dirLocked=false;
 
-  function dragStart(x,y){ startX=x; startY=y; curY=0; active=true; sheet.style.transition='none'; }
-  function dragMove(x,y){
-    if(!active) return;
-    const dy=y-startY, dx=Math.abs(x-startX);
-    if(dx>dy+5 || dy<0){ active=false; return; } // 수평 스와이프 or 위로 → 취소
-    curY=dy;
-    sheet.style.transform='translateY('+dy+'px)';
-    modal.style.background='rgba(0,0,0,'+(0.55-dy/600)+')';
+  function onTouchStart(e) {
+    startY = e.touches[0].clientY;
+    curY = 0; active = true; dirLocked = false;
+    sheet.style.transition = 'none';
   }
-  function dragEnd(){
-    if(!active) return; active=false;
-    if(curY>60){
-      sheet.style.transition='transform 0.22s ease';
-      sheet.style.transform='translateY(110%)';
-      setTimeout(()=>{ closeBabyPicker(); sheet.style.transform=''; sheet.style.transition=''; },230);
+  function onTouchMove(e) {
+    if (!active) return;
+    const dy = e.touches[0].clientY - startY;
+    const dx = Math.abs(e.touches[0].clientX - (e.touches[0].clientX)); // 0
+
+    // 방향 확정 전 (첫 8px 이내)
+    if (!dirLocked) {
+      if (Math.abs(dy) < 8) return;
+      dirLocked = true;
+      if (dy < 0) { active = false; return; } // 위로 스와이프 → 취소
+    }
+    if (dy <= 0) return;
+    curY = dy;
+    sheet.style.transform = 'translateY(' + curY + 'px)';
+    const alpha = Math.max(0.05, 0.55 - curY / 400);
+    modal.style.background = 'rgba(0,0,0,' + alpha + ')';
+  }
+  function onTouchEnd() {
+    if (!active) return;
+    active = false; dirLocked = false;
+    if (curY > 80) {
+      sheet.style.transition = 'transform 0.25s ease';
+      sheet.style.transform = 'translateY(120%)';
+      setTimeout(() => {
+        closeBabyPicker();
+        sheet.style.transform = '';
+        sheet.style.transition = '';
+      }, 260);
     } else {
-      sheet.style.transition='transform 0.28s cubic-bezier(0.34,1.56,0.64,1)';
-      sheet.style.transform='translateY(0)';
-      modal.style.background='rgba(0,0,0,0.55)';
-      setTimeout(()=>{ sheet.style.transition=''; },300);
+      sheet.style.transition = 'transform 0.3s cubic-bezier(0.34,1.56,0.64,1)';
+      sheet.style.transform = 'translateY(0)';
+      modal.style.background = 'rgba(0,0,0,0.55)';
+      setTimeout(() => { sheet.style.transition = ''; }, 320);
     }
   }
 
-  // 핸들: 가장 중요, 넓은 영역
-  handle.addEventListener('touchstart', e=>dragStart(e.touches[0].clientX,e.touches[0].clientY),{passive:true});
-  handle.addEventListener('touchmove',  e=>dragMove(e.touches[0].clientX,e.touches[0].clientY),{passive:true});
-  handle.addEventListener('touchend',   dragEnd,{passive:true});
-
-  // 시트 상단 70px도 감지
-  sheet.addEventListener('touchstart', e=>{
-    if(e.touches[0].clientY-sheet.getBoundingClientRect().top<70)
-      dragStart(e.touches[0].clientX,e.touches[0].clientY);
-  },{passive:true});
-  sheet.addEventListener('touchmove', e=>{ if(active) { e.preventDefault && null; dragMove(e.touches[0].clientX,e.touches[0].clientY); } },{passive:true});
-  sheet.addEventListener('touchend', dragEnd,{passive:true});
+  // sheet 전체에 이벤트 (handle 포함)
+  sheet.addEventListener('touchstart', onTouchStart, { passive: true });
+  sheet.addEventListener('touchmove',  onTouchMove,  { passive: true });
+  sheet.addEventListener('touchend',   onTouchEnd,   { passive: true });
 }
 
 
