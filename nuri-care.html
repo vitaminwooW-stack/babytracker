@@ -1965,6 +1965,18 @@ body.dark .onboarding-dot.active { background: #c8860a !important; }
 
 /* onboarding-overlay 배경 */
 body.dark #onboarding-overlay.screen { background: #1a1612 !important; }
+
+/* ── 온보딩 CSS 변수 ── */
+#onboarding-overlay.screen {
+  --ob-card-bg: #fffbf0;
+  --ob-txt: #7a5600;
+  --ob-sub: #9a8060;
+}
+body.dark #onboarding-overlay.screen {
+  --ob-card-bg: #1e1a15;
+  --ob-txt: #c8a870;
+  --ob-sub: #8a7860;
+}
 </style>
   <!-- 귀여운 한국어 폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1978,7 +1990,7 @@ body.dark #onboarding-overlay.screen { background: #1a1612 !important; }
 
 <!-- ═══════════ 온보딩 오버레이 ═══════════ -->
 <div id="onboarding-overlay" class="screen" style="background:#fff8e8;align-items:center;justify-content:center;">
-  <div class="onboarding-card" style="padding:32px 24px 44px;">
+  <div class="onboarding-card" style="padding:28px 24px 40px;">
 
     <!-- 진행 도트 - 3개 -->
     <div class="onboarding-dots" id="ob-dots">
@@ -1987,94 +1999,60 @@ body.dark #onboarding-overlay.screen { background: #1a1612 !important; }
       <div class="onboarding-dot"></div>
     </div>
 
-    <!-- STEP 1: 핵심 가치 소개 -->
+    <!-- STEP 1: 누리케어 소개 -->
     <div class="onboarding-step active" id="ob-0">
-      <div class="onboarding-icon" style="font-size:56px;margin-bottom:16px;">🍼</div>
-      <div class="onboarding-title" style="font-size:22px;font-weight:900;margin-bottom:6px;">누리케어에 오신 것을<br>환영해요!</div>
-      <div class="onboarding-desc" style="margin-bottom:24px;">신생아 육아, 이제 기록이 쉬워져요</div>
-
-      <!-- 3가지 핵심 기능 카드 -->
+      <div class="onboarding-icon" style="font-size:60px;margin-bottom:16px;">🍼</div>
+      <div class="onboarding-title" style="font-size:22px;font-weight:900;margin-bottom:8px;line-height:1.3;">신생아 육아 기록,<br>이제 말 한마디로</div>
+      <div class="onboarding-desc" style="margin-bottom:24px;font-size:14px;line-height:1.7;">수유·수면·기저귀를 음성으로 기록하고<br>아빠와 함께 육아 기록을 공유해요</div>
       <div style="display:flex;flex-direction:column;gap:10px;text-align:left;margin-bottom:4px;">
-        <div style="display:flex;align-items:center;gap:14px;background:#fffbf0;border:1.5px solid #f0d060;border-radius:14px;padding:14px 16px;">
-          <div style="font-size:28px;flex-shrink:0;">⏱️</div>
-          <div>
-            <div style="font-size:14px;font-weight:800;color:#1a1a1a;margin-bottom:2px;">수유·수면·기저귀 기록</div>
-            <div style="font-size:12px;color:#6b7280;line-height:1.5;">버튼 하나로 타이머 시작·종료<br>오늘의 패턴을 한눈에 파악</div>
-          </div>
+        <div style="display:flex;align-items:center;gap:14px;background:var(--ob-card-bg,#fffbf0);border:1.5px solid #f0d060;border-radius:14px;padding:14px 16px;">
+          <div style="font-size:28px;">🎙️</div>
+          <div><div style="font-size:13px;font-weight:800;color:var(--ob-txt,#7a5600);">음성 기록</div><div style="font-size:12px;color:var(--ob-sub,#9a8060);">새벽에도 화면 안 봐도 OK</div></div>
         </div>
-        <div style="display:flex;align-items:center;gap:14px;background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:14px;padding:14px 16px;">
-          <div style="font-size:28px;flex-shrink:0;">🎙️</div>
-          <div>
-            <div style="font-size:14px;font-weight:800;color:#1a1a1a;margin-bottom:2px;">음성 한 마디로 기록</div>
-            <div style="font-size:12px;color:#6b7280;line-height:1.5;">"수유 시작", "기저귀 갈았어"<br>새벽에도 화면 안 봐도 돼요 🌙</div>
-          </div>
+        <div style="display:flex;align-items:center;gap:14px;background:var(--ob-card-bg,#fffbf0);border:1.5px solid #f0d060;border-radius:14px;padding:14px 16px;">
+          <div style="font-size:28px;">👨‍👩‍👧</div>
+          <div><div style="font-size:13px;font-weight:800;color:var(--ob-txt,#7a5600);">부부 공동 육아</div><div style="font-size:12px;color:var(--ob-sub,#9a8060);">아빠와 실시간 기록 공유</div></div>
         </div>
-        <div style="display:flex;align-items:center;gap:14px;background:#fdf4ff;border:1.5px solid #e9d5ff;border-radius:14px;padding:14px 16px;">
-          <div style="font-size:28px;flex-shrink:0;">👨‍👩‍👧</div>
-          <div>
-            <div style="font-size:14px;font-weight:800;color:#1a1a1a;margin-bottom:2px;">아빠와 함께 기록</div>
-            <div style="font-size:12px;color:#6b7280;line-height:1.5;">초대 코드로 연결하면<br>엄마·아빠 모두 같은 기록 공유</div>
-          </div>
+        <div style="display:flex;align-items:center;gap:14px;background:var(--ob-card-bg,#fffbf0);border:1.5px solid #f0d060;border-radius:14px;padding:14px 16px;">
+          <div style="font-size:28px;">📊</div>
+          <div><div style="font-size:13px;font-weight:800;color:var(--ob-txt,#7a5600);">성장 추이 & 수유 패턴</div><div style="font-size:12px;color:var(--ob-sub,#9a8060);">한국 평균과 비교 분석</div></div>
         </div>
       </div>
     </div>
 
-    <!-- STEP 2: 아기 프로필 직접 입력 -->
+    <!-- STEP 2: 수면 코치 & 알림 -->
     <div class="onboarding-step" id="ob-1">
-      <div class="onboarding-icon" style="font-size:48px;margin-bottom:12px;">👶</div>
-      <div class="onboarding-title" style="font-size:20px;font-weight:900;margin-bottom:4px;">우리 아기를 소개해줘요</div>
-      <div class="onboarding-desc" style="margin-bottom:16px;font-size:13px;">입력하면 D+일수와 성장 평균이<br>자동으로 계산돼요</div>
-
-      <!-- 이름 -->
-      <div style="margin-bottom:12px;text-align:left;">
-        <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:4px;">👶 아기 이름 (또는 태명)</div>
-        <input type="text" id="ob-name" placeholder="예: 허지은"
-          style="width:100%;box-sizing:border-box;padding:13px 14px;border:1.5px solid #f0d060;border-radius:12px;font-size:15px;font-family:inherit;outline:none;"
-          oninput="obNameCheck()">
-      </div>
-
-      <!-- 생년월일 -->
-      <div style="margin-bottom:12px;text-align:left;">
-        <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:4px;">🎂 태어난 날</div>
-        <input type="date" id="ob-birth"
-          style="width:100%;box-sizing:border-box;padding:13px 14px;border:1.5px solid #f0d060;border-radius:12px;font-size:15px;font-family:inherit;outline:none;">
-      </div>
-
-      <!-- 성별 -->
-      <div style="margin-bottom:16px;text-align:left;">
-        <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:6px;">💕 성별</div>
-        <div style="display:flex;gap:8px;">
-          <button id="ob-girl" onclick="obSelGender('girl')"
-            style="flex:1;padding:16px 8px;border:2.5px solid #f0d0e8;border-radius:16px;background:#fff;cursor:pointer;color:#c4a0b0;transition:all 0.2s;text-align:center;line-height:1.5;">
-            <div style="font-size:32px;margin-bottom:4px;">👧</div>
-            <div style="font-size:14px;font-weight:800;">여아</div>
-          </button>
-          <button id="ob-boy" onclick="obSelGender('boy')"
-            style="flex:1;padding:16px 8px;border:2.5px solid #d0e0f0;border-radius:16px;background:#fff;cursor:pointer;color:#a0b0c4;transition:all 0.2s;text-align:center;line-height:1.5;">
-            <div style="font-size:32px;margin-bottom:4px;">👦</div>
-            <div style="font-size:14px;font-weight:800;">남아</div>
-          </button>
+      <div class="onboarding-icon" style="font-size:60px;margin-bottom:16px;">😴</div>
+      <div class="onboarding-title" style="font-size:22px;font-weight:900;margin-bottom:8px;line-height:1.3;">수면 타이밍을<br>AI가 알려드려요</div>
+      <div class="onboarding-desc" style="margin-bottom:24px;font-size:14px;line-height:1.7;">월령별 권장 wake window를 분석해<br>지금 재울 타이밍인지 알려줘요</div>
+      <div style="display:flex;flex-direction:column;gap:10px;text-align:left;margin-bottom:4px;">
+        <div style="display:flex;align-items:center;gap:14px;background:var(--ob-card-bg,#fffbf0);border:1.5px solid #f0d060;border-radius:14px;padding:14px 16px;">
+          <div style="font-size:28px;">⏰</div>
+          <div><div style="font-size:13px;font-weight:800;color:var(--ob-txt,#7a5600);">수유 알림</div><div style="font-size:12px;color:var(--ob-sub,#9a8060);">마지막 수유 후 자동 알림</div></div>
         </div>
-      </div>
-
-      <!-- 오류 메시지 -->
-      <div id="ob-profile-err" style="font-size:12px;color:#ef4444;margin-bottom:4px;min-height:16px;"></div>
-
-      <div style="font-size:11px;color:#9ca3af;text-align:center;">
-        언제든 상단 ✏️ 프로필에서 수정할 수 있어요
+        <div style="display:flex;align-items:center;gap:14px;background:var(--ob-card-bg,#fffbf0);border:1.5px solid #f0d060;border-radius:14px;padding:14px 16px;">
+          <div style="font-size:28px;">📅</div>
+          <div><div style="font-size:13px;font-weight:800;color:var(--ob-txt,#7a5600);">100일·돌 알림</div><div style="font-size:12px;color:var(--ob-sub,#9a8060);">소중한 날짜를 미리 알려드려요</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;background:var(--ob-card-bg,#fffbf0);border:1.5px solid #f0d060;border-radius:14px;padding:14px 16px;">
+          <div style="font-size:28px;">📸</div>
+          <div><div style="font-size:13px;font-weight:800;color:var(--ob-txt,#7a5600);">사진 일기 & 출생 카드</div><div style="font-size:12px;color:var(--ob-sub,#9a8060);">카카오톡으로 바로 공유</div></div>
+        </div>
       </div>
     </div>
 
     <!-- STEP 3: 시작하기 -->
     <div class="onboarding-step" id="ob-2">
-      <div class="onboarding-icon" style="font-size:56px;margin-bottom:16px;">🌟</div>
-      <div class="onboarding-title" style="font-size:22px;font-weight:900;margin-bottom:6px;">이제 시작해볼까요?</div>
-      <div class="onboarding-desc" style="margin-bottom:20px;">홈화면에 추가하면<br>아이콘 탭 → 음성 바로 시작!</div>
-      <button onclick="obAddToHome()" style="width:100%;padding:14px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:8px;">
-        📱 홈화면에 추가하기
-      </button>
-      <button onclick="obFinish()" style="width:100%;padding:12px;background:none;color:#9ca3af;border:none;font-size:14px;font-weight:600;cursor:pointer;">
-        🍼 바로 시작하기
+      <div class="onboarding-icon" style="font-size:60px;margin-bottom:16px;">🌟</div>
+      <div class="onboarding-title" style="font-size:22px;font-weight:900;margin-bottom:8px;">준비됐어요!</div>
+      <div class="onboarding-desc" style="margin-bottom:24px;font-size:14px;line-height:1.7;">아기 정보를 입력하면<br>D+일수와 맞춤 코칭이 시작돼요</div>
+      <div style="background:var(--ob-card-bg,#fffbf0);border:1.5px solid #f0d060;border-radius:16px;padding:20px;text-align:center;margin-bottom:16px;">
+        <div style="font-size:32px;margin-bottom:8px;">🍼✨</div>
+        <div style="font-size:14px;font-weight:800;color:var(--ob-txt,#7a5600);margin-bottom:4px;">완전 무료 · 광고 없음</div>
+        <div style="font-size:12px;color:var(--ob-sub,#9a8060);">소중한 육아 기록을 안전하게 보관해요</div>
+      </div>
+      <button onclick="obFinish()" style="width:100%;padding:15px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;margin-bottom:8px;box-shadow:0 4px 16px rgba(200,134,10,0.3);">
+        🍼 아기 정보 입력하기
       </button>
     </div>
 
@@ -8377,25 +8355,6 @@ function showOnboarding() {
 }
 
 function obNext() {
-  // STEP ob-1(프로필 입력) → ob-2(홈화면): 이름+생일 검증 + 저장
-  if (obStep === 1) {
-    const name  = (document.getElementById('ob-name')?.value || '').trim();
-    const birth = document.getElementById('ob-birth')?.value || '';
-    const err   = document.getElementById('ob-profile-err');
-    if (!name)  { if(err) err.textContent='아기 이름을 입력해주세요 🍼'; return; }
-    if (!birth) { if(err) err.textContent='태어난 날을 선택해주세요 📅'; return; }
-    if(err) err.textContent = '';
-    // 구버전 키(baby_profile)에 저장 → hasProfileNow()가 찾을 수 있음
-    const profile = { name, birthDate: birth, gender: _obGender || 'unknown' };
-    localStorage.setItem('baby_profile', JSON.stringify(profile));
-    // babies 배열도 초기화 → 마이그레이션 실행되도록
-    localStorage.removeItem('babies_list');
-    localStorage.removeItem('active_baby_id');
-    sessionStorage.removeItem('active_baby_id');
-    try { loadBabies(); } catch(e) {}
-    try { renderAppHeader(); } catch(e) {}
-  }
-
   obStep++;
   const total = 3;
   if (obStep >= total) { obFinish(); return; }
@@ -8404,7 +8363,7 @@ function obNext() {
   const btn = document.getElementById('ob-btn');
   if (btn) {
     if (obStep === 2) {
-      btn.style.display = 'none';  // STEP3는 "홈화면추가"/"시작하기" 버튼 사용
+      btn.style.display = 'none'; // STEP3는 "아기 정보 입력하기" 버튼 사용
     } else {
       btn.style.display = '';
       btn.textContent = '다음';
@@ -9064,15 +9023,16 @@ function appStart() {
 
 // 온보딩 후 PIN으로 (obFinish, obSkip에서 호출)
 function obFinish() {
-  // onboarding screen 비활성화
   const obEl = document.getElementById('onboarding-overlay');
   if (obEl) obEl.classList.remove('active');
   localStorage.setItem('onboarding_done', '1');
   try { loadBabies(); } catch(e) {}
   if (hasProfileNow()) {
+    // 기존 아기 정보 있으면 바로 앱
     enterApp();
     try { renderAppHeader(); } catch(e) {}
   } else {
+    // 처음이면 아기 정보 입력 화면
     showScreen('profile');
   }
 }
@@ -11261,13 +11221,14 @@ function _showResetChoiceCard() {
     setTimeout(() => {
       wrap.remove();
       localStorage.removeItem('onboarding_done');
-      // ob-1(프로필 입력)으로 바로 이동
-      showOnboarding();       // screen active + obStep=0
-      obStep = 1;             // ob-1로 강제 이동
-      document.querySelectorAll('.onboarding-step').forEach((s,i) => s.classList.toggle('active', i===1));
-      document.querySelectorAll('.onboarding-dot').forEach((d,i)  => d.classList.toggle('active', i===1));
+      // 아기 정보 입력 화면으로 바로 이동
+      showOnboarding();
+      // STEP3(준비됐어요)로 이동 후 "아기 정보 입력하기" 버튼 클릭 유도
+      obStep = 2;
+      document.querySelectorAll('.onboarding-step').forEach((s,i) => s.classList.toggle('active', i===2));
+      document.querySelectorAll('.onboarding-dot').forEach((d,i)  => d.classList.toggle('active', i===2));
       const btn = document.getElementById('ob-btn');
-      if (btn) { btn.style.display=''; btn.textContent='다음'; }
+      if (btn) btn.style.display='none';
     }, 300);
   };
   document.getElementById('prc-no').onclick = () => {
