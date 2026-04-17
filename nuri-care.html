@@ -2048,8 +2048,8 @@ body.dark #onboarding-overlay.screen {
       <div class="onboarding-desc" style="margin-bottom:24px;font-size:14px;line-height:1.7;">아기 정보를 입력하면<br>D+일수와 맞춤 코칭이 시작돼요</div>
       <div style="background:var(--ob-card-bg,#fffbf0);border:1.5px solid #f0d060;border-radius:16px;padding:20px;text-align:center;margin-bottom:16px;">
         <div style="font-size:32px;margin-bottom:8px;">🍼✨</div>
-        <div style="font-size:14px;font-weight:800;color:var(--ob-txt,#7a5600);margin-bottom:4px;">완전 무료 · 광고 없음</div>
-        <div style="font-size:12px;color:var(--ob-sub,#9a8060);">소중한 육아 기록을 안전하게 보관해요</div>
+        <div style="font-size:14px;font-weight:800;color:var(--ob-txt,#7a5600);margin-bottom:4px;">누리케어 브랜드 · 광고 없는 공간</div>
+        <div style="font-size:12px;color:var(--ob-sub,#9a8060);">소중한 육아 기록을 한 곳에 모아요</div>
       </div>
       <button onclick="obFinish()" style="width:100%;padding:15px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;margin-bottom:8px;box-shadow:0 4px 16px rgba(200,134,10,0.3);">
         🍼 아기 정보 입력하기
@@ -11261,57 +11261,59 @@ function _showResetChoiceCard() {
 
 // ── 아기선택 모달 드래그 닫기 ──
 function initBabyPickerDrag() {
-  const sheet = document.getElementById('baby-picker-sheet');
-  const modal = document.getElementById('baby-picker-modal');
-  if (!sheet || !modal) return;
+  const handle = document.getElementById('baby-picker-handle');
+  const sheet  = document.getElementById('baby-picker-sheet');
+  const modal  = document.getElementById('baby-picker-modal');
+  if (!handle || !sheet || !modal) return;
 
-  let startY=0, curY=0, active=false, dirLocked=false;
+  // 이전 이벤트 제거 (중복 방지)
+  const newHandle = handle.cloneNode(true);
+  handle.parentNode.replaceChild(newHandle, handle);
 
-  function onTouchStart(e) {
+  let startY = 0, curY = 0, dragging = false;
+
+  newHandle.addEventListener('touchstart', function(e) {
     startY = e.touches[0].clientY;
-    curY = 0; active = true; dirLocked = false;
+    curY = 0;
+    dragging = true;
     sheet.style.transition = 'none';
-  }
-  function onTouchMove(e) {
-    if (!active) return;
-    const dy = e.touches[0].clientY - startY;
-    const dx = Math.abs(e.touches[0].clientX - (e.touches[0].clientX)); // 0
+    e.stopPropagation();
+  }, { passive: true });
 
-    // 방향 확정 전 (첫 8px 이내)
-    if (!dirLocked) {
-      if (Math.abs(dy) < 8) return;
-      dirLocked = true;
-      if (dy < 0) { active = false; return; } // 위로 스와이프 → 취소
-    }
-    if (dy <= 0) return;
+  newHandle.addEventListener('touchmove', function(e) {
+    if (!dragging) return;
+    const dy = e.touches[0].clientY - startY;
+    if (dy < 0) return; // 위로는 이동 안함
     curY = dy;
     sheet.style.transform = 'translateY(' + curY + 'px)';
-    const alpha = Math.max(0.05, 0.55 - curY / 400);
+    // 배경 페이드
+    const alpha = Math.max(0, 0.55 * (1 - curY / 300));
     modal.style.background = 'rgba(0,0,0,' + alpha + ')';
-  }
-  function onTouchEnd() {
-    if (!active) return;
-    active = false; dirLocked = false;
-    if (curY > 80) {
-      sheet.style.transition = 'transform 0.25s ease';
-      sheet.style.transform = 'translateY(120%)';
+  }, { passive: true });
+
+  newHandle.addEventListener('touchend', function() {
+    if (!dragging) return;
+    dragging = false;
+    if (curY > 60) {
+      // 닫기: 아래로 슬라이드 후 제거
+      sheet.style.transition = 'transform 0.28s cubic-bezier(0.4,0,0.6,1)';
+      sheet.style.transform = 'translateY(100%)';
+      modal.style.transition = 'background 0.28s';
+      modal.style.background = 'rgba(0,0,0,0)';
       setTimeout(() => {
         closeBabyPicker();
-        sheet.style.transform = '';
         sheet.style.transition = '';
-      }, 260);
+        sheet.style.transform = '';
+        modal.style.transition = '';
+      }, 290);
     } else {
-      sheet.style.transition = 'transform 0.3s cubic-bezier(0.34,1.56,0.64,1)';
+      // 복귀
+      sheet.style.transition = 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1)';
       sheet.style.transform = 'translateY(0)';
       modal.style.background = 'rgba(0,0,0,0.55)';
-      setTimeout(() => { sheet.style.transition = ''; }, 320);
+      setTimeout(() => { sheet.style.transition = ''; }, 280);
     }
-  }
-
-  // sheet 전체에 이벤트 (handle 포함)
-  sheet.addEventListener('touchstart', onTouchStart, { passive: true });
-  sheet.addEventListener('touchmove',  onTouchMove,  { passive: true });
-  sheet.addEventListener('touchend',   onTouchEnd,   { passive: true });
+  }, { passive: true });
 }
 
 
