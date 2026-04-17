@@ -477,7 +477,8 @@ body.dark .guide-card-body { border-top-color: #3d3628; }
 /* ══════ 새 기능 CSS ══════ */
 
 /* ── 다크모드 ── */
-body.dark { background: #1a1612; color: #f0ead8; }
+body.dark { background: #1a1612; color: #f0ead8; --card-bg: #2a2520; --border-color: #3d3628; --text-main: #f0ead8; --text-sub: #a89880; }
+body { --card-bg: #ffffff; --border-color: #f0ece4; --text-main: #1a1a1a; --text-sub: #6b7280; }
 body.dark .app-header, body.dark .timeline-card, body.dark .status-card,
 
 
@@ -611,7 +612,7 @@ body.dark .coach-title, body.dark .coach-reason { color: #a89880; }
 /* ── 페이지 네비게이션 레이블 ── */
 
 /* ── 온보딩 오버레이 ── */
-#onboarding-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 9000; display: flex; align-items: flex-end; }
+/* onboarding-overlay: screen 시스템으로 통합 */
 .onboarding-card { background: #fff; border-radius: 24px 24px 0 0; padding: 28px 24px 48px; width: 100%; max-width: 480px; margin: 0 auto; }
 .onboarding-step { display: none; }
 .onboarding-step.active { display: block; }
@@ -1763,33 +1764,20 @@ body.dark .profile-section-title { color: #c8a870 !important; }
 body.dark .profile-section-toggle { background: #2a2520 !important; color: #c8a870 !important; border-color: #5a4a10 !important; }
 
 /* ── 온보딩 화면 (screen 시스템) ── */
-#onboarding-overlay.screen { background: #fff8e8; }
-#onboarding-overlay.screen.active { display: flex; flex-direction: column; justify-content: flex-end; }
-body.dark #onboarding-overlay.screen { background: #1a1612; }
-body.dark #onboarding-overlay .onboarding-card { background: #2a2520 !important; }
+
+
+body.dark 
+body.dark 
 
 /* ── 온보딩 카드 센터 ── */
-#onboarding-overlay.screen.active {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0 20px;
-}
-#onboarding-overlay .onboarding-card {
-  border-radius: 24px !important;
-  max-height: 88vh;
-  width: 100%;
-  max-width: 480px;
-  overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
-}
-body.dark #onboarding-overlay.screen { background: #1a1612 !important; }
+
+
+body.dark 
 
 /* ── 다크모드 4차 보완 ── */
 
 /* 온보딩 배경 및 카드 */
-body.dark #onboarding-overlay.screen { background: #1a1612 !important; }
+body.dark 
 body.dark .onboarding-card {
   background: #2a2520 !important;
   color: #f0ead8 !important;
@@ -1843,6 +1831,33 @@ body.dark .qb-time { color: #a89880 !important; }
 body.dark .hdr-btn { background: #2a2520 !important; border-color: #3d3628 !important; color: #f0ead8 !important; }
 body.dark .hdr-btn.invite { background: #3d2010 !important; border-color: #c8860a !important; color: #f0d060 !important; }
 body.dark #hdr-add-baby-btn { background: #2a2010 !important; border-color: #5a4a10 !important; color: #c8a870 !important; }
+
+/* ── 온보딩 화면 ── */
+#onboarding-overlay {
+  /* screen 시스템 사용: .screen { display:none } → .screen.active { display:flex } */
+}
+#onboarding-overlay.screen {
+  background: #fff8e8;
+  overflow: hidden;
+}
+body.dark 
+#onboarding-overlay.screen.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+#onboarding-overlay .onboarding-card {
+  background: #ffffff;
+  border-radius: 24px;
+  max-height: 88vh;
+  width: 100%;
+  max-width: 440px;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+}
+body.dark 
 </style>
   <!-- 귀여운 한국어 폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -8229,19 +8244,22 @@ function showOnboarding() {
 }
 
 function obNext() {
-  // STEP 1 → 2: 프로필 저장 시도
+  // STEP ob-1(프로필 입력) → ob-2(홈화면): 이름+생일 검증 + 저장
   if (obStep === 1) {
     const name  = (document.getElementById('ob-name')?.value || '').trim();
     const birth = document.getElementById('ob-birth')?.value || '';
     const err   = document.getElementById('ob-profile-err');
     if (!name)  { if(err) err.textContent='아기 이름을 입력해주세요 🍼'; return; }
     if (!birth) { if(err) err.textContent='태어난 날을 선택해주세요 📅'; return; }
-    // 프로필 저장
-    const existing = JSON.parse(localStorage.getItem(getBabyKey('baby_profile')) || '{}');
-    const profile = { ...existing, name, birthDate: birth, gender: _obGender || 'unknown' };
-    localStorage.setItem(getBabyKey('baby_profile'), JSON.stringify(profile));
     if(err) err.textContent = '';
-    // 헤더 즉시 갱신
+    // 구버전 키(baby_profile)에 저장 → hasProfileNow()가 찾을 수 있음
+    const profile = { name, birthDate: birth, gender: _obGender || 'unknown' };
+    localStorage.setItem('baby_profile', JSON.stringify(profile));
+    // babies 배열도 초기화 → 마이그레이션 실행되도록
+    localStorage.removeItem('babies_list');
+    localStorage.removeItem('active_baby_id');
+    sessionStorage.removeItem('active_baby_id');
+    try { loadBabies(); } catch(e) {}
     try { renderAppHeader(); } catch(e) {}
   }
 
@@ -8253,7 +8271,7 @@ function obNext() {
   const btn = document.getElementById('ob-btn');
   if (btn) {
     if (obStep === 2) {
-      btn.style.display = 'none';
+      btn.style.display = 'none';  // STEP3는 "홈화면추가"/"시작하기" 버튼 사용
     } else {
       btn.style.display = '';
       btn.textContent = '다음';
@@ -8264,10 +8282,24 @@ function obNext() {
 let _obGender = 'unknown';
 function obSelGender(g) {
   _obGender = g;
+  const isDark = document.body.classList.contains('dark');
+  const unselBg = isDark ? '#1a1612' : '#fff';
   const girl = document.getElementById('ob-girl');
   const boy  = document.getElementById('ob-boy');
-  if (girl) { girl.style.background = g==='girl' ? '#fce7f3' : '#fff'; girl.style.borderColor = g==='girl' ? '#f472b6' : '#f0d060'; }
-  if (boy)  { boy.style.background  = g==='boy'  ? '#eff6ff' : '#fff'; boy.style.borderColor  = g==='boy'  ? '#60a5fa' : '#f0d060'; }
+  if (girl) {
+    girl.style.background   = g==='girl' ? '#fce7f3' : unselBg;
+    girl.style.borderColor  = g==='girl' ? '#f472b6' : '#f0d060';
+    girl.style.color        = g==='girl' ? '#be185d' : (isDark ? '#f0ead8' : '#374151');
+    girl.style.fontWeight   = g==='girl' ? '800' : '600';
+    girl.style.transform    = g==='girl' ? 'scale(1.05)' : 'scale(1)';
+  }
+  if (boy) {
+    boy.style.background    = g==='boy'  ? '#eff6ff' : unselBg;
+    boy.style.borderColor   = g==='boy'  ? '#60a5fa' : '#f0d060';
+    boy.style.color         = g==='boy'  ? '#1d4ed8' : (isDark ? '#f0ead8' : '#374151');
+    boy.style.fontWeight    = g==='boy'  ? '800' : '600';
+    boy.style.transform     = g==='boy'  ? 'scale(1.05)' : 'scale(1)';
+  }
 }
 function obNameCheck() {
   const err = document.getElementById('ob-profile-err');
@@ -8306,11 +8338,11 @@ function showHomeAddGuide() {
 
   if (isIOS) {
     modal.innerHTML = `
-      <div style="background:#fff;border-radius:20px;padding:28px 24px;width:100%;max-width:400px;">
+      <div style="background:var(--card-bg,#fff);border-radius:20px;padding:28px 24px;width:100%;max-width:400px;">
         <div style="font-size:32px;text-align:center;margin-bottom:12px;">📱</div>
-        <div style="font-size:18px;font-weight:800;text-align:center;margin-bottom:6px;color:#1a1a1a;">홈화면에 추가하기</div>
+        <div style="font-size:18px;font-weight:800;text-align:center;margin-bottom:6px;color:var(--text-main,#1a1a1a);">홈화면에 추가하기</div>
         <div style="font-size:13px;color:#6b7280;text-align:center;margin-bottom:20px;">앱스토어 설치 후 Safari에서:</div>
-        <div style="background:#f8f9fa;border-radius:14px;padding:16px;margin-bottom:16px;line-height:2.0;">
+        <div style="background:var(--border-color,#f8f9fa);border-radius:14px;padding:16px;margin-bottom:16px;line-height:2.0;">
           <div style="font-size:14px;color:#1a1a1a;">1️⃣ 하단 <strong>공유 버튼</strong> (□↑) 탭</div>
           <div style="font-size:14px;color:#1a1a1a;">2️⃣ <strong>"홈 화면에 추가"</strong> 선택</div>
           <div style="font-size:14px;color:#1a1a1a;">3️⃣ <strong>"추가"</strong> 탭</div>
@@ -8323,11 +8355,11 @@ function showHomeAddGuide() {
       </div>`;
   } else {
     modal.innerHTML = `
-      <div style="background:#fff;border-radius:20px;padding:28px 24px;width:100%;max-width:400px;">
+      <div style="background:var(--card-bg,#fff);border-radius:20px;padding:28px 24px;width:100%;max-width:400px;">
         <div style="font-size:32px;text-align:center;margin-bottom:12px;">📱</div>
-        <div style="font-size:18px;font-weight:800;text-align:center;margin-bottom:6px;color:#1a1a1a;">홈화면에 추가하기</div>
+        <div style="font-size:18px;font-weight:800;text-align:center;margin-bottom:6px;color:var(--text-main,#1a1a1a);">홈화면에 추가하기</div>
         <div style="font-size:13px;color:#6b7280;text-align:center;margin-bottom:20px;">플레이스토어 설치 후 Chrome에서:</div>
-        <div style="background:#f8f9fa;border-radius:14px;padding:16px;margin-bottom:16px;line-height:2.0;">
+        <div style="background:var(--border-color,#f8f9fa);border-radius:14px;padding:16px;margin-bottom:16px;line-height:2.0;">
           <div style="font-size:14px;color:#1a1a1a;">1️⃣ 우상단 <strong>⋮ 메뉴</strong> 탭</div>
           <div style="font-size:14px;color:#1a1a1a;">2️⃣ <strong>"앱 설치"</strong> 또는 <strong>"홈 화면에 추가"</strong></div>
           <div style="font-size:14px;color:#1a1a1a;">3️⃣ <strong>"설치"</strong> 탭</div>
@@ -8354,7 +8386,7 @@ function openHomeAddModal(msg, isIOS) {
     <div style="background:#fff;border-radius:24px 24px 0 0;padding:28px 24px 48px;width:100%;max-width:480px;margin:0 auto;">
       <div style="font-size:28px;text-align:center;margin-bottom:12px;">${isIOS ? '📱' : '🤖'}</div>
       <div style="font-size:16px;font-weight:800;color:#1a1a1a;margin-bottom:16px;text-align:center;">홈화면에 추가하기</div>
-      <div style="background:#f8f9fa;border-radius:14px;padding:16px;font-size:13px;color:#374151;line-height:2;white-space:pre-line;margin-bottom:20px;">${msg}</div>
+      <div style="background:var(--border-color,#f8f9fa);border-radius:14px;padding:16px;font-size:13px;color:#374151;line-height:2;white-space:pre-line;margin-bottom:20px;">${msg}</div>
       ${isIOS ? `<div style="text-align:center;margin-bottom:16px;">
         <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007AFF'%3E%3Cpath d='M8 12l4-4 4 4M12 16V8'/%3E%3Crect x='3' y='14' width='18' height='7' rx='2'/%3E%3C/svg%3E" style="width:48px;" alt="공유"/>
         <div style="font-size:11px;color:#9ca3af;margin-top:4px;">아래 공유 버튼을 누르세요</div>
