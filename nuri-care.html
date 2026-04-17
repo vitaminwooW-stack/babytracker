@@ -2092,6 +2092,57 @@ body.dark .diary-delete-btn {
 
   </div>
 </div>
+<!-- ══ 이유식 기록 모달 ══ -->
+<div class="modal-bg" id="modal-meal" role="dialog" aria-modal="true" aria-label="이유식 기록">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>🥣 이유식 기록</h2>
+    <span class="field-label">음식명 <span class="u-hint">(선택)</span></span>
+    <input type="text" id="meal-food-name" placeholder="예: 쌀미음, 애호박죽"
+      autocomplete="off" class="u-mb12" style="width:100%;box-sizing:border-box;padding:11px 14px;border:1.5px solid #f0d060;border-radius:12px;font-size:15px;">
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <div style="flex:1;">
+        <span class="field-label">양</span>
+        <input type="number" id="meal-amount" placeholder="예: 80" min="0" max="500"
+          autocomplete="off" style="width:100%;box-sizing:border-box;padding:11px 12px;border:1.5px solid #f0d060;border-radius:12px;font-size:15px;">
+      </div>
+      <div style="flex:1;">
+        <span class="field-label">단위</span>
+        <select id="meal-unit" style="width:100%;box-sizing:border-box;padding:11px 12px;border:1.5px solid #f0d060;border-radius:12px;font-size:15px;">
+          <option value="ml">ml</option>
+          <option value="g">g</option>
+          <option value="스푼">스푼</option>
+        </select>
+      </div>
+    </div>
+    <span class="field-label">메모 <span class="u-hint">(선택)</span></span>
+    <input type="text" id="meal-memo" placeholder="예: 잘 먹었어요" autocomplete="off"
+      class="u-mb12" style="width:100%;box-sizing:border-box;padding:11px 14px;border:1.5px solid #f0d060;border-radius:12px;font-size:15px;">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('meal')">취소</button>
+      <button class="btn-save" onclick="saveMealRecord()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 간식 기록 모달 ══ -->
+<div class="modal-bg" id="modal-snack" role="dialog" aria-modal="true" aria-label="간식 기록">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>🍪 간식 기록</h2>
+    <span class="field-label">음식명 <span class="u-hint">(선택)</span></span>
+    <input type="text" id="snack-food-name" placeholder="예: 과자, 과일"
+      autocomplete="off" class="u-mb12" style="width:100%;box-sizing:border-box;padding:11px 14px;border:1.5px solid #f0d060;border-radius:12px;font-size:15px;">
+    <span class="field-label">메모 <span class="u-hint">(선택)</span></span>
+    <input type="text" id="snack-memo" placeholder="예: 좋아했어요" autocomplete="off"
+      class="u-mb12" style="width:100%;box-sizing:border-box;padding:11px 14px;border:1.5px solid #f0d060;border-radius:12px;font-size:15px;">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('snack')">취소</button>
+      <button class="btn-save" onclick="saveSnackRecord()">저장</button>
+    </div>
+  </div>
+</div>
+
 
 <!-- ═══════════ 스플래시 화면 ═══════════ -->
 <div id="screen-splash" aria-hidden="true">
@@ -3050,13 +3101,13 @@ body.dark .diary-delete-btn {
     <h2>✏️ 기록 직접 입력</h2>
     <span class="field-label">카테고리</span>
     <div class="opt-row" style="gap:6px;margin-bottom:16px;flex-wrap:wrap;">
-      <button class="opt-btn sel" id="mr-cat-feed"   onclick="mrSetCat('feed')"   class="u-opt-sm2 opt-btn">🍼 수유</button>
-      <button class="opt-btn"     id="mr-cat-sleep"  onclick="mrSetCat('sleep')"  class="u-opt-sm2 opt-btn">😴 수면</button>
-      <button class="opt-btn"     id="mr-cat-diaper" onclick="mrSetCat('diaper')" class="u-opt-sm2 opt-btn">🌿 기저귀</button>
-      <button class="opt-btn"     id="mr-cat-pump"   onclick="mrSetCat('pump')"   class="u-opt-sm2 opt-btn">🤱 유축</button>
-      <button class="opt-btn"     id="mr-cat-meal"   onclick="mrSetCat('meal')"   class="u-opt-sm2 opt-btn">🥣 이유식</button>
-      <button class="opt-btn"     id="mr-cat-snack"  onclick="mrSetCat('snack')"  class="u-opt-sm2 opt-btn">🍪 간식</button>
-      <button class="opt-btn"     id="mr-cat-etc"    onclick="mrSetCat('etc')"    class="u-opt-sm2 opt-btn">📝 기타</button>
+      <button class="opt-btn sel" id="mr-cat-feed"   onclick="mrSetCat('feed')"   class="u-opt-sm2 opt-btn">수유</button>
+      <button class="opt-btn"     id="mr-cat-sleep"  onclick="mrSetCat('sleep')"  class="u-opt-sm2 opt-btn">수면</button>
+      <button class="opt-btn"     id="mr-cat-diaper" onclick="mrSetCat('diaper')" class="u-opt-sm2 opt-btn">기저귀</button>
+      <button class="opt-btn"     id="mr-cat-pump"   onclick="mrSetCat('pump')"   class="u-opt-sm2 opt-btn">유축</button>
+      <button class="opt-btn"     id="mr-cat-meal"   onclick="mrSetCat('meal')"   class="u-opt-sm2 opt-btn">이유식</button>
+      <button class="opt-btn"     id="mr-cat-snack"  onclick="mrSetCat('snack')"  class="u-opt-sm2 opt-btn">간식</button>
+      <button class="opt-btn"     id="mr-cat-etc"    onclick="mrSetCat('etc')"    class="u-opt-sm2 opt-btn">기타</button>
     </div>
     <span class="field-label">시작 시각</span>
     <input type="datetime-local" id="mr-start-time" aria-label="시작 시각" class="u-mb12">
@@ -5597,8 +5648,11 @@ function renderTimeline() {
       progressBadge = '<span style="font-size:9px;background:'+bg+';border:1px solid '+bd+';color:'+txt+';border-radius:6px;padding:1px 6px;font-weight:700;margin-left:4px;">진행중</span>';
     }
 
-    const catColors = { feed:'#eff6ff', sleep:'#f0f9ff', diaper:'#f0fdf4', pump:'#fdf4ff' };
-    const bgColor = catColors[r.cat] || '#f9fafb';
+    const isDarkMode = document.body.classList.contains('dark');
+    const catColors = isDarkMode
+      ? { feed:'#1a2535', sleep:'#1a2530', diaper:'#1a2a1a', pump:'#251a35', meal:'#2a2010', snack:'#2a1f10' }
+      : { feed:'#eff6ff', sleep:'#f0f9ff', diaper:'#f0fdf4', pump:'#fdf4ff', meal:'#fef9ec', snack:'#fef3ec' };
+    const bgColor = catColors[r.cat] || (isDarkMode ? '#2a2520' : '#f9fafb');
 
     let icon = r.icon, subDisplay = (r.sub||'').replace(/\n/g, '<br>');
     if (r.cat === 'diaper') {
@@ -10123,13 +10177,9 @@ function quickStartAction(type) {
   } else if (type === 'diaper') {
     startSession('diaper');
   } else if (type === 'meal') {
-    // 이유식: 직접입력 모달로 (이유식 카테고리 선택 상태로 열기)
-    openManualRecord();
-    setTimeout(() => mrSetCat('meal'), 50);
+    openMealModal();
   } else if (type === 'snack') {
-    // 간식: 직접입력 모달로 (간식 카테고리 선택 상태로 열기)
-    openManualRecord();
-    setTimeout(() => mrSetCat('snack'), 50);
+    openSnackModal();
   }
 }
 
@@ -11655,6 +11705,58 @@ function deleteBabyProfile(id) {
 
   showToast('🗑️ ' + (baby.name || '아기') + ' 기록이 삭제됐어요');
   renderSettingBabyList();
+}
+
+
+// ── 이유식/간식 전용 모달 ──
+function openMealModal() {
+  const el = id => document.getElementById(id);
+  if(el('meal-food-name')) el('meal-food-name').value = '';
+  if(el('meal-amount'))    el('meal-amount').value    = '';
+  if(el('meal-memo'))      el('meal-memo').value      = '';
+  document.getElementById('modal-meal').classList.add('open');
+}
+
+function saveMealRecord() {
+  const name   = document.getElementById('meal-food-name')?.value?.trim() || '';
+  const amount = document.getElementById('meal-amount')?.value || '';
+  const unit   = document.getElementById('meal-unit')?.value  || 'ml';
+  const memo   = document.getElementById('meal-memo')?.value?.trim() || '';
+  let sub = name || '이유식';
+  if (amount) sub += ' · ' + amount + unit;
+  if (memo)   sub += ' · ' + memo;
+  const rec = {
+    type:'meal', cat:'meal', icon:'🥣', title:'이유식',
+    sub, time: nowLocal(),
+    foodName: name||undefined, amount: amount||undefined, unit, memo: memo||undefined
+  };
+  closeModal('meal');
+  addRecord(rec);
+  try { updateTodayWidget(); } catch(e) {}
+  showToast('🥣 이유식 기록 완료!');
+}
+
+function openSnackModal() {
+  const el = id => document.getElementById(id);
+  if(el('snack-food-name')) el('snack-food-name').value = '';
+  if(el('snack-memo'))      el('snack-memo').value      = '';
+  document.getElementById('modal-snack').classList.add('open');
+}
+
+function saveSnackRecord() {
+  const name = document.getElementById('snack-food-name')?.value?.trim() || '';
+  const memo = document.getElementById('snack-memo')?.value?.trim()  || '';
+  let sub = name || '간식';
+  if (memo) sub += ' · ' + memo;
+  const rec = {
+    type:'snack', cat:'snack', icon:'🍪', title:'간식',
+    sub, time: nowLocal(),
+    foodName: name||undefined, memo: memo||undefined
+  };
+  closeModal('snack');
+  addRecord(rec);
+  try { updateTodayWidget(); } catch(e) {}
+  showToast('🍪 간식 기록 완료!');
 }
 
 </script>
