@@ -1414,10 +1414,10 @@ body.dark .diary-delete-btn { background: #2a1515 !important; border-color: #5a2
             <button class="voice-hero-btn" id="voice-btn" onclick="toggleVoice()">
               <span id="voice-btn-inner"></span>
             </button>
-            <div class="voice-hero-cmds">
-              <span class="voice-cmd">수유 시작/종료</span>
+            <div class="voice-hero-cmds" id="voice-cmds-wrap">
+              <span class="voice-cmd" id="vc-feed">수유 시작/종료</span>
               <span class="voice-cmd">수면 시작/종료</span>
-              <span class="voice-cmd">유축 시작/종료</span>
+              <span class="voice-cmd" id="vc-pump">유축 시작/종료</span>
               <span class="voice-cmd">💧 기저귀 소변</span>
               <span class="voice-cmd">💩 기저귀 대변</span>
               <span class="voice-cmd">응가했어</span>
@@ -9331,6 +9331,27 @@ function _updateAgeButtons() {
     pumpBtn.onclick = () => quickStartAction('pump');
     pumpBtn.setAttribute('data-mode','pump');
     if (pumpIcon) pumpIcon.textContent = '🤱';
+  }
+
+  // ── 음성 가이드 텍스트 업데이트 ──
+  const hintEl = document.getElementById('voice-hint-text');
+  const vcFeed = document.getElementById('vc-feed');
+  const vcPump = document.getElementById('vc-pump');
+  if (fullMealMode) {
+    // D+450~: 이유식/간식 모드
+    if (hintEl) hintEl.textContent = '이유식 기록 · 수면 시작 · 간식 기록 · 기저귀';
+    if (vcFeed) vcFeed.textContent = '🥣 이유식 기록';
+    if (vcPump) vcPump.textContent = '🍪 간식 기록';
+  } else if (showMeal) {
+    // D+120~449: 수유+이유식 병행
+    if (hintEl) hintEl.textContent = '수유 시작 · 이유식 기록 · 수면 시작 · 기저귀';
+    if (vcFeed) vcFeed.textContent = '수유 시작/종료';
+    if (vcPump) vcPump.textContent = '유축 시작/종료';
+  } else {
+    // D+119 이하: 기본
+    if (hintEl) hintEl.textContent = '수유 시작 · 수면 시작 · 유축 시작 · 기저귀';
+    if (vcFeed) vcFeed.textContent = '수유 시작/종료';
+    if (vcPump) vcPump.textContent = '유축 시작/종료';
   }
 }
 
