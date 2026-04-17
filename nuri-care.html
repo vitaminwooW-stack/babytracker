@@ -1997,12 +1997,14 @@ body.dark .feature-page-sub { color: #a89880 !important; }
         <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:6px;">💕 성별</div>
         <div style="display:flex;gap:8px;">
           <button id="ob-girl" onclick="obSelGender('girl')"
-            style="flex:1;padding:11px;border:1.5px solid #f0d060;border-radius:12px;font-size:14px;font-weight:700;background:#fff;cursor:pointer;color:#1a1a1a;">
-            👧 여아
+            style="flex:1;padding:16px 8px;border:2.5px solid #f0d0e8;border-radius:16px;background:#fff;cursor:pointer;color:#c4a0b0;transition:all 0.2s;text-align:center;line-height:1.5;">
+            <div style="font-size:32px;margin-bottom:4px;">👧</div>
+            <div style="font-size:14px;font-weight:800;">여아</div>
           </button>
           <button id="ob-boy" onclick="obSelGender('boy')"
-            style="flex:1;padding:11px;border:1.5px solid #f0d060;border-radius:12px;font-size:14px;font-weight:700;background:#fff;cursor:pointer;color:#1a1a1a;">
-            👦 남아
+            style="flex:1;padding:16px 8px;border:2.5px solid #d0e0f0;border-radius:16px;background:#fff;cursor:pointer;color:#a0b0c4;transition:all 0.2s;text-align:center;line-height:1.5;">
+            <div style="font-size:32px;margin-bottom:4px;">👦</div>
+            <div style="font-size:14px;font-weight:800;">남아</div>
           </button>
         </div>
       </div>
@@ -3555,6 +3557,34 @@ function hasProfileNow() {
        JSON.parse(localStorage.getItem('babies_list')||'[]').length > 0) ||
     !!(activeBabyId && localStorage.getItem(getBabyKey('baby_profile')));
 }
+
+// ── 성별 버튼 공통 스타일 ──
+function _applyGenderStyle(g, girlId, boyId) {
+  const isDark = document.body.classList.contains('dark');
+  const unselBg  = isDark ? '#2a2520' : '#ffffff';
+  const unselBdr = isDark ? '#3d3628' : '#e5e7eb';
+  const unselTxt = isDark ? '#6b5a4e' : '#c4b0bc';
+
+  const girl = document.getElementById(girlId);
+  const boy  = document.getElementById(boyId);
+
+  if (girl) {
+    const sel = g === 'girl';
+    girl.style.background  = sel ? (isDark ? '#3d1a2e' : '#fce7f3') : unselBg;
+    girl.style.borderColor = sel ? '#f472b6' : unselBdr;
+    girl.style.color       = sel ? (isDark ? '#f9a8d4' : '#ec4899') : unselTxt;
+    girl.style.transform   = sel ? 'scale(1.07)' : 'scale(1)';
+    girl.style.boxShadow   = sel ? '0 6px 20px rgba(244,114,182,0.4)' : 'none';
+  }
+  if (boy) {
+    const sel = g === 'boy';
+    boy.style.background   = sel ? (isDark ? '#1a2a3d' : '#eff6ff') : unselBg;
+    boy.style.borderColor  = sel ? '#60a5fa' : unselBdr;
+    boy.style.color        = sel ? (isDark ? '#93c5fd' : '#3b82f6') : unselTxt;
+    boy.style.transform    = sel ? 'scale(1.07)' : 'scale(1)';
+    boy.style.boxShadow    = sel ? '0 6px 20px rgba(96,165,250,0.4)' : 'none';
+  }
+}
 function getBabyKey(key) {
   return activeBabyId ? key + '_' + activeBabyId : key;
 }
@@ -3771,27 +3801,7 @@ function closeAddBabyModal() {
 
 function selAddBabyGender(g) {
   _addBabyGender = g;
-  const isDark = document.body.classList.contains('dark');
-  const unselBg   = isDark ? '#2a2520' : '#fff';
-  const unselTxt  = isDark ? '#a89880' : '#9ca3af';
-  const girl = document.getElementById('add-baby-girl');
-  const boy  = document.getElementById('add-baby-boy');
-  if (girl) {
-    const sel = g==='girl';
-    girl.style.background  = sel ? (isDark?'#3d1a2e':'#fce7f3') : unselBg;
-    girl.style.borderColor = sel ? '#f472b6' : (isDark?'#3d2535':'#f0d0e8');
-    girl.style.color       = sel ? '#f472b6' : unselTxt;
-    girl.style.transform   = sel ? 'scale(1.06)' : 'scale(1)';
-    girl.style.boxShadow   = sel ? '0 4px 16px rgba(244,114,182,0.35)' : 'none';
-  }
-  if (boy) {
-    const sel = g==='boy';
-    boy.style.background   = sel ? (isDark?'#1a2a3d':'#eff6ff') : unselBg;
-    boy.style.borderColor  = sel ? '#60a5fa' : (isDark?'#253545':'#d0e0f0');
-    boy.style.color        = sel ? '#60a5fa' : unselTxt;
-    boy.style.transform    = sel ? 'scale(1.06)' : 'scale(1)';
-    boy.style.boxShadow    = sel ? '0 4px 16px rgba(96,165,250,0.35)' : 'none';
-  }
+  _applyGenderStyle(g, 'add-baby-girl', 'add-baby-boy');
 }
 
 function saveAddBaby() {
@@ -11383,12 +11393,14 @@ function initBabyPickerDrag() {
       <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:6px;">💕 성별</div>
       <div style="display:flex;gap:8px;">
         <button id="add-baby-girl" onclick="selAddBabyGender('girl')"
-          style="flex:1;padding:14px 8px;border:2px solid #f0d0e8;border-radius:14px;font-size:15px;font-weight:700;background:var(--card-bg,#fff);cursor:pointer;color:var(--text-main,#1a1a1a);transition:all 0.18s;line-height:1.4;text-align:center;">
-          👧<br><span style="font-size:13px;">여아</span>
+          style="flex:1;padding:16px 8px;border:2.5px solid #f0d0e8;border-radius:16px;background:var(--card-bg,#fff);cursor:pointer;color:#c4a0b0;transition:all 0.2s;text-align:center;line-height:1.5;">
+          <div style="font-size:32px;margin-bottom:4px;">👧</div>
+          <div style="font-size:14px;font-weight:800;">여아</div>
         </button>
         <button id="add-baby-boy" onclick="selAddBabyGender('boy')"
-          style="flex:1;padding:11px;border:1.5px solid #f0d060;border-radius:12px;font-size:14px;font-weight:700;background:var(--card-bg,#fff);cursor:pointer;color:var(--text-main,#1a1a1a);">
-          👦 남아
+          style="flex:1;padding:16px 8px;border:2.5px solid #d0e0f0;border-radius:16px;background:var(--card-bg,#fff);cursor:pointer;color:#a0b0c4;transition:all 0.2s;text-align:center;line-height:1.5;">
+          <div style="font-size:32px;margin-bottom:4px;">👦</div>
+          <div style="font-size:14px;font-weight:800;">남아</div>
         </button>
       </div>
     </div>
