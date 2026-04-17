@@ -2799,6 +2799,41 @@ body.dark .diary-delete-btn {
           </div>
 
           <!-- 음성 단축키 -->
+          <div class="feature-section-title">🌙 화면 설정</div>
+          <div class="chart-wrap u-p1416">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+              <div>
+                <div style="font-size:14px;font-weight:600;">다크 모드</div>
+                <div style="font-size:12px;color:#9ca3af;margin-top:2px;">야간 수유 시 눈이 편해요</div>
+              </div>
+              <div id="dark-toggle" aria-label="다크 모드 토글" role="switch" onclick="toggleDarkMode()" style="width:44px;height:24px;border-radius:12px;background:#d1d5db;cursor:pointer;position:relative;transition:background 0.2s;">
+                <div id="dark-knob" style="width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:14px;font-weight:600;">PIN 잠금 <span style="font-size:11px;background:#fff7d6;color:#7a5600;padding:2px 6px;border-radius:8px;font-weight:700;">선택사항</span></div>
+                <div style="font-size:12px;color:#9ca3af;margin-top:2px;">켜면 앱 시작 시 PIN 4자리 입력</div>
+              </div>
+              <div id="pin-toggle" aria-label="PIN 잠금 토글" role="switch" onclick="togglePinLock()" style="width:44px;height:24px;border-radius:12px;background:#d1d5db;cursor:pointer;position:relative;transition:background 0.2s;">
+                <div id="pin-knob" style="width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+              </div>
+            </div>
+          </div>
+          <div class="feature-section-title">👶 아기 관리</div>
+          <div class="chart-wrap u-p1416">
+            <div id="setting-baby-list" style="margin-bottom:12px;"></div>
+            <button onclick="openAddBabyModal()"
+              style="width:100%;padding:12px;background:none;border:2px dashed #f0d060;border-radius:12px;font-size:14px;font-weight:700;color:#7a5600;cursor:pointer;"
+              id="setting-add-baby-btn">
+              ＋ 아기 추가
+            </button>
+            <!-- 출생 기념 카드 -->
+            <button onclick="openBirthCard()" style="width:100%;margin-top:10px;padding:13px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+              🎉 출생 기념 카드 만들기
+            </button>
+          </div>
+
           <div class="feature-section-title">⚡ 음성 단축키 · 홈화면 추가</div>
           <div class="chart-wrap u-p1416">
             <!-- STEP 1: 앱 설치 안내 -->
@@ -2839,20 +2874,19 @@ body.dark .diary-delete-btn {
 
           <!-- 폰 교체 가이드 -->
           <!-- 아기 관리 -->
-          <div class="feature-section-title">👶 아기 관리</div>
+          <div class="feature-section-title">🔔 수유·수면·기념일 알림</div>
           <div class="chart-wrap u-p1416">
-            <div id="setting-baby-list" style="margin-bottom:12px;"></div>
-            <button onclick="openAddBabyModal()"
-              style="width:100%;padding:12px;background:none;border:2px dashed #f0d060;border-radius:12px;font-size:14px;font-weight:700;color:#7a5600;cursor:pointer;"
-              id="setting-add-baby-btn">
-              ＋ 아기 추가
-            </button>
-            <!-- 출생 기념 카드 -->
-            <button onclick="openBirthCard()" style="width:100%;margin-top:10px;padding:13px;background:linear-gradient(135deg,#7a5600,#c8860a);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
-              🎉 출생 기념 카드 만들기
+            <div style="font-size:13px;color:var(--text-sub,#555);margin-bottom:10px;line-height:1.7;">
+              수유 시간이 되거나 아기가 오래 깨있으면<br>
+              <strong>자동으로 알림</strong>을 보내드려요.<br>
+              <span style="font-size:11px;color:var(--text-sub,#9ca3af);">
+                🏥 퇴원 후 케어 알림 · 🎂 100일 알림도 자동 발송돼요
+              </span>
+            </div>
+            <button id="notif-req-btn" class="export-btn" onclick="requestNotifPermission()" style="margin-bottom:0">
+              🔔 수유·수면 알림 켜기
             </button>
           </div>
-
           <div class="feature-section-title">📱 폰 교체 · 데이터 이전</div>
           <div class="chart-wrap u-p1416" style="background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1.5px solid #fed7aa;">
             <div style="font-size:13px;font-weight:800;color:#c2410c;margin-bottom:10px;">⚠️ 폰 바꾸기 전에 꼭 확인하세요!</div>
@@ -2891,40 +2925,6 @@ body.dark .diary-delete-btn {
           </div>
 
           <!-- 화면 설정 -->
-          <div class="feature-section-title">🌙 화면 설정</div>
-          <div class="chart-wrap u-p1416">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-              <div>
-                <div style="font-size:14px;font-weight:600;">다크 모드</div>
-                <div style="font-size:12px;color:#9ca3af;margin-top:2px;">야간 수유 시 눈이 편해요</div>
-              </div>
-              <div id="dark-toggle" aria-label="다크 모드 토글" role="switch" onclick="toggleDarkMode()" style="width:44px;height:24px;border-radius:12px;background:#d1d5db;cursor:pointer;position:relative;transition:background 0.2s;">
-                <div id="dark-knob" style="width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;">
-              <div>
-                <div style="font-size:14px;font-weight:600;">PIN 잠금 <span style="font-size:11px;background:#fff7d6;color:#7a5600;padding:2px 6px;border-radius:8px;font-weight:700;">선택사항</span></div>
-                <div style="font-size:12px;color:#9ca3af;margin-top:2px;">켜면 앱 시작 시 PIN 4자리 입력</div>
-              </div>
-              <div id="pin-toggle" aria-label="PIN 잠금 토글" role="switch" onclick="togglePinLock()" style="width:44px;height:24px;border-radius:12px;background:#d1d5db;cursor:pointer;position:relative;transition:background 0.2s;">
-                <div id="pin-knob" style="width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
-              </div>
-            </div>
-          </div>
-          <div class="feature-section-title">🔔 수유·수면·기념일 알림</div>
-          <div class="chart-wrap u-p1416">
-            <div style="font-size:13px;color:var(--text-sub,#555);margin-bottom:10px;line-height:1.7;">
-              수유 시간이 되거나 아기가 오래 깨있으면<br>
-              <strong>자동으로 알림</strong>을 보내드려요.<br>
-              <span style="font-size:11px;color:var(--text-sub,#9ca3af);">
-                🏥 퇴원 후 케어 알림 · 🎂 100일 알림도 자동 발송돼요
-              </span>
-            </div>
-            <button id="notif-req-btn" class="export-btn" onclick="requestNotifPermission()" style="margin-bottom:0">
-              🔔 수유·수면 알림 켜기
-            </button>
-          </div>
           <div class="feature-section-title">📤 데이터 내보내기</div>
           <button class="export-btn" onclick="exportCSV()">📊 기록 데이터 CSV로 내보내기</button>
           <button class="export-btn" onclick="exportGrowthCSV()">📏 성장 기록 CSV로 내보내기</button>
@@ -3431,7 +3431,6 @@ body.dark .diary-delete-btn {
   <div class="modal">
     <div class="modal-handle"></div>
     <button class="modal-close-x" aria-label="닫기" onclick="closeModal('profile-edit')">✕</button>
-  try { loadBabies(); } catch(e) {}  // birthDate 반영
     <h2>✏️ 프로필 수정</h2>
     <span class="field-label">이름 또는 태명 *</span>
     <input type="text" id="ep-name" placeholder="예: 하준이, 콩이">
@@ -7492,6 +7491,8 @@ function toggleDarkMode() {
   if (toggle) toggle.style.background = isDark ? '#7a5600' : '#d1d5db';
   if (knob) knob.style.transform = isDark ? 'translateX(20px)' : 'translateX(0)';
   // 다크모드 전환 시 JS로 렌더된 페이지 재렌더
+  try { renderTimeline(); } catch(e) {}
+  try { updateQuickBtns(); } catch(e) {}
   try { renderMomCarePage(); } catch(e) {}
   try { renderMilestoneList(); } catch(e) {}
   try { renderPatternClock(); } catch(e) {}
