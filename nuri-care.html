@@ -2538,6 +2538,17 @@ body.dark .diary-delete-btn { background: #2a1515 !important; border-color: #5a2
     </div>
     <span class="field-label">기록 시각</span>
     <input type="datetime-local" id="fe-time" aria-label="수유 완료 시각" class="u-mb12">
+    <!-- 이유식 병행 섹션 (D+120~449에서만 표시) -->
+    <div id="feed-end-meal-section" style="display:none;margin-bottom:12px;border-top:1.5px solid #f0d060;padding-top:12px;">
+      <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:8px;">🥣 이유식도 먹였나요? <span style="font-weight:400;color:#9ca3af;">(선택)</span></div>
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="fe-meal-name" placeholder="음식명 (예: 쌀미음)" autocomplete="off"
+          style="flex:1;padding:9px 10px;border:1.5px solid #f0d060;border-radius:10px;font-size:13px;box-sizing:border-box;">
+        <input type="number" id="fe-meal-amount" placeholder="ml/g" min="0" max="500" autocomplete="off"
+          style="width:70px;padding:9px 8px;border:1.5px solid #f0d060;border-radius:10px;font-size:13px;box-sizing:border-box;">
+      </div>
+    </div>
+
     <div class="modal-actions">
       <button class="btn-cancel" aria-label="취소" onclick="closeFeedEndModal(false)">취소</button>
       <button class="btn-save" aria-label="저장" onclick="saveFeedEnd()">완료</button>
@@ -8545,6 +8556,15 @@ function openFeedEndModal() {
     });
   } catch(e) { console.warn('openFeedEndModal init:', e); }
 
+  // 이유식 병행 섹션 표시 (D+120~449)
+  const _mealDays = getBabyAgeDays() || 0;
+  const mealSection = document.getElementById('feed-end-meal-section');
+  if (mealSection) {
+    mealSection.style.display = (_mealDays >= 120 && _mealDays < 450) ? '' : 'none';
+  }
+  if (document.getElementById('fe-meal-name')) document.getElementById('fe-meal-name').value = '';
+  if (document.getElementById('fe-meal-amount')) document.getElementById('fe-meal-amount').value = '';
+
   // 모달 표시 - display:flex 직접 설정으로 확실히
   var modal = document.getElementById('modal-feed-end');
   if (modal) {
@@ -9190,8 +9210,8 @@ function updateQuickBtns() {
   const qbFeed=document.getElementById('qb-feed'), qlFeed=document.getElementById('ql-feed'),
         qtFeed=document.getElementById('qt-feed');
   const _days = getBabyAgeDays() || 0;
-  const _showMeal = _days >= 120;
-  const _showSnack = _days >= 365;
+  const _showMeal  = _days >= 450;   // D+450부터 수유→이유식 완전전환
+  const _showSnack = _days >= 450;   // D+450부터 유축→간식 완전전환
   if (feedingStart) {
     if (qlFeed) qlFeed.textContent='수유 종료 ✅';
     if (qtFeed) qtFeed.innerHTML=elapsedStr(feedingStart)+'<br>수유 중';
