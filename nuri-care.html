@@ -8,50 +8,36 @@
 <meta name="apple-mobile-web-app-title" content="아기 루틴">
 <title>누리케어 | Nuri Care</title>
 <style>
+/* ═══ 누리케어 스타일시트 (정리됨) ═══ */
+
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 button, a, [onclick] { touch-action: manipulation; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif; background: #f7f8fa; min-height: 100vh; color: #111827; }
-
+body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif; background: #f7f8fa; min-height: 100vh; color: #111827; --card-bg: #ffffff; --border-color: #f0ece4; --text-main: #1a1a1a; --text-sub: #6b7280; }
 .screen { display: none; min-height: 100vh; }
 .screen.active { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-/* 아빠·가이드·프로필 화면은 전체 스크롤 허용 */
 #screen-guide.active { display: flex; flex-direction: column; overflow: hidden; }
 #screen-profile.active { overflow-y: auto; overflow-x: hidden; }
-
-/* ── 뒤로가기·닫기 버튼 공통 ── */
 .nav-close-btn { width: 34px; height: 34px; border-radius: 50%; background: rgba(0,0,0,0.07); border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #555; cursor: pointer; flex-shrink: 0; line-height: 1; }
 .nav-close-btn:active { background: rgba(0,0,0,0.15); }
 body.dark .nav-close-btn { background: rgba(255,255,255,0.1); color: #c8a870; }
-/* 모달 X 닫기 버튼 */
 .modal-close-x { position: absolute; top: 16px; right: 16px; width: 30px; height: 30px; border-radius: 50%; background: #f3f4f6; border: none; font-size: 16px; color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1; }
 .modal-close-x:active { background: #e5e7eb; }
 body.dark .modal-close-x { background: #3d3628; color: #c8a870; }
 .page-wrap { max-width: 480px; margin: 0 auto; padding: 24px 20px 80px; width: 100%; }
-
 .field-label { font-size: 12px; font-weight: 600; color: #6b7280; margin-bottom: 6px; margin-top: 16px; display: block; letter-spacing: 0.04em; }
-input[type="text"], input[type="number"], input[type="datetime-local"], input[type="date"], input[type="time"] {
-  width: 100%; padding: 13px 14px; border: 1px solid #d1d5db; border-radius: 12px;
-  font-size: 15px; background: #fff; color: #1a1a1a; outline: none; font-family: inherit;
-}
+input[type="text"], input[type="number"], input[type="datetime-local"], input[type="date"], input[type="time"] { width: 100%; padding: 13px 14px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 15px; background: #fff; color: #1a1a1a; outline: none; font-family: inherit; }
 input:focus { border-color: #bfdbfe; }
 .btn-primary { width: 100%; padding: 15px; border: none; border-radius: 8px; background: #7a5600; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 20px; font-family: inherit; }
 .btn-primary:active { opacity: 0.85; }
-
-/* ── 전체 배경 컬러 통일 (첫 화면 톤) ── */
-
 #screen-login { background: radial-gradient(circle at top, #fffdf2 0%, #fff7d6 60%, #f6e6a8 100%); align-items: center; justify-content: center; }
 #screen-profile { background: #fffdf2; }
 #screen-guide { background: #fffdf2; }
 #screen-app { background: #fff7d6; }
 .role-card:active { transform: scale(0.96); }
-/* ── 아빠 화면 ── */
-
 .dad-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 16px; width: 100%; }
-
 .dad-section { margin-bottom: 20px; }
 .dad-section-title { font-size: 14px; font-weight: 800; color: #1e293b; letter-spacing: -0.01em; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
 .dad-section-title span { display: none; }
-
 .dad-check-card { background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden; box-shadow: none; }
 .dad-check-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: background 0.15s; }
 .dad-check-item:last-child { border-bottom: none; }
@@ -61,11 +47,6 @@ input:focus { border-color: #bfdbfe; }
 .dad-checkbox.checked { background: #22c55e; border-color: #22c55e; }
 .dad-checkbox.checked::after { content: '✓'; color: #fff; font-size: 13px; font-weight: 700; }
 .dad-check-title { font-size: 14px; font-weight: 600; color: #1e293b; }
-.dad-check-item:last-child { border-bottom: none; }
-.dad-check-item:active { background: #f5f8ff; }
-.dad-check-item.done { background: linear-gradient(135deg, #f0fdf4, #e8f8f0); border-bottom-color: #d4f0e0; }
-.dad-checkbox.checked { background: #22c55e; border-color: #22c55e; }
-.dad-checkbox.checked::after { content: '✓'; color: #fff; font-size: 13px; font-weight: 700; }
 .dad-check-info { flex: 1; min-width: 0; }
 .dad-check-desc { font-size: 12px; color: #6b7280; margin-top: 3px; line-height: 1.5; word-break: keep-all; white-space: normal; }
 .dad-praise { font-size: 13px; color: #16a34a; font-weight: 600; margin-top: 4px; }
@@ -79,19 +60,12 @@ input:focus { border-color: #bfdbfe; }
 .dad-progress-bar-wrap { flex: 1; background: #c8dff5; border-radius: 4px; height: 6px; }
 .dad-progress-bar { height: 6px; border-radius: 4px; background: #2563eb; transition: width 0.4s; }
 .dad-progress-text { font-size: 13px; color: #1d4ed8; font-weight: 700; flex-shrink: 0; }
-/* 엄마가 보는 아빠 체크리스트 (읽기전용) */
 .dad-view-modal .dad-view-summary { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
 .dad-view-chip { font-size: 12px; padding: 4px 10px; border-radius: 10px; font-weight: 600; }
-/* ── 정책 체크 ── */
-
-
-
-/* 신청 버튼 + 완료 체크 행 */
 .policy-apply-row { display: flex; gap: 8px; align-items: stretch; margin-top: 12px; }
 .policy-apply-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 11px 12px; background: #7a5600; color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; transition: opacity 0.15s; }
 .policy-apply-btn:active { opacity: 0.8; }
 .policy-apply-btn.done-btn { background: #16a34a; }
-/* 완료 체크 버튼 */
 .policy-done-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 8px 12px; background: #f9fafb; border: 1.5px solid #e5e7eb; border-radius: 10px; cursor: pointer; min-width: 60px; flex-shrink: 0; transition: all 0.15s; }
 .policy-done-btn.checked { background: #f0fdf4; border-color: #86efac; }
 .policy-done-icon { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #d1d5db; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
@@ -99,13 +73,7 @@ input:focus { border-color: #bfdbfe; }
 .policy-done-icon.checked::after { content: '✓'; color: #fff; font-size: 12px; font-weight: 700; }
 .policy-done-label { font-size: 10px; color: #9ca3af; font-weight: 600; }
 .policy-done-label.checked { color: #16a34a; }
-/* 신청 완료 표시하기 — 독립 행 (기존 스타일 유지) */
-
-
-
-
 .policy-applied-badge { font-size: 11px; background: #f0fdf4; color: #1d7a3a; padding: 2px 8px; border-radius: 8px; font-weight: 600; margin-left: auto; flex-shrink: 0; }
-/* ── 로그인 ── */
 .login-box { width: 100%; max-width: 360px; padding: 0 24px; }
 .login-logo { text-align: center; margin-bottom: 28px; }
 .login-logo .logo-icon { font-size: 30px; margin-bottom: 10px; font-weight: 900; letter-spacing: -0.04em; color: #1f2937; line-height: 1.15; }
@@ -122,33 +90,19 @@ input:focus { border-color: #bfdbfe; }
 .pin-key.del { font-size: 18px; color: #6b7280; }
 .pin-key.empty { background: transparent; border-color: transparent; cursor: default; pointer-events: none; }
 .login-hint { font-size: 12px; color: #9ca3af; text-align: center; margin-top: 16px; line-height: 1.6; }
-
-/* ── 프로필 ── */
 .profile-header { text-align: center; padding: 32px 0 8px; }
 .step-badge { display: inline-block; background: #ffffff; border: 1px solid #dbe3ef; color: #475569; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 8px; margin-bottom: 12px; }
 .profile-header h2 { font-size: 22px; font-weight: 700; color: #1a1a1a; }
 .profile-header p { font-size: 14px; color: #6b7280; margin-top: 6px; }
 .profile-card { background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; padding: 14px 16px; margin-top: 10px; box-shadow: none; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-/* ── 메인 앱 헤더 ── */
 .app-header { background: #fff; padding: 44px 20px 10px; box-shadow: 0 1px 0 #e5e7eb; flex-shrink: 0; }
 .app-header-inner { max-width: 480px; margin: 0 auto; }
 .app-header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .app-header-left { display: flex; align-items: center; gap: 10px; }
 .baby-avatar { width: 40px; height: 40px; border-radius: 12px; background: #fff7d6; border: 1px solid #e8d796; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
 .baby-name { font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 1px; }
-/* 헤더 D+N 강조 */
-.baby-dday {
-  font-family: 'Jua', 'Apple SD Gothic Neo', sans-serif !important;
-  font-size: 26px !important;
-  font-weight: 400 !important;
-  color: #7a5600 !important;
-  letter-spacing: 0.02em;
-  line-height: 1.0;
-  margin-bottom: 0;
-}
-
+.baby-dday { font-family: 'Jua', 'Apple SD Gothic Neo', sans-serif !important; font-size: 26px !important; font-weight: 400 !important; color: #7a5600 !important; letter-spacing: 0.02em; line-height: 1.0; margin-bottom: 0; }
 .app-header-top-right { display: flex; align-items: flex-start; gap: 8px; flex-shrink: 0; margin-right: 4px; }
 .header-date { font-size: 12px; font-weight: 600; color: #7a5600; font-family: 'Gowun Dodum', sans-serif; white-space: nowrap; padding-right: 16px; }
 .app-header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
@@ -156,27 +110,22 @@ input:focus { border-color: #bfdbfe; }
 .hdr-btn { display: flex; align-items: center; gap: 4px; padding: 5px 11px; border-radius: 20px; border: 1.5px solid; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
 .hdr-btn:active { opacity: 0.8; }
 .hdr-btn.profile { background: #fffdf2; border-color: #e8d796; color: #7a5600; }
-.hdr-btn.guide   { background: #fffbeb; border-color: #fde68a; color: #92400e; }
-.hdr-btn.invite  { background: #fdf2f8; border-color: #f9a8d4; color: #be185d; }
-.hdr-btn.dad     { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
+.hdr-btn.guide { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+.hdr-btn.invite { background: #fdf2f8; border-color: #f9a8d4; color: #be185d; }
+.hdr-btn.dad { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
 body.dark .app-header { background: #2a2520; box-shadow: 0 1px 0 #3d3628; }
 body.dark .baby-name { color: #f0ead8; }
 body.dark .hdr-btn.profile { background: #2a2520; border-color: #4d4030; color: #c8a870; }
-body.dark .hdr-btn.guide   { background: #2a2218; border-color: #5a4a10; color: #d4a020; }
-body.dark .hdr-btn.invite  { background: #2a1820; border-color: #6a2840; color: #ec4899; }
-body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: #60a5fa; }
-
+body.dark .hdr-btn.guide { background: #2a2218; border-color: #5a4a10; color: #d4a020; }
+body.dark .hdr-btn.invite { background: #3d2010 !important; border-color: #c8860a !important; color: #f0d060 !important; }
+body.dark .hdr-btn.dad { background: #18202a; border-color: #1e3a5a; color: #60a5fa; }
 .app-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 16px; width: 100%; box-sizing: border-box; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-
 .status-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
 .status-card { background: #fff; border-radius: 8px; padding: 12px 8px; text-align: center; box-shadow: none; }
 .s-icon { font-size: 20px; margin-bottom: 4px; }
 .s-label { font-size: 11px; color: #6b7280; }
 .s-time { font-size: 13px; font-weight: 600; color: #333; margin-top: 3px; }
-
-
 .section-title { font-size: 12px; font-weight: 600; color: #9ca3af; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
-
 .btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px; }
 .btn-main { border: none; border-radius: 12px; padding: 14px 6px 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; transition: transform 0.1s; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 .btn-main:active { transform: scale(0.94); }
@@ -184,7 +133,6 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .btn-feed { background: #eff6ff; color: #c0410f; }
 .btn-sleep { background: #eff6ff; color: #1d4ed8; }
 .btn-pump { background: #f5f3ff; color: #7c3aaf; }
-
 .timeline-card { background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; padding: 4px 0; box-shadow: none; overflow: hidden; }
 .t-item { display: flex; gap: 12px; padding: 12px 16px; align-items: center; border-bottom: 1px solid #f3f4f6; }
 .t-item:last-child { border-bottom: none; }
@@ -201,17 +149,12 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .clear-btn { margin-top: 12px; width: 100%; padding: 12px; background: none; border: 1px dashed #ddd; border-radius: 12px; color: #ccc; font-size: 13px; cursor: pointer; }
 .t-actions { display: flex; gap: 4px; flex-shrink: 0; margin-left: 4px; }
 .t-edit-btn { background: #f0f5ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 7px 10px; font-size: 12px; font-weight: 700; cursor: pointer; color: #1d4ed8; white-space: nowrap; }
-.t-del-btn  { background: #fff0f0; border: none; border-radius: 8px; padding: 6px 8px; font-size: 13px; cursor: pointer; color: #e05555; }
+.t-del-btn { background: #fff0f0; border: none; border-radius: 8px; padding: 6px 8px; font-size: 13px; cursor: pointer; color: #e05555; }
 .section-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .section-title-row .section-title { margin-bottom: 0; }
-
-/* ── 스와이프 ── */
 .swipe-container { display: flex; width: 1000%; height: 100%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
 .swipe-page { width: calc(100% / 10); height: 100%; flex-shrink: 0; overflow: hidden; }
-/* 사진 페이지(2번째)는 스크롤 없이 꽉 차게 */
 .swipe-page:nth-child(2) { overflow: hidden; }
-
-/* ── 일기 페이지 ── */
 .diary-page { padding: 16px 16px 16px; background: #fffdf2; height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; }
 .diary-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .diary-header h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; }
@@ -235,10 +178,7 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .diary-img-preview { width: 100%; max-height: 200px; object-fit: cover; border-radius: 10px; margin-top: 10px; display: none; }
 .diary-img-upload-btn { display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: #fffdf2; border: 1px dashed #e8d796; border-radius: 10px; font-size: 13px; color: #7a5600; cursor: pointer; margin-top: 10px; font-weight: 500; width: 100%; box-sizing: border-box; }
 .diary-img-upload-btn:active { background: #fff7d6; }
-
-/* ── 각 페이지 빈공간 제거 ── */
 .mom-page { padding: 16px 16px 40px; background: var(--page-bg, #fffdf2); height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; touch-action: pan-y; }
-
 .mom-page-header { margin-bottom: 16px; }
 .mom-page-header h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; }
 .mom-page-header p { font-size: 13px; color: #6b7280; margin-top: 4px; }
@@ -266,101 +206,29 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .search-btn { width: 100%; padding: 11px; background: #7a5600; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 8px; }
 .search-btn:active { opacity: 0.85; }
 .mom-no-info { text-align: center; padding: 40px 0; color: #9ca3af; font-size: 14px; line-height: 1.8; }
-
-/* ── 아기 사진 페이지 — 헤더 아래 화면 꽉 채우기 ── */
-.photo-page {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background: #fffdf2;
-  overflow: hidden;
-}
-.photo-upload-area {
-  position: relative;
-  width: 100%;
-  flex: 1;          /* 남은 공간 모두 차지 */
-  min-height: 0;    /* flex 자식이 넘치지 않도록 */
-  overflow: hidden;
-}
-.baby-photo-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-  background: #e8dfc0;
-}
-.baby-photo-placeholder {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(160deg, #fffdf2 0%, #f6e6a8 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  gap: 12px;
-}
+.photo-page { display: flex; flex-direction: column; height: 100%; background: #fffdf2; overflow: hidden; }
+.photo-upload-area { position: relative; width: 100%; flex: 1; min-height: 0; overflow: hidden; }
+.baby-photo-img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; background: #e8dfc0; }
+.baby-photo-placeholder { width: 100%; height: 100%; background: linear-gradient(160deg, #fffdf2 0%, #f6e6a8 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; gap: 12px; }
 .baby-photo-placeholder .ph-icon { font-size: 52px; }
 .baby-photo-placeholder p { font-size: 15px; color: #a07830; font-weight: 500; }
 .photo-upload-input { display: none; }
-.photo-overlay {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  padding: 48px 20px 24px;
-  background: linear-gradient(transparent, rgba(0,0,0,0.65));
-}
+.photo-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 48px 20px 24px; background: linear-gradient(transparent, rgba(0,0,0,0.65)); }
 .photo-baby-name { font-size: 26px; font-weight: 700; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.4); }
 .photo-baby-days { font-size: 14px; color: rgba(255,255,255,0.9); margin-top: 4px; }
 .photo-info-row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
 .photo-info-chip { background: rgba(0,0,0,0.35); border-radius: 8px; padding: 4px 10px; font-size: 12px; color: #fff; backdrop-filter: blur(4px); }
-.photo-change-btn {
-  position: absolute; top: 12px; right: 12px;
-  background: rgba(0,0,0,0.35);
-  border: none; border-radius: 20px;
-  color: #fff; font-size: 12px;
-  padding: 6px 12px; cursor: pointer;
-  backdrop-filter: blur(4px);
-}
-/* 사진 없을 때 이름·태어난날 표시 — 플레이스홀더 오버레이로 */
-.no-photo-info {
-  display: none; /* 사진 있는 경우엔 overlay 사용, 없는 경우는 placeholder 안에서 처리 */
-}
-
-/* ── 정책 페이지 및 카드 스타일 ── */
-
-
-
-
-
+.photo-change-btn { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.35); border: none; border-radius: 20px; color: #fff; font-size: 12px; padding: 6px 12px; cursor: pointer; backdrop-filter: blur(4px); }
+.no-photo-info { display: none; }
 .policy-icon { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-
-
-
-
-
-
-
 .policy-link { display: block; text-align: center; font-size: 12px; color: #1d4ed8; margin-top: 14px; padding: 8px; background: #EBF4FF; border-radius: 8px; text-decoration: none; }
 .policy-notice { background: #fff7ed; border-radius: 12px; padding: 10px 14px; font-size: 12px; color: #8a6d00; margin-bottom: 16px; line-height: 1.6; }
 .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 400; align-items: flex-end; }
-.modal { transition: transform 0.15s ease; touch-action: pan-y; overflow-y: auto; }
+.modal { transition: transform 0.15s ease; touch-action: pan-y; overflow-y: auto; position: relative; background: #fff; border-radius: 16px 16px 0 0; padding: 24px 20px 40px; width: 100%; max-height: 92vh; }
 .modal-bg.drag-closing .modal { transition: none; touch-action: none; }
 .modal-bg.open { display: flex; }
-.modal { position: relative; background: #fff; border-radius: 16px 16px 0 0; padding: 24px 20px 40px; width: 100%; max-height: 92vh; overflow-y: auto; }
-.modal-handle {
-  width: 40px; height: 4px;
-  background: #e0e0e0; border-radius: 2px;
-  margin: 0 auto 16px;
-  cursor: grab; touch-action: none;
-  /* 터치 영역 확장 - 시각적으로는 4px, 터치는 넓게 */
-  position: relative;
-}
-.modal-handle::before {
-  content: '';
-  position: absolute;
-  top: -14px; left: -40px; right: -40px; bottom: -14px;
-}
+.modal-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 16px; cursor: grab; touch-action: none; position: relative; }
+.modal-handle::before { content: ''; position: absolute; top: -14px; left: -40px; right: -40px; bottom: -14px; }
 .modal h2 { font-size: 18px; font-weight: 700; margin-bottom: 18px; color: #1a1a1a; }
 .opt-row { display: flex; gap: 8px; }
 .opt-btn { flex: 1; padding: 10px 6px; border: 1px solid #d1d5db; border-radius: 8px; background: #fafafa; font-size: 14px; cursor: pointer; color: #555; font-weight: 500; touch-action: manipulation; }
@@ -370,8 +238,6 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .btn-cancel { flex: 1; padding: 14px; border: 1px solid #d1d5db; border-radius: 12px; background: #fff; font-size: 15px; color: #6b7280; cursor: pointer; touch-action: manipulation; }
 .btn-save { flex: 2; padding: 14px; border: none; border-radius: 12px; background: #2563eb; color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; touch-action: manipulation; }
 .btn-save:active { opacity: 0.85; }
-
-/* ── 유축 모달 전용 ── */
 .pump-side-btns { display: flex; gap: 10px; margin-bottom: 4px; }
 .side-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 8px; border: 2px solid #e8e8e8; border-radius: 12px; background: #fafafa; cursor: pointer; transition: all 0.15s; }
 .side-btn .side-icon { font-size: 28px; }
@@ -394,7 +260,6 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .sw-btn.stop { background: #e05555; color: #fff; }
 .sw-btn.reset { background: #f0f0f0; color: #6b7280; }
 .sw-btn.switch { background: #2563eb; color: #fff; }
-
 .pump-log-row { display: flex; align-items: center; justify-content: space-between; background: #fafafa; border-radius: 12px; padding: 10px 14px; margin-top: 8px; border: 1px solid #e5e7eb; }
 .pump-log-side { display: flex; align-items: center; gap: 8px; }
 .pump-log-tag { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 12px; }
@@ -402,17 +267,13 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .pump-log-tag.R { background: #eff6ff; color: #1d4ed8; }
 .pump-log-info { font-size: 13px; color: #555; }
 .pump-log-del { background: none; border: none; color: #ddd; font-size: 16px; cursor: pointer; padding: 4px; }
-
 .pump-total-row { display: flex; justify-content: space-between; align-items: center; background: #f5f3ff; border-radius: 12px; padding: 10px 14px; margin-top: 8px; }
 .pump-total-label { font-size: 13px; color: #7c3aaf; font-weight: 600; }
 .pump-total-val { font-size: 16px; font-weight: 700; color: #7c3aaf; }
-
 .ml-input-row { display: flex; gap: 8px; align-items: flex-end; margin-top: 8px; }
 .ml-input-row input { flex: 1; }
 .ml-add-btn { padding: 13px 18px; background: #7c3aaf; color: #fff; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 .ml-add-btn:active { opacity: 0.85; }
-
-/* ── 초대 코드 ── */
 .invite-section { margin-top: 20px; background: #fff; border-radius: 12px; padding: 16px; box-shadow: none; }
 .invite-title { font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
 .invite-code-box { display: flex; align-items: center; gap: 8px; background: #eff6ff; border-radius: 8px; padding: 12px 14px; margin: 8px 0; }
@@ -420,9 +281,7 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .invite-copy-btn { background: #2563eb; color: #fff; border: none; border-radius: 8px; padding: 7px 14px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 .invite-gen-btn { width: 100%; padding: 12px; background: #eff6ff; color: #1d4ed8; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 4px; }
 .invite-gen-btn:active { background: #2563eb; color: #fff; }
-/* 아빠 초대 코드 입력 */
 .dad-invite-input::placeholder { color: rgba(255,255,255,0.4); font-weight: 400; letter-spacing: 0; }
-/* 아빠 이벤트 섹션 */
 .dad-event-card { background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: none; border: 1px solid #e5e7eb; }
 .dad-event-item { display: flex; align-items: flex-start; gap: 14px; padding: 18px 16px; border-bottom: 1px solid #fce7f3; cursor: pointer; transition: background 0.15s; }
 .dad-event-item:last-child { border-bottom: none; }
@@ -437,25 +296,7 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .dad-event-praise { font-size: 13px; color: #1d4ed8; font-weight: 600; margin-top: 4px; }
 .dad-event-tag { font-size: 11px; background: #eff6ff; color: #1d4ed8; padding: 2px 8px; border-radius: 8px; margin-top: 5px; display: inline-block; font-weight: 600; }
 .dad-section-secret { font-size: 11px; color: #1d4ed8; margin-left: 6px; font-weight: 500; }
-
-@keyframes shake {
-  0%,100% { transform: translateX(0); }
-  20%,60% { transform: translateX(-8px); }
-  40%,80% { transform: translateX(8px); }
-}
-
-/* ── 신생아 케어 가이드 화면 ── */
-
-
-
-
 .guide-body { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 12px 16px 80px; box-sizing: border-box; }
-
-
-
-
-
-
 .guide-card { background: #fff; border-radius: 12px; border: 1px solid #e8d796; margin-bottom: 10px; overflow: hidden; }
 .guide-card-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; user-select: none; }
 .guide-card-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
@@ -463,61 +304,39 @@ body.dark .hdr-btn.dad     { background: #18202a; border-color: #1e3a5a; color: 
 .guide-card-arrow.open { transform: rotate(90deg); color: #7a5600; }
 .guide-card-body { display: none; padding: 2px 16px 16px; border-top: 1px solid #f3f0e0; }
 .guide-card-body.open { display: block; }
-
-
-
-
-
-
-
-
-
 body.dark .guide-card { background: #2a2520; border-color: #3d3628; }
 body.dark .guide-card-body { border-top-color: #3d3628; }
-/* ══════ 새 기능 CSS ══════ */
-
-/* ── 다크모드 ── */
-body.dark { background: #1a1612; color: #f0ead8; --card-bg: #2a2520; --border-color: #3d3628; --text-main: #f0ead8; --text-sub: #a89880; }
-body { --card-bg: #ffffff; --border-color: #f0ece4; --text-main: #1a1a1a; --text-sub: #6b7280; }
+body.dark { background: #1a1612 !important; color: #f0ead8; --card-bg: #2a2520; --border-color: #3d3628; --text-main: #f0ead8; --text-sub: #a89880; --bg-main: #1a1612; --page-bg: #1a1612; --ms-header-bg: #1a1612; --btn-inactive-bg: #2a2520; --btn-inactive-color: #a89880; }
 body.dark .app-header, body.dark .timeline-card, body.dark .status-card,
-
 
 body.dark .photo-page, body.dark .swipe-page { background: #1a1612; }
 body.dark .s-label, body.dark .baby-age, body.dark .header-date, body.dark .t-sub,
 
 body.dark .baby-name, body.dark .t-title, body.dark .guide-card-title { color: #f0ead8; }
-
 body.dark input, body.dark textarea { background: #2a2520; border-color: #3d3628; color: #f0ead8; }
-body.dark .opt-btn { background: #2a2520; border-color: #3d3628; color: #f0ead8; }
-
+body.dark .opt-btn { background: #2a2520 !important; border-color: #5a4a10 !important; color: #f0ead8 !important; }
 body.dark body.dark .no-photo-info .baby-dname { color: #f0ead8; }
-
-/* ── 차트 탭 ── */
 .chart-tab-row { display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
 .chart-tab-row::-webkit-scrollbar { display: none; }
 .chart-tab { padding: 6px 14px; border-radius: 20px; border: 1px solid #e8d796; background: #fff; font-size: 13px; font-weight: 600; color: #7a5600; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
 .chart-tab.active { background: #7a5600; color: #fff; border-color: #7a5600; }
 .chart-wrap { background: #fff; border-radius: 12px; border: 1px solid #e8d796; padding: 16px; margin-bottom: 12px; position: relative; }
-body.dark .chart-tab { background: #2a2520; border-color: #3d3628; color: #c8a870; }
-body.dark .chart-tab.active { background: #7a5600; color: #fff; }
-body.dark .chart-wrap { background: #2a2520; border-color: #3d3628; }
+body.dark .chart-tab { background: #2a2520 !important; border-color: #3d3628 !important; color: #c8a870 !important; }
+body.dark .chart-tab.active { background: #7a5600 !important; color: #fff !important; }
+body.dark .chart-wrap { background: #2a2520 !important; border-color: #3d3628 !important; color: #f0ead8 !important; }
 .chart-canvas-wrap { width: 100%; overflow-x: auto; }
 .chart-empty { text-align: center; padding: 30px 0; color: #9ca3af; font-size: 13px; }
 .chart-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
 .chart-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #6b7280; }
 .chart-legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-
-/* ── 성장 기록 ── */
 .growth-input-row { display: flex; gap: 8px; margin-bottom: 12px; }
 .growth-input-row input { flex: 1; }
 .growth-add-btn { padding: 13px 16px; background: #7a5600; color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 .growth-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .growth-table th { background: #fff7d6; color: #7a5600; font-weight: 700; padding: 8px 10px; text-align: left; border-bottom: 1px solid #e8d796; }
 .growth-table td { padding: 8px 10px; border-bottom: 1px solid #f3f0e0; color: #374151; }
-body.dark .growth-table th { background: #2a2520; color: #c8a870; border-color: #3d3628; }
-body.dark .growth-table td { border-color: #3d3628; color: #d0c0a8; }
-
-/* ── 예방접종 ── */
+body.dark .growth-table th { background: #2a2520 !important; color: #c8a870 !important; border-color: #3d3628 !important; }
+body.dark .growth-table td { border-color: #3d3628 !important; color: #d0c0a8 !important; }
 .vaccine-card { background: #fff; border-radius: 12px; border: 1px solid #e8d796; padding: 14px 16px; margin-bottom: 10px; }
 .vaccine-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f3f0e0; cursor: pointer; }
 .vaccine-row:last-child { border-bottom: none; }
@@ -527,92 +346,55 @@ body.dark .growth-table td { border-color: #3d3628; color: #d0c0a8; }
 .vaccine-name { font-size: 14px; font-weight: 600; color: #1a1a1a; flex: 1; }
 .vaccine-age-badge { font-size: 11px; background: #fff7d6; color: #7a5600; border-radius: 8px; padding: 2px 8px; font-weight: 700; flex-shrink: 0; }
 .vaccine-done-text { font-size: 12px; color: #16a34a; font-weight: 600; }
-body.dark .vaccine-card { background: #2a2520; border-color: #3d3628; }
-body.dark .vaccine-row { border-color: #3d3628; }
-body.dark .vaccine-name { color: #f0ead8; }
-body.dark .vaccine-age-badge { background: #3d3628; color: #c8a870; }
-
-/* ── 마일스톤 듀오링고 스타일 ── */
-.ms-stage-dot { flex:1; height:6px; border-radius:3px; background:#e8d796; transition:background 0.3s; }
-.ms-stage-dot.active { background:#f59e0b; }
-.ms-stage-dot.done { background:#22c55e; }
-.ms-card {
-  background:#fff; border-radius:20px; padding:20px 16px 18px;
-  margin-bottom:14px; text-align:center;
-  box-shadow:0 3px 12px rgba(122,86,0,0.10), 0 0 0 1.5px rgba(232,215,150,0.6);
-  transition:transform 0.15s, box-shadow 0.15s;
-  cursor:pointer; user-select:none; touch-action: manipulation;
-}
-.ms-card:active { transform:scale(0.97); }
-.ms-card.ms-done {
-  background:linear-gradient(135deg,#f0fdf4,#dcfce7);
-  box-shadow:0 3px 12px rgba(34,197,94,0.15), 0 0 0 2px #86efac;
-}
-.ms-card-emoji { font-size:52px; line-height:1; margin-bottom:10px; display:block; }
-.ms-card-title { font-size:16px; font-weight:800; color:#1a1a1a; margin-bottom:5px; word-break:keep-all; }
-.ms-card-desc { font-size:12px; color:#9ca3af; line-height:1.5; word-break:keep-all; margin-bottom:10px; }
-.ms-card-btn {
-  display:inline-flex; align-items:center; gap:5px;
-  padding:8px 18px; border-radius:20px; border:none; cursor:pointer;
-  font-size:13px; font-weight:700; transition:all 0.15s;
-  background:#f59e0b; color:#fff;
-}
-.ms-card.ms-done .ms-card-btn { background:#22c55e; }
-.ms-card-btn:active { opacity:0.8; transform:scale(0.96); }
-.ms-card-date { font-size:11px; color:#22c55e; font-weight:600; margin-top:6px; }
-.ms-month-title {
-  font-size:13px; font-weight:800; color:#7a5600;
-  text-align:center; padding:10px 0 8px;
-  letter-spacing:0.02em;
-}
-.ms-all-done {
-  text-align:center; padding:30px 16px;
-  font-size:15px; font-weight:700; color:#22c55e;
-}
-body.dark .ms-card { background:#2a2520; box-shadow:0 3px 12px rgba(0,0,0,0.2),0 0 0 1.5px #3d3628; }
-body.dark .ms-card.ms-done { background:linear-gradient(135deg,#0f2a1a,#162a1a); box-shadow:0 3px 12px rgba(34,197,94,0.15),0 0 0 2px #166534; }
-body.dark .ms-card-title { color:#f0ead8; }
-body.dark .ms-month-title { color:#c8a870; }
-
-/* ── 데이터 내보내기 버튼 ── */
+body.dark .vaccine-card { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .vaccine-row { border-color: #3d3628 !important; }
+body.dark .vaccine-name { color: #f0ead8 !important; }
+body.dark .vaccine-age-badge { background: #3d3628 !important; color: #c8a870 !important; }
+.ms-stage-dot { flex: 1; height: 6px; border-radius: 3px; background: #e8d796; transition: background 0.3s; }
+.ms-stage-dot.active { background: #f59e0b; }
+.ms-stage-dot.done { background: #22c55e; }
+.ms-card { background: #fff; border-radius: 20px; padding: 20px 16px 18px; margin-bottom: 14px; text-align: center; box-shadow: 0 3px 12px rgba(122,86,0,0.10), 0 0 0 1.5px rgba(232,215,150,0.6); transition: transform 0.15s, box-shadow 0.15s; cursor: pointer; user-select: none; touch-action: manipulation; }
+.ms-card:active { transform: scale(0.97); }
+.ms-card.ms-done { background: linear-gradient(135deg,#f0fdf4,#dcfce7); box-shadow: 0 3px 12px rgba(34,197,94,0.15), 0 0 0 2px #86efac; }
+.ms-card-emoji { font-size: 52px; line-height: 1; margin-bottom: 10px; display: block; }
+.ms-card-title { font-size: 16px; font-weight: 800; color: #1a1a1a; margin-bottom: 5px; word-break: keep-all; }
+.ms-card-desc { font-size: 12px; color: #9ca3af; line-height: 1.5; word-break: keep-all; margin-bottom: 10px; }
+.ms-card-btn { display: inline-flex; align-items: center; gap: 5px; padding: 8px 18px; border-radius: 20px; border: none; cursor: pointer; font-size: 13px; font-weight: 700; transition: all 0.15s; background: #f59e0b; color: #fff; }
+.ms-card.ms-done .ms-card-btn { background: #22c55e; }
+.ms-card-btn:active { opacity: 0.8; transform: scale(0.96); }
+.ms-card-date { font-size: 11px; color: #22c55e; font-weight: 600; margin-top: 6px; }
+.ms-month-title { font-size: 13px; font-weight: 800; color: #7a5600; text-align: center; padding: 10px 0 8px; letter-spacing: 0.02em; }
+.ms-all-done { text-align: center; padding: 30px 16px; font-size: 15px; font-weight: 700; color: #22c55e; }
+body.dark .ms-card { background: #2a2520 !important; box-shadow: 0 3px 12px rgba(0,0,0,0.3), 0 0 0 1.5px #3d3628 !important; }
+body.dark .ms-card.ms-done { background: linear-gradient(135deg,#0f2a1a,#162a1a) !important; box-shadow: 0 3px 12px rgba(34,197,94,0.15), 0 0 0 2px #166534 !important; }
+body.dark .ms-card-title { color: #f0ead8 !important; }
+body.dark .ms-month-title { color: #c8a870 !important; }
 .export-btn { display: flex; align-items: center; gap: 6px; width: 100%; padding: 12px 14px; background: #fff; border: 1px solid #e8d796; border-radius: 10px; font-size: 14px; font-weight: 600; color: #7a5600; cursor: pointer; margin-bottom: 8px; }
 .export-btn:active { background: #fff7d6; }
-body.dark .export-btn { background: #2a2520; border-color: #3d3628; color: #c8a870; }
-
-/* ── 새 기능 페이지 공통 ── */
+body.dark .export-btn { background: #2a2520 !important; border-color: #3d3628 !important; color: #c8a870 !important; }
 .feature-page { padding: 16px 16px 60px; background: var(--page-bg, #fffdf2); height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; touch-action: pan-y; }
 .feature-page-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
 .feature-page-sub { font-size: 13px; color: #6b7280; margin-bottom: 16px; }
 .feature-section-title { font-size: 12px; font-weight: 700; color: #7a5600; letter-spacing: 0.06em; text-transform: uppercase; margin: 16px 0 8px; }
-body.dark .feature-page { background: #1a1612; }
-body.dark .feature-page-title { color: #f0ead8; }
-body.dark .feature-section-title { color: #c8a870; }
-
-/* ══════ Decision Engine + Confidence Layer ══════ */
+body.dark .feature-page { background: #1a1612 !important; color: #f0ead8; }
+body.dark .feature-page-title { color: #f0ead8 !important; }
+body.dark .feature-section-title { color: #c8a870 !important; }
 .coach-card { border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; border: 1.5px solid; }
-.coach-card.green  { background: linear-gradient(135deg,#f0fdf4,#dcfce7); border-color: #86efac; }
+.coach-card.green { background: linear-gradient(135deg,#f0fdf4,#dcfce7); border-color: #86efac; }
 .coach-card.yellow { background: linear-gradient(135deg,#fffbeb,#fef9c3); border-color: #fde68a; }
-.coach-card.red    { background: linear-gradient(135deg,#fff1f2,#ffe4e6); border-color: #fca5a5; }
-.coach-card.blue   { background: linear-gradient(135deg,#eff6ff,#dbeafe); border-color: #93c5fd; }
+.coach-card.red { background: linear-gradient(135deg,#fff1f2,#ffe4e6); border-color: #fca5a5; }
+.coach-card.blue { background: linear-gradient(135deg,#eff6ff,#dbeafe); border-color: #93c5fd; }
 .coach-card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
 .coach-urgency { font-size: 20px; }
 .coach-title { font-size: 14px; font-weight: 700; color: #1a1a1a; flex: 1; }
 .coach-reason { font-size: 11px; color: #6b7280; margin-top: 3px; }
 .coach-action-btn.sleep-btn { background: #1d4ed8; color: #fff; }
-.coach-action-btn.feed-btn  { background: #c0410f; color: #fff; }
-body.dark .coach-card.green  { background: #0f2a1a; border-color: #166534; }
+.coach-action-btn.feed-btn { background: #c0410f; color: #fff; }
+body.dark .coach-card.green { background: #0f2a1a; border-color: #166534; }
 body.dark .coach-card.yellow { background: #1a1500; border-color: #713f12; }
-body.dark .coach-card.red    { background: #2a0f0f; border-color: #991b1b; }
-body.dark .coach-card.blue   { background: #0f1a2a; border-color: #1e3a5f; }
+body.dark .coach-card.red { background: #2a0f0f; border-color: #991b1b; }
+body.dark .coach-card.blue { background: #0f1a2a; border-color: #1e3a5f; }
 body.dark .coach-title, body.dark .coach-reason { color: #a89880; }
-
-/* 육아 점수 카드 */
-/* quick-btn 구버전 제거 — 새 스타일은 하단에 정의 */
-
-/* ── 페이지 네비게이션 레이블 ── */
-
-/* ── 온보딩 오버레이 ── */
-/* onboarding-overlay: screen 시스템으로 통합 */
 .onboarding-card { background: #fff; border-radius: 24px 24px 0 0; padding: 28px 24px 48px; width: 100%; max-width: 480px; margin: 0 auto; }
 .onboarding-step { display: none; }
 .onboarding-step.active { display: block; }
@@ -624,47 +406,12 @@ body.dark .coach-title, body.dark .coach-reason { color: #a89880; }
 .onboarding-dot.active { background: #7a5600; width: 20px; border-radius: 4px; }
 .onboarding-btn { width: 100%; padding: 15px; background: #7a5600; color: #fff; border: none; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer; }
 .onboarding-skip { display: block; text-align: center; margin-top: 12px; font-size: 13px; color: #9ca3af; cursor: pointer; }
-body.dark .onboarding-card { background: #2a2520; }
-/* ── 다크모드 추가 보완 (생활패턴, 타임라인, 통계 등) ── */
-
-/* CSS 변수 - 다크모드 */
-body.dark {
-  --card-bg: #2a2520;
-  --border-color: #3d3628;
-  --text-main: #f0ead8;
-  --text-sub: #a89880;
-  --bg-main: #1a1612;
-  --page-bg: #1a1612;
-  --ms-header-bg: #1a1612;
-  --btn-inactive-bg: #2a2520;
-  --btn-inactive-color: #a89880;
-}
-body:not(.dark) {
-  --card-bg: #ffffff;
-  --border-color: #f0ece4;
-  --text-main: #1a1a1a;
-  --text-sub: #6b7280;
-  --bg-main: #fffdf2;
-  --page-bg: #fffdf2;
-  --ms-header-bg: #fff7d6;
-  --btn-inactive-bg: #ffffff;
-  --btn-inactive-color: #888888;
-}
-
-/* 생활패턴 카드 */
-body.dark #life-pattern-wrap {
-  background: #2a2520 !important;
-  border-color: #3d3628 !important;
-}
+body.dark .onboarding-card { background: #2a2520 !important; color: #f0ead8 !important; }
+body:not(.dark) { --card-bg: #ffffff; --border-color: #f0ece4; --text-main: #1a1a1a; --text-sub: #6b7280; --bg-main: #fffdf2; --page-bg: #fffdf2; --ms-header-bg: #fff7d6; --btn-inactive-bg: #ffffff; --btn-inactive-color: #888888; }
+body.dark #life-pattern-wrap { background: #2a2520 !important; border-color: #3d3628 !important; }
 body.dark #pattern-date-label { color: #c8a870 !important; }
 body.dark #pattern-insight-text { color: #a89880 !important; }
-body.dark #ptab-week {
-  background: #2a2520 !important;
-  border-color: #3d3628 !important;
-  color: #a89880 !important;
-}
-
-/* 타임라인 아이템 */
+body.dark #ptab-week { background: #2a2520 !important; border-color: #3d3628 !important; color: #a89880 !important; }
 body.dark .tl-item { border-color: #3d3628; }
 body.dark .tl-item, body.dark .tl-body, body.dark .tl-time-col { background: #2a2520; }
 body.dark .tl-content { border-color: #3d3628; }
@@ -676,140 +423,84 @@ body.dark .tl-icon-circle { opacity: 0.85; }
 body.dark .t-edit-btn { background: #3d3628; color: #c8a870; border-color: #4d4030; }
 body.dark .t-del-btn { background: #3d2020; color: #f87171; border-color: #5a2828; }
 body.dark .timeline-list { background: transparent; }
-body.dark #tl-btn-all {
-  background: #2a2520 !important;
-  border-color: #3d3628 !important;
-  color: #a89880 !important;
-}
-
-/* 패턴 분석 카드 */
-body.dark .pattern-card {
-  background: #2a2520 !important;
-  border-color: #3d3628 !important;
-}
+body.dark #tl-btn-all { background: #2a2520 !important; border-color: #3d3628 !important; color: #a89880 !important; }
+body.dark .pattern-card { background: #2a2520 !important; border-color: #3d3628 !important; }
 body.dark .pattern-card-label { color: #a89880 !important; }
 body.dark .pattern-card-value { color: #f0ead8 !important; }
 body.dark .pattern-card-sub { color: #7a6a5a !important; }
-body.dark .pattern-insight { color: #a89880 !important; }
+body.dark .pattern-insight { color: #a89880 !important; background: #2a2520; border-color: #3d3628; }
 body.dark #pattern-analysis-wrap > div { background: #2a2520 !important; border-color: #3d3628 !important; }
-
-/* 점수 카드 */
 body.dark #score-card-wrap > div { background: #2a2520 !important; border-color: #3d3628 !important; }
 body.dark .score-label { color: #a89880 !important; }
 body.dark .score-val { color: #f0ead8 !important; }
-
-/* 무드 셀렉터 */
-body.dark #mood-selector-wrap {
-  background: linear-gradient(135deg, #2a2218, #231e14) !important;
-}
-
-/* 차트 레전드 */
-body.dark .chart-legend-item { color: #a89880; }
-
-/* 퀵 버튼 */
-body.dark .quick-btn {
-  background: #2a2520 !important;
-  border-color: #3d3628 !important;
-}
+body.dark #mood-selector-wrap { background: linear-gradient(135deg,#2a2218,#1e1a10) !important; }
+body.dark .chart-legend-item { color: #a89880 !important; }
+body.dark .quick-btn { background: #2a2520 !important; border-color: #3d3628 !important; box-shadow: 0 2px 8px rgba(0,0,0,0.2), 0 0 0 1.5px #3d3628; }
 body.dark .quick-btn-label { color: #f0ead8; }
 body.dark .quick-btn-time { color: #a89880; }
 body.dark .quick-btn-icon { opacity: 0.9; }
-
-/* 모달 */
 body.dark .modal-bg { background: rgba(0,0,0,0.7); }
 body.dark .modal { background: #2a2520 !important; }
 body.dark .modal h2 { color: #f0ead8; }
 body.dark .field-label { color: #a89880; }
 body.dark .btn-cancel { background: #3d3628; color: #c8a870; border-color: #4d4030; }
 body.dark .btn-save { color: #fff; }
-body.dark .opt-btn { background: #3d3628 !important; border-color: #4d4030 !important; color: #f0ead8 !important; }
-body.dark .opt-btn.sel { background: #7a5600 !important; color: #fff !important; }
+body.dark .opt-btn.sel { background: #7a5600 !important; color: #fff !important; border-color: #c8860a !important; }
 body.dark input[type="number"],
 body.dark input[type="datetime-local"],
 body.dark input[type="text"],
-body.dark textarea {
-  background: #3d3628 !important;
-  border-color: #4d4030 !important;
-  color: #f0ead8 !important;
-}
+body.dark textarea { background: #3d3628 !important; border-color: #4d4030 !important; color: #f0ead8 !important; }
 body.dark input::placeholder { color: #7a6a5a; }
-
-/* 코치 카드 텍스트 */
 body.dark .coach-title { color: #f0ead8 !important; }
 body.dark .coach-msg { color: #c8a870 !important; }
-
-/* 앱 배경 */
 body.dark .app-body { background: #1a1612 !important; }
 body.dark .voice-hero { background: transparent; }
 body.dark .voice-hero-status { color: #f0ead8; }
 body.dark .voice-hero-hint { color: #7a6a5a; }
 body.dark .voice-cmd { background: #2a2520; color: #c8a870; border-color: #3d3628; }
-
-/* 퀵 로그 */
-body.dark .quick-log-row .quick-btn {
-  background: #2a2520;
-  border: 1.5px solid #3d3628;
-}
-
-/* 타임라인 카드 배경 (feed, sleep 등) */
+body.dark .quick-log-row .quick-btn { background: #2a2520; border: 1.5px solid #3d3628; }
 body.dark [style*="background:#eff6ff"] { background: #0f1a2a !important; }
 body.dark [style*="background:#f0f9ff"] { background: #0a1a25 !important; }
 body.dark [style*="background:#f0fdf4"] { background: #0a2010 !important; }
 body.dark [style*="background:#fdf4ff"] { background: #1a0f25 !important; }
 body.dark [style*="background:#fff7ed"] { background: #251508 !important; }
 body.dark [style*="background:#fdf2f8"] { background: #2a0f20 !important; }
-
-body.dark .onboarding-title { color: #f0ead8; }
-
-/* ── 알림 권한 배너 ── */
+body.dark .onboarding-title { color: #f0ead8 !important; }
 .notif-banner { background: linear-gradient(135deg,#fffbeb,#fef9c3); border: 1px solid #fde68a; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
 .notif-banner-text { flex: 1; font-size: 13px; color: #92400e; line-height: 1.5; word-break: keep-all; }
 .notif-banner-btn { background: #7a5600; color: #fff; border: none; border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 .notif-banner-close { background: none; border: none; color: #9ca3af; font-size: 16px; cursor: pointer; padding: 0; flex-shrink: 0; }
-
-/* ── PIN 힌트·분실 버튼 ── */
 .pin-forgot-btn { display: block; text-align: center; font-size: 12px; color: #9ca3af; cursor: pointer; margin-top: 8px; text-decoration: underline; }
 .pin-forgot-btn:active { color: #6b7280; }
-
-/* ── 데이터 백업 토스트 ── */
 .backup-toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 12px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; z-index: 8000; box-shadow: 0 4px 16px rgba(0,0,0,0.25); max-width: 300px; text-align: center; display: flex; align-items: center; gap: 8px; }
 .backup-toast-btn { background: #7a5600; border: none; border-radius: 8px; color: #fff; font-size: 12px; font-weight: 700; padding: 4px 10px; cursor: pointer; white-space: nowrap; }
-
-/* ── 마이크 중심 UI ── */
-/* ══ 음성 히어로 UI ══ */
 .voice-hero { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 0 0; }
 .voice-hero-mic { margin-bottom: 12px; opacity: 0.92; transition: transform 0.2s; }
 .voice-hero-mic.listening { animation: micPulse 1.2s ease-in-out infinite; }
 .voice-hero-status { font-size: 22px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px; letter-spacing: -0.3px; }
 .voice-hero-hint { font-size: 13px; color: #9ca3af; margin-bottom: 20px; text-align: center; line-height: 1.5; }
 .voice-hero-btn { width: 80px; height: 80px; border-radius: 50%; background: #7a5600; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 24px rgba(122,86,0,0.32), 0 0 0 0 rgba(122,86,0,0.2); transition: all 0.15s; margin-bottom: 20px; position: relative; touch-action: manipulation; }
-.voice-hero-btn::after { content:''; position:absolute; inset:-8px; border-radius:50%; border:2px solid rgba(122,86,0,0.2); }
+.voice-hero-btn::after { content: ''; position: absolute; inset: -8px; border-radius: 50%; border: 2px solid rgba(122,86,0,0.2); }
 .voice-hero-btn:active { transform: scale(0.92); }
 .voice-hero-btn.listening { background: #dc2626; box-shadow: 0 6px 24px rgba(220,38,38,0.35), 0 0 0 12px rgba(220,38,38,0.12); animation: btnPulse 1.2s ease-in-out infinite; }
 #voice-btn-inner { width: 28px; height: 28px; border-radius: 50%; background: #fff; display: block; transition: border-radius 0.2s, width 0.2s, height 0.2s; }
 .voice-hero-btn.listening #voice-btn-inner { border-radius: 6px; width: 22px; height: 22px; }
 .voice-hero-cmds { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 0 16px; pointer-events: none; margin-bottom: 20px; }
 .voice-cmd { background: #fff7d6; border: 1.5px solid #e8d796; border-radius: 20px; padding: 5px 12px; font-size: 12px; color: #7a5600; font-weight: 600; white-space: nowrap; }
-@keyframes micPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
-@keyframes btnPulse { 0%,100%{box-shadow:0 6px 24px rgba(220,38,38,0.35),0 0 0 0 rgba(220,38,38,0.2)} 50%{box-shadow:0 6px 24px rgba(220,38,38,0.35),0 0 0 16px rgba(220,38,38,0)} }
-body.dark .voice-hero-status { color: #f0ead8; }
 body.dark .voice-hero-btn { background: #7a5600; }
 body.dark .voice-hero-btn.listening { background: #dc2626; }
-body.dark .voice-cmd { background: #2a2520; border-color: #3d3628; color: #c8a870; }
-
-/* ══ 진행 중 세션 카드 ══ */
 body.dark body.dark body.dark body.dark 
-/* ── 아빠 기록 섹션 ── */
+
 .dad-rec-section { background: #fff; border-radius: 14px; border: 1.5px solid #e8d796; padding: 14px 16px; margin-bottom: 14px; }
 .dad-rec-title { font-size: 13px; font-weight: 700; color: #7a5600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
 .dad-rec-badge { font-size: 10px; font-weight: 600; background: #f0fdf4; color: #16a34a; border: 1px solid #86efac; border-radius: 10px; padding: 2px 8px; }
 .dad-rec-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
 .dad-rec-btn { padding: 12px 8px; border-radius: 12px; border: 1.5px solid; font-size: 13px; font-weight: 700; cursor: pointer; text-align: center; transition: all 0.1s; }
 .dad-rec-btn:active { opacity: 0.75; transform: scale(0.97); }
-.dad-rec-btn.feed   { background: #fff7ed; border-color: #fdba74; color: #c2410c; }
+.dad-rec-btn.feed { background: #fff7ed; border-color: #fdba74; color: #c2410c; }
 .dad-rec-btn.diaper { background: #f0fdf4; border-color: #86efac; color: #15803d; }
-.dad-rec-btn.sleep  { background: #eff6ff; border-color: #93c5fd; color: #1d4ed8; }
-.dad-rec-btn.bath   { background: #fdf4ff; border-color: #d8b4fe; color: #7c3aed; }
+.dad-rec-btn.sleep { background: #eff6ff; border-color: #93c5fd; color: #1d4ed8; }
+.dad-rec-btn.bath { background: #fdf4ff; border-color: #d8b4fe; color: #7c3aed; }
 .dad-rec-today { border-top: 1px solid #f3f0e0; padding-top: 10px; }
 .dad-rec-item { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #f8f5ee; }
 .dad-rec-item:last-child { border-bottom: none; }
@@ -818,11 +509,9 @@ body.dark body.dark body.dark body.dark
 .dad-rec-item-title { font-size: 13px; font-weight: 600; color: #1a1a1a; }
 .dad-rec-item-time { font-size: 11px; color: #9ca3af; }
 .dad-rec-empty { font-size: 12px; color: #9ca3af; text-align: center; padding: 8px 0; }
-body.dark .dad-rec-section { background: #2a2520; border-color: #3d3628; }
-body.dark .dad-rec-title { color: #c8a870; }
+body.dark .dad-rec-section { background: #2a2218 !important; border-color: #3d3628 !important; }
+body.dark .dad-rec-title { color: #f0ead8 !important; }
 body.dark .dad-rec-item-title { color: #f0ead8; }
-
-/* ── 빠른 이동 탭바 ── */
 .quick-nav-bar { display: flex; align-items: center; justify-content: space-around; padding: 4px 8px 2px; background: #fff; border-top: 1px solid #f3f0e0; overflow-x: auto; scrollbar-width: none; gap: 2px; }
 .quick-nav-bar::-webkit-scrollbar { display: none; }
 .qnav-btn { flex: 1; min-width: 32px; padding: 5px 2px 3px; border: none; background: none; font-size: 18px; border-radius: 8px; cursor: pointer; transition: background 0.15s; line-height: 1; position: relative; }
@@ -830,143 +519,44 @@ body.dark .dad-rec-item-title { color: #f0ead8; }
 .qnav-btn.active::after { background: #7a5600; }
 .qnav-btn.active { background: #fff7d6; }
 .qnav-btn:active { background: #f3f0e0; }
-body.dark .quick-nav-bar { background: #2a2520; border-top-color: #3d3628; }
+body.dark .quick-nav-bar { background: #1a1612 !important; border-top-color: #3d3628 !important; }
 body.dark .qnav-btn.active { background: #3d3628; }
 body.dark .qnav-btn.active::after { background: #c8a870; }
-/* page-dots, page-nav 숨김 (탭바로 대체) */
-.page-dots { display:none; }
-.page-nav { display:none; }
-
-@keyframes heartbeat {
-  0%,100% { transform: scale(1); }
-  50% { transform: scale(1.08); }
-}
-@keyframes bounce {
-  from { transform: translateY(0); }
-  to   { transform: translateY(-6px); }
-}
-
-/* ── 스플래시 화면 ── */
-#screen-splash {
-  position: fixed; inset: 0; z-index: 9999;
-  background: linear-gradient(160deg, #fffdf2 0%, #fff7d6 50%, #f6e6a8 100%);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  transition: opacity 0.7s ease;
-  visibility: visible !important;
-}
+.page-dots { display: none; }
+.page-nav { display: none; }
+#screen-splash { position: fixed; inset: 0; z-index: 9999; background: linear-gradient(160deg, #fffdf2 0%, #fff7d6 50%, #f6e6a8 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.7s ease; visibility: visible !important; }
 #screen-splash.fade-out { opacity: 0; pointer-events: none; }
 .splash-icon { margin-bottom: 20px; animation: splashPop 0.6s cubic-bezier(0.34,1.56,0.64,1) both; }
 .splash-logo { font-size: 32px; font-weight: 900; color: #7a5600; letter-spacing: -0.03em; animation: splashFadeUp 0.5s 0.2s ease both; }
 .splash-sub { font-size: 14px; color: #9ca3af; margin-top: 8px; animation: splashFadeUp 0.5s 0.35s ease both; }
-@keyframes splashPop { from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
-@keyframes splashFadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-
-/* ── 퀵버튼 리디자인 ── */
 .quick-log-row { display: flex; gap: 10px; padding: 0 4px; z-index: 5; position: relative; margin-bottom: 0; }
-.quick-btn {
-  flex: 1; display: flex; flex-direction: column; align-items: center;
-  gap: 5px; padding: 14px 6px 10px;
-  background: #fff; border: none;
-  border-radius: 18px; cursor: pointer;
-  transition: all 0.15s;
-  box-shadow: 0 2px 8px rgba(122,86,0,0.10), 0 0 0 1.5px rgba(232,215,150,0.5);
-  position: relative; z-index: 1;
-  -webkit-tap-highlight-color: rgba(122,86,0,0.1);
-  touch-action: manipulation;
-}
+.quick-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 14px 6px 10px; background: #fff; border: none; border-radius: 18px; cursor: pointer; transition: all 0.15s; box-shadow: 0 2px 8px rgba(122,86,0,0.10), 0 0 0 1.5px rgba(232,215,150,0.5); position: relative; z-index: 1; -webkit-tap-highlight-color: rgba(122,86,0,0.1); touch-action: manipulation; }
 .quick-btn:active { transform: scale(0.94); box-shadow: 0 1px 4px rgba(122,86,0,0.12); }
-.quick-btn.active-session {
-  background: linear-gradient(135deg,#fff7d6,#ffe9a0);
-  box-shadow: 0 2px 8px rgba(122,86,0,0.18), 0 0 0 2px #e8d796;
-}
+.quick-btn.active-session { background: linear-gradient(135deg,#fff7d6,#ffe9a0); box-shadow: 0 2px 8px rgba(122,86,0,0.18), 0 0 0 2px #e8d796; }
 .quick-btn-icon { font-size: 26px; line-height: 1; }
 .quick-btn-label { font-size: 11px; font-weight: 700; color: #7a5600; letter-spacing: -0.01em; }
 .quick-btn-time { font-size: 10px; color: #9ca3af; min-height: 13px; font-weight: 500; }
-body.dark .quick-btn { background: #2a2520; box-shadow: 0 2px 8px rgba(0,0,0,0.2), 0 0 0 1.5px #3d3628; }
 body.dark .quick-btn.active-session { background: linear-gradient(135deg,#3d3628,#4d4530); }
-body.dark .quick-btn-label { color: #c8a870; }
-/* ── 가이드 스토리 카드 ── */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ── 엄마 케어 그리드 카드 ── */
-.mom-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  padding: 14px 16px 80px;
-}
-.mom-grid-card {
-  border-radius: 18px;
-  padding: 18px 12px 14px;
-  text-align: center;
-  cursor: pointer;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.07), 0 0 0 1px rgba(0,0,0,0.04);
-  transition: transform 0.15s, box-shadow 0.15s;
-  position: relative; overflow: hidden;
-}
-.mom-grid-card::before {
-  content: '';
-  position: absolute; top: -20px; right: -20px;
-  width: 60px; height: 60px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.25);
-}
+.mom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px 16px 80px; }
+.mom-grid-card { border-radius: 18px; padding: 18px 12px 14px; text-align: center; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.07), 0 0 0 1px rgba(0,0,0,0.04); transition: transform 0.15s, box-shadow 0.15s; position: relative; overflow: hidden; }
+.mom-grid-card::before { content: ''; position: absolute; top: -20px; right: -20px; width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.25); }
 .mom-grid-card:active { transform: scale(0.96); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-.mom-grid-card.warn {
-  grid-column: 1 / -1;
-  display: flex; align-items: center; gap: 14px;
-  text-align: left; padding: 16px 18px;
-}
+.mom-grid-card.warn { grid-column: 1 / -1; display: flex; align-items: center; gap: 14px; text-align: left; padding: 16px 18px; }
 .mom-grid-card.warn .mom-grid-emoji { font-size: 30px; margin-bottom: 0; flex-shrink: 0; }
 .mom-grid-emoji { font-size: 38px; margin-bottom: 10px; line-height: 1; display: block; }
-.mom-grid-title {
-  font-size: 13px; font-weight: 800;
-  color: #1a1a1a; margin-bottom: 5px;
-  word-break: keep-all; line-height: 1.4;
-}
-.mom-grid-count {
-  font-size: 11px; color: rgba(0,0,0,0.35);
-  font-weight: 600;
-  background: rgba(255,255,255,0.4);
-  border-radius: 8px; padding: 2px 8px;
-  display: inline-block;
-}
+.mom-grid-title { font-size: 13px; font-weight: 800; color: #1a1a1a; margin-bottom: 5px; word-break: keep-all; line-height: 1.4; }
+.mom-grid-count { font-size: 11px; color: rgba(0,0,0,0.35); font-weight: 600; background: rgba(255,255,255,0.4); border-radius: 8px; padding: 2px 8px; display: inline-block; }
 body.dark .mom-grid-card { box-shadow: 0 3px 10px rgba(0,0,0,0.3); }
 body.dark .mom-grid-title { color: #f0ead8; }
 body.dark .mom-grid-count { color: rgba(255,255,255,0.4); background: rgba(0,0,0,0.2); }
-/* 엄마 케어 상세 모달 */
-.mom-detail-item { display:flex; align-items:flex-start; gap:12px; padding:11px 0; border-bottom:1px solid #f3f0e0; }
-.mom-detail-item:last-child { border-bottom:none; }
-.mom-detail-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:6px; }
-.mom-detail-text { font-size:14px; color:var(--text-main,#374151); line-height:1.65; word-break:keep-all; }
-body.dark .mom-detail-text { color:#d0c0a8; }
-body.dark .mom-detail-item { border-color:#3d3628; }
-/* 패턴 분석 카드 */
+.mom-detail-item { display: flex; align-items: flex-start; gap: 12px; padding: 11px 0; border-bottom: 1px solid #f3f0e0; }
+.mom-detail-item:last-child { border-bottom: none; }
+.mom-detail-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+.mom-detail-text { font-size: 14px; color: var(--text-main,#374151); line-height: 1.65; word-break: keep-all; }
+body.dark .mom-detail-text { color: #d0c0a8; }
+body.dark .mom-detail-item { border-color: #3d3628; }
 .pattern-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-.pattern-card {
-  background: #fff; border-radius: 14px; padding: 14px 12px;
-  border: 1.5px solid #f0e8d0;
-  box-shadow: 0 2px 8px rgba(122,86,0,0.06);
-}
+.pattern-card { background: #fff; border-radius: 14px; padding: 14px 12px; border: 1.5px solid #f0e8d0; box-shadow: 0 2px 8px rgba(122,86,0,0.06); }
 .pattern-card-label { font-size: 10px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
 .pattern-card-value { font-size: 22px; font-weight: 900; color: #1a1a1a; line-height: 1.1; margin-bottom: 2px; }
 .pattern-card-unit { font-size: 11px; color: #9ca3af; }
@@ -977,159 +567,59 @@ body.dark .mom-detail-item { border-color:#3d3628; }
 .pattern-bar-label { font-size: 10px; color: #9ca3af; width: 24px; text-align: right; flex-shrink: 0; }
 .pattern-bar-bg { flex: 1; height: 6px; border-radius: 3px; background: #f3f0e0; overflow: hidden; }
 .pattern-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
-.pattern-insight {
-  background: linear-gradient(135deg,#fffbeb,#fff7d6);
-  border: 1.5px solid #e8d796; border-radius: 14px;
-  padding: 12px 14px; margin-bottom: 12px;
-  font-size: 13px; color: #7a5600; line-height: 1.7;
-  font-weight: 500; word-break: keep-all;
-}
-body.dark .pattern-card { background: #2a2520; border-color: #3d3628; }
-body.dark .pattern-card-value { color: #f0ead8; }
-body.dark .pattern-card-sub { color: #a89880; }
+.pattern-insight { background: linear-gradient(135deg,#fffbeb,#fff7d6); border: 1.5px solid #e8d796; border-radius: 14px; padding: 12px 14px; margin-bottom: 12px; font-size: 13px; color: #7a5600; line-height: 1.7; font-weight: 500; word-break: keep-all; }
 body.dark .pattern-bar-bg { background: #3d3628; }
-body.dark .pattern-insight { background: #2a2520; border-color: #3d3628; color: #c8a870; }
-
-/* 기분 이모지 버튼 */
-.mood-btn {
-  font-size: 28px; background: none; border: 2.5px solid transparent;
-  border-radius: 50%; width: 50px; height: 50px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: all 0.15s; line-height: 1;
-}
+.mood-btn { font-size: 28px; background: none; border: 2.5px solid transparent; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; line-height: 1; }
 .mood-btn:active { transform: scale(0.9); }
 .mood-btn.selected { border-color: #f59e0b; background: #fff7d6; transform: scale(1.15); }
-
-/* Babyfolio 스타일 타임라인 */
-.tl-item {
-  display: flex; gap: 0; padding: 0;
-  border-bottom: 1px solid #f3f4f6;
-  align-items: stretch;
-}
+.tl-item { display: flex; gap: 0; padding: 0; border-bottom: 1px solid #f3f4f6; align-items: stretch; }
 .tl-item:last-child { border-bottom: none; }
-.tl-time-col {
-  min-width: 58px; padding: 12px 8px 12px 14px;
-  display: flex; flex-direction: column; align-items: flex-end;
-  justify-content: center; flex-shrink: 0;
-  border-right: 2px solid #f3f4f6;
-}
+.tl-time-col { min-width: 58px; padding: 12px 8px 12px 14px; display: flex; flex-direction: column; align-items: flex-end; justify-content: center; flex-shrink: 0; border-right: 2px solid #f3f4f6; }
 .tl-time-ampm { font-size: 9px; color: #9ca3af; font-weight: 600; text-transform: uppercase; }
 .tl-time-hm { font-size: 15px; font-weight: 800; color: #1a1a1a; line-height: 1; }
 .tl-body { flex: 1; padding: 11px 12px 11px 12px; display: flex; align-items: center; gap: 10px; }
-.tl-icon-circle {
-  width: 34px; height: 34px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px; flex-shrink: 0;
-}
+.tl-icon-circle { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
 .tl-content { flex: 1; min-width: 0; }
 .tl-content-title { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 1px; }
 .tl-content-sub { font-size: 11px; color: #9ca3af; }
 .tl-actions-col { display: flex; gap: 4px; align-items: center; padding-right: 10px; flex-shrink: 0; }
-body.dark .tl-item { border-color: #2a2520; }
 body.dark .tl-time-col { border-color: #2a2520; }
-body.dark .tl-time-hm { color: #f0ead8; }
-body.dark .tl-content-title { color: #f0ead8; }
-.tag-badge { background:#fff; border:1px solid #e8d796; border-radius:8px; padding:4px 10px; font-size:12px; color:#7a5600; font-weight:600; }
-
-
-/* ══════ 다크모드 전역 강화 ══════ */
-
-/* 전체 배경/텍스트 기본 */
-body.dark { background: #1a1612 !important; color: #f0ead8; }
-body.dark .app-body { background: #1a1612 !important; }
-
-/* feature-page 전체 (성장기록, 통계, 예방접종 등) */
-body.dark .feature-page { background: #1a1612 !important; color: #f0ead8; }
-body.dark .feature-page-title { color: #f0ead8 !important; }
+.tag-badge { background: #fff; border: 1px solid #e8d796; border-radius: 8px; padding: 4px 10px; font-size: 12px; color: #7a5600; font-weight: 600; }
 body.dark .feature-page-sub { color: #a89880 !important; }
-body.dark .feature-section-title { color: #c8a870 !important; }
-
-/* 카드/섹션 */
 body.dark .chart-wrap,
 body.dark .score-card,
 body.dark .pattern-card,
 body.dark .vaccine-card,
 body.dark .growth-card { background: #2a2520 !important; border-color: #3d3628 !important; }
-
-/* 텍스트 */
 body.dark .chart-period-label { color: #c8a870 !important; }
 body.dark [style*="color:#1a1a1a"] { color: #f0ead8 !important; }
-body.dark [style*="color:#374151"] { color: #c8b898 !important; }
+body.dark [style*="color:#374151"] { color: #c8a870 !important; }
 body.dark [style*="color:#6b7280"] { color: #a89880 !important; }
 body.dark [style*="color:#9ca3af"] { color: #7a6a5a !important; }
 body.dark [style*="color:#7a5600"] { color: #c8a870 !important; }
-
-/* 성장 기록 테이블 */
 body.dark .growth-table { color: #f0ead8; }
-body.dark .growth-table th { background: #2a2520 !important; color: #c8a870 !important; border-color: #3d3628 !important; }
-body.dark .growth-table td { color: #d0c0a8 !important; border-color: #3d3628 !important; }
 body.dark .growth-input-row input { background: #2a2520 !important; border-color: #3d3628 !important; color: #f0ead8 !important; }
 body.dark .growth-add-btn { background: #7a5600 !important; }
-
-/* 예방접종 */
-body.dark .vaccine-card { background: #2a2520 !important; border-color: #3d3628 !important; }
-body.dark .vaccine-row { border-color: #3d3628 !important; }
-body.dark .vaccine-name { color: #f0ead8 !important; }
-body.dark .vaccine-age-badge { background: #3d3628 !important; color: #c8a870 !important; }
 body.dark .vaccine-done-text { color: #4ade80 !important; }
-
-/* 통계 분석 */
-body.dark .chart-tab { background: #2a2520 !important; border-color: #3d3628 !important; color: #c8a870 !important; }
-body.dark .chart-tab.active { background: #7a5600 !important; color: #fff !important; }
-body.dark .chart-legend-item { color: #a89880 !important; }
 body.dark .pattern-analysis-wrap > div { background: #2a2520 !important; border-color: #3d3628 !important; color: #f0ead8 !important; }
-
-/* 무드 셀렉터 */
-body.dark #mood-selector-wrap { background: linear-gradient(135deg,#2a2218,#1e1a10) !important; }
-
-/* 직접 입력 모달 */
 body.dark #modal-manual-record .modal { background: #2a2520 !important; }
 body.dark #modal-manual-record textarea { background: #3d3628 !important; border-color: #4d4030 !important; color: #f0ead8 !important; }
-
-/* score-card-wrap 내부 */
 body.dark #score-card-wrap * { color: #f0ead8; }
 body.dark #score-card-wrap [style*="background"] { background: #2a2520 !important; }
-
-/* 복지정책 페이지 */
-
-
-
-
 body.dark [style*="#fff0f6"],[style*="#fce7f3"] { background: #2a1520 !important; }
-
-/* 설정 페이지 카드들 */
 body.dark .feature-page .chart-wrap { background: #2a2520 !important; border-color: #3d3628 !important; }
 body.dark [style*="background:#f9fafb"] { background: #2a2520 !important; }
 body.dark [style*="background:#f3f4f6"] { background: #3d3628 !important; }
-body.dark [style*="background:#fff"] { }
-
-/* 직접입력 모달 세부 */
 body.dark #mr-side-wrap div { color: #c8a870; }
 body.dark #mr-pump-total-label { color: #c8a870 !important; }
-
-/* ══════ 다크모드 추가 보완 2 ══════ */
-
-/* ── 발달 마일스톤 ── */
-body.dark { --ms-header-bg: #1a1612; }
-body.dark .ms-card { background: #2a2520 !important; box-shadow: 0 3px 12px rgba(0,0,0,0.3), 0 0 0 1.5px #3d3628 !important; }
-body.dark .ms-card.ms-done { background: linear-gradient(135deg,#0f2a1a,#162a1a) !important; box-shadow: 0 3px 12px rgba(34,197,94,0.15), 0 0 0 2px #166534 !important; }
-body.dark .ms-card-title { color: #f0ead8 !important; }
 body.dark .ms-card-desc { color: #a89880 !important; }
 body.dark .ms-card-btn { background: #7a5600; color: #fff; }
 body.dark .ms-card.ms-done .ms-card-btn { background: #166534; }
-body.dark .ms-month-title { color: #c8a870 !important; }
 body.dark .ms-all-done { color: #4ade80 !important; }
 body.dark .ms-stage-dot { background: #3d3628; }
 body.dark .ms-stage-dot.active { background: #c8860a; }
 body.dark .ms-stage-dot.done { background: #166534; }
-/* 마일스톤 이전/다음 버튼 */
-body.dark #milestone-list button[onclick*="showMilestoneStage"] {
-  background: #2a2520 !important;
-  border-color: #3d3628 !important;
-  color: #c8a870 !important;
-}
-
-/* ── 엄마 케어 ── */
+body.dark #milestone-list button[onclick*="showMilestoneStage"] { background: #2a2520 !important; border-color: #3d3628 !important; color: #c8a870 !important; }
 body.dark .mom-page { background: #1a1612 !important; }
 body.dark .mom-page-header { background: #2a2218 !important; }
 body.dark .mom-care-card { background: #2a2520 !important; border-color: #3d3628 !important; }
@@ -1140,93 +630,52 @@ body.dark .mom-section-title { color: #c8a870 !important; }
 body.dark .mom-week-label { color: #a89880 !important; }
 body.dark .mom-tip-card { background: #2a2520 !important; border-color: #3d3628 !important; }
 body.dark .mom-tip-text { color: #d0c0a8 !important; }
-
-/* ── 출산 지원 정책 ── */
-
-
-
-
-
 body.dark .policy-tag { background: #3d3628 !important; color: #c8a870 !important; }
 body.dark .policy-amount { color: #fbbf24 !important; }
 body.dark .policy-badge { background: #3d3628 !important; color: #c8a870 !important; }
-
-/* ── 아빠 공간 ── */
 body.dark #dad-tab-page { background: #1a1612; }
-body.dark .dad-section { background: #1a1612; }
+body.dark .dad-section { background: transparent !important; }
 body.dark .dad-section-title { color: #c8a870 !important; }
-body.dark .dad-check-card { background: #2a2520 !important; border-color: #3d3628 !important; }
-body.dark .dad-check-item { border-color: #3d3628 !important; }
+body.dark .dad-check-card { background: #232018 !important; border-color: #3d3628 !important; }
+body.dark .dad-check-item { border-color: #3d3628 !important; background: transparent !important; }
 body.dark .dad-check-item:hover { background: #2f2820 !important; }
-body.dark .dad-check-title { color: #f0ead8 !important; }
-body.dark .dad-check-desc { color: #a89880 !important; }
+body.dark .dad-check-title { color: #f5ead8 !important; font-weight: 700; }
+body.dark .dad-check-desc { color: #d4c4a8 !important; }
 body.dark .dad-check-tag { background: #3d3628 !important; color: #c8a870 !important; }
 body.dark .dad-check-tag.done-tag { background: #1a3020 !important; color: #4ade80 !important; }
-body.dark .dad-praise { color: #fbbf24 !important; }
+body.dark .dad-praise { color: #fcd34d !important; }
 body.dark .dad-event-card { background: #2a2520 !important; border-color: #3d3628 !important; }
 body.dark .dad-event-item { border-color: #3d2a35 !important; }
-body.dark .dad-rec-section { background: #2a2218 !important; border-color: #3d3628 !important; }
-body.dark .dad-rec-title { color: #f0ead8 !important; }
 body.dark .dad-rec-btn { background: #2a2520 !important; border-color: #3d3628 !important; color: #c8a870 !important; }
 body.dark .dad-invite-section, body.dark #dad-invite-section { background: #0f1a2a !important; border-color: #1e3a5f !important; }
 body.dark #dad-tab-sub { color: #a89880 !important; }
 body.dark #dad-linked-status { background: #0f2a1a !important; color: #4ade80 !important; }
 body.dark .dad-progress-bar-wrap { background: #3d3628 !important; }
-
-/* ── 설정 ── */
-body.dark .feature-page { background: #1a1612 !important; }
-body.dark .chart-wrap { background: #2a2520 !important; border-color: #3d3628 !important; }
-body.dark .export-btn { background: #2a2520 !important; border-color: #3d3628 !important; color: #c8a870 !important; }body.dark .feature-page-sub { color: #a89880 !important; }
-/* 토글 스위치 비활성 */
 body.dark input[type="checkbox"] { accent-color: #7a5600; }
-/* 앱 정보 카드 */
 body.dark [style*="background:linear-gradient(135deg,#fffbeb"] { background: linear-gradient(135deg,#2a2218,#231e14) !important; }
 body.dark [style*="background:#fff7d6"] { background: #2a2218 !important; }
 body.dark [style*="background:#fffdf2"] { background: #1a1612 !important; }
 body.dark [style*="background:#fffbeb"] { background: #2a2218 !important; }
-/* 설정 카드 내 텍스트 */
-body.dark [style*="color:#1a1a1a"] { color: #f0ead8 !important; }
-body.dark [style*="color:#374151"] { color: #c8a870 !important; }
-body.dark [style*="color:#6b7280"] { color: #a89880 !important; }
 body.dark [style*="color:#7a5600"]:not(button):not(.active) { color: #c8a870 !important; }
-
-
-/* 아빠 기록 버튼 다크모드 */
-body.dark .dad-rec-btn.feed   { background: linear-gradient(135deg,#2a1a08,#3a2010) !important; border-color: #c2410c !important; }
+body.dark .dad-rec-btn.feed { background: linear-gradient(135deg,#2a1a08,#3a2010) !important; border-color: #c2410c !important; }
 body.dark .dad-rec-btn.diaper { background: linear-gradient(135deg,#0a2010,#162a18) !important; border-color: #15803d !important; }
-body.dark .dad-rec-btn.sleep  { background: linear-gradient(135deg,#0f1a2a,#1a2a3a) !important; border-color: #1d4ed8 !important; }
-body.dark .dad-rec-btn.bath   { background: linear-gradient(135deg,#0a1e22,#102830) !important; border-color: #0e7490 !important; }
+body.dark .dad-rec-btn.sleep { background: linear-gradient(135deg,#0f1a2a,#1a2a3a) !important; border-color: #1d4ed8 !important; }
+body.dark .dad-rec-btn.bath { background: linear-gradient(135deg,#0a1e22,#102830) !important; border-color: #0e7490 !important; }
 body.dark .dad-rec-btn span:last-child { opacity: 0.7; }
-
-
-/* ══ 타이틀 다크모드 강화 ══ */
 body.dark .diary-header h2 { color: #f0ead8 !important; }
 body.dark .diary-write-btn { background: #2a2520 !important; border-color: #3d3628 !important; color: #c8a870 !important; }
 body.dark .diary-empty { color: #7a6a5a !important; }
 body.dark .diary-header { color: #f0ead8; }
 body.dark .diary-page { background: #1a1612 !important; }
-
 body.dark .mom-page-header h2 { color: #f0ead8 !important; }
-body.dark .mom-page-header p  { color: #a89880 !important; }
-body.dark .mom-birth-badge    { opacity: 0.9; }
-
-
-
-/* ══ 커뮤니티 검색 다크모드 ══ */
+body.dark .mom-page-header p { color: #a89880 !important; }
+body.dark .mom-birth-badge { opacity: 0.9; }
 body.dark .community-search-box { background: #2a2520 !important; border-color: #3d3628 !important; }
 body.dark .community-search-title { color: #f0ead8 !important; }
 body.dark .community-chip { background: #1a2535 !important; color: #60a5fa !important; border-color: #1e3a5a !important; }
 body.dark .community-chip:active { background: #1d4ed8 !important; color: #fff !important; }
 body.dark .community-search-input { background: #2a2520 !important; border-color: #3d3628 !important; color: #f0ead8 !important; }
 body.dark .community-search-btn { background: #7a5600 !important; color: #fff !important; }
-
-/* 아빠 체크 타이틀/설명 더 밝게 */
-body.dark .dad-check-title { color: #f5ead8 !important; font-weight: 700; }
-body.dark .dad-check-desc { color: #d4c4a8 !important; }
-body.dark .dad-praise { color: #fcd34d !important; }
-
-
-/* 아빠 모달 */
 body.dark #modal-dad-record .modal { background: #2a2520 !important; }
 body.dark #dad-record-header .dad-rec-sub { color: #a89880 !important; }
 body.dark #dad-feed-detail .field-label { color: #c8a870 !important; }
@@ -1236,779 +685,306 @@ body.dark #dad-sleep-detail > div { background: linear-gradient(135deg,#0f1a2a,#
 body.dark #dad-bath-detail > div { background: linear-gradient(135deg,#0a1e22,#102830) !important; }
 body.dark #dad-sleep-detail .dad-sleep-label { color: #60a5fa !important; }
 body.dark #dad-sleep-detail p { color: #a89880 !important; }
-
-
-/* ══ 라이트모드 엄마케어 카드 보호 ══ */
-body:not(.dark) .mom-grid-card { color: #1a1a1a; }
-
-/* ══ 다크모드 엄마케어 warn 카드 ══ */
+body:not(.dark) .mom-grid-card { color: #1a1a1a; background: revert; }
 body.dark .mom-grid-card.warn { background: linear-gradient(135deg,#2a0f10,#3a1515) !important; }
 body.dark .mom-grid-card.warn .mom-grid-title { color: #f87171 !important; }
-
-/* ══ 다크모드 커뮤니티 검색 결과 ══ */
 body.dark .community-result { background: #2a2520 !important; color: #f0ead8 !important; }
 body.dark .community-result-title { color: #f0ead8 !important; }
 body.dark .community-result-sub { color: #a89880 !important; }
-
-
-/* ══ 이미지 분석 기반 다크모드 수정 ══ */
-
-/* 아빠 체크리스트 카드 배경 */
-body.dark .dad-check-card { background: #232018 !important; border-color: #3d3628 !important; }
-body.dark .dad-check-item { background: transparent !important; border-color: #3d3628 !important; }
 body.dark .dad-check-item.done { background: linear-gradient(135deg,#0f2a1a,#162a1e) !important; }
-
-/* 아빠 섹션 배경 통일 */
 body.dark .dad-tab-page, body.dark #dad-tab-page { background: #1a1612 !important; }
-body.dark .dad-section { background: transparent !important; }
-
-/* 아빠 체크박스 */
 body.dark .dad-checkbox { border-color: #5a5040 !important; background: #2a2520 !important; }
 body.dark .dad-checkbox.checked { background: #166534 !important; border-color: #166534 !important; }
-
-/* 아빠 이벤트 카드 */
-
-
-/* 아빠 진행 상태 바 */
 body.dark .dad-progress-wrap { background: #2a2520 !important; border-color: #3d3628 !important; }
-
-/* 엄마케어 카드 그리드 라이트모드 보호 */
-body:not(.dark) .mom-grid-card { 
-  background: revert; 
-}
-/* 라이트모드에서 어두운 배경 강제 방지 */
-body:not(.dark) .mom-grid-card[style*="#2a"],
-body:not(.dark) .mom-grid-card[style*="#1a"],
-body:not(.dark) .mom-grid-card[style*="#0a"],
-body:not(.dark) .mom-grid-card[style*="#0f"] {
-  background: #fff0f6 !important;
-}
-/* 라이트모드 아빠 이벤트 카드 */
-body:not(.dark) .dad-event-card { background: #ffffff !important; border-color: #e5e7eb !important; }
-body:not(.dark) .dad-event-item { background: transparent !important; border-color: #fce7f3 !important; }
-body:not(.dark) .dad-check-card { background: #ffffff !important; border-color: #e5e7eb !important; }
-body:not(.dark) .dad-check-item { background: transparent !important; }
-body:not(.dark) .dad-section { background: transparent !important; }
-
-/* 커뮤니티 검색박스 */
-body.dark #community-search-box { background: #2a2520 !important; border-color: #3d3628 !important; }
-body.dark .community-search-title { color: #f0ead8 !important; }
-body.dark .community-chip { background: #1a2535 !important; color: #60a5fa !important; border-color: #1e3a5a !important; }
-
-
-/* ══ 라이트모드 카드 배경 강제 보호 ══ */
 body:not(.dark) .mom-grid-card[style*="#2a"],
 body:not(.dark) .mom-grid-card[style*="#1a"],
 body:not(.dark) .mom-grid-card[style*="#0a"],
 body:not(.dark) .mom-grid-card[style*="#0f"] { background: #fff0f6 !important; }
 body:not(.dark) .dad-event-card { background: #ffffff !important; border-color: #e5e7eb !important; }
-body:not(.dark) .dad-event-item { background: transparent !important; color: #1a1a1a !important; }
+body:not(.dark) .dad-event-item { background: transparent !important; border-color: #fce7f3 !important; color: #1a1a1a !important; }
 body:not(.dark) .dad-check-card { background: #ffffff !important; border-color: #e5e7eb !important; }
 body:not(.dark) .dad-check-item { background: transparent !important; color: #1a1a1a !important; }
+body:not(.dark) .dad-section { background: transparent !important; }
+body.dark #community-search-box { background: #2a2520 !important; border-color: #3d3628 !important; }
 body:not(.dark) .dad-check-tag { background: revert !important; color: revert !important; }
 body:not(.dark) .dad-check-tag.urgent { background: #eff6ff !important; color: #c0410f !important; }
-body:not(.dark) .dad-check-tag.soon   { background: #fff7ed !important; color: #8a6d00 !important; }
-body:not(.dark) .dad-check-tag.prep   { background: #f0fdf4 !important; color: #1d7a3a !important; }
+body:not(.dark) .dad-check-tag.soon { background: #fff7ed !important; color: #8a6d00 !important; }
+body:not(.dark) .dad-check-tag.prep { background: #f0fdf4 !important; color: #1d7a3a !important; }
 body:not(.dark) .dad-check-tag.done-tag { background: #dcfce7 !important; color: #16a34a !important; }
 body:not(.dark) .dad-event-tag { background: #fce7f3 !important; color: #be185d !important; }
 body:not(.dark) .dad-check-title { color: #1a1a1a !important; }
-body:not(.dark) .dad-check-desc  { color: #555555 !important; }
+body:not(.dark) .dad-check-desc { color: #555555 !important; }
 body:not(.dark) .dad-section-title { color: #7a5600 !important; }
-
-/* ══════════════════════════════════════
-   엄마케어 카드 - CSS 클래스 기반 (인라인 스타일 의존 제거)
-══════════════════════════════════════ */
-
-/* 라이트 카드 팔레트 */
-.mom-card-pink   { background: linear-gradient(135deg,#fff0f6,#fce7f3); border-top: 3px solid #db277733; }
-.mom-card-blue   { background: linear-gradient(135deg,#eff6ff,#dbeafe); border-top: 3px solid #2563eb33; }
-.mom-card-green  { background: linear-gradient(135deg,#f0fdf4,#dcfce7); border-top: 3px solid #16a34a33; }
+.mom-card-pink { background: linear-gradient(135deg,#fff0f6,#fce7f3); border-top: 3px solid #db277733; }
+.mom-card-blue { background: linear-gradient(135deg,#eff6ff,#dbeafe); border-top: 3px solid #2563eb33; }
+.mom-card-green { background: linear-gradient(135deg,#f0fdf4,#dcfce7); border-top: 3px solid #16a34a33; }
 .mom-card-purple { background: linear-gradient(135deg,#fdf4ff,#f3e8ff); border-top: 3px solid #9333ea33; }
 .mom-card-yellow { background: linear-gradient(135deg,#fffbeb,#fef9c3); border-top: 3px solid #d9770633; }
 .mom-card-orange { background: linear-gradient(135deg,#fff7ed,#ffedd5); border-top: 3px solid #ea580c33; }
-.mom-card-amber  { background: linear-gradient(135deg,#fefce8,#fef9c3); border-top: 3px solid #ca8a0433; }
-.mom-card-teal   { background: linear-gradient(135deg,#f0fdfa,#ccfbf1); border-top: 3px solid #0d948833; }
-.mom-card-warn   { background: linear-gradient(135deg,#fff1f2,#ffe4e6); border-left: 4px solid #dc2626; grid-column: 1/-1; display:flex; align-items:center; gap:14px; text-align:left; padding:16px 18px; border-top: none; }
-
-/* 카드 텍스트 색상 */
-.mom-count-pink   { color: #db2777; }
-.mom-count-blue   { color: #2563eb; }
-.mom-count-green  { color: #16a34a; }
+.mom-card-amber { background: linear-gradient(135deg,#fefce8,#fef9c3); border-top: 3px solid #ca8a0433; }
+.mom-card-teal { background: linear-gradient(135deg,#f0fdfa,#ccfbf1); border-top: 3px solid #0d948833; }
+.mom-card-warn { background: linear-gradient(135deg,#fff1f2,#ffe4e6); border-left: 4px solid #dc2626; grid-column: 1/-1; display: flex; align-items: center; gap: 14px; text-align: left; padding: 16px 18px; border-top: none; }
+.mom-count-pink { color: #db2777; }
+.mom-count-blue { color: #2563eb; }
+.mom-count-green { color: #16a34a; }
 .mom-count-purple { color: #9333ea; }
 .mom-count-yellow { color: #d97706; }
 .mom-count-orange { color: #ea580c; }
-.mom-count-amber  { color: #ca8a04; }
-.mom-count-teal   { color: #0d9488; }
-
-/* warn 카드 전용 */
-.mom-warn-title  { font-size: 15px; font-weight: 700; color: #dc2626; }
-.mom-warn-count  { font-size: 13px; color: #dc2626; margin-top: 4px; }
-.mom-warn-arrow  { font-size: 18px; color: #dc2626; opacity: 0.5; }
-
-/* 디테일 모달 */
-.mom-detail-header { display:flex; align-items:center; gap:12px; margin-bottom:18px; padding-bottom:14px; border-bottom:2px solid #f0e8d0; }
+.mom-count-amber { color: #ca8a04; }
+.mom-count-teal { color: #0d9488; }
+.mom-warn-title { font-size: 15px; font-weight: 700; color: #dc2626; }
+.mom-warn-count { font-size: 13px; color: #dc2626; margin-top: 4px; }
+.mom-warn-arrow { font-size: 18px; color: #dc2626; opacity: 0.5; }
+.mom-detail-header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 2px solid #f0e8d0; }
 .mom-detail-header-warn { border-bottom-color: #fca5a5; }
-.mom-detail-title   { font-size:17px; font-weight:800; color:#1a1a1a; margin-bottom:2px; }
-.mom-detail-sub     { font-size:12px; color:#7a5600; font-weight:600; }
+.mom-detail-title { font-size: 17px; font-weight: 800; color: #1a1a1a; margin-bottom: 2px; }
+.mom-detail-sub { font-size: 12px; color: #7a5600; font-weight: 600; }
 .mom-detail-sub-warn { color: #dc2626; }
-.mom-dot-normal  { background: #7a5600; }
-.mom-dot-warn    { background: #dc2626; }
-.mom-warn-note   { background:#fff1f2; border-radius:10px; padding:12px 14px; margin-top:10px; font-size:13px; color:#dc2626; font-weight:600; line-height:1.6; border-left:3px solid #dc2626; }
-
-/* ── 다크모드 엄마케어 카드 ── */
-body.dark .mom-card-pink   { background: linear-gradient(135deg,#2a1520,#3a1a28); border-top-color: #f472b666; }
-body.dark .mom-card-blue   { background: linear-gradient(135deg,#0f1a2a,#1a2a3a); border-top-color: #60a5fa66; }
-body.dark .mom-card-green  { background: linear-gradient(135deg,#0a2010,#162a18); border-top-color: #4ade8066; }
+.mom-dot-normal { background: #7a5600; }
+.mom-dot-warn { background: #dc2626; }
+.mom-warn-note { background: #fff1f2; border-radius: 10px; padding: 12px 14px; margin-top: 10px; font-size: 13px; color: #dc2626; font-weight: 600; line-height: 1.6; border-left: 3px solid #dc2626; }
+body.dark .mom-card-pink { background: linear-gradient(135deg,#2a1520,#3a1a28); border-top-color: #f472b666; }
+body.dark .mom-card-blue { background: linear-gradient(135deg,#0f1a2a,#1a2a3a); border-top-color: #60a5fa66; }
+body.dark .mom-card-green { background: linear-gradient(135deg,#0a2010,#162a18); border-top-color: #4ade8066; }
 body.dark .mom-card-purple { background: linear-gradient(135deg,#1a0f25,#2a1535); border-top-color: #c084fc66; }
 body.dark .mom-card-yellow { background: linear-gradient(135deg,#1a1500,#2a2000); border-top-color: #fbbf2466; }
 body.dark .mom-card-orange { background: linear-gradient(135deg,#1a1008,#2a1a10); border-top-color: #fb923c66; }
-body.dark .mom-card-amber  { background: linear-gradient(135deg,#1a1200,#2a1e00); border-top-color: #fcd34d66; }
-body.dark .mom-card-teal   { background: linear-gradient(135deg,#0a1a18,#102a25); border-top-color: #2dd4bf66; }
-body.dark .mom-card-warn   { background: linear-gradient(135deg,#2a0f10,#3a1515); border-left-color: #f87171; }
-
-body.dark .mom-count-pink   { color: #f472b6; }
-body.dark .mom-count-blue   { color: #60a5fa; }
-body.dark .mom-count-green  { color: #4ade80; }
+body.dark .mom-card-amber { background: linear-gradient(135deg,#1a1200,#2a1e00); border-top-color: #fcd34d66; }
+body.dark .mom-card-teal { background: linear-gradient(135deg,#0a1a18,#102a25); border-top-color: #2dd4bf66; }
+body.dark .mom-card-warn { background: linear-gradient(135deg,#2a0f10,#3a1515); border-left-color: #f87171; }
+body.dark .mom-count-pink { color: #f472b6; }
+body.dark .mom-count-blue { color: #60a5fa; }
+body.dark .mom-count-green { color: #4ade80; }
 body.dark .mom-count-purple { color: #c084fc; }
 body.dark .mom-count-yellow { color: #fbbf24; }
 body.dark .mom-count-orange { color: #fb923c; }
-body.dark .mom-count-amber  { color: #fcd34d; }
-body.dark .mom-count-teal   { color: #2dd4bf; }
-
-body.dark .mom-warn-title  { color: #f87171; }
-body.dark .mom-warn-count  { color: #f87171; }
-body.dark .mom-warn-arrow  { color: #f87171; }
-body.dark .mom-detail-title  { color: #f0ead8; }
-body.dark .mom-detail-sub    { color: #c8a870; }
+body.dark .mom-count-amber { color: #fcd34d; }
+body.dark .mom-count-teal { color: #2dd4bf; }
+body.dark .mom-warn-title { color: #f87171; }
+body.dark .mom-warn-count { color: #f87171; }
+body.dark .mom-warn-arrow { color: #f87171; }
+body.dark .mom-detail-title { color: #f0ead8; }
+body.dark .mom-detail-sub { color: #c8a870; }
 body.dark .mom-detail-sub-warn { color: #f87171; }
 body.dark .mom-detail-header { border-bottom-color: #3d3628; }
 body.dark .mom-detail-header-warn { border-bottom-color: #7f1d1d; }
-body.dark .mom-dot-normal  { background: #c8a870; }
-body.dark .mom-dot-warn    { background: #f87171; }
-body.dark .mom-warn-note   { background: #2a0f10; color: #f87171; border-left-color: #f87171; }
-body.dark .mom-detail-text { color: #c8b898; }
-
-/* ══ 아빠 이벤트 뱃지 라이트모드 강제 보호 ══ */
+body.dark .mom-dot-normal { background: #c8a870; }
+body.dark .mom-dot-warn { background: #f87171; }
+body.dark .mom-warn-note { background: #2a0f10; color: #f87171; border-left-color: #f87171; }
 body:not(.dark) .dad-event-tag,
-body:not(.dark) .dad-event-tag.done-tag {
-  background: #fce7f3 !important;
-  color: #be185d !important;
-}
-body:not(.dark) .dad-check-tag { background: revert !important; color: revert !important; }
-body:not(.dark) .dad-check-tag.done-tag { background: #dcfce7 !important; color: #16a34a !important; }
-body:not(.dark) .dad-check-tag.urgent { background: #eff6ff !important; color: #c0410f !important; }
-body:not(.dark) .dad-check-tag.soon   { background: #fff7ed !important; color: #8a6d00 !important; }
-body:not(.dark) .dad-check-tag.prep   { background: #f0fdf4 !important; color: #1d7a3a !important; }
-
-/* 다크 이벤트 뱃지 */
+body:not(.dark) .dad-event-tag.done-tag { background: #fce7f3 !important; color: #be185d !important; }
 body.dark .dad-event-tag { background: #2a1a28 !important; color: #f9a8d4 !important; }
 body.dark .dad-event-tag.done-tag { background: #1a2a18 !important; color: #86efac !important; }
-
-
-/* ══ 삭제 확인 모달 다크모드 ══ */
 body.dark #modal-delete-confirm .modal { background: #2a2520 !important; }
-body.dark #modal-delete-confirm input[type="text"] {
-  background: #3d3628 !important; border-color: #ef4444 !important; color: #f0ead8 !important;
-}
+body.dark #modal-delete-confirm input[type="text"] { background: #3d3628 !important; border-color: #ef4444 !important; color: #f0ead8 !important; }
 body.dark #modal-delete-confirm label { color: #f0ead8; }
-body.dark #modal-delete-confirm [style*="background:#fff5f5"] {
-  background: #2a1010 !important; border-color: #7f1d1d !important;
-}
-
-
-/* ══ 오늘 요약 위젯 다크모드 ══ */
+body.dark #modal-delete-confirm [style*="background:#fff5f5"] { background: #2a1010 !important; border-color: #7f1d1d !important; }
 body.dark #today-summary-widget > div:nth-child(1) { background: linear-gradient(135deg,#1a1008,#2a1a10) !important; border-color: #7c2d12 !important; }
 body.dark #today-summary-widget > div:nth-child(2) { background: linear-gradient(135deg,#0f1a2a,#1a2a3a) !important; border-color: #1e3a5a !important; }
 body.dark #today-summary-widget > div:nth-child(3) { background: linear-gradient(135deg,#0a2010,#162a18) !important; border-color: #166534 !important; }
 body.dark #today-summary-widget > div:nth-child(4) { background: linear-gradient(135deg,#1a0f25,#2a1535) !important; border-color: #4c1d95 !important; }
 body.dark #widget-feed-count, body.dark #widget-sleep-time,
 body.dark #widget-diaper-count, body.dark #widget-pump-total { color: #f0ead8 !important; }
-
-
-/* 엄마몰래 뱃지 - 항상 라이트 */
 body.dark [style*="😉 엄마 몰래"] { background: #fce7f3 !important; color: #9d174d !important; }
-
-
-/* ── 스크린 리더 skip navigation ── */
-.skip-nav {
-  position: absolute;
-  top: -100px;
-  left: 0;
-  background: #7a5600;
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 0 0 8px 0;
-  font-size: 14px;
-  font-weight: 700;
-  z-index: 9999;
-  text-decoration: none;
-}
+.skip-nav { position: absolute; top: -100px; left: 0; background: #7a5600; color: #fff; padding: 8px 16px; border-radius: 0 0 8px 0; font-size: 14px; font-weight: 700; z-index: 9999; text-decoration: none; }
 .skip-nav:focus { top: 0; }
-
-
-/* ══════════════════════════════════════
-   누리케어 유틸리티 클래스 (방법1 최적화)
-   인라인 스타일 반복 패턴 → CSS 클래스
-══════════════════════════════════════ */
-
-/* 레이아웃 */
-.u-hidden        { display: none; }
-.u-flex1         { flex: 1; }
+.u-hidden { display: none; }
+.u-flex1 { flex: 1; }
 .u-flex-row-gap10 { display: flex; gap: 10px; margin-bottom: 16px; }
 .u-flex-row-gap10b { display: flex; gap: 10px; margin-bottom: 12px; }
-.u-input-full    { width: 100%; box-sizing: border-box; }
-.u-p1416         { padding: 14px 16px; }
-.u-mb12          { margin-bottom: 12px; }
-.u-mb8           { margin-top: 8px; }
-.u-mt8           { margin-top: 8px; }
-.u-modal-scroll  { max-height: 85vh; overflow-y: auto; }
-
-/* 텍스트 */
-.u-hint          { font-size: 11px; color: #9ca3af; }
-.u-hint-mt       { font-size: 10px; color: #9ca3af; margin-top: 2px; }
-.u-subtext       { font-size: 11px; color: #6b7280; margin: 8px 0 4px; padding-top: 8px; border-top: 1px solid #f3f0e0; }
-.u-label-sm      { font-size: 11px; font-weight: 700; color: #7a5600; margin-bottom: 4px; }
+.u-input-full { width: 100%; box-sizing: border-box; }
+.u-p1416 { padding: 14px 16px; }
+.u-mb12 { margin-bottom: 12px; }
+.u-mb8 { margin-top: 8px; }
+.u-mt8 { margin-top: 8px; }
+.u-modal-scroll { max-height: 85vh; overflow-y: auto; }
+.u-hint { font-size: 11px; color: #9ca3af; }
+.u-hint-mt { font-size: 10px; color: #9ca3af; margin-top: 2px; }
+.u-subtext { font-size: 11px; color: #6b7280; margin: 8px 0 4px; padding-top: 8px; border-top: 1px solid #f3f0e0; }
+.u-label-sm { font-size: 11px; font-weight: 700; color: #7a5600; margin-bottom: 4px; }
 .u-label-sm-purple { font-size: 11px; font-weight: 700; color: #7c3aaf; margin-bottom: 4px; }
-.u-text13-600    { font-size: 13px; font-weight: 600; }
-.u-text12-700    { font-size: 12px; font-weight: 700; }
-.u-text12        { font-size: 12px; }
-.u-text28        { font-size: 28px; }
-.u-info-row      { font-size: 11px; display: flex; align-items: center; gap: 3px; color: var(--text-sub, #555); }
-
-/* 버튼 opt-btn 변형 */
-.u-opt-sm        { flex: 1; padding: 10px 4px; font-size: 13px; }
-.u-opt-sm2       { flex: 1; min-width: 60px; padding: 10px 4px; font-size: 13px; }
-.u-opt-sm3       { flex: 1; min-width: 56px; font-size: 13px; }
-.u-opt-md        { flex: 1; padding: 10px; font-size: 13px; }
-.u-opt-lg        { flex: 1; padding: 12px 6px; font-size: 14px; }
-.u-opt-xl        { flex: 1; padding: 14px 8px; font-size: 15px; }
-.u-opt-pill      { font-size: 12px; padding: 4px 10px; }
-.u-opt-card      { flex: 1; padding: 14px; font-size: 15px; flex-direction: column; display: flex; align-items: center; gap: 6px; border-radius: 16px; }
-
-/* 모달 카드 */
-.u-modal-card    { background: #fff; border-radius: 24px 24px 0 0; padding: 28px 24px 48px; width: 100%; max-width: 480px; margin: 0 auto; }
-
-/* 다크모드 유틸리티 */
-body.dark .u-subtext  { border-top-color: #3d3628; color: #a89880; }
-body.dark .u-hint     { color: #7a6a5a; }
-body.dark .u-hint-mt  { color: #7a6a5a; }
+.u-text13-600 { font-size: 13px; font-weight: 600; }
+.u-text12-700 { font-size: 12px; font-weight: 700; }
+.u-text12 { font-size: 12px; }
+.u-text28 { font-size: 28px; }
+.u-info-row { font-size: 11px; display: flex; align-items: center; gap: 3px; color: var(--text-sub, #555); }
+.u-opt-sm { flex: 1; padding: 10px 4px; font-size: 13px; }
+.u-opt-sm2 { flex: 1; min-width: 60px; padding: 10px 4px; font-size: 13px; }
+.u-opt-sm3 { flex: 1; min-width: 56px; font-size: 13px; }
+.u-opt-md { flex: 1; padding: 10px; font-size: 13px; }
+.u-opt-lg { flex: 1; padding: 12px 6px; font-size: 14px; }
+.u-opt-xl { flex: 1; padding: 14px 8px; font-size: 15px; }
+.u-opt-pill { font-size: 12px; padding: 4px 10px; }
+.u-opt-card { flex: 1; padding: 14px; font-size: 15px; flex-direction: column; display: flex; align-items: center; gap: 6px; border-radius: 16px; }
+.u-modal-card { background: #fff; border-radius: 24px 24px 0 0; padding: 28px 24px 48px; width: 100%; max-width: 480px; margin: 0 auto; }
+body.dark .u-subtext { border-top-color: #3d3628; color: #a89880; }
+body.dark .u-hint { color: #7a6a5a; }
+body.dark .u-hint-mt { color: #7a6a5a; }
 body.dark .u-modal-card { background: #2a2520; }
-
-
-/* ══ 신생아 케어 가이드 다크모드 ══ */
 body.dark #screen-guide { background: #1a1612 !important; }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* 성장기록 입력 카드 다크모드 */
 body.dark #growth-date,
 body.dark #growth-weight,
-body.dark #growth-height {
-  background: #2a2520 !important;
-  border-color: #5a4a10 !important;
-  color: #f0ead8 !important;
-}
-body.dark .growth-table th { background: #2a2520 !important; }
+body.dark #growth-height { background: #2a2520 !important; border-color: #5a4a10 !important; color: #f0ead8 !important; }
 body.dark .growth-table tr { border-bottom-color: #3d3628 !important; }
-body.dark #growth-latest-badge {
-  background: #0a2010 !important;
-  border-color: #166534 !important;
-}
+body.dark #growth-latest-badge { background: #0a2010 !important; border-color: #166534 !important; }
 body.dark #growth-latest-text { color: #4ade80 !important; }
-
-
-/* D+ 다크모드 */
 body.dark .baby-dday { color: #f0c060 !important; }
-body.dark .baby-dday-sub { color: #a89060 !important; }
-
-
-/* ══ baby-dday 완전 정의 ══ */
-.baby-dday {
-  font-family: 'Jua', 'Apple SD Gothic Neo', sans-serif !important;
-  font-size: 26px !important;
-  font-weight: 400 !important;
-  color: #7a5600 !important;
-  letter-spacing: 0.02em;
-  line-height: 1.0;
-  margin-bottom: 0;
-}
-.baby-dday-sub {
-  font-family: 'Gowun Dodum', 'Apple SD Gothic Neo', sans-serif !important;
-  font-size: 12px !important;
-  color: #c8a070 !important;
-  font-weight: 400 !important;
-  letter-spacing: 0.02em;
-  line-height: 1.4;
-  margin-top: 1px;
-}
-body.dark .baby-dday  { color: #f0c060 !important; }
 body.dark .baby-dday-sub { color: #a08050 !important; }
-
-
+.baby-dday-sub { font-family: 'Gowun Dodum', 'Apple SD Gothic Neo', sans-serif !important; font-size: 12px !important; color: #c8a070 !important; font-weight: 400 !important; letter-spacing: 0.02em; line-height: 1.4; margin-top: 1px; }
 body.dark .header-date { color: #c8a870; }
-
-
-/* ── 다크모드 보완 (2차) ── */
-
-/* 사진 페이지 플레이스홀더 */
-body.dark .photo-placeholder {
-  background: linear-gradient(160deg, #1a1612 0%, #2a2218 100%) !important;
-}
+body.dark .photo-placeholder { background: linear-gradient(160deg, #1a1612 0%, #2a2218 100%) !important; }
 body.dark .ph-icon { filter: brightness(0.7); }
 body.dark .no-photo-info .baby-dname { color: #f0ead8 !important; }
-
-/* 성장기록 날짜 select */
-body.dark #growth-date {
-  background: #2a2520 !important;
-  border-color: #5a4a10 !important;
-  color: #f0ead8 !important;
-}
-
-/* 성장기록 머리둘레 input */
-body.dark #growth-head {
-  background: #2a2520 !important;
-  border-color: #5a4a10 !important;
-  color: #f0ead8 !important;
-}
-
-/* 설정 페이지 인라인 스타일 카드들 */
-body.dark .chart-wrap {
-  background: #2a2520 !important;
-  border-color: #3d3628 !important;
-  color: #f0ead8 !important;
-}
-
-/* 설정 - 음성단축키 STEP 카드 */
+body.dark #growth-date { background: #2a2520 !important; border-color: #5a4a10 !important; color: #f0ead8 !important; }
+body.dark #growth-head { background: #2a2520 !important; border-color: #5a4a10 !important; color: #f0ead8 !important; }
 body.dark .chart-wrap [style*="background:#fff7ed"],
 body.dark .chart-wrap [style*="background: #fff7ed"],
 body.dark .chart-wrap [style*="background:#fffbf0"],
 body.dark .chart-wrap [style*="background:#f0f9ff"],
-body.dark .chart-wrap [style*="background:#fff"] {
-  background: #2a2520 !important;
-  border-color: #3d3628 !important;
-}
-
-/* 헤더 날짜 색상 */
+body.dark .chart-wrap [style*="background:#fff"] { background: #2a2520 !important; border-color: #3d3628 !important; }
 body.dark #app-date { color: #c8a870; }
 body.dark .app-date { color: #c8a870; }
-
-/* 탭바 */
-body.dark .quick-nav-bar { background: #1a1612 !important; border-top-color: #3d3628 !important; }
-
-/* 아기선택 모달 */
 body.dark #baby-picker-modal > div,
-body.dark #add-baby-modal > div {
-  background: #2a2520 !important;
-}
+body.dark #add-baby-modal > div { background: #2a2520 !important; }
 body.dark #baby-picker-modal input,
-body.dark #add-baby-modal input {
-  background: #1a1612 !important;
-  color: #f0ead8 !important;
-  border-color: #5a4a10 !important;
-}
-
-/* 온보딩 카드 */
-body.dark .onboarding-card {
-  background: #2a2520 !important;
-}
-body.dark .onboarding-title { color: #f0ead8 !important; }
+body.dark #add-baby-modal input { background: #1a1612 !important; color: #f0ead8 !important; border-color: #5a4a10 !important; }
 body.dark .onboarding-desc { color: #a89880 !important; }
-
-/* 직접입력 모달 */
-body.dark #modal-manual-record .modal {
-  background: #2a2520 !important;
-}
-
-/* 폰교체/아기관리 인라인 카드 */
 body.dark [style*="background:#fff;border-radius:12px"],
 body.dark [style*="background: #fff;border-radius:12px"],
 body.dark [style*="background:#fffbeb"],
-body.dark [style*="background:#f0f7ff"] {
-  background: #1e1a15 !important;
-  border-color: #3d3628 !important;
-  color: #f0ead8 !important;
-}
-
-/* 아빠탭 체크리스트 카드 */
-body.dark .dad-item-card {
-  background: #2a2520 !important;
-  border-color: #3d3628 !important;
-}
-
-/* 코치카드 */
-body.dark .coach-card-wrap {
-  background: #2a2520 !important;
-}
-
-/* ── 다크모드 3차 보완 ── */
-
-/* 사진 페이지 전체 */
+body.dark [style*="background:#f0f7ff"] { background: #1e1a15 !important; border-color: #3d3628 !important; color: #f0ead8 !important; }
+body.dark .dad-item-card { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .coach-card-wrap { background: #2a2520 !important; }
 body.dark .photo-page { background: #1a1612 !important; }
 body.dark .baby-photo-placeholder { background: linear-gradient(160deg, #1e1a15 0%, #2a2218 100%) !important; }
 body.dark .photo-info-chip { background: #2a2520 !important; color: #c8a870 !important; }
 body.dark .no-photo-name { color: #f0ead8 !important; }
 body.dark .no-photo-days { color: #a89880 !important; }
-
-/* 원형 차트 내부 */
 body.dark canvas { filter: none; }
-
-/* 아빠 탭 dad-item */
 body.dark .dad-item { background: #2a2520 !important; border-color: #3d3628 !important; }
 body.dark .dad-item-title { color: #f0ead8 !important; }
 body.dark .dad-item-desc { color: #a89880 !important; }
-body.dark .dad-section-title { color: #c8a870 !important; }
-
-/* 설정 인라인 카드 - STEP 1 (오렌지 배경) */
 body.dark .chart-wrap [style*="background:linear-gradient(135deg,#fff7ed"],
 body.dark .chart-wrap [style*="background: linear-gradient(135deg, #fff7ed"],
-body.dark [class*="chart-wrap"][style*="linear-gradient"] {
-  background: #2a1f10 !important;
-  border-color: #5a3a10 !important;
-}
-
-/* 설정 음성명령 카드 (흰 배경) */
+body.dark [class*="chart-wrap"][style*="linear-gradient"] { background: #2a1f10 !important; border-color: #5a3a10 !important; }
 body.dark .chart-wrap > div[style*="background:#fff"],
-body.dark .chart-wrap > div[style*="background: #fff"] {
-  background: #1e1a15 !important;
-  color: #f0ead8 !important;
-}
-
-/* 아기 추가 모달 */
-body.dark #add-baby-modal > div {
-  background: #2a2520 !important;
-  color: #f0ead8 !important;
-}
+body.dark .chart-wrap > div[style*="background: #fff"] { background: #1e1a15 !important; color: #f0ead8 !important; }
+body.dark #add-baby-modal > div { background: #2a2520 !important; color: #f0ead8 !important; }
 body.dark #add-baby-name,
 body.dark #add-baby-birth,
 body.dark #ob-name,
-body.dark #ob-birth {
-  background: #1a1612 !important;
-  color: #f0ead8 !important;
-  border-color: #5a4a10 !important;
-}
+body.dark #ob-birth { background: #1a1612 !important; color: #f0ead8 !important; border-color: #5a4a10 !important; }
 body.dark #add-baby-girl,
-body.dark #add-baby-boy {
-  background: #2a2520 !important;
-  color: #f0ead8 !important;
-  border-color: #5a4a10 !important;
-}
-
-/* 생활패턴 일/주 탭 */
+body.dark #add-baby-boy { background: #2a2520 !important; color: #f0ead8 !important; border-color: #5a4a10 !important; }
 body.dark .pattern-tab-btn { background: #2a2520 !important; color: #a89880 !important; }
 body.dark .pattern-tab-btn.active { background: #7a5600 !important; color: #fff !important; }
-
-/* 온보딩 카드 내부 (기능 소개 카드 3장) */
 body.dark .onboarding-card [style*="background:#fffbf0"],
 body.dark .onboarding-card [style*="background:#f0f9ff"],
 body.dark .onboarding-card [style*="background:#fdf4ff"],
-body.dark .onboarding-card [style*="background:#fff7d6"] {
-  background: #2a2520 !important;
-  border-color: #5a4a10 !important;
-}
-
-/* 온보딩 입력 필드 */
+body.dark .onboarding-card [style*="background:#fff7d6"] { background: #2a2520 !important; border-color: #5a4a10 !important; }
 body.dark #ob-name,
 body.dark #ob-birth,
 body.dark #ob-girl,
-body.dark #ob-boy {
-  background: #2a2520 !important;
-  color: #f0ead8 !important;
-  border-color: #5a4a10 !important;
-}
+body.dark #ob-boy { background: #2a2520 !important; color: #f0ead8 !important; border-color: #5a4a10 !important; }
 body.dark #ob-profile-err { color: #f87171 !important; }
-
-/* 삭제 확인 입력창 */
-body.dark #delete-confirm-input {
-  background: #2a2520 !important;
-  color: #f0ead8 !important;
-  border-color: #fecaca !important;
-}
-
-/* ── 프로필 화면 다크모드 ── */
+body.dark #delete-confirm-input { background: #2a2520 !important; color: #f0ead8 !important; border-color: #fecaca !important; }
 body.dark .page-wrap { background: #1a1612 !important; }
 body.dark .profile-header { background: #1a1612 !important; }
 body.dark .profile-card { background: #2a2520 !important; border-color: #3d3628 !important; }
 body.dark .profile-card input,
 body.dark .profile-card select,
-body.dark .profile-card textarea {
-  background: #1a1612 !important;
-  color: #f0ead8 !important;
-  border-color: #5a4a10 !important;
-}
+body.dark .profile-card textarea { background: #1a1612 !important; color: #f0ead8 !important; border-color: #5a4a10 !important; }
 body.dark .profile-card .field-label { color: #c8a870 !important; }
-body.dark .opt-btn { background: #2a2520 !important; color: #f0ead8 !important; border-color: #5a4a10 !important; }
-body.dark .opt-btn.sel { background: #7a5600 !important; color: #fff !important; border-color: #c8860a !important; }
 body.dark .btn-primary { background: linear-gradient(135deg,#7a5600,#c8860a) !important; }
 body.dark .profile-card .u-hint { color: #a89880 !important; }
 body.dark p.u-sub { color: #a89880 !important; }
 body.dark .profile-section-title { color: #c8a870 !important; }
 body.dark .profile-section-toggle { background: #2a2520 !important; color: #c8a870 !important; border-color: #5a4a10 !important; }
-
-/* ── 온보딩 화면 (screen 시스템) ── */
-
-
 body.dark 
 body.dark 
 
-/* ── 온보딩 카드 센터 ── */
-
-
 body.dark 
 
-/* ── 다크모드 4차 보완 ── */
-
-/* 온보딩 배경 및 카드 */
 body.dark 
-body.dark .onboarding-card {
-  background: #2a2520 !important;
-  color: #f0ead8 !important;
-}
-body.dark .onboarding-title { color: #f0ead8 !important; }
-body.dark .onboarding-desc { color: #a89880 !important; }
+body.dark .onboarding-card { background: #2a2520 !important; color: #f0ead8 !important; }
 body.dark .onboarding-dot { background: #3d3628 !important; }
 body.dark .onboarding-dot.active { background: #c8860a !important; }
-body.dark .onboarding-btn { background: linear-gradient(135deg,#7a5600,#c8860a) !important; }
-body.dark .onboarding-skip { color: #6b5a3e !important; }
-
-/* 온보딩 기능 소개 카드 3장 */
+body.dark .onboarding-btn { background: linear-gradient(135deg,#7a5600,#c8860a) !important; color: #fff !important; }
+body.dark .onboarding-skip { color: #5a4a3e !important; }
 body.dark .onboarding-card [style*="background:#fffbf0"],
 body.dark .onboarding-card [style*="background:#f0f9ff"],
-body.dark .onboarding-card [style*="background:#fdf4ff"] {
-  background: #1e1a15 !important;
-  border-color: #5a4a10 !important;
-  color: #f0ead8 !important;
-}
-body.dark .onboarding-card [style*="font-weight:800;color:#1a1a1a"] {
-  color: #f0ead8 !important;
-}
-body.dark .onboarding-card [style*="color:#6b7280"] {
-  color: #a89880 !important;
-}
-
-/* 성장 기록 chart-wrap 배경 */
-body.dark [class*="chart-wrap"] {
-  background: #2a2520 !important;
-  border-color: #3d3628 !important;
-}
-body.dark .chart-wrap {
-  background: #2a2520 !important;
-  border-color: #3d3628 !important;
-}
-
-/* 성장기록 입력 영역 강제 */
+body.dark .onboarding-card [style*="background:#fdf4ff"] { background: #1e1a15 !important; border-color: #5a4a10 !important; color: #f0ead8 !important; }
+body.dark .onboarding-card [style*="font-weight:800;color:#1a1a1a"] { color: #f0ead8 !important; }
+body.dark .onboarding-card [style*="color:#6b7280"] { color: #a89880 !important; }
+body.dark [class*="chart-wrap"] { background: #2a2520 !important; border-color: #3d3628 !important; }
 body.dark .feature-page .chart-wrap,
 body.dark .feature-page [class="chart-wrap"],
-body.dark .feature-page [class="chart-wrap u-p1416"] {
-  background: #2a2520 !important;
-  border-color: #3d3628 !important;
-}
-
-/* 수유/수면 위젯카드 */
+body.dark .feature-page [class="chart-wrap u-p1416"] { background: #2a2520 !important; border-color: #3d3628 !important; }
 body.dark .qb-card { background: #2a2520 !important; border-color: #3d3628 !important; }
 body.dark .qb-label { color: #f0ead8 !important; }
 body.dark .qb-time { color: #a89880 !important; }
-
-/* 헤더 버튼들 */
 body.dark .hdr-btn { background: #2a2520 !important; border-color: #3d3628 !important; color: #f0ead8 !important; }
-body.dark .hdr-btn.invite { background: #3d2010 !important; border-color: #c8860a !important; color: #f0d060 !important; }
 body.dark #hdr-add-baby-btn { background: #2a2010 !important; border-color: #5a4a10 !important; color: #c8a870 !important; }
-
-/* ── 온보딩 화면 ── */
-#onboarding-overlay {
-  /* screen 시스템 사용: .screen { display:none } → .screen.active { display:flex } */
-}
-#onboarding-overlay.screen {
-  background: #fff8e8;
-  overflow: hidden;
-}
+#onboarding-overlay.screen { background: #fff8e8; overflow: hidden; --ob-card-bg: #fffbf0; --ob-txt: #7a5600; --ob-sub: #9a8060; }
 body.dark 
-#onboarding-overlay.screen.active {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-#onboarding-overlay .onboarding-card {
-  background: #ffffff;
-  border-radius: 24px;
-  max-height: 88vh;
-  width: 100%;
-  max-width: 440px;
-  overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
-}
+#onboarding-overlay.screen.active { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+#onboarding-overlay .onboarding-card { background: #ffffff; border-radius: 24px; max-height: 88vh; width: 100%; max-width: 440px; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.12); }
 body.dark 
 
-/* ── 성장기록 카드 ── */
-.growth-input-card {
-  background: linear-gradient(135deg,#fffbf0,#fff7d6);
-  border: 1.5px solid #f0d060;
-  border-radius: 18px;
-  padding: 16px;
-  margin-bottom: 16px;
-}
-.growth-card-title {
-  font-size: 13px;
-  font-weight: 800;
-  color: #7a5600;
-  margin-bottom: 12px;
-}
-.growth-field-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: #7a5600;
-  margin-bottom: 4px;
-}
-.growth-input-field {
-  width: 100%;
-  box-sizing: border-box;
-  border-radius: 10px;
-  border: 1.5px solid #f0d060;
-  padding: 9px 12px;
-  font-size: 14px;
-  background: #fff;
-  color: #1a1a1a;
-}
-/* 다크모드 */
-body.dark .growth-input-card {
-  background: #2a2520;
-  border-color: #5a4a10;
-}
-body.dark .growth-card-title {
-  color: #c8a870;
-}
-body.dark .growth-field-label {
-  color: #a89880;
-}
-body.dark .growth-input-field {
-  background: #1a1612;
-  color: #f0ead8;
-  border-color: #5a4a10;
-}
+.growth-input-card { background: linear-gradient(135deg,#fffbf0,#fff7d6); border: 1.5px solid #f0d060; border-radius: 18px; padding: 16px; margin-bottom: 16px; }
+.growth-card-title { font-size: 13px; font-weight: 800; color: #7a5600; margin-bottom: 12px; }
+.growth-field-label { font-size: 11px; font-weight: 700; color: #7a5600; margin-bottom: 4px; }
+.growth-input-field { width: 100%; box-sizing: border-box; border-radius: 10px; border: 1.5px solid #f0d060; padding: 9px 12px; font-size: 14px; background: #fff; color: #1a1a1a; }
+body.dark .growth-input-card { background: #2a2520; border-color: #5a4a10; }
+body.dark .growth-card-title { color: #c8a870; }
+body.dark .growth-field-label { color: #a89880; }
+body.dark .growth-input-field { background: #1a1612; color: #f0ead8; border-color: #5a4a10; }
 body.dark #growth-date,
 body.dark #growth-weight,
 body.dark #growth-height,
-body.dark #growth-head {
-  background: #1a1612;
-  color: #f0ead8;
-  border-color: #5a4a10;
-}
-/* 성장기록 전체 배경 */
+body.dark #growth-head { background: #1a1612; color: #f0ead8; border-color: #5a4a10; }
 body.dark .swipe-page .feature-page { background: #1a1612 !important; }
-body.dark .feature-page-title { color: #f0ead8 !important; }
-body.dark .feature-page-sub { color: #a89880 !important; }
-
-/* ── ob-1 (아기 소개) 다크모드 ── */
 body.dark #ob-1 .onboarding-title,
 body.dark #ob-1 .onboarding-icon { color: #f0ead8; }
 body.dark #ob-1 .onboarding-desc { color: #a89880; }
-
-/* 라벨 - 인라인 color:#7a5600을 다크에서 override */
 body.dark #ob-1 [style*="color:#7a5600"] { color: #c8a870 !important; }
 body.dark #ob-1 [style*="color: #7a5600"] { color: #c8a870 !important; }
-
-/* ob-name, ob-birth 입력 필드 */
 body.dark #ob-name,
-body.dark #ob-birth {
-  background: #1a1612 !important;
-  color: #f0ead8 !important;
-  border-color: #5a4a10 !important;
-}
+body.dark #ob-birth { background: #1a1612 !important; color: #f0ead8 !important; border-color: #5a4a10 !important; }
 body.dark #ob-name::placeholder { color: #6b5a3e !important; }
-
-/* 성별 버튼 기본 상태 (다크) */
 body.dark #ob-girl,
-body.dark #ob-boy {
-  background: #2a2520 !important;
-  border-color: #3d3628 !important;
-  color: #6b5a4e !important;
-}
-
-/* 힌트 텍스트 */
+body.dark #ob-boy { background: #2a2520 !important; border-color: #3d3628 !important; color: #6b5a4e !important; }
 body.dark #ob-1 [style*="color:#9ca3af"],
 body.dark #ob-1 [style*="color: #9ca3af"] { color: #6b5a3e !important; }
-
-/* 온보딩 카드 전체 배경 확실히 */
-body.dark .onboarding-card {
-  background: #2a2520 !important;
-  color: #f0ead8 !important;
-}
-body.dark .onboarding-title { color: #f0ead8 !important; }
-body.dark .onboarding-desc { color: #a89880 !important; }
-body.dark .onboarding-skip { color: #5a4a3e !important; }
-body.dark .onboarding-btn {
-  background: linear-gradient(135deg,#7a5600,#c8860a) !important;
-  color: #fff !important;
-}
-body.dark .onboarding-dot { background: #3d3628 !important; }
-body.dark .onboarding-dot.active { background: #c8860a !important; }
-
-/* onboarding-overlay 배경 */
-body.dark #onboarding-overlay.screen { background: #1a1612 !important; }
-
-/* ── 온보딩 CSS 변수 ── */
-#onboarding-overlay.screen {
-  --ob-card-bg: #fffbf0;
-  --ob-txt: #7a5600;
-  --ob-sub: #9a8060;
-}
-body.dark #onboarding-overlay.screen {
-  --ob-card-bg: #1e1a15;
-  --ob-txt: #c8a870;
-  --ob-sub: #8a7860;
-}
-
-/* ── 육아일기 다크모드 ── */
-body.dark .diary-entry {
-  background: #2a2520 !important;
-  border-color: #3d3628 !important;
-}
-body.dark .diary-entry-body {
-  background: #2a2520 !important;
-}
-body.dark .diary-entry-text {
-  color: #f0ead8 !important;
-}
+body.dark #onboarding-overlay.screen { background: #1a1612 !important; --ob-card-bg: #1e1a15; --ob-txt: #c8a870; --ob-sub: #8a7860; }
+body.dark .diary-entry { background: #2a2520 !important; border-color: #3d3628 !important; }
+body.dark .diary-entry-body { background: #2a2520 !important; }
+body.dark .diary-entry-text { color: #f0ead8 !important; }
 body.dark .diary-entry-date,
-body.dark .diary-entry-meta {
-  color: #a89880 !important;
+body.dark .diary-entry-meta { color: #a89880 !important; }
+body.dark .diary-day-badge { background: #3d3020 !important; color: #c8a870 !important; }
+body.dark .diary-edit-btn { background: #2a2520 !important; border-color: #3d3628 !important; color: #c8a870 !important; }
+body.dark .diary-delete-btn { background: #2a1515 !important; border-color: #5a2020 !important; color: #f87171 !important; }
+
+/* ═══ @media / @keyframes ═══ */
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%,60% { transform: translateX(-8px); }
+  40%,80% { transform: translateX(8px); }
 }
-body.dark .diary-day-badge {
-  background: #3d3020 !important;
-  color: #c8a870 !important;
+@keyframes micPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+@keyframes btnPulse { 0%,100%{box-shadow:0 6px 24px rgba(220,38,38,0.35),0 0 0 0 rgba(220,38,38,0.2)} 50%{box-shadow:0 6px 24px rgba(220,38,38,0.35),0 0 0 16px rgba(220,38,38,0)} }
+@keyframes heartbeat {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
 }
-body.dark .diary-edit-btn {
-  background: #2a2520 !important;
-  border-color: #3d3628 !important;
-  color: #c8a870 !important;
+@keyframes bounce {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-6px); }
 }
-body.dark .diary-delete-btn {
-  background: #2a1515 !important;
-  border-color: #5a2020 !important;
-  color: #f87171 !important;
-}
-</style>
+@keyframes splashPop { from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
+@keyframes splashFadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }</style>
   <!-- 귀여운 한국어 폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2143,7 +1119,6 @@ body.dark .diary-delete-btn {
     </div>
   </div>
 </div>
-
 
 <!-- ═══════════ 스플래시 화면 ═══════════ -->
 <div id="screen-splash" aria-hidden="true">
@@ -2974,7 +1949,6 @@ body.dark .diary-delete-btn {
 <!-- ── 모달: 아빠 기록 ── -->
 <!-- ── 모달: 수유 타이머 (시작 시) ── -->
 
-
 <div class="modal-bg" id="modal-dad-record" role="dialog" aria-modal="true" aria-label="아빠 기록">
   <div class="modal u-modal-scroll">
     <div class="modal-handle"></div>
@@ -3367,7 +2341,6 @@ body.dark .diary-delete-btn {
   </div>
 </div>
 
-
 <!-- ═══════════ 유축 모달 ═══════════ -->
 <div class="modal-bg" id="modal-pump" role="dialog" aria-modal="true" aria-label="유축 기록">
   <div class="modal u-modal-scroll">
@@ -3424,7 +2397,6 @@ body.dark .diary-delete-btn {
     </div>
   </div>
 </div>
-
 
 <!-- ═══════════ 프로필 수정 모달 ═══════════ -->
 <div class="modal-bg" id="modal-profile-edit" role="dialog" aria-modal="true" aria-label="프로필 수정">
@@ -3537,7 +2509,6 @@ body.dark .diary-delete-btn {
       <input type="number" id="fe-pump-ml" placeholder="예: 80" min="0" max="500"
         style="width:100%;box-sizing:border-box;">
     </div>
-
 
     <span class="field-label">수유 시간</span>
     <div id="fe-side-wrap" style="display:flex;gap:10px;margin-bottom:12px;">
@@ -3693,7 +2664,6 @@ if ('serviceWorker' in navigator) {
 // ── 다중 아기 프로필 ──
 let babies = [];        // [{id, name, birthDate, gender, avatar}]
 let activeBabyId = '';  // 현재 선택된 아기 ID
-
 
 // ── 프로필 존재 여부 (전역) ──
 function hasProfileNow() {
@@ -4843,7 +3813,6 @@ function removePumpSession(i) {
   }
 }
 
-
 function savePump() {
   if (!pumpSessions.length) { showToast('유축 기록을 최소 하나 추가해주세요'); return; }
   const time = document.getElementById('pump-time').value || nowLocal();
@@ -4937,7 +3906,6 @@ function saveFeed() {
   } catch(e) { console.warn('saveFeed:', e); }
   updateQuickBtns(); renderTimeline(); updateStatus();
 }
-
 
 function saveSleep() {
   const mode = selOpts['sleep-t'];
@@ -5231,7 +4199,6 @@ function renderPatternClock() {
     }
   }
 
-
   // 중앙 텍스트 - 선택된 날짜 기준 D+일자 계산
   let displayDays = null;
   try {
@@ -5302,7 +4269,6 @@ function renderPatternInsight(dayRecs, sel) {
     el.textContent = insights.join('  ·  ');
   }
 }
-
 
 let _tlFilter = 'today';
 function filterTimeline(mode) {
@@ -5378,7 +4344,6 @@ function mrSetCat(cat) {
     }
   }
 }
-
 
 function mrFeSel(type) {
   _mrFeSel = type;
@@ -5543,7 +4508,6 @@ function saveManualRecord() {
   addRecord(rec);
   try { updateTodayWidget(); } catch(e) {}
 }
-
 
 function renderTimeline() {
   const el = document.getElementById('timeline');
@@ -6244,7 +5208,6 @@ function renderDadTabChecklist() {
   updateDadProgress();
 }
 
-
 function toggleDadTabCheck(id) {
   const checks = JSON.parse(localStorage.getItem(getBabyKey('dad_checks')) || '{}');
   checks[id] = !checks[id];
@@ -6276,26 +5239,12 @@ function updateDadProgress() {
 // ── 정책 체크 ──
 const POLICY_KEYS = ['p-bumo','p-first','p-child','p-parental','p-maternity','p-care','p-sanmo'];
 
-
-
-
 // ── 신생아 케어 가이드 데이터 ──
 let guideFromScreen = 'role';
 const GUIDE_CATEGORIES = ['전체','수유·트림','기저귀','목욕·청결','안기·재우기','건강 체크','응급 상황','발달·놀이'];
 
-
 let guideCurrentCat = '전체';
 let guideOpenId = null;
-
-
-
-
-
-
-
-
-
-
 
 // 카테고리별 배경 색상
 const GUIDE_CARD_COLORS = {
@@ -6307,9 +5256,6 @@ const GUIDE_CARD_COLORS = {
   '응급 상황': { bg: 'linear-gradient(135deg,#fff1f2,#fecaca)', numBg: '#dc2626' },
   '발달·놀이': { bg: 'linear-gradient(135deg,#fffbeb,#fef9c3)', numBg: '#f59e0b' },
 };
-
-
-
 
 const DAD_EVENTS = [
   { id: 'ev-flower', title: '꽃다발 깜짝 선물', desc: '퇴근길에 작은 꽃다발 하나만으로도 충분해요\n"수고했어" 한마디와 함께 전달하면 완벽 🌸', tag: 'event' },
@@ -6872,7 +5818,7 @@ function addGrowthRecord() {
     head:   isNaN(head)   ? null : head,
   });
   growthRecords.sort((a,b) => b.date.localeCompare(a.date));
-  localStorage.setItem('growth_records', JSON.stringify(growthRecords));
+  localStorage.setItem(getBabyKey('growth_records'), JSON.stringify(growthRecords));
   document.getElementById('growth-weight').value = '';
   document.getElementById('growth-height').value = '';
   if (headEl) headEl.value = '';
@@ -6880,7 +5826,6 @@ function addGrowthRecord() {
   renderGrowthChart();
   showToast('✅ 성장 기록 추가됐어요!');
 }
-
 
 function renderGrowthChart() {
   const canvas = document.getElementById('growth-chart');
@@ -7062,7 +6007,6 @@ function renderGrowthTable() {
     '<th style="padding:10px 4px;"></th></tr>';
   table.innerHTML = header + (rows || '<tr><td colspan="4" style="text-align:center;padding:20px;color:#9ca3af;font-size:13px;">아직 기록이 없어요</td></tr>');
 }
-
 
 function deleteGrowthRecord(i) {
   growthRecords.splice(i, 1);
@@ -7493,6 +6437,7 @@ function toggleDarkMode() {
   // 다크모드 전환 시 JS로 렌더된 페이지 재렌더
   try { renderTimeline(); } catch(e) {}
   try { updateQuickBtns(); } catch(e) {}
+  try { renderSettingBabyList(); } catch(e) {}
   try { renderMomCarePage(); } catch(e) {}
   try { renderMilestoneList(); } catch(e) {}
   try { renderPatternClock(); } catch(e) {}
@@ -8400,7 +7345,6 @@ let notifPermission = false;
 let sleepNotifTimer = null;
 let feedNotifTimer = null;
 
-
 function dismissNotifBanner() {
   const el = document.getElementById('notif-banner');
   if (el) el.style.display = 'none';
@@ -8555,7 +7499,6 @@ function updateNotifBtnUI() {
     btn.style.borderColor = '';
   }
 }
-
 
 // ── 🟢 개선2: 온보딩 ──
 let obStep = 0;
@@ -8998,7 +7941,6 @@ function showToast(msg) {
   setTimeout(() => el.remove(), 3000);
 }
 
-
 // ── enterApp 통합 (모든 기능 초기화) ──
 // loadData: localStorage 우선 (동기), IndexedDB는 백그라운드에서 보완
 function loadData() {
@@ -9439,7 +8381,6 @@ function pumpSideReset() {
 // 기존 pumpTimerToggle은 호환성 유지용으로 남김
 function pumpTimerToggle() { pumpSideToggle(_pumpSActive==='right'?'right':'left'); }
 
-
 function _pumpTimerTick() {
   const elapsed = _pumpTimerMs + (_pumpTimerStart ? Date.now() - _pumpTimerStart : 0);
   const totalSec = Math.floor(elapsed / 1000);
@@ -9449,7 +8390,6 @@ function _pumpTimerTick() {
   const el = document.getElementById('pump-timer-display');
   if (el) el.textContent = String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0')+':'+String(cs).padStart(2,'0');
 }
-
 
 function pumpTimerReset() {
   clearInterval(_pumpTimerInterval);
@@ -9613,7 +8553,6 @@ function openFeedEndModal() {
   }
 }
 
-
 function feSel(t) {
   _feType = t;
   ['breast','bottle','both','pump'].forEach(function(v){
@@ -9660,7 +8599,6 @@ function feSel(t) {
 let _fmtL=0, _fmtR=0, _fmtLStart=null, _fmtRStart=null;
 let _fmtInterval=null, _fmtActive=null;
 
-
 function feedTypeChange(type) {
   const minWrap    = document.getElementById('feed-min-wrap');
   const bottleWrap = document.getElementById('feed-bottle-wrap');
@@ -9679,7 +8617,6 @@ function feedTypeChange(type) {
   if(mlEl && type!=='bottle' && type!=='both') mlEl.value='';
   if(pumpMlEl && type!=='pump') pumpMlEl.value='';
 }
-
 
 function fmtToggle(side) {
   const isL=side==='left';
@@ -9981,6 +8918,20 @@ function saveFeedEnd() {
     feedingStart=null;
     localStorage.setItem(getBabyKey('baby_feeding'),'');
   }
+
+  // 이유식 병행 기록 저장 (D+120~449)
+  try {
+    const mealName = document.getElementById('fe-meal-name')?.value?.trim();
+    const mealAmt  = document.getElementById('fe-meal-amount')?.value;
+    if (mealName || mealAmt) {
+      let mealSub = mealName || '이유식';
+      if (mealAmt) mealSub += ' · ' + mealAmt + 'ml';
+      addRecord({ type:'meal', cat:'meal', icon:'🥣', title:'이유식',
+        sub: mealSub, time: nowLocal(),
+        foodName: mealName||undefined, amount: mealAmt||undefined });
+    }
+  } catch(e) {}
+
   updateQuickBtns(); renderTimeline(); updateStatus(); setVoiceBtnState(false);
 }
 
@@ -10312,9 +9263,10 @@ function _updateAgeButtons() {
   }
   if (!days) return;
 
-  // D+120부터 이유식, D+365부터 간식 전환
-  const showMeal  = days >= 120;
-  const showSnack = days >= 365;
+  // D+120~449: 수유+이유식 병행, D+450~: 이유식/간식으로 완전 전환
+  const showMeal     = days >= 120;   // 이유식 병행 시작
+  const fullMealMode = days >= 450;   // 수유 버튼 → 이유식 완전 전환
+  const showSnack    = days >= 450;   // 유축 버튼 → 간식 전환
 
   const feedIcon = document.getElementById('qi-feed');
   const feedLabel= document.getElementById('ql-feed');
@@ -10323,27 +9275,34 @@ function _updateAgeButtons() {
 
   if (!feedBtn || !pumpBtn) return;
 
-  // 수유 → 이유식 전환 (D+120)
-  if (showMeal) {
+  // 수유 버튼 전환
+  if (fullMealMode) {
+    // D+450~: 수유 → 이유식 완전 전환
     feedBtn.onclick = () => quickStartAction('meal');
     feedBtn.setAttribute('data-mode','meal');
-    if (feedIcon)  feedIcon.textContent  = '🥣';
+    if (feedIcon) feedIcon.textContent = '🥣';
     if (feedLabel && !feedingStart) feedLabel.textContent = '이유식 기록';
-    // 이유식 중 상태표시
     const qtFeed=document.getElementById('qt-feed');
     const meal=records.find(r=>r.cat==='meal');
     if (qtFeed && !feedingStart) qtFeed.textContent = meal ? timeDiff(meal.time) : '-';
+  } else if (showMeal) {
+    // D+120~449: 수유 버튼 유지 (수유 모달에 이유식 섹션 추가로 처리)
+    feedBtn.onclick = () => quickStartAction('feed');
+    feedBtn.setAttribute('data-mode','feed');
+    if (feedIcon) feedIcon.textContent = '🍼';
+    if (feedLabel && !feedingStart) feedLabel.textContent = '수유 시작';
   } else {
     feedBtn.onclick = () => quickStartAction('feed');
     feedBtn.setAttribute('data-mode','feed');
     if (feedIcon) feedIcon.textContent = '🍼';
   }
 
-  // 유축 → 간식 전환 (D+365)
+  // 유축 버튼 전환
   if (showSnack) {
+    // D+450~: 유축 → 간식 완전 전환
     pumpBtn.onclick = () => quickStartAction('snack');
     pumpBtn.setAttribute('data-mode','snack');
-    if (pumpIcon)  pumpIcon.textContent  = '🍪';
+    if (pumpIcon) pumpIcon.textContent = '🍪';
     if (pumpLabel && !pumpingStart) pumpLabel.textContent = '간식 기록';
     const qtPump=document.getElementById('qt-pump');
     const snack=records.find(r=>r.cat==='snack');
@@ -10360,19 +9319,20 @@ function processVoiceCommand(text) {
   const t = text.toLowerCase().replace(/\s/g,'');
   let matched = false;
 
-  // ── 수유 ──
-  if (t.includes('수유시작') || (t.includes('수유') && (t.includes('시작')||t.includes('했어')||t.includes('먹여')||t.includes('먹이')))) {
-    startSession('feed');
-    matched = true;
-  } else if (t.includes('수유종료')||t.includes('수유완료')||t.includes('수유끝')||(t.includes('수유')&&(t.includes('끝')||t.includes('종료')||t.includes('완료')||t.includes('그만')))) {
-    // 페이지2(메인)로 이동 후 모달 열기
+  // ── 수유/이유식 (월령 분기) ──
+  const _voiceDays = getBabyAgeDays() || 0;
+  const _fullMeal  = _voiceDays >= 450;
+  if (!_fullMeal && (t.includes('수유시작') || (t.includes('수유') && (t.includes('시작')||t.includes('했어')||t.includes('먹여')||t.includes('먹이'))))) {
+    startSession('feed'); matched = true;
+  } else if (!_fullMeal && (t.includes('수유종료')||t.includes('수유완료')||t.includes('수유끝')||(t.includes('수유')&&(t.includes('끝')||t.includes('종료')||t.includes('완료')||t.includes('그만'))))) {
     if (typeof goToPage === 'function') goToPage(2);
-    // 페이지 전환 애니메이션 완료 후 모달 열기 (300ms)
     setTimeout(function() { openFeedEndModal(); }, 300);
     matched = true;
-  } else if (t.includes('수유')||t.includes('밥먹')||t.includes('분유')||t.includes('젖먹')) {
+  } else if (!_fullMeal && (t.includes('수유')||t.includes('밥먹')||t.includes('분유')||t.includes('젖먹'))) {
     if (feedingStart) { endSession('feed'); }
     matched = true;
+  } else if (_fullMeal && (t.includes('수유')||t.includes('분유')||t.includes('젖먹'))) {
+    speak('지금은 이유식 시기예요. 이유식으로 기록할까요?'); matched = true;
   }
   // ── 수면 ──
   else if (t.includes('수면시작')||t.includes('잠시작')||t.includes('재웠어')||t.includes('잠재워')||t.includes('아기재워')||t.includes('잠들었')||(t.includes('자기')&&t.includes('시작'))) {
@@ -10386,15 +9346,16 @@ function processVoiceCommand(text) {
     if (sleepingStart) { endSession('sleep'); }
     matched = true;
   }
-  // ── 유축 ──
-  else if (t.includes('유축시작')||(t.includes('유축')&&t.includes('시작'))) {
-    openModal('pump');
-    matched = true;
-  } else if (t.includes('유축종료')||t.includes('유축완료')||t.includes('유축끝')||(t.includes('유축')&&t.includes('끝'))) {
+  // ── 유축 (D+450 이후 차단) ──
+  else if (!_fullMeal && (t.includes('유축시작')||(t.includes('유축')&&t.includes('시작')))) {
+    openModal('pump'); matched = true;
+  } else if (!_fullMeal && (t.includes('유축종료')||t.includes('유축완료')||t.includes('유축끝')||(t.includes('유축')&&t.includes('끝')))) {
     endSession('pump'); matched = true;
-  } else if (t.includes('유축')) {
+  } else if (!_fullMeal && t.includes('유축')) {
     if (pumpingStart) { endSession('pump'); }
     matched = true;
+  } else if (_fullMeal && t.includes('유축')) {
+    speak('지금은 간식 시기예요. 간식으로 기록할까요?'); matched = true;
   }
   // ── 이유식 (D+120~) ──
   else if (t.includes('이유식')||(t.includes('미음')||t.includes('죽먹')||t.includes('죽줬'))) {
@@ -10410,11 +9371,14 @@ function processVoiceCommand(text) {
   // ── 간식 (D+365~) ──
   else if (t.includes('간식')||(t.includes('과자먹')||t.includes('과일먹'))) {
     const days = getBabyAgeDays() || 0;
-    if (days >= 365) {
+    if (days >= 450) {
+      openSnackModal();
+      speak('간식 기록 화면을 열었어요');
+    } else if (days >= 120) {
       openSnackModal();
       speak('간식 기록 화면을 열었어요');
     } else {
-      speak('간식 기록은 D+365 이후부터 사용할 수 있어요');
+      speak('간식 기록은 D+120 이후부터 사용할 수 있어요');
     }
     matched = true;
   }
@@ -10537,7 +9501,6 @@ function updateTodayWidget() {
   if(el('widget-pump-last')) el('widget-pump-last').textContent=pumpRecs[0]?fmt(pumpRecs[0].time):'기록 없음';
 }
 
-
 function updateStatus() {
   const feed = records.find(r => r.cat === 'feed' && (r.title === '수유 완료' || r.title === '수유'));
   const pump = records.find(r => r.cat === 'pump' && r.title === '유축 완료');
@@ -10572,7 +9535,6 @@ const DAD_RECORD_LABELS = {
 };
 
 // 아빠 기저귀 — 소변/대변 선택 후 기록
-
 
 function _openDadModal(type) {
   const el = id => document.getElementById(id);
@@ -10661,7 +9623,6 @@ function dadRecord(type) {
   const typeMap = { sleep:'sleep', bath:'bath' };
   _openDadModal(typeMap[type] || type);
 }
-
 
 function _saveDadRecord(rec) {
 
@@ -11166,7 +10127,6 @@ function initModalDragClose() {
   });
 }
 
-
 document.addEventListener('DOMContentLoaded', () => {
   try { initModalDragClose(); } catch(e) {}
   try { appStart(); } catch(e) {
@@ -11435,7 +10395,6 @@ async function shareTextBirthCard() {
   }
 }
 
-
 function showGoodbyeScreen() {
   const el = document.createElement('div');
   el.id = 'goodbye-screen';
@@ -11581,7 +10540,6 @@ function _showResetChoiceCard() {
   };
 }
 
-
 // ── 아기선택 모달 드래그 닫기 ──
 function initBabyPickerDrag() {
   const handle = document.getElementById('baby-picker-handle');
@@ -11638,7 +10596,6 @@ function initBabyPickerDrag() {
     }
   }, { passive: true });
 }
-
 
 // ── 온보딩 스와이프 ──
 (function(){
@@ -11697,7 +10654,6 @@ function initBabyPickerDrag() {
   });
 })();
 
-
 // ── 월령 전환 알림 (1회) ──
 function _checkAgeMilestoneToast() {
   const days = getBabyAgeDays();
@@ -11713,7 +10669,6 @@ function _checkAgeMilestoneToast() {
     setTimeout(() => showToast('🍪 D+365! 간식 버튼으로 바뀌었어요'), 1500);
   }
 }
-
 
 // 아기 프로필 삭제
 function deleteBabyProfile(id) {
@@ -11750,7 +10705,6 @@ function deleteBabyProfile(id) {
   showToast('🗑️ ' + (baby.name || '아기') + ' 기록이 삭제됐어요');
   renderSettingBabyList();
 }
-
 
 // ── 이유식/간식 전용 모달 ──
 function openMealModal() {
