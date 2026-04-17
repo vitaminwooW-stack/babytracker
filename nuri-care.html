@@ -3101,14 +3101,14 @@ body.dark .diary-delete-btn {
     <div class="modal-handle"></div>
     <h2>✏️ 기록 직접 입력</h2>
     <span class="field-label">카테고리</span>
-    <div class="opt-row" style="gap:6px;margin-bottom:16px;flex-wrap:wrap;">
-      <button class="opt-btn sel" id="mr-cat-feed"   onclick="mrSetCat('feed')"   class="u-opt-sm2 opt-btn">수유</button>
-      <button class="opt-btn"     id="mr-cat-sleep"  onclick="mrSetCat('sleep')"  class="u-opt-sm2 opt-btn">수면</button>
-      <button class="opt-btn"     id="mr-cat-diaper" onclick="mrSetCat('diaper')" class="u-opt-sm2 opt-btn">기저귀</button>
-      <button class="opt-btn"     id="mr-cat-pump"   onclick="mrSetCat('pump')"   class="u-opt-sm2 opt-btn">유축</button>
-      <button class="opt-btn"     id="mr-cat-meal"   onclick="mrSetCat('meal')"   class="u-opt-sm2 opt-btn">이유식</button>
-      <button class="opt-btn"     id="mr-cat-snack"  onclick="mrSetCat('snack')"  class="u-opt-sm2 opt-btn">간식</button>
-      <button class="opt-btn"     id="mr-cat-etc"    onclick="mrSetCat('etc')"    class="u-opt-sm2 opt-btn">기타</button>
+    <div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;">
+      <button class="opt-btn sel" id="mr-cat-feed"   onclick="mrSetCat('feed')"   style="flex:1;min-width:52px;text-align:center;padding:8px 4px;line-height:1.3;"><div style="font-size:18px;">🍼</div><div style="font-size:11px;font-weight:700;">수유</div></button>
+      <button class="opt-btn"     id="mr-cat-sleep"  onclick="mrSetCat('sleep')"  style="flex:1;min-width:52px;text-align:center;padding:8px 4px;line-height:1.3;"><div style="font-size:18px;">😴</div><div style="font-size:11px;font-weight:700;">수면</div></button>
+      <button class="opt-btn"     id="mr-cat-diaper" onclick="mrSetCat('diaper')" style="flex:1;min-width:52px;text-align:center;padding:8px 4px;line-height:1.3;"><div style="font-size:18px;">🌿</div><div style="font-size:11px;font-weight:700;">기저귀</div></button>
+      <button class="opt-btn"     id="mr-cat-pump"   onclick="mrSetCat('pump')"   style="flex:1;min-width:52px;text-align:center;padding:8px 4px;line-height:1.3;"><div style="font-size:18px;">🤱</div><div style="font-size:11px;font-weight:700;">유축</div></button>
+      <button class="opt-btn"     id="mr-cat-meal"   onclick="mrSetCat('meal')"   style="flex:1;min-width:52px;text-align:center;padding:8px 4px;line-height:1.3;"><div style="font-size:18px;">🥣</div><div style="font-size:11px;font-weight:700;">이유식</div></button>
+      <button class="opt-btn"     id="mr-cat-snack"  onclick="mrSetCat('snack')"  style="flex:1;min-width:52px;text-align:center;padding:8px 4px;line-height:1.3;"><div style="font-size:18px;">🍪</div><div style="font-size:11px;font-weight:700;">간식</div></button>
+      <button class="opt-btn"     id="mr-cat-etc"    onclick="mrSetCat('etc')"    style="flex:1;min-width:52px;text-align:center;padding:8px 4px;line-height:1.3;"><div style="font-size:18px;">📝</div><div style="font-size:11px;font-weight:700;">기타</div></button>
     </div>
     <span class="field-label">시작 시각</span>
     <input type="datetime-local" id="mr-start-time" aria-label="시작 시각" class="u-mb12">
@@ -10238,13 +10238,23 @@ function updateQuickBtns() {
   // ── 수유 ──
   const qbFeed=document.getElementById('qb-feed'), qlFeed=document.getElementById('ql-feed'),
         qtFeed=document.getElementById('qt-feed');
+  const _days = getBabyAgeDays() || 0;
+  const _showMeal = _days >= 120;
+  const _showSnack = _days >= 365;
   if (feedingStart) {
     if (qlFeed) qlFeed.textContent='수유 종료 ✅';
     if (qtFeed) qtFeed.innerHTML=elapsedStr(feedingStart)+'<br>수유 중';
     if (qbFeed){qbFeed.style.background='linear-gradient(135deg,#fff7ed,#ffedd5)';qbFeed.style.outline='2px solid #fdba74';}
   } else {
-    if (qlFeed) qlFeed.textContent='수유 시작';
-    if (qtFeed) qtFeed.textContent=feed?timeDiff(feed.time):'-';
+    if (qlFeed) qlFeed.textContent= _showMeal ? '이유식 기록' : '수유 시작';
+    if (qtFeed) {
+      if (_showMeal) {
+        const meal=records.find(r=>r.cat==='meal');
+        qtFeed.textContent = meal ? timeDiff(meal.time) : '-';
+      } else {
+        qtFeed.textContent = feed ? timeDiff(feed.time) : '-';
+      }
+    }
     if (qbFeed){qbFeed.style.background='';qbFeed.style.outline='';}
   }
 
@@ -10269,8 +10279,15 @@ function updateQuickBtns() {
     if (qtPump) qtPump.innerHTML=elapsedStr(pumpingStart)+'<br>유축 중';
     if (qbPump){qbPump.style.background='linear-gradient(135deg,#fdf4ff,#f3e8ff)';qbPump.style.outline='2px solid #d8b4fe';}
   } else {
-    if (qlPump) qlPump.textContent='유축 시작';
-    if (qtPump) qtPump.textContent=pump?timeDiff(pump.time):'-';
+    if (qlPump) qlPump.textContent= _showSnack ? '간식 기록' : '유축 시작';
+    if (qtPump) {
+      if (_showSnack) {
+        const snack=records.find(r=>r.cat==='snack');
+        qtPump.textContent = snack ? timeDiff(snack.time) : '-';
+      } else {
+        qtPump.textContent = pump ? timeDiff(pump.time) : '-';
+      }
+    }
     if (qbPump){qbPump.style.background='';qbPump.style.outline='';}
   }
 
@@ -10377,6 +10394,28 @@ function processVoiceCommand(text) {
     endSession('pump'); matched = true;
   } else if (t.includes('유축')) {
     if (pumpingStart) { endSession('pump'); }
+    matched = true;
+  }
+  // ── 이유식 (D+120~) ──
+  else if (t.includes('이유식')||(t.includes('미음')||t.includes('죽먹')||t.includes('죽줬'))) {
+    const days = getBabyAgeDays() || 0;
+    if (days >= 120) {
+      openMealModal();
+      speak('이유식 기록 화면을 열었어요');
+    } else {
+      speak('이유식 기록은 D+120 이후부터 사용할 수 있어요');
+    }
+    matched = true;
+  }
+  // ── 간식 (D+365~) ──
+  else if (t.includes('간식')||(t.includes('과자먹')||t.includes('과일먹'))) {
+    const days = getBabyAgeDays() || 0;
+    if (days >= 365) {
+      openSnackModal();
+      speak('간식 기록 화면을 열었어요');
+    } else {
+      speak('간식 기록은 D+365 이후부터 사용할 수 있어요');
+    }
     matched = true;
   }
   // ── 기저귀 ──
