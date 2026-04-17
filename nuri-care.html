@@ -666,7 +666,8 @@ body.dark #ptab-week {
 
 /* 타임라인 아이템 */
 body.dark .tl-item { border-color: #3d3628; }
-body.dark .tl-content { background: #2a2520; border-color: #3d3628; }
+body.dark .tl-item, body.dark .tl-body, body.dark .tl-time-col { background: #2a2520; }
+body.dark .tl-content { border-color: #3d3628; }
 body.dark .tl-content-title { color: #f0ead8; }
 body.dark .tl-content-sub { color: #a89880; }
 body.dark .tl-time-ampm { color: #a89880; }
@@ -11156,7 +11157,10 @@ function renderSettingBabyList() {
         </div>
         <div style="font-size:11px;color:${isDark?'#a89880':'#9ca3af'};margin-top:2px;">${days!==null?'D+'+days:'생일 미등록'}</div>
       </div>
-      ${!isActive?`<button onclick="switchBaby('${b.id}')" style="padding:6px 12px;background:#7a5600;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">전환</button>`:''}
+      <div style="display:flex;gap:6px;align-items:center;">
+        ${!isActive?`<button onclick="switchBaby('${b.id}'); setTimeout(renderSettingBabyList,50);" style="padding:6px 12px;background:#7a5600;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">전환</button>`:''}
+        ${babies.length>1?`<button onclick="deleteBabyProfile('${b.id}')" style="padding:6px 10px;background:none;color:#ef4444;border:1.5px solid #ef4444;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">삭제</button>`:''}
+      </div>
     </div>`;
   }).join('');
 
