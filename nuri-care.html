@@ -3102,7 +3102,7 @@ body.dark .diary-delete-btn {
       <div style="font-size:12px;color:#7a5600;font-weight:700;margin-bottom:12px;" id="mr-pump-total-label">총합: 0 ml</div>
     </div>
     <!-- 기타 세부 -->
-    <div id="mr-
+    <!-- 기타 세부 -->
     <!-- 이유식 세부 -->
     <div id="mr-meal-detail" style="display:none;">
       <span class="field-label">음식명 <span class="u-hint">(선택)</span></span>
@@ -3137,7 +3137,7 @@ body.dark .diary-delete-btn {
       <input type="text" id="mr-snack-memo" placeholder="예: 좋아했어요" autocomplete="off"
         style="width:100%;box-sizing:border-box;margin-bottom:12px;border-radius:10px;border:1.5px solid #f0d060;padding:9px 12px;font-size:14px;">
     </div>
-etc-detail" style="display:none;">
+    <div id="mr-etc-detail" style="display:none;">
       <span class="field-label">제목</span>
       <input type="text" id="mr-etc-title" placeholder="예: 목욕, 외출, 예방접종..." class="u-mb12">
       <span class="field-label">메모 <span class="u-hint">(선택)</span></span>
@@ -3379,6 +3379,7 @@ etc-detail" style="display:none;">
   <div class="modal">
     <div class="modal-handle"></div>
     <button class="modal-close-x" aria-label="닫기" onclick="closeModal('profile-edit')">✕</button>
+  try { loadBabies(); } catch(e) {}  // birthDate 반영
     <h2>✏️ 프로필 수정</h2>
     <span class="field-label">이름 또는 태명 *</span>
     <input type="text" id="ep-name" placeholder="예: 하준이, 콩이">
@@ -5797,6 +5798,7 @@ function saveProfileEdit() {
     }
   } catch(e) {}
   closeModal('profile-edit');
+  try { loadBabies(); } catch(e) {}   // birthDate 전역 배열 재반영
   renderAppHeader();       // D+일수 재계산
   renderPhotoPage();
   renderMomCarePage();
