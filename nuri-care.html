@@ -2399,7 +2399,7 @@ body.dark .diary-delete-btn {
           <!-- 진행 중 세션 카드 (수면·수유·유축 시작 후 이 화면에서 종료 가능) -->
           <div id="coach-card-wrap" class="u-mb12"></div>
           <div class="quick-log-row">
-            <button class="quick-btn" onclick="quickStartAction('feed')" id="qb-feed">
+            <button class="quick-btn" id="qb-feed">
               <span class="quick-btn-icon" id="qi-feed">🍼</span>
               <span class="quick-btn-label" id="ql-feed">수유 시작</span>
               <span class="quick-btn-time" id="qt-feed">-</span>
@@ -2409,7 +2409,7 @@ body.dark .diary-delete-btn {
               <span class="quick-btn-label" id="ql-sleep">수면 시작</span>
               <span class="quick-btn-time" id="qt-sleep">-</span>
             </button>
-            <button class="quick-btn" onclick="quickStartAction('pump')" id="qb-pump">
+            <button class="quick-btn" id="qb-pump">
               <span class="quick-btn-icon" id="qi-pump">🤱</span>
               <span class="quick-btn-label" id="ql-pump">유축 시작</span>
               <span class="quick-btn-time" id="qt-pump">-</span>
@@ -5307,12 +5307,13 @@ function mrSetCat(cat) {
     if (btn) btn.classList.toggle('sel', c===cat);
   });
   const el = id => document.getElementById(id);
-  el('mr-feed-detail').style.display   = cat==='feed'   ? '' : 'none';
-  el('mr-diaper-detail').style.display = cat==='diaper' ? '' : 'none';
-  el('mr-pump-detail').style.display   = cat==='pump'   ? '' : 'none';
-  el('mr-meal-detail').style.display   = cat==='meal'   ? '' : 'none';
-  el('mr-snack-detail').style.display  = cat==='snack'  ? '' : 'none';
-  el('mr-etc-detail').style.display    = cat==='etc'    ? '' : 'none';
+  const safe = (id, val) => { const e=el(id); if(e) e.style.display=val; };
+  safe('mr-feed-detail',   cat==='feed'   ? '' : 'none');
+  safe('mr-diaper-detail', cat==='diaper' ? '' : 'none');
+  safe('mr-pump-detail',   cat==='pump'   ? '' : 'none');
+  safe('mr-meal-detail',   cat==='meal'   ? '' : 'none');
+  safe('mr-snack-detail',  cat==='snack'  ? '' : 'none');
+  safe('mr-etc-detail',    cat==='etc'    ? '' : 'none');
   el('mr-end-wrap').style.display = cat === 'sleep' ? '' : 'none';
   if (cat === 'sleep') {
     const startEl = el('mr-start-time');
@@ -5785,10 +5786,22 @@ function saveProfileEdit() {
     center: document.getElementById('ep-center').value.trim()
   };
   localStorage.setItem(getBabyKey('baby_profile'), JSON.stringify(profile));
+  // babies 배열도 갱신 (birthDate 동기화)
+  try {
+    const ab = babies.find(b => b.id === activeBabyId);
+    if (ab) {
+      ab.birthDate = profile.birthDate;
+      ab.name = profile.name;
+      ab.gender = profile.gender;
+      localStorage.setItem('babies_list', JSON.stringify(babies));
+    }
+  } catch(e) {}
   closeModal('profile-edit');
-  renderAppHeader();
+  renderAppHeader();       // D+일수 재계산
   renderPhotoPage();
   renderMomCarePage();
+  try { renderSettingBabyList(); } catch(e) {}
+  try { _updateAgeButtons(); } catch(e) {}  // 버튼도 재계산
 }
 
 // ── 기록 수정 / 삭제 ──
@@ -10216,15 +10229,22 @@ function updateQuickBtns() {
 }
 
 function _updateAgeButtons() {
-  const days = getBabyAgeDays();
+  const days = getBabyAgeDays() || 0;
+  // days=0이어도 기본 onclick은 설정해야 함
+  const feedBtn = document.getElementById('qb-feed');
+  const pumpBtn = document.getElementById('qb-pump');
+  if (!feedBtn || !pumpBtn) return;
+  // 기본 onclick 항상 설정 (HTML onclick 속성 없으므로)
+  if (!feedBtn.getAttribute('data-mode')) {
+    feedBtn.onclick = () => quickStartAction('feed');
+    pumpBtn.onclick = () => quickStartAction('pump');
+  }
   if (!days) return;
 
   // D+120부터 이유식, D+365부터 간식 전환
   const showMeal  = days >= 120;
   const showSnack = days >= 365;
 
-  const feedBtn  = document.getElementById('qb-feed');
-  const pumpBtn  = document.getElementById('qb-pump');
   const feedIcon = document.getElementById('qi-feed');
   const feedLabel= document.getElementById('ql-feed');
   const pumpIcon = document.getElementById('qi-pump');
@@ -11596,6 +11616,43 @@ function _checkAgeMilestoneToast() {
     localStorage.setItem(key365, '1');
     setTimeout(() => showToast('🍪 D+365! 간식 버튼으로 바뀌었어요'), 1500);
   }
+}
+
+
+// 아기 프로필 삭제
+function deleteBabyProfile(id) {
+  const baby = babies.find(b => b.id === id);
+  if (!baby) return;
+  if (!confirm((baby.name || '이 아기') + '의 모든 기록을 삭제할까요?\n이 작업은 되돌릴 수 없어요.')) return;
+
+  // 해당 아기 데이터 삭제
+  const keysToRemove = [
+    'baby_profile', 'baby_records', 'baby_growth', 'baby_diary',
+    'baby_sleeping', 'baby_feeding', 'baby_pumping',
+    'baby_milestones', 'baby_checks', 'dad_checks', 'mom_checks'
+  ];
+  keysToRemove.forEach(k => {
+    localStorage.removeItem(k + '_' + id);
+  });
+
+  // babies 배열에서 제거
+  babies = babies.filter(b => b.id !== id);
+  localStorage.setItem('babies_list', JSON.stringify(babies));
+
+  // 현재 활성 아기였으면 첫 번째로 전환
+  if (activeBabyId === id) {
+    if (babies.length > 0) {
+      switchBaby(babies[0].id);
+    } else {
+      localStorage.removeItem('active_baby_id');
+      sessionStorage.removeItem('active_baby_id');
+      showScreen('profile');
+      return;
+    }
+  }
+
+  showToast('🗑️ ' + (baby.name || '아기') + ' 기록이 삭제됐어요');
+  renderSettingBabyList();
 }
 
 </script>
