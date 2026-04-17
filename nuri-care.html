@@ -3054,6 +3054,8 @@ body.dark .diary-delete-btn {
       <button class="opt-btn"     id="mr-cat-sleep"  onclick="mrSetCat('sleep')"  class="u-opt-sm2 opt-btn">😴 수면</button>
       <button class="opt-btn"     id="mr-cat-diaper" onclick="mrSetCat('diaper')" class="u-opt-sm2 opt-btn">🌿 기저귀</button>
       <button class="opt-btn"     id="mr-cat-pump"   onclick="mrSetCat('pump')"   class="u-opt-sm2 opt-btn">🤱 유축</button>
+      <button class="opt-btn"     id="mr-cat-meal"   onclick="mrSetCat('meal')"   class="u-opt-sm2 opt-btn">🥣 이유식</button>
+      <button class="opt-btn"     id="mr-cat-snack"  onclick="mrSetCat('snack')"  class="u-opt-sm2 opt-btn">🍪 간식</button>
       <button class="opt-btn"     id="mr-cat-etc"    onclick="mrSetCat('etc')"    class="u-opt-sm2 opt-btn">📝 기타</button>
     </div>
     <span class="field-label">시작 시각</span>
@@ -3100,7 +3102,42 @@ body.dark .diary-delete-btn {
       <div style="font-size:12px;color:#7a5600;font-weight:700;margin-bottom:12px;" id="mr-pump-total-label">총합: 0 ml</div>
     </div>
     <!-- 기타 세부 -->
-    <div id="mr-etc-detail" style="display:none;">
+    <div id="mr-
+    <!-- 이유식 세부 -->
+    <div id="mr-meal-detail" style="display:none;">
+      <span class="field-label">음식명 <span class="u-hint">(선택)</span></span>
+      <input type="text" id="mr-meal-name" placeholder="예: 쌀미음, 애호박죽" autocomplete="off"
+        style="width:100%;box-sizing:border-box;margin-bottom:10px;border-radius:10px;border:1.5px solid #f0d060;padding:9px 12px;font-size:14px;">
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <div style="flex:1;">
+          <span class="field-label">양 (ml 또는 g)</span>
+          <input type="number" id="mr-meal-amount" placeholder="예: 80" min="0" max="500" autocomplete="off"
+            style="width:100%;box-sizing:border-box;border-radius:10px;border:1.5px solid #f0d060;padding:9px 12px;font-size:14px;">
+        </div>
+        <div style="flex:1;">
+          <span class="field-label">단위</span>
+          <select id="mr-meal-unit" style="width:100%;box-sizing:border-box;border-radius:10px;border:1.5px solid #f0d060;padding:9px 12px;font-size:14px;">
+            <option value="ml">ml</option>
+            <option value="g">g</option>
+            <option value="스푼">스푼</option>
+          </select>
+        </div>
+      </div>
+      <span class="field-label">메모 <span class="u-hint">(선택)</span></span>
+      <input type="text" id="mr-meal-memo" placeholder="예: 잘 먹었어요" autocomplete="off"
+        style="width:100%;box-sizing:border-box;margin-bottom:12px;border-radius:10px;border:1.5px solid #f0d060;padding:9px 12px;font-size:14px;">
+    </div>
+
+    <!-- 간식 세부 -->
+    <div id="mr-snack-detail" style="display:none;">
+      <span class="field-label">음식명 <span class="u-hint">(선택)</span></span>
+      <input type="text" id="mr-snack-name" placeholder="예: 과자, 과일" autocomplete="off"
+        style="width:100%;box-sizing:border-box;margin-bottom:10px;border-radius:10px;border:1.5px solid #f0d060;padding:9px 12px;font-size:14px;">
+      <span class="field-label">메모 <span class="u-hint">(선택)</span></span>
+      <input type="text" id="mr-snack-memo" placeholder="예: 좋아했어요" autocomplete="off"
+        style="width:100%;box-sizing:border-box;margin-bottom:12px;border-radius:10px;border:1.5px solid #f0d060;padding:9px 12px;font-size:14px;">
+    </div>
+etc-detail" style="display:none;">
       <span class="field-label">제목</span>
       <input type="text" id="mr-etc-title" placeholder="예: 목욕, 외출, 예방접종..." class="u-mb12">
       <span class="field-label">메모 <span class="u-hint">(선택)</span></span>
@@ -5247,6 +5284,11 @@ function openManualRecord() {
   el('mr-pump-R').value = '';
   if (el('mr-etc-title')) el('mr-etc-title').value = '';
   if (el('mr-etc-memo')) el('mr-etc-memo').value = '';
+  if (el('mr-meal-name')) el('mr-meal-name').value = '';
+  if (el('mr-meal-amount')) el('mr-meal-amount').value = '';
+  if (el('mr-meal-memo')) el('mr-meal-memo').value = '';
+  if (el('mr-snack-name')) el('mr-snack-name').value = '';
+  if (el('mr-snack-memo')) el('mr-snack-memo').value = '';
   el('mr-pump-total-label').textContent = '총합: 0 ml';
   mrSetCat('feed');
   mrFeSel('breast');
@@ -5260,20 +5302,30 @@ function closeManualRecord() {
 
 function mrSetCat(cat) {
   _mrCat = cat;
-  ['feed','sleep','diaper','pump','etc'].forEach(c => {
+  ['feed','sleep','diaper','pump','meal','snack','etc'].forEach(c => {
     const btn = document.getElementById('mr-cat-'+c);
     if (btn) btn.classList.toggle('sel', c===cat);
   });
-  // 세부 섹션 표시/숨김
   const el = id => document.getElementById(id);
   el('mr-feed-detail').style.display   = cat==='feed'   ? '' : 'none';
   el('mr-diaper-detail').style.display = cat==='diaper' ? '' : 'none';
   el('mr-pump-detail').style.display   = cat==='pump'   ? '' : 'none';
+  el('mr-meal-detail').style.display   = cat==='meal'   ? '' : 'none';
+  el('mr-snack-detail').style.display  = cat==='snack'  ? '' : 'none';
   el('mr-etc-detail').style.display    = cat==='etc'    ? '' : 'none';
-  // 종료 시각: 수유/수면/유축만
-  // 종료 시각: 수면에만 표시
   el('mr-end-wrap').style.display = cat === 'sleep' ? '' : 'none';
+  if (cat === 'sleep') {
+    const startEl = el('mr-start-time');
+    const endEl   = el('mr-end-time');
+    if (startEl && startEl.value && (!endEl.value)) {
+      const d = new Date(startEl.value);
+      d.setHours(d.getHours() + 1);
+      const pad = n => String(n).padStart(2,'0');
+      endEl.value = d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes());
+    }
+  }
 }
+
 
 function mrFeSel(type) {
   _mrFeSel = type;
@@ -5395,6 +5447,33 @@ function saveManualRecord() {
       type:'pump', cat:'pump', icon:'🤱', title:'유축',
       sub, time: startVal,       // 유축도 시작시각 = 기록 시각
       Lml: L||undefined, Rml: R||undefined, total: total||undefined,
+      _manual: true
+    };
+
+  } else if (cat === 'meal') {
+    const name   = el('mr-meal-name')?.value?.trim() || '';
+    const amount = el('mr-meal-amount')?.value || '';
+    const unit   = el('mr-meal-unit')?.value || 'ml';
+    const memo   = el('mr-meal-memo')?.value?.trim() || '';
+    let sub = name || '이유식';
+    if (amount) sub += ' · ' + amount + unit;
+    if (memo)   sub += ' · ' + memo;
+    rec = {
+      type:'meal', cat:'meal', icon:'🥣', title:'이유식',
+      sub, time: startVal,
+      foodName: name||undefined, amount: amount||undefined, unit, memo: memo||undefined,
+      _manual: true
+    };
+
+  } else if (cat === 'snack') {
+    const name = el('mr-snack-name')?.value?.trim() || '';
+    const memo = el('mr-snack-memo')?.value?.trim() || '';
+    let sub = name || '간식';
+    if (memo) sub += ' · ' + memo;
+    rec = {
+      type:'snack', cat:'snack', icon:'🍪', title:'간식',
+      sub, time: startVal,
+      foodName: name||undefined, memo: memo||undefined,
       _manual: true
     };
 
@@ -10028,6 +10107,14 @@ function quickStartAction(type) {
     }
   } else if (type === 'diaper') {
     startSession('diaper');
+  } else if (type === 'meal') {
+    // 이유식: 직접입력 모달로 (이유식 카테고리 선택 상태로 열기)
+    openManualRecord();
+    setTimeout(() => mrSetCat('meal'), 50);
+  } else if (type === 'snack') {
+    // 간식: 직접입력 모달로 (간식 카테고리 선택 상태로 열기)
+    openManualRecord();
+    setTimeout(() => mrSetCat('snack'), 50);
   }
 }
 
@@ -10123,6 +10210,58 @@ function updateQuickBtns() {
   // ── 기저귀 ──
   const qtDiaper=document.getElementById('qt-diaper');
   if (qtDiaper) qtDiaper.textContent=diaper?timeDiff(diaper.time):'-';
+
+  // ── 월령별 버튼 자동전환 ──
+  _updateAgeButtons();
+}
+
+function _updateAgeButtons() {
+  const days = getBabyAgeDays();
+  if (!days) return;
+
+  // D+120부터 이유식, D+365부터 간식 전환
+  const showMeal  = days >= 120;
+  const showSnack = days >= 365;
+
+  const feedBtn  = document.getElementById('qb-feed');
+  const pumpBtn  = document.getElementById('qb-pump');
+  const feedIcon = document.getElementById('qi-feed');
+  const feedLabel= document.getElementById('ql-feed');
+  const pumpIcon = document.getElementById('qi-pump');
+  const pumpLabel= document.getElementById('ql-pump');
+
+  if (!feedBtn || !pumpBtn) return;
+
+  // 수유 → 이유식 전환 (D+120)
+  if (showMeal) {
+    feedBtn.onclick = () => quickStartAction('meal');
+    feedBtn.setAttribute('data-mode','meal');
+    if (feedIcon)  feedIcon.textContent  = '🥣';
+    if (feedLabel && !feedingStart) feedLabel.textContent = '이유식 기록';
+    // 이유식 중 상태표시
+    const qtFeed=document.getElementById('qt-feed');
+    const meal=records.find(r=>r.cat==='meal');
+    if (qtFeed && !feedingStart) qtFeed.textContent = meal ? timeDiff(meal.time) : '-';
+  } else {
+    feedBtn.onclick = () => quickStartAction('feed');
+    feedBtn.setAttribute('data-mode','feed');
+    if (feedIcon) feedIcon.textContent = '🍼';
+  }
+
+  // 유축 → 간식 전환 (D+365)
+  if (showSnack) {
+    pumpBtn.onclick = () => quickStartAction('snack');
+    pumpBtn.setAttribute('data-mode','snack');
+    if (pumpIcon)  pumpIcon.textContent  = '🍪';
+    if (pumpLabel && !pumpingStart) pumpLabel.textContent = '간식 기록';
+    const qtPump=document.getElementById('qt-pump');
+    const snack=records.find(r=>r.cat==='snack');
+    if (qtPump && !pumpingStart) qtPump.textContent = snack ? timeDiff(snack.time) : '-';
+  } else {
+    pumpBtn.onclick = () => quickStartAction('pump');
+    pumpBtn.setAttribute('data-mode','pump');
+    if (pumpIcon) pumpIcon.textContent = '🤱';
+  }
 }
 
 // ── 음성 명령 처리 업데이트 ──
@@ -11441,6 +11580,23 @@ function initBabyPickerDrag() {
     }
   });
 })();
+
+
+// ── 월령 전환 알림 (1회) ──
+function _checkAgeMilestoneToast() {
+  const days = getBabyAgeDays();
+  if (!days) return;
+  const key120 = 'notified_meal_start';
+  const key365 = 'notified_snack_start';
+  if (days >= 120 && !localStorage.getItem(key120)) {
+    localStorage.setItem(key120, '1');
+    setTimeout(() => showToast('🥣 D+120! 이유식 버튼으로 바뀌었어요'), 1500);
+  }
+  if (days >= 365 && !localStorage.getItem(key365)) {
+    localStorage.setItem(key365, '1');
+    setTimeout(() => showToast('🍪 D+365! 간식 버튼으로 바뀌었어요'), 1500);
+  }
+}
 
 </script>
 <!-- ── 아기 선택 팝업 ── -->
