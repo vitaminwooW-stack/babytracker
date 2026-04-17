@@ -11202,10 +11202,14 @@ function _showResetChoiceCard() {
     wrap.style.opacity='0'; wrap.style.transition='opacity 0.3s';
     setTimeout(() => {
       wrap.remove();
-      // 온보딩으로 이동 (새 아기 등록)
       localStorage.removeItem('onboarding_done');
-      showOnboarding();
-      showScreen('app');
+      // ob-1(프로필 입력)으로 바로 이동
+      showOnboarding();       // screen active + obStep=0
+      obStep = 1;             // ob-1로 강제 이동
+      document.querySelectorAll('.onboarding-step').forEach((s,i) => s.classList.toggle('active', i===1));
+      document.querySelectorAll('.onboarding-dot').forEach((d,i)  => d.classList.toggle('active', i===1));
+      const btn = document.getElementById('ob-btn');
+      if (btn) { btn.style.display=''; btn.textContent='다음'; }
     }, 300);
   };
   document.getElementById('prc-no').onclick = () => {
