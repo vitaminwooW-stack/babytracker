@@ -6853,12 +6853,13 @@ setInterval(updateStatus, 30000); // 30초마다 코치 카드·점수 갱신
 let voiceRecognition = null;
 let voiceActive = false;
 let voiceStarting = false; // start() 호출 후 실제 시작까지의 gap 보호
+let voiceAutoMode = false;           // 자동 음성인식 모드
+let voiceAutoRestartTimer = null;    // 자동 재시작 타이머
 
 function initVoice() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) return false;
 
-  // 매번 새로 생성 — 재사용 시 InvalidStateError 방지
   voiceRecognition = new SpeechRecognition();
   voiceRecognition.lang = 'ko-KR';
   voiceRecognition.continuous = false;
@@ -6879,52 +6880,99 @@ function initVoice() {
   voiceRecognition.onerror = (e) => {
     voiceActive = false;
     voiceStarting = false;
-    setVoiceBtnState(false);
-    if (e.error === 'no-speech') {
-      showVoiceToast('말소리를 못 들었어요. 다시 눌러보세요.', false);
+    voiceRecognition = null;
+    if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+      // 마이크 권한 없음 → 자동모드 끄기
+      voiceAutoMode = false;
+      localStorage.setItem('voice_auto', '0');
+      setVoiceBtnState(false);
+      showToast('마이크 권한이 필요해요. 설정에서 허용해주세요.');
+      return;
+    }
+    // no-speech 등 일반 오류: 자동모드면 재시작
+    if (voiceAutoMode) {
+      voiceAutoRestartTimer = setTimeout(() => { if (voiceAutoMode) _startVoiceOnce(); }, 800);
+    } else {
+      setVoiceBtnState(false);
     }
   };
 
   voiceRecognition.onend = () => {
     voiceActive = false;
     voiceStarting = false;
-    setVoiceBtnState(false);
-    voiceRecognition = null; // 다음 사용 시 새로 생성
+    voiceRecognition = null;
+    // 자동모드: 결과 처리 후 바로 재시작
+    if (voiceAutoMode) {
+      voiceAutoRestartTimer = setTimeout(() => { if (voiceAutoMode) _startVoiceOnce(); }, 500);
+    } else {
+      setVoiceBtnState(false);
+    }
   };
 
   return true;
 }
 
-function toggleVoice() {
-  // 이미 시작 중이거나 활성화된 경우 → 중지
-  if (voiceStarting || voiceActive) {
-    if (voiceRecognition) {
-      try { voiceRecognition.stop(); } catch(e) {}
-    }
-    voiceActive = false;
-    voiceStarting = false;
-    setVoiceBtnState(false);
-    return;
-  }
-
-  // 새로 시작
-  if (!initVoice()) {
-    showToast('이 브라우저에서는 음성 인식이 지원되지 않아요. Chrome/Safari를 사용해주세요.');
-    return;
-  }
-
+// 음성 1회 시작 (내부 헬퍼)
+function _startVoiceOnce() {
+  if (voiceStarting || voiceActive) return;
+  if (!initVoice()) return;
   voiceStarting = true;
-  setVoiceBtnState('starting');
-
   try {
     voiceRecognition.start();
   } catch(e) {
     voiceStarting = false;
     voiceActive = false;
     voiceRecognition = null;
-    setVoiceBtnState(false);
-    console.warn('Voice start error:', e);
+    if (voiceAutoMode) {
+      voiceAutoRestartTimer = setTimeout(() => { if (voiceAutoMode) _startVoiceOnce(); }, 1500);
+    }
   }
+}
+
+// 자동 음성 시작 (앱 진입 시 호출)
+function startAutoVoice() {
+  if (voiceAutoMode) return; // 이미 자동모드
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) return;
+  voiceAutoMode = true;
+  localStorage.setItem('voice_auto', '1');
+  setVoiceBtnState('auto');
+  _startVoiceOnce();
+}
+
+// 자동 음성 중지
+function stopAutoVoice() {
+  voiceAutoMode = false;
+  localStorage.setItem('voice_auto', '0');
+  clearTimeout(voiceAutoRestartTimer);
+  if (voiceRecognition) {
+    try { voiceRecognition.stop(); } catch(e) {}
+  }
+  voiceActive = false;
+  voiceStarting = false;
+  voiceRecognition = null;
+  setVoiceBtnState(false);
+}
+
+function toggleVoice() {
+  // 자동모드면 → 중지
+  if (voiceAutoMode) {
+    stopAutoVoice();
+    showToast('🎙️ 자동 음성인식을 껐어요');
+    return;
+  }
+  // 자동모드 아닌데 듣는 중 → 중지
+  if (voiceStarting || voiceActive) {
+    stopAutoVoice();
+    return;
+  }
+  // 시작: 자동모드로 켜기
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    showToast('이 브라우저에서는 음성 인식이 지원되지 않아요. Chrome/Safari를 사용해주세요.');
+    return;
+  }
+  startAutoVoice();
 }
 
 // 하위 호환 (기존 setVoiceBtn 호출 제거됨)
@@ -8074,6 +8122,15 @@ function enterApp() {
   try { updateStatus(); } catch(e) {}
 
   showScreen('app');
+
+  // 자동 음성인식 시작 (기본: 켜짐 / 사용자가 껐으면 꺼짐)
+  setTimeout(() => {
+    try {
+      if (localStorage.getItem('voice_auto') !== '0') {
+        startAutoVoice();
+      }
+    } catch(e) {}
+  }, 1200);
 
   setTimeout(() => {
     try { renderMainChart(); } catch(e) {}
@@ -9455,21 +9512,23 @@ function setVoiceBtnState(state) {
   const hintText = document.getElementById('voice-hint-text');
   if (!btn) return;
 
-  if (state === true) {
+  if (state === true || state === 'auto') {
     btn.classList.add('listening');
     if (micWrap) micWrap.classList.add('listening');
-    if (statusText) statusText.textContent = '듣는 중... 말씀해주세요';
-    if (hintText) hintText.textContent = '수유 종료 · 수면 종료 · 유축 종료 · 기저귀';
+    if (statusText) statusText.textContent = voiceAutoMode ? '자동 듣기 중 🎙️' : '듣는 중... 말씀해주세요';
+    const hasActive = sleepingStart || pumpingStart || feedingStart;
+    if (hintText) hintText.textContent = hasActive
+      ? '수유 종료 · 수면 종료 · 유축 종료'
+      : '수유 시작 · 수면 시작 · 유축 시작 · 기저귀';
   } else if (state === 'starting') {
-    btn.classList.remove('listening');
-    if (micWrap) micWrap.classList.remove('listening');
-    if (statusText) statusText.textContent = '마이크 준비 중...';
+    btn.classList.add('listening');
+    if (micWrap) micWrap.classList.add('listening');
+    if (statusText) statusText.textContent = '마이크 연결 중...';
   } else {
     btn.classList.remove('listening');
     if (micWrap) micWrap.classList.remove('listening');
-    // 상태에 따라 힌트 다르게
     const hasActive = sleepingStart || pumpingStart || feedingStart;
-    if (statusText) statusText.textContent = hasActive ? '종료하려면 탭하기' : '탭해서 말하기';
+    if (statusText) statusText.textContent = '탭하면 자동으로 듣기 시작해요';
     if (hintText) hintText.textContent = hasActive
       ? '수유 종료 · 수면 종료 · 유축 종료'
       : '수유 시작 · 수면 시작 · 유축 시작 · 기저귀';
@@ -10808,6 +10867,25 @@ function saveSnackRecord() {
   try { updateTodayWidget(); } catch(e) {}
   showToast('🍪 간식 기록 완료!');
 }
+
+
+// ── 화면 on/off 시 자동 음성 관리 ──
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    // 화면 꺼지면 음성 중지 (배터리 절약)
+    if (voiceAutoMode && voiceRecognition) {
+      try { voiceRecognition.stop(); } catch(e) {}
+    }
+  } else {
+    // 화면 다시 켜지면 자동모드였으면 재시작
+    if (voiceAutoMode) {
+      clearTimeout(voiceAutoRestartTimer);
+      voiceAutoRestartTimer = setTimeout(() => {
+        if (voiceAutoMode && !voiceActive && !voiceStarting) _startVoiceOnce();
+      }, 800);
+    }
+  }
+});
 
 </script>
 <!-- ── 아기 선택 팝업 ── -->
