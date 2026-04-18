@@ -6954,7 +6954,6 @@ function startAutoVoice() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) return;
   voiceAutoMode = true;
-  localStorage.setItem('voice_auto', '1');
   // 버튼 애니메이션 제거
   const btn = document.getElementById('voice-btn');
   if (btn) btn.style.animation = '';
@@ -6965,7 +6964,7 @@ function startAutoVoice() {
 // 자동 음성 중지
 function stopAutoVoice() {
   voiceAutoMode = false;
-  localStorage.setItem('voice_auto', '0');
+  // voice_auto는 저장하지 않음 → 다음 앱 시작 시 항상 자동시작
   clearTimeout(voiceAutoRestartTimer);
   if (voiceRecognition) {
     try { voiceRecognition.stop(); } catch(e) {}
@@ -6993,7 +6992,6 @@ function toggleVoice() {
   // voiceAutoMode 켜고 즉시 시작 (user gesture로 iOS 허용됨)
   clearTimeout(voiceAutoRestartTimer);
   voiceAutoMode = true;
-  localStorage.setItem('voice_auto', '1');
   const btn = document.getElementById('voice-btn');
   if (btn) btn.style.animation = '';
   setVoiceBtnState('auto');
@@ -8148,12 +8146,10 @@ function enterApp() {
 
   showScreen('app');
 
-  // 자동 음성인식 시작 (기본: 켜짐 / 사용자가 껐으면 꺼짐)
+  // 자동 음성인식: 항상 시작 (사용자가 이번 세션에서 끄면 꺼짐)
   setTimeout(() => {
     try {
-      if (localStorage.getItem('voice_auto') !== '0') {
-        startAutoVoice();
-      }
+      startAutoVoice();
     } catch(e) {}
   }, 1200);
 
