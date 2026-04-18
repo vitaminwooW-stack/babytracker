@@ -990,6 +990,33 @@ body.dark .diary-delete-btn { background: #2a1515 !important; border-color: #5a2
   0%, 100% { transform: scale(1); opacity: 0.8; }
   50% { transform: scale(1.06); opacity: 1; }
 }
+
+/* ── 프로필 입력 화면 다크모드 ── */
+body.dark #screen-profile { background: #1a1612; }
+body.dark #screen-profile .page-wrap { background: #1a1612; }
+body.dark #screen-profile .profile-header { background: #1a1612; }
+body.dark #screen-profile .profile-header h2 { color: #f0ead8; }
+body.dark #screen-profile .profile-header p { color: #a89880; }
+body.dark #screen-profile .step-badge {
+  background: #2a2520;
+  border-color: #3d3628;
+  color: #c8a870;
+}
+body.dark #screen-profile .profile-card {
+  background: #2a2520;
+  border-color: #3d3628;
+}
+body.dark #screen-profile .field-label { color: #c8a870; }
+body.dark #screen-profile input,
+body.dark #screen-profile select {
+  background: #1a1612 !important;
+  color: #f0ead8 !important;
+  border-color: #5a4a10 !important;
+}
+body.dark #screen-profile input::placeholder { color: #6b5a3e !important; }
+body.dark #screen-profile .section-title { color: #c8a870; }
+body.dark #screen-profile .profile-section-header { color: #c8a870; }
+body.dark #screen-profile .section-label { color: #a89880; }
 </style>
   <!-- 귀여운 한국어 폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3056,6 +3083,7 @@ function saveProfile() {
     center: document.getElementById('p-center').value.trim()
   };
   localStorage.setItem(getBabyKey('baby_profile'), JSON.stringify(profile));
+  localStorage.setItem('onboarding_done', '1');  // 새로고침 시 앱 유지
   err.textContent = '';
 
   // 출생 몸무게/키가 있으면 성장 기록 초기값으로 저장
@@ -8252,13 +8280,20 @@ function appStart() {
 
   // 새로고침 감지 — 이미 앱에 진입했었으면 바로 앱으로
   const wasInApp = sessionStorage.getItem('nuri_in_app');
-  if (wasInApp === '1' && hasProfileNow() && localStorage.getItem('onboarding_done') === '1') {
+  if (wasInApp === '1' && hasProfileNow()) {
     if (splash) splash.style.display = 'none';
     enterApp();
     if (hasAction) setTimeout(checkURLAction, 300);
     return;
   }
 
+  // 프로필 있고 온보딩 완료면 스플래시 없이 바로 앱
+  if (hasProfileNow() && localStorage.getItem('onboarding_done') === '1') {
+    if (splash) splash.style.display = 'none';
+    enterApp();
+    if (hasAction) setTimeout(checkURLAction, 300);
+    return;
+  }
   // PIN 없이 프로필 있으면 (액션 URL) 바로 진입
   if (hasAction && hasProfileNow() && localStorage.getItem('baby_pin')) {
     if (splash) splash.style.display = 'none';
