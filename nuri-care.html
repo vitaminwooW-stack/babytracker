@@ -1017,6 +1017,20 @@ body.dark #screen-profile input::placeholder { color: #6b5a3e !important; }
 body.dark #screen-profile .section-title { color: #c8a870; }
 body.dark #screen-profile .profile-section-header { color: #c8a870; }
 body.dark #screen-profile .section-label { color: #a89880; }
+
+/* ── 수유완료 모달 유축 섹션 다크모드 ── */
+body.dark #fe-pump-wrap {
+  background: #1e1625 !important;
+  border-color: #4a2a6a !important;
+}
+body.dark .fe-pump-label {
+  color: #c084fc !important;
+}
+body.dark #fe-pump-ml {
+  background: #1a1612 !important;
+  color: #f0ead8 !important;
+  border-color: #5a4a10 !important;
+}
 </style>
   <!-- 귀여운 한국어 폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2538,7 +2552,7 @@ body.dark #screen-profile .section-label { color: #a89880; }
     </div>
     <!-- 유축 수유: ml 입력 -->
     <div id="fe-pump-wrap" style="display:none;background:#f5f0ff;border:1.5px solid #e9d5ff;border-radius:12px;padding:12px;margin-bottom:12px;">
-      <div style="font-size:12px;font-weight:700;color:#7c3aaf;margin-bottom:6px;">🤱 유축한 모유 수유량 (ml)</div>
+      <div class="fe-pump-label" style="font-size:12px;font-weight:700;color:#7c3aaf;margin-bottom:6px;">🤱 유축한 모유 수유량 (ml)</div>
       <input type="number" id="fe-pump-ml" placeholder="예: 80" min="0" max="500"
         style="width:100%;box-sizing:border-box;">
     </div>
@@ -5004,8 +5018,12 @@ function saveEditPump() {
 let currentPage = 1;
 let swipeTouchStartX = 0, swipeTouchStartY = 0;
 
+let _swipeInitialized = false;  // 중복 초기화 방지
 function initSwipe() {
+  if (_swipeInitialized) return;  // 이미 초기화됐으면 스킵
+  _swipeInitialized = true;
   const el = document.getElementById('swipe-container');
+  if (!el) return;
   let _swipeBlocked = false;
   el.addEventListener('touchstart', e => {
     swipeTouchStartX = e.touches[0].clientX;
@@ -5015,7 +5033,6 @@ function initSwipe() {
   el.addEventListener('touchmove', e => {
     const dx = Math.abs(e.touches[0].clientX - swipeTouchStartX);
     const dy = Math.abs(e.touches[0].clientY - swipeTouchStartY);
-    // 수직 이동이 수평보다 크면 스와이프 차단 (내부 스크롤 우선)
     if (dy > dx && dy > 10) { _swipeBlocked = true; }
   }, { passive: true });
   el.addEventListener('touchend', e => {
