@@ -984,7 +984,13 @@ body.dark .diary-delete-btn { background: #2a1515 !important; border-color: #5a2
   to   { transform: translateY(-6px); }
 }
 @keyframes splashPop { from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
-@keyframes splashFadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }</style>
+@keyframes splashFadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+/* ── 음성 버튼 대기 애니메이션 ── */
+@keyframes voicePulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+</style>
   <!-- 귀여운 한국어 폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -6931,11 +6937,14 @@ function _startVoiceOnce() {
 
 // 자동 음성 시작 (앱 진입 시 호출)
 function startAutoVoice() {
-  if (voiceAutoMode) return; // 이미 자동모드
+  if (voiceAutoMode) return;
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) return;
   voiceAutoMode = true;
   localStorage.setItem('voice_auto', '1');
+  // 버튼 애니메이션 제거
+  const btn = document.getElementById('voice-btn');
+  if (btn) btn.style.animation = '';
   setVoiceBtnState('auto');
   _startVoiceOnce();
 }
@@ -6955,24 +6964,26 @@ function stopAutoVoice() {
 }
 
 function toggleVoice() {
-  // 자동모드면 → 중지
+  // 자동모드 중지
   if (voiceAutoMode) {
     stopAutoVoice();
-    showToast('🎙️ 자동 음성인식을 껐어요');
+    showToast('🎙️ 자동 듣기를 껐어요. 다시 탭하면 켜져요');
     return;
   }
-  // 자동모드 아닌데 듣는 중 → 중지
+  // 이미 시작 중 → 중지
   if (voiceStarting || voiceActive) {
     stopAutoVoice();
     return;
   }
-  // 시작: 자동모드로 켜기
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) {
-    showToast('이 브라우저에서는 음성 인식이 지원되지 않아요. Chrome/Safari를 사용해주세요.');
+  // SpeechRecognition 지원 확인
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    showToast('Chrome 또는 Safari에서 사용해주세요.');
     return;
   }
+  // 자동모드 시작
   startAutoVoice();
+  showToast('🎙️ 자동 듣기 시작! 말씀해주세요');
 }
 
 // 하위 호환 (기존 setVoiceBtn 호출 제거됨)
@@ -9512,22 +9523,29 @@ function setVoiceBtnState(state) {
   const hintText = document.getElementById('voice-hint-text');
   if (!btn) return;
 
-  if (state === true || state === 'auto') {
+  const hasActive = sleepingStart || pumpingStart || feedingStart;
+  if (state === true) {
     btn.classList.add('listening');
+    btn.style.animation = '';
     if (micWrap) micWrap.classList.add('listening');
-    if (statusText) statusText.textContent = voiceAutoMode ? '자동 듣기 중 🎙️' : '듣는 중... 말씀해주세요';
-    const hasActive = sleepingStart || pumpingStart || feedingStart;
+    if (statusText) statusText.textContent = voiceAutoMode ? '자동 듣기 중 🎙️  (탭하면 꺼짐)' : '듣는 중...';
     if (hintText) hintText.textContent = hasActive
       ? '수유 종료 · 수면 종료 · 유축 종료'
       : '수유 시작 · 수면 시작 · 유축 시작 · 기저귀';
+  } else if (state === 'auto') {
+    btn.classList.add('listening');
+    btn.style.animation = '';
+    if (micWrap) micWrap.classList.add('listening');
+    if (statusText) statusText.textContent = '자동 듣기 켜짐 🎙️';
+    if (hintText) hintText.textContent = '말씀해주세요 — 자동으로 계속 듣고 있어요';
   } else if (state === 'starting') {
     btn.classList.add('listening');
+    btn.style.animation = '';
     if (micWrap) micWrap.classList.add('listening');
     if (statusText) statusText.textContent = '마이크 연결 중...';
   } else {
     btn.classList.remove('listening');
     if (micWrap) micWrap.classList.remove('listening');
-    const hasActive = sleepingStart || pumpingStart || feedingStart;
     if (statusText) statusText.textContent = '탭하면 자동으로 듣기 시작해요';
     if (hintText) hintText.textContent = hasActive
       ? '수유 종료 · 수면 종료 · 유축 종료'
