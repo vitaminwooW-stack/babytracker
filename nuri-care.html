@@ -6967,7 +6967,7 @@ function toggleVoice() {
   // 자동모드 중지
   if (voiceAutoMode) {
     stopAutoVoice();
-    showToast('🎙️ 자동 듣기를 껐어요. 다시 탭하면 켜져요');
+    showToast('🎙️ 자동 듣기를 껐어요');
     return;
   }
   // 이미 시작 중 → 중지
@@ -6983,7 +6983,7 @@ function toggleVoice() {
   }
   // 자동모드 시작
   startAutoVoice();
-  showToast('🎙️ 자동 듣기 시작! 말씀해주세요');
+  showToast('🎙️ 자동 듣기 시작');
 }
 
 // 하위 호환 (기존 setVoiceBtn 호출 제거됨)
@@ -9528,7 +9528,7 @@ function setVoiceBtnState(state) {
     btn.classList.add('listening');
     btn.style.animation = '';
     if (micWrap) micWrap.classList.add('listening');
-    if (statusText) statusText.textContent = voiceAutoMode ? '자동 듣기 중 🎙️  (탭하면 꺼짐)' : '듣는 중...';
+    if (statusText) statusText.textContent = voiceAutoMode ? '자동 듣기 중 🎙️' : '듣는 중...';
     if (hintText) hintText.textContent = hasActive
       ? '수유 종료 · 수면 종료 · 유축 종료'
       : '수유 시작 · 수면 시작 · 유축 시작 · 기저귀';
@@ -9536,8 +9536,8 @@ function setVoiceBtnState(state) {
     btn.classList.add('listening');
     btn.style.animation = '';
     if (micWrap) micWrap.classList.add('listening');
-    if (statusText) statusText.textContent = '자동 듣기 켜짐 🎙️';
-    if (hintText) hintText.textContent = '말씀해주세요 — 자동으로 계속 듣고 있어요';
+    if (statusText) statusText.textContent = '자동 듣기 중 🎙️';
+    try { _updateAgeButtons(); } catch(e) {}
   } else if (state === 'starting') {
     btn.classList.add('listening');
     btn.style.animation = '';
