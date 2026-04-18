@@ -6887,14 +6887,27 @@ function initVoice() {
     voiceActive = false;
     voiceStarting = false;
     voiceRecognition = null;
+
     if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
-      // 마이크 권한 없음 → 자동모드 끄기
-      voiceAutoMode = false;
-      localStorage.setItem('voice_auto', '0');
-      setVoiceBtnState(false);
-      showToast('마이크 권한이 필요해요. 설정에서 허용해주세요.');
+      // iOS: 앱 시작 시 user gesture 없으면 not-allowed → 자동모드 유지, 버튼 탭 유도
+      // Android: 사용자가 명시적 거부한 경우도 있음
+      // → 구분: voiceAutoMode가 true이고 자동시작 시도 중이면 iOS 케이스로 판단
+      if (voiceAutoMode) {
+        // 자동모드는 유지, 버튼만 탭 유도 상태로
+        setVoiceBtnState(false);
+        const st = document.getElementById('voice-status-text');
+        if (st) st.textContent = '🎙️ 탭해서 듣기 시작';
+        // 3초 후 재시도 (사용자가 탭했을 수 있음)
+        voiceAutoRestartTimer = setTimeout(() => {
+          if (voiceAutoMode) _startVoiceOnce();
+        }, 3000);
+      } else {
+        setVoiceBtnState(false);
+        showToast('마이크 권한이 필요해요. 설정에서 허용해주세요.');
+      }
       return;
     }
+
     // no-speech 등 일반 오류: 자동모드면 재시작
     if (voiceAutoMode) {
       voiceAutoRestartTimer = setTimeout(() => { if (voiceAutoMode) _startVoiceOnce(); }, 800);
@@ -6907,9 +6920,9 @@ function initVoice() {
     voiceActive = false;
     voiceStarting = false;
     voiceRecognition = null;
-    // 자동모드: 결과 처리 후 바로 재시작
     if (voiceAutoMode) {
-      voiceAutoRestartTimer = setTimeout(() => { if (voiceAutoMode) _startVoiceOnce(); }, 500);
+      // 자동모드: 300ms 후 재시작 (빠른 재청취)
+      voiceAutoRestartTimer = setTimeout(() => { if (voiceAutoMode) _startVoiceOnce(); }, 300);
     } else {
       setVoiceBtnState(false);
     }
@@ -6966,24 +6979,25 @@ function stopAutoVoice() {
 function toggleVoice() {
   // 자동모드 중지
   if (voiceAutoMode) {
+    // 듣는 중이면 → 끄기
     stopAutoVoice();
     showToast('🎙️ 자동 듣기를 껐어요');
     return;
   }
-  // 이미 시작 중 → 중지
-  if (voiceStarting || voiceActive) {
-    stopAutoVoice();
-    return;
-  }
-  // SpeechRecognition 지원 확인
+  // 자동모드 꺼져있음 → 켜기
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) {
     showToast('Chrome 또는 Safari에서 사용해주세요.');
     return;
   }
-  // 자동모드 시작
-  startAutoVoice();
-  showToast('🎙️ 자동 듣기 시작');
+  // voiceAutoMode 켜고 즉시 시작 (user gesture로 iOS 허용됨)
+  clearTimeout(voiceAutoRestartTimer);
+  voiceAutoMode = true;
+  localStorage.setItem('voice_auto', '1');
+  const btn = document.getElementById('voice-btn');
+  if (btn) btn.style.animation = '';
+  setVoiceBtnState('auto');
+  _startVoiceOnce();  // user gesture 컨텍스트에서 직접 호출
 }
 
 // 하위 호환 (기존 setVoiceBtn 호출 제거됨)
