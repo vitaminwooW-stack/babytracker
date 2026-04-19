@@ -2970,6 +2970,17 @@ function openAddBabyModal() {
 function closeAddBabyModal() {
   const el = document.getElementById('add-baby-modal');
   if (el) el.style.display = 'none';
+  // 입력 초기화
+  ['add-baby-name','add-baby-birth','add-baby-birthtime','add-baby-weight','add-baby-height'].forEach(id => {
+    const e=document.getElementById(id); if(e) e.value='';
+  });
+  _addBabyGender = 'unknown';
+  ['add-baby-girl','add-baby-boy'].forEach(id => {
+    const b=document.getElementById(id);
+    if(b){ b.style.background=''; b.style.borderColor=''; b.style.color=''; b.style.boxShadow=''; }
+  });
+  const err=document.getElementById('add-baby-err');
+  if(err) err.textContent='';
 }
 
 function selAddBabyGender(g) {
@@ -2978,20 +2989,29 @@ function selAddBabyGender(g) {
 }
 
 function saveAddBaby() {
-  const name  = document.getElementById('add-baby-name')?.value.trim();
-  const birth = document.getElementById('add-baby-birth')?.value;
-  const err   = document.getElementById('add-baby-err');
+  const name      = document.getElementById('add-baby-name')?.value.trim();
+  const birth     = document.getElementById('add-baby-birth')?.value;
+  const birthTime = document.getElementById('add-baby-birthtime')?.value || '';
+  const weight    = document.getElementById('add-baby-weight')?.value || '';
+  const height    = document.getElementById('add-baby-height')?.value || '';
+  const err       = document.getElementById('add-baby-err');
   if (!name)  { if(err) err.textContent='이름을 입력해주세요'; return; }
   if (!birth) { if(err) err.textContent='태어난 날을 선택해주세요'; return; }
 
   const id = addBaby(name, birth, _addBabyGender);
   if (!id) return;
 
-  // 새 아기 프로필 저장
-  const newProfile = { name, birthDate: birth, gender: _addBabyGender || 'unknown' };
+  // 새 아기 프로필 저장 (시각/몸무게/키 포함)
+  const newProfile = {
+    name, birthDate: birth, gender: _addBabyGender || 'unknown',
+    birthTime, weight, height
+  };
   localStorage.setItem('baby_profile_' + id, JSON.stringify(newProfile));
   // 빈 기록 초기화
   localStorage.setItem('baby_records_' + id, '[]');
+
+  // 출생 성장기록 저장
+  _saveBirthGrowthRecord(id, birth, weight, height);
 
   closeAddBabyModal();
   showToast('🎉 ' + name + ' 기록이 추가됐어요!');
@@ -3079,6 +3099,27 @@ function selBirthType(t) {
   ['natural','csection'].forEach(v => document.getElementById('birth-type-'+v).classList.toggle('sel', v === t));
 }
 
+
+// ── 출생 성장기록 저장 헬퍼 (saveProfile/saveAddBaby 공통) ──
+function _saveBirthGrowthRecord(babyId, birthDate, weight, height) {
+  if (!birthDate || (!weight && !height)) return;
+  try {
+    const key = 'growth_records_' + babyId;
+    const existing = JSON.parse(localStorage.getItem(key) || '[]');
+    const hasBirth = existing.some(r => r.date === birthDate && r.isBirth);
+    if (!hasBirth) {
+      existing.unshift({
+        date: birthDate,
+        weight: weight ? parseFloat(weight) : null,
+        height: height ? parseFloat(height) : null,
+        isBirth: true,
+        note: '출생 기록'
+      });
+      localStorage.setItem(key, JSON.stringify(existing));
+    }
+  } catch(e) {}
+}
+
 function saveProfile() {
   const name = document.getElementById('p-name').value.trim();
   const date = document.getElementById('p-birth-date').value;
@@ -3097,29 +3138,31 @@ function saveProfile() {
     center: document.getElementById('p-center').value.trim()
   };
   localStorage.setItem(getBabyKey('baby_profile'), JSON.stringify(profile));
-  localStorage.setItem('onboarding_done', '1');  // 새로고침 시 앱 유지
-  err.textContent = '';
+  localStorage.setItem('onboarding_done', '1');
 
-  // 출생 몸무게/키가 있으면 성장 기록 초기값으로 저장
+  // babies_list에도 반영 (새로고침 시 hasProfileNow 보장)
+  try {
+    loadBabies();  // activeBabyId 확보
+    const ab = babies.find(b => b.id === activeBabyId);
+    if (ab) {
+      ab.name = profile.name;
+      ab.birthDate = profile.birthDate;
+      ab.gender = profile.gender;
+      localStorage.setItem('babies_list', JSON.stringify(babies));
+    } else if (activeBabyId) {
+      // babies_list에 없으면 추가
+      babies.push({ id: activeBabyId, name: profile.name,
+        birthDate: profile.birthDate, gender: profile.gender||'unknown', avatar: '👶' });
+      localStorage.setItem('babies_list', JSON.stringify(babies));
+    }
+  } catch(e) {}
+
+  // 출생 성장기록 저장 (올바른 키: growth_records_id)
   if (profile.weight || profile.height) {
-    try {
-      const growthKey = getBabyKey('baby_growth');
-      const existing = JSON.parse(localStorage.getItem(growthKey) || '[]');
-      // 출생일 기록이 없으면 추가
-      const hasBirthRecord = existing.some(r => r.date === profile.birthDate && r.isBirth);
-      if (!hasBirthRecord && profile.birthDate) {
-        existing.unshift({
-          date: profile.birthDate,
-          weight: profile.weight ? parseFloat(profile.weight) : null,
-          height: profile.height ? parseFloat(profile.height) : null,
-          isBirth: true,
-          note: '출생 기록'
-        });
-        localStorage.setItem(growthKey, JSON.stringify(existing));
-      }
-    } catch(e) {}
+    _saveBirthGrowthRecord(activeBabyId, profile.birthDate, profile.weight, profile.height);
   }
 
+  err.textContent = '';
   enterApp();
 }
 
@@ -8304,8 +8347,8 @@ function appStart() {
     return;
   }
 
-  // 프로필 있고 온보딩 완료면 스플래시 없이 바로 앱
-  if (hasProfileNow() && localStorage.getItem('onboarding_done') === '1') {
+  // 프로필 있으면 스플래시 없이 바로 앱 (onboarding_done 유무 무관)
+  if (hasProfileNow()) {
     if (splash) splash.style.display = 'none';
     enterApp();
     if (hasAction) setTimeout(checkURLAction, 300);
@@ -11002,7 +11045,7 @@ document.addEventListener('visibilitychange', () => {
         style="width:100%;box-sizing:border-box;padding:12px 14px;border:1.5px solid #f0d060;border-radius:12px;font-size:15px;font-family:inherit;outline:none;background:var(--card-bg,#fff);color:var(--text-main,#1a1a1a);">
     </div>
 
-    <div style="margin-bottom:20px;">
+    <div style="margin-bottom:12px;">
       <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:6px;">💕 성별</div>
       <div style="display:flex;gap:8px;">
         <button id="add-baby-girl" onclick="selAddBabyGender('girl')"
@@ -11015,6 +11058,27 @@ document.addEventListener('visibilitychange', () => {
           <div style="font-size:32px;margin-bottom:4px;">👦</div>
           <div style="font-size:14px;font-weight:800;">남아</div>
         </button>
+      </div>
+    </div>
+
+    <!-- 태어난 시각 -->
+    <div style="margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:4px;">⏰ 태어난 시각 <span style="font-weight:400;color:#9ca3af;">(선택)</span></div>
+      <input type="time" id="add-baby-birthtime" autocomplete="off"
+        style="width:100%;box-sizing:border-box;padding:12px 14px;border:1.5px solid #f0d060;border-radius:12px;font-size:15px;font-family:inherit;outline:none;background:var(--card-bg,#fff);color:var(--text-main,#1a1a1a);">
+    </div>
+
+    <!-- 몸무게 / 키 -->
+    <div style="display:flex;gap:8px;margin-bottom:20px;">
+      <div style="flex:1;">
+        <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:4px;">⚖️ 몸무게 (kg) <span style="font-weight:400;color:#9ca3af;">(선택)</span></div>
+        <input type="number" id="add-baby-weight" placeholder="예: 3.2" step="0.01" min="0" max="10" autocomplete="off"
+          style="width:100%;box-sizing:border-box;padding:12px 14px;border:1.5px solid #f0d060;border-radius:12px;font-size:15px;font-family:inherit;outline:none;background:var(--card-bg,#fff);color:var(--text-main,#1a1a1a);">
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:12px;font-weight:700;color:#7a5600;margin-bottom:4px;">📏 키 (cm) <span style="font-weight:400;color:#9ca3af;">(선택)</span></div>
+        <input type="number" id="add-baby-height" placeholder="예: 50" step="0.1" min="0" max="100" autocomplete="off"
+          style="width:100%;box-sizing:border-box;padding:12px 14px;border:1.5px solid #f0d060;border-radius:12px;font-size:15px;font-family:inherit;outline:none;background:var(--card-bg,#fff);color:var(--text-main,#1a1a1a);">
       </div>
     </div>
 
