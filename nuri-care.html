@@ -4964,12 +4964,20 @@ function editRecord(i) {
 
   } else if (r.cat === 'sleep') {
     title.textContent = '😴 수면 수정';
+    // 시작/종료 시간 파악
+    const sleepStart = r._startTime || r.time;
+    const sleepEnd   = r._startTime ? r.time : '';
     body.innerHTML =
       '<span class="field-label">시작 시각</span>' +
-      '<input type="datetime-local" id="er-time" value="' + r.time + '">' +
+      '<input type="datetime-local" id="er-sleep-start" value="' + sleepStart + '" oninput="erCalcSleep()">' +
+      '<span class="field-label">종료 시각 <span style="font-weight:400;color:#9ca3af;font-size:11px;">(비우면 진행 중)</span></span>' +
+      '<input type="datetime-local" id="er-sleep-end" value="' + sleepEnd + '" oninput="erCalcSleep()">' +
+      '<div id="er-sleep-dur" style="font-size:13px;font-weight:700;color:#7a5600;margin:6px 0 10px;min-height:20px;"></div>' +
       '<span class="field-label">메모</span>' +
-      '<input type="text" id="er-sleep-sub" value="' + r.sub + '" placeholder="예: 낮잠">';
+      '<input type="text" id="er-sleep-sub" value="' + (r.sub||'') + '" placeholder="예: 낮잠">';
     saveBtn.onclick = saveEditSleep;
+    // 초기 계산
+    setTimeout(() => erCalcSleep(), 50);
 
   } else if (r.cat === 'diaper') {
     const type = r.sub.includes('소변+대변') ? 'both' : r.sub.includes('대변') ? 'poop' : 'wet';
@@ -5027,10 +5035,67 @@ function saveEditFeed() {
   closeModal('edit-record');
 }
 
+function erCalcSleep() {
+  const startEl = document.getElementById('er-sleep-start');
+  const endEl   = document.getElementById('er-sleep-end');
+  const durEl   = document.getElementById('er-sleep-dur');
+  if (!startEl || !durEl) return;
+  const s = startEl.value, e = endEl ? endEl.value : '';
+  if (s && e) {
+    const diffMin = Math.round((new Date(e) - new Date(s)) / 60000);
+    if (diffMin < 0) {
+      durEl.textContent = '⚠️ 종료 시각이 시작보다 빠릅니다';
+      durEl.style.color = '#ef4444';
+    } else {
+      const h = Math.floor(diffMin / 60), m = diffMin % 60;
+      const durStr = h > 0 ? h + '시간 ' + (m > 0 ? m + '분' : '') : m + '분';
+      durEl.textContent = '💤 수면 시간: ' + durStr.trim();
+      durEl.style.color = '#7a5600';
+    }
+  } else if (s && !e) {
+    durEl.textContent = '⏳ 진행 중...';
+    durEl.style.color = '#9ca3af';
+  } else {
+    durEl.textContent = '';
+  }
+}
+
 function saveEditSleep() {
-  const t = document.getElementById('er-time').value;
-  const sub = document.getElementById('er-sleep-sub').value;
-  records[editingIndex] = { ...records[editingIndex], time: t, sub };
+  const startVal = document.getElementById('er-sleep-start')?.value;
+  const endVal   = document.getElementById('er-sleep-end')?.value;
+  const sub      = document.getElementById('er-sleep-sub')?.value || '';
+  if (!startVal) { alert('시작 시각을 입력해주세요'); return; }
+
+  // 수면시간 계산
+  let durMin = 0, durStr = '';
+  if (startVal && endVal) {
+    durMin = Math.round((new Date(endVal) - new Date(startVal)) / 60000);
+    if (durMin < 0) { alert('종료 시각이 시작 시각보다 빠릅니다'); return; }
+    const h = Math.floor(durMin / 60), m = durMin % 60;
+    durStr = h > 0 ? h + '시간 ' + (m > 0 ? m + '분' : '') : m + '분';
+  }
+
+  // 제목/sub 재계산
+  const newTitle = endVal ? '기상' : '수면 시작';
+  const newSub   = durStr ? (sub ? sub + ' · ' + durStr.trim() : durStr.trim())
+                          : (sub || '');
+
+  records[editingIndex] = {
+    ...records[editingIndex],
+    title: newTitle,
+    time: endVal || startVal,
+    _startTime: endVal ? startVal : undefined,
+    _durMin: durMin || undefined,
+    sub: newSub
+  };
+
+  // 종료 없음 → 진행 중 상태 유지 (기존 sleepingStart 뱃지 그대로)
+  if (!endVal) {
+    sleepingStart = new Date(startVal);
+    localStorage.setItem(getBabyKey('baby_sleeping'), startVal);
+    updateSleepBanner();
+  }
+
   saveData(); renderTimeline(); updateStatus();
   closeModal('edit-record');
 }
