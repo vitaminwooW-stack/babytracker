@@ -4967,6 +4967,9 @@ function editRecord(i) {
     // 시작/종료 시간 파악
     const sleepStart = r._startTime || r.time;
     const sleepEnd   = r._startTime ? r.time : '';
+    // 메모: _note 우선, 없으면 sub에서 시간 문자열 제거
+    const sleepNote = r._note !== undefined ? r._note
+      : (r.sub||'').replace(/\d+시간\s*\d*분?|\d+분/g,'').replace(/·\s*$|^\s*·/g,'').trim();
     body.innerHTML =
       '<span class="field-label">시작 시각</span>' +
       '<input type="datetime-local" id="er-sleep-start" value="' + sleepStart + '" oninput="erCalcSleep()">' +
@@ -4974,7 +4977,7 @@ function editRecord(i) {
       '<input type="datetime-local" id="er-sleep-end" value="' + sleepEnd + '" oninput="erCalcSleep()">' +
       '<div id="er-sleep-dur" style="font-size:13px;font-weight:700;color:#7a5600;margin:6px 0 10px;min-height:20px;"></div>' +
       '<span class="field-label">메모</span>' +
-      '<input type="text" id="er-sleep-sub" value="' + (r.sub||'') + '" placeholder="예: 낮잠">';
+      '<input type="text" id="er-sleep-sub" value="' + sleepNote + '" placeholder="예: 낮잠">';
     saveBtn.onclick = saveEditSleep;
     // 초기 계산
     setTimeout(() => erCalcSleep(), 50);
@@ -5075,10 +5078,12 @@ function saveEditSleep() {
     durStr = h > 0 ? h + '시간 ' + (m > 0 ? m + '분' : '') : m + '분';
   }
 
-  // 제목/sub 재계산
+  // 제목/sub 재계산 (_note에 순수 메모, sub에 표시용 문자열)
   const newTitle = endVal ? '기상' : '수면 시작';
-  const newSub   = durStr ? (sub ? sub + ' · ' + durStr.trim() : durStr.trim())
-                          : (sub || '');
+  // sub: 메모 + 시간 (표시용)
+  const newSub = durStr
+    ? (sub ? sub + ' · ' + durStr.trim() : durStr.trim())
+    : (sub || '');
 
   records[editingIndex] = {
     ...records[editingIndex],
@@ -5086,6 +5091,7 @@ function saveEditSleep() {
     time: endVal || startVal,
     _startTime: endVal ? startVal : undefined,
     _durMin: durMin || undefined,
+    _note: sub,   // 순수 메모만 별도 보존
     sub: newSub
   };
 
