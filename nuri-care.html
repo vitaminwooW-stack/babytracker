@@ -4932,8 +4932,36 @@ let editingIndex = -1;
 
 function deleteRecord(i) {
   if (!confirm('이 기록을 삭제할까요?')) return;
-  records.splice(i, 1);
-  saveData(); renderTimeline(); updateStatus();
+  const r = records[i];
+
+  // 수면 종료 기록 삭제 시 → 시작 기록도 함께 삭제
+  if (r && r.cat === 'sleep' && (r.title === '기상' || r._merged)) {
+    // 시작 기록 인덱스: _startOrigIdx 또는 탐색
+    let startIdx = r._startOrigIdx !== undefined ? r._startOrigIdx : -1;
+    if (startIdx < 0) {
+      startIdx = records.findIndex((s, si) =>
+        si !== i && s.cat === 'sleep' &&
+        (s.title === '수면 시작' || s.title === '수면') &&
+        r._startTime && Math.abs(new Date(s.time) - new Date(r._startTime)) < 60000
+      );
+    }
+    // 두 인덱스 중 큰 것부터 삭제 (인덱스 밀림 방지)
+    const idxs = [i, startIdx].filter(x => x >= 0).sort((a,b) => b-a);
+    idxs.forEach(idx => records.splice(idx, 1));
+
+    // sleepingStart 초기화 (진행중으로 돌아가지 않게)
+    sleepingStart = null;
+    localStorage.removeItem(getBabyKey('baby_sleeping'));
+  } else {
+    records.splice(i, 1);
+    // 수면 시작 기록 삭제 시 sleepingStart 초기화
+    if (r && r.cat === 'sleep') {
+      sleepingStart = null;
+      localStorage.removeItem(getBabyKey('baby_sleeping'));
+    }
+  }
+
+  saveData(); renderTimeline(); updateStatus(); updateQuickBtns();
 }
 
 function editRecord(i) {
@@ -9446,6 +9474,7 @@ function startSessionTimer() {
   clearInterval(sessionTimer);
   sessionTimer = setInterval(() => {
     updateQuickBtns();        // 수유/수면/유축 진행 시간 갱신
+    try { renderCoachCard(); } catch(e) {}   // 코치카드 시간 갱신
     try { updateTodayWidget(); } catch(e) {}  // 위젯 4장 실시간 갱신
   }, 10000);
 }
