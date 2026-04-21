@@ -4660,6 +4660,7 @@ function renderTimeline() {
           icon: {feed:'🍼',sleep:'😴',pump:'🤱'}[r.cat],
           title: dispTitles[r.cat],
           _startTime: todayRecs[startIdx].time,
+          _startOrigIdx: todayRecs[startIdx]._origIdx,  // 시작 기록 원본 인덱스
           _merged: true,
         });
         return;
@@ -5085,18 +5086,49 @@ function saveEditSleep() {
     ? (sub ? sub + ' · ' + durStr.trim() : durStr.trim())
     : (sub || '');
 
-  records[editingIndex] = {
-    ...records[editingIndex],
-    title: newTitle,
-    time: endVal || startVal,
-    _startTime: endVal ? startVal : undefined,
-    _durMin: durMin || undefined,
-    _note: sub,   // 순수 메모만 별도 보존
-    sub: newSub
-  };
+  const r = records[editingIndex];
 
-  // 종료 없음 → 진행 중 상태 유지 (기존 sleepingStart 뱃지 그대로)
-  if (!endVal) {
+  if (endVal) {
+    // 종료 있음: 종료 기록 수정
+    records[editingIndex] = {
+      ...r,
+      title: newTitle,
+      time: endVal,
+      _startTime: startVal,
+      _durMin: durMin || undefined,
+      _note: sub,
+      sub: newSub
+    };
+    // 시작 기록도 함께 수정 (_startOrigIdx로 찾기)
+    const startIdx = r._startOrigIdx !== undefined ? r._startOrigIdx
+      : records.findIndex((s, si) =>
+          si !== editingIndex && s.cat === 'sleep' &&
+          (s.title === '수면 시작' || s.title === '수면') &&
+          Math.abs(new Date(s.time) - new Date(r._startTime || r.time)) < 60000);
+    if (startIdx >= 0 && records[startIdx]) {
+      records[startIdx] = { ...records[startIdx], time: startVal };
+    }
+  } else {
+    // 종료 없음: 시작 기록만 수정 (진행 중)
+    // 시작 기록 인덱스 찾기
+    const startIdx = r._startOrigIdx !== undefined ? r._startOrigIdx
+      : records.findIndex((s, si) =>
+          si !== editingIndex && s.cat === 'sleep' &&
+          (s.title === '수면 시작' || s.title === '수면'));
+    if (startIdx >= 0 && records[startIdx]) {
+      records[startIdx] = { ...records[startIdx], time: startVal };
+    }
+    // 현재 기록(시작 기록 자체)도 수정
+    records[editingIndex] = {
+      ...r,
+      title: newTitle,
+      time: startVal,
+      _startTime: undefined,
+      _durMin: undefined,
+      _note: sub,
+      sub: newSub
+    };
+    // sleepingStart 업데이트
     sleepingStart = new Date(startVal);
     localStorage.setItem(getBabyKey('baby_sleeping'), startVal);
     updateSleepBanner();
