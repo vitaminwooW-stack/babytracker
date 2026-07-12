@@ -172,7 +172,7 @@ body.dark .hdr-btn.dad { background: #18202a; border-color: #1e3a5a; color: #60a
 .swipe-container { display: flex; width: 1000%; height: 100%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
 .swipe-page { width: calc(100% / 10); height: 100%; flex-shrink: 0; overflow: hidden; }
 .swipe-page:nth-child(2) { overflow: hidden; }
-.diary-page { padding: 16px 16px 16px; background: var(--cream-bg); height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; }
+.diary-page { padding: 16px 16px 96px; background: var(--cream-bg); height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; }
 .diary-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .diary-header h2 { font-size: 20px; font-weight: 700; color: var(--text-dark); }
 .diary-write-btn { display: flex; align-items: center; gap: 5px; padding: 8px 16px; background: var(--amber-600); color: #fff; border: none; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; }
@@ -390,7 +390,7 @@ body.dark .ms-month-title { color: #c8a870 !important; }
 .export-btn { display: flex; align-items: center; gap: 6px; width: 100%; padding: 12px 14px; background: var(--cream-card); border: 1px solid var(--amber-200); border-radius:var(--radius-btn); font-size: 14px; font-weight: 600; color: var(--amber-600); cursor: pointer; margin-bottom: 8px; }
 .export-btn:active { background: var(--cream-soft); }
 body.dark .export-btn { background: #2a2520 !important; border-color: #3d3628 !important; color: #c8a870 !important; }
-.feature-page { padding: 16px 16px 60px; background: var(--page-bg, var(--cream-bg)); height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; touch-action: pan-y; }
+.feature-page { padding: 16px 16px 96px; background: var(--page-bg, var(--cream-bg)); height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; touch-action: pan-y; }
 .feature-page-title { font-size: 20px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
 .feature-page-sub { font-size: 13px; color: var(--text-sub); margin-bottom: 16px; }
 .feature-section-title { font-size: 12px; font-weight: 700; color: var(--amber-600); letter-spacing: 0.06em; text-transform: uppercase; margin: 16px 0 8px; }
@@ -509,6 +509,22 @@ body.dark .notif-banner-text { color: #c8a870 !important; }
 .voice-cmd { background: var(--cream-soft); border: 1.5px solid var(--amber-200); border-radius: 20px; padding: 5px 12px; font-size: 12px; color: var(--amber-600); font-weight: 600; white-space: nowrap; }
 body.dark .voice-hero-btn { background: #7a5600; }
 body.dark .voice-hero-btn.listening { background: #dc2626; }
+.voice-fab { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 300; width: 64px; height: 64px; border-radius: 50%; background: var(--amber-600); border: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(122,86,0,0.25); cursor: pointer; color: #FDF9F0; touch-action: manipulation; transition: background 0.15s; }
+.voice-fab .icon { width: 28px; height: 28px; }
+.voice-fab-icon-stop { display: none; }
+.voice-fab.listening { background: #C0504A; animation: voiceFabPulse 1.2s ease-in-out infinite; }
+.voice-fab.listening .voice-fab-icon-mic { display: none; }
+.voice-fab.listening .voice-fab-icon-stop { display: flex; }
+.voice-fab.hidden { display: none !important; }
+@keyframes voiceFabPulse {
+  0%, 100% { box-shadow: 0 4px 14px rgba(192,80,74,0.35), 0 0 0 0 rgba(192,80,74,0.25); }
+  50% { box-shadow: 0 4px 14px rgba(192,80,74,0.35), 0 0 0 10px rgba(192,80,74,0); }
+}
+body.dark .voice-fab { background: #7a5600; }
+body.dark .voice-fab.listening { background: #dc2626; }
+.voice-fab-tooltip { position: fixed; bottom: 94px; left: 50%; transform: translateX(-50%); background: var(--text-dark); color: #fff; padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; white-space: nowrap; z-index: 299; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.voice-fab-tooltip.show { opacity: 1; }
+body.dark .voice-fab-tooltip { background: #2a2520; }
 body.dark body.dark body.dark body.dark 
 
 .dad-rec-section { background: #fff; border-radius: 14px; border: 1.5px solid #e8d796; padding: 14px 16px; margin-bottom: 14px; }
@@ -2015,6 +2031,13 @@ body.dark #fe-pump-ml {
 
     </div>
   </div>
+
+  <!-- ── 플로팅 음성 기록 버튼 (FAB) ── -->
+  <button class="voice-fab hidden" id="voice-fab" onclick="toggleVoice()" aria-label="음성으로 기록하기">
+    <span class="voice-fab-icon-mic"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M6 11v1a6 6 0 0 0 12 0v-1"/><path d="M12 18v3M9 21h6"/></svg></span>
+    <span class="voice-fab-icon-stop"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor"/></svg></span>
+  </button>
+  <div class="voice-fab-tooltip" id="voice-fab-tooltip">말로 기록해보세요</div>
 </div>
 
 <!-- ═══════════ 엄마 케어 상세 모달 ═══════════ -->
@@ -2758,6 +2781,7 @@ const ICONS = {
   settings: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>',
   bell: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>',
   mic: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M6 11v1a6 6 0 0 0 12 0v-1"/><path d="M12 18v3M9 21h6"/></svg>',
+  stop: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor"/></svg>',
   check: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
   close: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
   warning: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20Z"/><path d="M12 9.5v4.5"/><path d="M12 17v.01"/></svg>',
@@ -7743,6 +7767,7 @@ function goToPage(n) {
       try { updateNotifBtnUI(); loadPinToggle(); renderSettingBabyList(); } catch(e) {}
     }, 150);
   }
+  try { syncVoiceFab(); } catch(e) {}
 }
 
 // ── 🟢 개선1: Web Notification ──
@@ -8469,6 +8494,7 @@ function enterApp() {
   try { updateStatus(); } catch(e) {}
 
   showScreen('app');
+  try { syncVoiceFab(); } catch(e) {}
 
   // 자동 음성인식: 항상 시작 (사용자가 이번 세션에서 끄면 꺼짐)
   setTimeout(() => {
@@ -9893,8 +9919,33 @@ function setVoiceBtnState(state) {
       ? '수유 종료 · 수면 종료 · 유축 종료'
       : '수유 시작 · 수면 시작 · 유축 시작 · 기저귀';
   }
+  try { syncVoiceFab(); } catch(e) {}
 }
 function setVoiceBtn(active) { setVoiceBtnState(active); }
+
+// ── 🎙️ 플로팅 음성 버튼 (FAB) — 기존 voice-btn 상태를 그대로 참조해 동기화만 함 ──
+function syncVoiceFab() {
+  const fab = document.getElementById('voice-fab');
+  if (!fab) return;
+  const mainBtn = document.getElementById('voice-btn');
+  const onVoicePage = currentPage === 2;
+  fab.classList.toggle('listening', !!(mainBtn && mainBtn.classList.contains('listening')));
+  fab.classList.toggle('hidden', onVoicePage);
+  const tip = document.getElementById('voice-fab-tooltip');
+  if (tip && onVoicePage) tip.classList.remove('show');
+  else if (!onVoicePage) { try { showVoiceFabTipOnce(); } catch(e) {} }
+}
+
+function showVoiceFabTipOnce() {
+  try {
+    if (localStorage.getItem('voice_fab_tip_shown')) return;
+    const tip = document.getElementById('voice-fab-tooltip');
+    if (!tip) return;
+    tip.classList.add('show');
+    setTimeout(() => { tip.classList.remove('show'); }, 3000);
+    localStorage.setItem('voice_fab_tip_shown', '1');
+  } catch(e) {}
+}
 
 // updateStatus에 세션 상태 포함
 function updateTodayWidget() {
