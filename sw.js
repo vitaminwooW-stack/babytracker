@@ -1,11 +1,11 @@
 // ── 누리케어 Service Worker ──
 // 버전을 올리면 자동으로 사용자 앱이 업데이트돼요
-const VERSION = 'nuri-care-v3.0';
+const VERSION = 'nuri-care-v6.1';
 const CACHE_NAME = VERSION;
 
 // 캐시할 파일 목록
 const CACHE_FILES = [
-  './nuri-care.html?v=3',
+  './nuri-care.html?v=6.1',
 ];
 
 // 오프라인에서도 폰트 유지 (실패해도 설치는 계속 진행)

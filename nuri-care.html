@@ -1817,7 +1817,7 @@ body.dark #fe-pump-ml {
           <div class="dad-rec-section">
             <div class="dad-rec-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> 아빠 기록 <span class="dad-rec-badge">엄마 타임라인에 공유됨</span></div>
             <div class="dad-rec-btns" style="grid-template-columns:1fr 1fr;gap:10px;">
-              <button class="dad-rec-btn feed" onclick="dadRecordFeed()" style="padding:16px 8px;border-radius:var(--radius-btn);display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid var(--cream-soft);background:var(--cream-soft);">
+              <button class="dad-rec-btn feed" onclick="dadRecordFeed()" style="padding:16px 8px;border-radius:var(--radius-btn);display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid #C2410C;background:var(--cream-soft);">
                 <span class="u-text28"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6M10 2v3.5L8 8v11a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V8l-2-2.5V2"/><path d="M9 12h6"/></svg></span>
                 <span style="font-size:13px;font-weight:800;color:var(--amber-800);">분유·수유</span>
                 <span style="font-size:10px;color:var(--amber-600);opacity:0.8;">기록하기</span>
@@ -2062,6 +2062,7 @@ body.dark #fe-pump-ml {
 <div class="modal-bg" id="modal-dad-record" role="dialog" aria-modal="true" aria-label="아빠 기록">
   <div class="modal u-modal-scroll">
     <div class="modal-handle"></div>
+    <button class="modal-close-x" aria-label="닫기" onclick="closeDadRecordModal()"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     <div id="dad-record-header" style="text-align:center;padding:8px 0 20px;">
       <div id="dad-rec-emoji" style="font-size:52px;margin-bottom:8px;"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6M10 2v3.5L8 8v11a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V8l-2-2.5V2"/><path d="M9 12h6"/></svg></div>
       <div id="dad-rec-title" style="font-size:19px;font-weight:900;color:var(--text-dark);margin-bottom:4px;"></div>
@@ -2605,6 +2606,7 @@ body.dark #fe-pump-ml {
 <div class="modal-bg" id="modal-feed-end" role="dialog" aria-modal="true" aria-label="수유 완료">
   <div class="modal">
     <div class="modal-handle"></div>
+    <button class="modal-close-x" aria-label="닫기" onclick="closeFeedEndModal(false)"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     <h2>🍼 수유 완료</h2>
     <span class="field-label">수유 방법</span>
     <div class="opt-row" style="gap:6px;flex-wrap:wrap;margin-bottom:16px;">
