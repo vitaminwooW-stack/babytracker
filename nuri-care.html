@@ -53,7 +53,7 @@ input:focus { border-color: var(--amber-200); }
 .role-card:active { transform: scale(0.96); }
 .dad-body { max-width: 480px; margin: 0 auto; padding: 16px 16px 16px; width: 100%; }
 .dad-section { margin-bottom: 20px; }
-.dad-section-title { font-size: 14px; font-weight: 800; color: #1e293b; letter-spacing: -0.01em; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+.dad-section-title { font-size: 14px; font-weight: 800; color: var(--text-dark); letter-spacing: -0.01em; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
 .dad-section-title span { display: none; }
 .dad-check-card { background: var(--cream-card); border-radius:var(--radius-card); border: 1px solid var(--amber-100); overflow: hidden; box-shadow: none; }
 .dad-check-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--cream-soft); cursor: pointer; transition: background 0.15s; }
@@ -63,7 +63,7 @@ input:focus { border-color: var(--amber-200); }
 .dad-checkbox { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--amber-100); flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: all 0.15s; }
 .dad-checkbox.checked { background: #4A7A3F; border-color: #4A7A3F; }
 .dad-checkbox.checked::after { content: '✓'; color: #fff; font-size: 13px; font-weight: 700; }
-.dad-check-title { font-size: 14px; font-weight: 600; color: #1e293b; }
+.dad-check-title { font-size: 14px; font-weight: 600; color: var(--text-dark); }
 .dad-check-info { flex: 1; min-width: 0; }
 .dad-check-desc { font-size: 12px; color: var(--text-sub); margin-top: 3px; line-height: 1.5; word-break: keep-all; white-space: normal; }
 .dad-praise { font-size: 13px; color: #4A7A3F; font-weight: 600; margin-top: 4px; }
@@ -93,7 +93,7 @@ input:focus { border-color: var(--amber-200); }
 .policy-applied-badge { font-size: 11px; background: #F0F7EC; color: #4A7A3F; padding: 2px 8px; border-radius: 8px; font-weight: 600; margin-left: auto; flex-shrink: 0; }
 .login-box { width: 100%; max-width: 360px; padding: 0 24px; }
 .login-logo { text-align: center; margin-bottom: 28px; }
-.login-logo .logo-icon { font-size: 30px; margin-bottom: 10px; font-weight: 900; letter-spacing: -0.04em; color: #1f2937; line-height: 1.15; }
+.login-logo .logo-icon { font-size: 30px; margin-bottom: 10px; font-weight: 900; letter-spacing: -0.04em; color: var(--text-dark); line-height: 1.15; }
 .login-logo h1 { font-size: 26px; font-weight: 700; color: var(--text-dark); }
 .login-logo p { font-size: 14px; color: var(--text-sub); margin-top: 6px; }
 .pin-label { text-align: center; font-size: 15px; color: var(--text-dark); margin-bottom: 16px; line-height: 1.6; }
@@ -327,6 +327,7 @@ body.dark { background: #1a1612 !important; color: #f0ead8; --card-bg: #2a2520; 
 body.dark .app-header, body.dark .timeline-card, body.dark .status-card,
 
 body.dark .photo-page, body.dark .swipe-page { background: #1a1612; }
+body.dark .baby-avatar { background: #2a2520 !important; border-color: #5a4a10 !important; color: #f0ead8 !important; }
 body.dark .s-label, body.dark .baby-age, body.dark .header-date, body.dark .t-sub,
 
 body.dark .baby-name, body.dark .t-title, body.dark .guide-card-title { color: #f0ead8; }
@@ -487,6 +488,8 @@ body.dark .onboarding-title { color: #f0ead8 !important; }
 .notif-banner-text { flex: 1; font-size: 13px; color: var(--amber-800); line-height: 1.5; word-break: keep-all; }
 .notif-banner-btn { background: var(--amber-600); color: #fff; border: none; border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 .notif-banner-close { background: none; border: none; color: var(--text-faint); font-size: 16px; cursor: pointer; padding: 0; flex-shrink: 0; }
+body.dark .notif-banner { background: #2a2520 !important; border-color: #5a4a10 !important; }
+body.dark .notif-banner-text { color: #c8a870 !important; }
 .pin-forgot-btn { display: block; text-align: center; font-size: 12px; color: var(--text-faint); cursor: pointer; margin-top: 8px; text-decoration: underline; }
 .pin-forgot-btn:active { color: var(--text-sub); }
 .backup-toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: var(--text-dark); color: #fff; padding: 12px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; z-index: 8000; box-shadow: 0 4px 16px rgba(0,0,0,0.25); max-width: 300px; text-align: center; display: flex; align-items: center; gap: 8px; }
@@ -531,8 +534,9 @@ body.dark .dad-rec-title { color: #f0ead8 !important; }
 body.dark .dad-rec-item-title { color: #f0ead8; }
 .quick-nav-bar { display: flex; align-items: center; justify-content: space-around; padding: 4px 8px 2px; background: var(--cream-card); border-top: 1px solid var(--cream-soft); overflow-x: auto; scrollbar-width: none; gap: 2px; }
 .quick-nav-bar::-webkit-scrollbar { display: none; }
-.qnav-btn { flex: 1; min-width: 32px; padding: 5px 2px 3px; border: none; background: none; font-size: 18px; border-radius: 8px; cursor: pointer; transition: background 0.15s; line-height: 1; position: relative; }
+.qnav-btn { flex: 1; min-width: 32px; padding: 5px 2px 3px; border: none; background: none; font-size: 18px; border-radius: 8px; cursor: pointer; transition: background 0.15s; line-height: 1; position: relative; color: var(--btn-inactive-color); }
 .qnav-btn::after { content: ''; display: block; height: 3px; border-radius: 2px; background: transparent; margin: 2px auto 0; width: 20px; transition: background 0.15s; }
+.qnav-btn.active { color: var(--amber-600); }
 .qnav-btn.active::after { background: var(--amber-600); }
 .qnav-btn.active { background: var(--cream-soft); }
 .qnav-btn:active { background: var(--cream-soft); }
@@ -586,7 +590,7 @@ body.dark .mom-detail-item { border-color: #3d3628; }
 .pattern-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
 .pattern-insight { background: var(--cream-soft); border: 1.5px solid var(--amber-200); border-radius:var(--radius-card); padding: 12px 14px; margin-bottom: 12px; font-size: 13px; color: var(--amber-600); line-height: 1.7; font-weight: 500; word-break: keep-all; }
 body.dark .pattern-bar-bg { background: #3d3628; }
-.mood-btn { font-size: 28px; background: none; border: 2.5px solid transparent; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; line-height: 1; }
+.mood-btn { font-size: 28px; background: none; border: 2.5px solid transparent; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; line-height: 1; color: var(--btn-inactive-color); }
 .mood-btn:active { transform: scale(0.9); }
 .mood-btn.selected { border-color: var(--amber-600); background: var(--cream-soft); transform: scale(1.15); }
 .tl-item { display: flex; gap: 0; padding: 0; border-bottom: 1px solid var(--cream-soft); align-items: stretch; }
@@ -623,7 +627,7 @@ body.dark #modal-manual-record .modal { background: #2a2520 !important; }
 body.dark #modal-manual-record textarea { background: #3d3628 !important; border-color: #4d4030 !important; color: #f0ead8 !important; }
 body.dark #score-card-wrap * { color: #f0ead8; }
 body.dark #score-card-wrap [style*="background"] { background: #2a2520 !important; }
-body.dark [style*="var(--cream-soft)"],[style*="var(--cream-soft)"] { background: #2a1520 !important; }
+body.dark [style*="var(--cream-soft)"],body.dark [style*="var(--cream-soft)"] { background: #2a1520 !important; }
 body.dark .feature-page .chart-wrap { background: #2a2520 !important; border-color: #3d3628 !important; }
 body.dark [style*="background:var(--cream-bg)"] { background: #2a2520 !important; }
 body.dark [style*="background:var(--cream-soft)"] { background: #3d3628 !important; }
@@ -1412,10 +1416,10 @@ body.dark #fe-pump-ml {
       <button class="qnav-btn" onclick="goToPage(1)" id="qn-1" aria-label="아기 사진" title="아기 사진"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg></button>
       <button class="qnav-btn active" onclick="goToPage(2)" id="qn-2" aria-label="수유 기록 메인" title="수유 기록 메인"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6M10 2v3.5L8 8v11a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V8l-2-2.5V2"/><path d="M9 12h6"/></svg></button>
       <button class="qnav-btn" onclick="goToPage(3)" id="qn-3" aria-label="생활 패턴" title="생활 패턴"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></button>
-      <button class="qnav-btn" onclick="goToPage(4)" id="qn-4" aria-label="통계 분석" title="통계 분석"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></button>
+      <button class="qnav-btn" onclick="goToPage(4)" id="qn-4" aria-label="통계 분석" title="통계 분석"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/></svg></button>
       <button class="qnav-btn" onclick="goToPage(5)" id="qn-5" aria-label="성장 기록" title="성장 기록"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></button>
       <button class="qnav-btn" onclick="goToPage(6)" id="qn-6" aria-label="발달 마일스톤" title="발달 마일스톤"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.9L21 9.6l-4.5 4.3 1.2 6.1L12 17l-5.7 3 1.2-6.1L3 9.6l6.4-.7Z"/></svg></button>
-      <button class="qnav-btn" onclick="goToPage(7)" id="qn-7" aria-label="엄마 케어" title="엄마 케어"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="3"/><path d="M2 21c0-3.9 2.7-6.5 6-6.5s6 2.6 6 6.5"/><circle cx="17.5" cy="8" r="2.3"/><path d="M15 21c.3-2.9 2.1-5 4.8-5.3"/></svg></button>
+      <button class="qnav-btn" onclick="goToPage(7)" id="qn-7" aria-label="엄마 케어" title="엄마 케어"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.35-9.5-8.5C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.5C14.3 5.2 15.8 4 18 4c4 0 5.5 4 3.5 7.5C19 15.65 12 20 12 20Z"/></svg></button>
       <button class="qnav-btn" onclick="goToPage(8)" id="qn-8" aria-label="아빠 공간" title="아빠 공간"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="3"/><path d="M2 21c0-3.9 2.7-6.5 6-6.5s6 2.6 6 6.5"/><circle cx="17.5" cy="8" r="2.3"/><path d="M15 21c.3-2.9 2.1-5 4.8-5.3"/></svg></button>
       <button class="qnav-btn" onclick="goToPage(9)" id="qn-9" aria-label="설정" title="설정"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg></button>
     </div>
@@ -1596,7 +1600,7 @@ body.dark #fe-pump-ml {
 <!-- ── 페이지 3.5(통계): 통계 & 분석 ── -->
       <div class="swipe-page">
         <div class="feature-page">
-          <div class="feature-page-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg> 통계 & 분석</div>
+          <div class="feature-page-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/></svg> 통계 & 분석</div>
 
           <div id="mood-selector-wrap" style="background:var(--cream-soft);border-radius:var(--radius-card);padding:14px 16px;margin-bottom:12px;">
             <div style="font-size:12px;font-weight:700;color:var(--amber-600);margin-bottom:10px;">오늘 육아는 어땠나요?</div>
@@ -1738,7 +1742,7 @@ body.dark #fe-pump-ml {
       <div class="swipe-page">
         <div class="mom-page" id="mom-care-page">
           <div class="mom-page-header" id="mom-page-header-el">
-            <h2><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="3"/><path d="M2 21c0-3.9 2.7-6.5 6-6.5s6 2.6 6 6.5"/><circle cx="17.5" cy="8" r="2.3"/><path d="M15 21c.3-2.9 2.1-5 4.8-5.3"/></svg> 엄마 케어</h2>
+            <h2><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.35-9.5-8.5C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.5C14.3 5.2 15.8 4 18 4c4 0 5.5 4 3.5 7.5C19 15.65 12 20 12 20Z"/></svg> 엄마 케어</h2>
             <p>출산 후 엄마 회복 정보 &amp; 커뮤니티</p>
           </div>
           <div id="mom-birth-type-badge"></div>
@@ -1898,7 +1902,7 @@ body.dark #fe-pump-ml {
                 <strong>앱을 더 빠르게 실행</strong>할 수 있어요
               </div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                <button onclick="showSiriGuideModal()" style="padding:12px 8px;background:#000;color:#fff;border:none;border-radius:var(--radius-btn);font-size:12px;font-weight:700;cursor:pointer;line-height:1.8;">
+                <button onclick="showSiriGuideModal()" style="padding:12px 8px;background:var(--amber-600);color:#fff;border:none;border-radius:var(--radius-btn);font-size:12px;font-weight:700;cursor:pointer;line-height:1.8;">
                   🍎 Siri 단축어<br><span style="font-size:10px;font-weight:400;opacity:0.8;">iPhone 전용</span>
                 </button>
                 <button onclick="showAssistantGuideModal()" style="padding:12px 8px;background:var(--amber-600);color:#fff;border:none;border-radius:var(--radius-btn);font-size:12px;font-weight:700;cursor:pointer;line-height:1.8;">
@@ -2762,6 +2766,7 @@ const ICONS = {
   family: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="3"/><path d="M2 21c0-3.9 2.7-6.5 6-6.5s6 2.6 6 6.5"/><circle cx="17.5" cy="8" r="2.3"/><path d="M15 21c.3-2.9 2.1-5 4.8-5.3"/></svg>',
   tip: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.6 1 1.4 1 2.5h6c0-1.1.3-1.9 1-2.5A6 6 0 0 0 12 3Z"/></svg>',
   chart: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>',
+  barChart: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/></svg>',
   star: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.9L21 9.6l-4.5 4.3 1.2 6.1L12 17l-5.7 3 1.2-6.1L3 9.6l6.4-.7Z"/></svg>',
   clock: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
   save: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5Z"/><path d="M8 4v5h7V4"/><path d="M8 14h8v6H8Z"/></svg>',
@@ -2796,6 +2801,7 @@ const ICONS = {
   wave: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V4a1.5 1.5 0 0 1 3 0v5"/><path d="M11 9V3a1.5 1.5 0 0 1 3 0v6"/><path d="M14 9V5a1.5 1.5 0 0 1 3 0v4"/><path d="M17 10V8a1.5 1.5 0 0 1 3 0v5c0 4-3 7-7 7h-1c-2.5 0-3.5-1-4.5-2.5l-2-3.3a1.3 1.3 0 0 1 2.2-1.4L9 11"/></svg>',
   box: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8 12 4l9 4-9 4-9-4Z"/><path d="M3 8v9l9 4 9-4V8"/><path d="M12 12v9"/></svg>',
   crawl: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15c2-4 4-4 6 0s4 4 6 0 4-4 6 0"/></svg>',
+  copy: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>',
 };
 // 기존에 저장된 기록의 icon 필드(이모지 문자열)를 화면 표시용 SVG로 변환. 저장 데이터는 그대로 두고 렌더링 시점에만 매핑.
 const EMOJI_TO_ICON = {
@@ -4286,15 +4292,16 @@ function renderPatternClock() {
     });
   }
   const dayRecs = records.filter(r => r.time && targetDates.includes(r.time.slice(0,10)));
+  const isDark = document.body.classList.contains('dark');
 
   // 배경 원 (트랙)
   ctx.beginPath();
   ctx.arc(cx, cy, outerR, 0, Math.PI*2);
-  ctx.fillStyle = 'var(--cream-soft)';
+  ctx.fillStyle = isDark ? '#2a2520' : '#FAEEDA';
   ctx.fill();
   ctx.beginPath();
   ctx.arc(cx, cy, innerR, 0, Math.PI*2);
-  ctx.fillStyle = 'var(--cream-card)';
+  ctx.fillStyle = isDark ? '#1a1612' : '#FFFFFF';
   ctx.fill();
 
   // 호 그리기 함수
@@ -4374,7 +4381,7 @@ function renderPatternClock() {
     ctx.beginPath();
     ctx.moveTo(cx+r1*Math.cos(angle), cy+r1*Math.sin(angle));
     ctx.lineTo(cx+r2*Math.cos(angle), cy+r2*Math.sin(angle));
-    ctx.strokeStyle = isMajor ? '#999' : '#ddd';
+    ctx.strokeStyle = isDark ? (isMajor ? '#6b5f45' : '#4a4030') : (isMajor ? '#999' : '#ddd');
     ctx.lineWidth = isMajor ? 1.5 : 1;
     ctx.stroke();
     // 모든 짝수 시간 표시 (0,2,4,...22)
@@ -4382,7 +4389,7 @@ function renderPatternClock() {
       const labelR = outerR + (isMajor ? 22 : 18);
       const tx = cx + labelR*Math.cos(angle);
       const ty = cy + labelR*Math.sin(angle);
-      ctx.fillStyle = isMajor ? '#555' : '#aaa';
+      ctx.fillStyle = isDark ? (isMajor ? '#e0d5b8' : '#a89880') : (isMajor ? '#555' : '#aaa');
       ctx.font = isMajor ? 'bold 10px sans-serif' : '9px sans-serif';
       ctx.textAlign='center'; ctx.textBaseline='middle';
       ctx.fillText(h, tx, ty);
@@ -4407,14 +4414,14 @@ function renderPatternClock() {
   // D+숫자 크게
   ctx.textAlign='center'; ctx.textBaseline='middle';
   if (displayDays !== null) {
-    ctx.fillStyle='var(--amber-600)'; ctx.font='bold 18px sans-serif';
+    ctx.fillStyle='#854F0B'; ctx.font='bold 18px sans-serif';
     ctx.fillText('D+'+displayDays, cx, cy-6);
   } else {
-    ctx.fillStyle='var(--text-faint)'; ctx.font='bold 14px sans-serif';
+    ctx.fillStyle=isDark ? '#a89880' : '#B8A888'; ctx.font='bold 14px sans-serif';
     ctx.fillText('--', cx, cy-6);
   }
   // 날짜 작게
-  ctx.fillStyle='var(--text-faint)'; ctx.font='10px sans-serif';
+  ctx.fillStyle=isDark ? '#a89880' : '#B8A888'; ctx.font='10px sans-serif';
   ctx.fillText(_patternTab==='day' ? sel.slice(5).replace('-','/') : '7일 평균', cx, cy+12);
 
   // 패턴 인사이트 텍스트
@@ -5362,7 +5369,7 @@ function renderPhotoPage() {
   const ph = document.getElementById('photo-placeholder');
   if (ph && name) {
     ph.innerHTML =
-      '<span class="ph-icon">📷</span>' +
+      '<span class="ph-icon">' + ICONS.photo + '</span>' +
       '<div style="font-size:22px;font-weight:700;color:var(--amber-800);margin-top:4px;">' + name + '</div>' +
       '<div style="font-size:13px;color:var(--amber-400);margin-top:2px;">' + daysText + '</div>' +
       '<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;justify-content:center;">' +
@@ -6083,8 +6090,8 @@ function renderMainChart() {
   const barW = Math.floor((W - 40) / 7) - 4;
   ctx.clearRect(0, 0, W, H);
   const dark = document.body.classList.contains('dark');
-  const gridColor = dark ? '#3d3628' : 'var(--cream-soft)';
-  const textColor = dark ? '#a89880' : 'var(--text-sub)';
+  const gridColor = dark ? '#3d3628' : '#FAEEDA';
+  const textColor = dark ? '#a89880' : '#9A8B70';
   // 그리드
   for (let g = 0; g <= 4; g++) {
     const y = 10 + (H - 30) / 4 * g;
@@ -6159,8 +6166,8 @@ function renderGrowthChart() {
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
   const dark = document.body.classList.contains('dark');
-  const gridColor = dark ? '#4a3a28' : 'var(--cream-soft)';
-  const textColor = dark ? '#d4c4a8' : 'var(--amber-800)';
+  const gridColor = dark ? '#4a3a28' : '#FAEEDA';
+  const textColor = dark ? '#d4c4a8' : '#633806';
   const bgColor   = dark ? '#1a1612' : '#fff';
   ctx.clearRect(0,0,W,H);
   ctx.fillStyle = bgColor;
@@ -6765,6 +6772,9 @@ function toggleDarkMode() {
   try { renderMomCarePage(); } catch(e) {}
   try { renderMilestoneList(); } catch(e) {}
   try { renderPatternClock(); } catch(e) {}
+  try { renderCoachCard(); } catch(e) {}
+  try { renderMainChart(); } catch(e) {}
+  try { renderGrowthChart(); } catch(e) {}
   try { if (document.getElementById('dad-tab-checklist-urgent').innerHTML) renderDadTabChecklist(); } catch(e) {}
 }
 
@@ -7023,7 +7033,13 @@ function renderCoachCard() {
   const c = cards[0];
 
   // 색상 맵
-  const colorMap = {
+  const isDark = document.body.classList.contains('dark');
+  const colorMap = isDark ? {
+    red:    { bg:'#2a1a1a', border:'#5a2a2a', text:'#f5a3a3' },
+    yellow: { bg:'#2a2418', border:'#5a4a20', text:'#e0c070' },
+    green:  { bg:'#1a2a18', border:'#2e4a2a', text:'#86efac' },
+    blue:   { bg:'#161f2a', border:'#2a3f5a', text:'#93c5fd' },
+  } : {
     red:    { bg:'#fff1f2', border:'#fca5a5', text:'#dc2626' },
     yellow: { bg:'#fffbeb', border:'#fde68a', text:'#92400e' },
     green:  { bg:'#f0fdf4', border:'#86efac', text:'#16a34a' },
@@ -8065,8 +8081,9 @@ function showSiriGuideModal() {
         <div style="font-size:14px;font-weight:700;color:var(--text-dark);">${s.label}</div>
         <div class="u-hint">Hey Siri, "${s.phrase}"</div>
       </div>
-      <button onclick="copySiriUrl('${s.url}','${s.phrase}')"
-        style="padding:6px 12px;background:#000;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">
+      <button onclick="copySiriUrl('${s.url}','${s.phrase}')" aria-label="URL 복사"
+        style="padding:6px 12px;background:var(--amber-600);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;">
+        ${ICONS.copy} 복사
       </button>
     </div>`).join('');
 
@@ -8086,7 +8103,7 @@ function showSiriGuideModal() {
         설정 후 "Hey Siri, 수유 시작" 이라고 말하면 앱이 열리면서 바로 기록돼요!
       </div>
       <button onclick="document.getElementById('siri-guide-modal').remove();"
-        style="width:100%;padding:14px;background:#000;color:#fff;border:none;border-radius:var(--radius-btn);font-size:15px;font-weight:700;cursor:pointer;margin-bottom:8px;">
+        style="width:100%;padding:14px;background:var(--amber-600);color:#fff;border:none;border-radius:var(--radius-btn);font-size:15px;font-weight:700;cursor:pointer;margin-bottom:8px;">
         단축어 앱 열기
       </button>
       <button onclick="document.getElementById('siri-guide-modal').remove();obNext();"
@@ -9993,10 +10010,10 @@ function _openDadModal(type) {
   });
   // 타입별 설정
   const configs = {
-    feed:   { emoji:ICONS.feed, title:'수유 기록', color:'#c2410c', detail:'dad-feed-detail' },
-    diaper: { emoji:ICONS.diaper, title:'기저귀 기록', color:'#15803d', detail:'dad-diaper-detail' },
-    sleep:  { emoji:ICONS.sleep, title:'재웠어요', color:'#1d4ed8', detail:'dad-sleep-detail' },
-    bath:   { emoji:ICONS.bath, title:'목욕 기록', color:'#0e7490', detail:'dad-bath-detail' },
+    feed:   { emoji:ICONS.feed, title:'수유 기록', color:'var(--amber-600)', detail:'dad-feed-detail' },
+    diaper: { emoji:ICONS.diaper, title:'기저귀 기록', color:'#4A7A3F', detail:'dad-diaper-detail' },
+    sleep:  { emoji:ICONS.sleep, title:'재웠어요', color:'var(--amber-600)', detail:'dad-sleep-detail' },
+    bath:   { emoji:ICONS.bath, title:'목욕 기록', color:'var(--amber-600)', detail:'dad-bath-detail' },
   };
   const cfg = configs[type] || configs.feed;
   el('dad-rec-emoji').innerHTML = cfg.emoji;
@@ -10154,43 +10171,28 @@ function _uploadLocalToFirebase(db, fid) {
 
 // Firebase에 기록 저장 (addRecord 호출 시 자동 실행)
 function _pushRecordToFirebase(r) {
-  waitForFirebase(db => {
-    if (!db || !_syncActive) return;
-    const fid = getFamilyId();
-    if (!fid) return;
-    const F = window._nuriFirebase;
-    const key = `r${Date.now()}_${Math.random().toString(36).slice(2,7)}`;
-    F.set(F.ref(db, `families/${fid}/records/${key}`), { ...r, _ts: Date.now() })
-      .catch(e => console.warn('record push:', e));
-  });
+  if (!FB_ENABLED || !fbDb || !fbSyncActive || !fbFamilyId) return;
+  const key = `r${Date.now()}_${Math.random().toString(36).slice(2,7)}`;
+  fbDb.ref(`families/${fbFamilyId}/records/${key}`).set({ ...r, _ts: Date.now() })
+    .catch(e => console.warn('record push:', e));
 }
 
 // Firebase에 session 저장
 function _syncSessionToFirebase() {
-  waitForFirebase(db => {
-    if (!db || !_syncActive) return;
-    const fid = getFamilyId();
-    if (!fid) return;
-    const F = window._nuriFirebase;
-    F.set(F.ref(db, `families/${fid}/sessions`), {
-      sleeping: sleepingStart ? sleepingStart.toISOString() : null,
-      pumping: pumpingStart ? pumpingStart.toISOString() : null,
-      feeding: feedingStart ? feedingStart.toISOString() : null,
-    }).catch(e => console.warn('session sync:', e));
-  });
+  if (!FB_ENABLED || !fbDb || !fbSyncActive || !fbFamilyId) return;
+  fbDb.ref(`families/${fbFamilyId}/sessions`).set({
+    sleeping: sleepingStart ? sleepingStart.toISOString() : null,
+    pumping: pumpingStart ? pumpingStart.toISOString() : null,
+    feeding: feedingStart ? feedingStart.toISOString() : null,
+  }).catch(e => console.warn('session sync:', e));
 }
 
 // Firebase에 dad_checks 저장
 function _syncDadChecksToFirebase() {
-  waitForFirebase(db => {
-    if (!db || !_syncActive) return;
-    const fid = getFamilyId();
-    if (!fid) return;
-    const F = window._nuriFirebase;
-    const checks = JSON.parse(localStorage.getItem(getBabyKey('dad_checks')) || '{}');
-    F.set(F.ref(db, `families/${fid}/dad_checks`), checks)
-      .catch(e => console.warn('dad_checks sync:', e));
-  });
+  if (!FB_ENABLED || !fbDb || !fbSyncActive || !fbFamilyId) return;
+  const checks = JSON.parse(localStorage.getItem(getBabyKey('dad_checks')) || '{}');
+  fbDb.ref(`families/${fbFamilyId}/dad_checks`).set(checks)
+    .catch(e => console.warn('dad_checks sync:', e));
 }
 
 // 동기화 알림 토스트
@@ -10598,7 +10600,7 @@ function renderSettingBabyList() {
     return `<div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:var(--radius-card);margin-bottom:8px;
         background:${isActive?(isDark?'#3d3628':'var(--cream-soft)'):(isDark?'#2a2520':'var(--cream-soft)')};
         border:1.5px solid ${isActive?'var(--amber-600)':(isDark?'#3d3628':'var(--amber-100)')};">
-      <div style="font-size:28px;">${b.avatar||'👶'}</div>
+      <div style="font-size:28px;color:${isDark?'#f0ead8':'var(--text-dark)'};">${emojiToIcon(b.avatar||'👶')}</div>
       <div style="flex:1;">
         <div style="font-size:14px;font-weight:800;color:${isDark?'#f0ead8':'var(--text-dark)'};">${b.name}
           ${isActive?'<span style="font-size:10px;background:var(--amber-600);color:#fff;border-radius:6px;padding:1px 6px;margin-left:4px;">현재</span>':''}
