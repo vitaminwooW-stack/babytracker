@@ -241,7 +241,7 @@ body.dark .hdr-btn.dad { background: #18202a; border-color: #1e3a5a; color: #60a
 .baby-photo-placeholder .ph-icon { font-size: 52px; }
 .baby-photo-placeholder p { font-size: 15px; color: var(--amber-400); font-weight: 500; }
 .photo-upload-input { display: none; }
-.photo-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 48px 20px 24px; background: linear-gradient(transparent, rgba(0,0,0,0.65)); }
+.photo-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 48px 20px 124px; background: linear-gradient(transparent, rgba(0,0,0,0.65)); }
 .photo-baby-name { font-size: 26px; font-weight: 700; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.4); }
 .photo-baby-days { font-size: 14px; color: rgba(255,255,255,0.9); margin-top: 4px; }
 .photo-info-row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
@@ -719,7 +719,7 @@ body.dark [style*="background:var(--cream-soft)"] { background: var(--dark-card)
 body.dark [style*="background:var(--cream-bg)"] { background: var(--dark-bg) !important; }
 body.dark [style*="background:var(--cream-soft)"] { background: var(--dark-card) !important; }
 body.dark [style*="color:var(--amber-600)"]:not(button):not(.active) { color: var(--dark-amber) !important; }
-body.dark .dad-rec-btn.feed { background: linear-gradient(135deg,#2a1a08,#3a2010) !important; border-color: #c2410c !important; }
+body.dark .dad-rec-btn.feed { background: linear-gradient(135deg,#2a2010,#3a2e10) !important; border-color: var(--dark-amber) !important; }
 body.dark .dad-rec-btn.diaper { background: linear-gradient(135deg,#0a2010,#162a18) !important; border-color: #15803d !important; }
 body.dark .dad-rec-btn.sleep { background: linear-gradient(135deg,#0f1a2a,#1a2a3a) !important; border-color: #1d4ed8 !important; }
 body.dark .dad-rec-btn.bath { background: linear-gradient(135deg,#0a1e22,#102830) !important; border-color: #0e7490 !important; }
@@ -1501,7 +1501,7 @@ body.dark #fe-pump-ml {
               <div class="photo-baby-days" id="photo-days-text"></div>
               <div class="photo-info-row" id="photo-info-chips"></div>
             </div>
-            <button class="photo-change-btn" id="photo-change-btn" style="display:none;" onclick="document.getElementById('photo-file-input').click()">📷 사진 변경</button>
+            <button class="photo-change-btn" id="photo-change-btn" style="display:none;" onclick="document.getElementById('photo-file-input').click()"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg> 사진 변경</button>
           </div>
           <div class="no-photo-info" id="no-photo-info">
             <div class="baby-dname" id="photo-name-noimg"></div>
@@ -1533,8 +1533,8 @@ body.dark #fe-pump-ml {
               <span class="voice-cmd" id="vc-feed">수유 시작/종료</span>
               <span class="voice-cmd">수면 시작/종료</span>
               <span class="voice-cmd" id="vc-pump">유축 시작/종료</span>
-              <span class="voice-cmd">💧 기저귀 소변</span>
-              <span class="voice-cmd">💩 기저귀 대변</span>
+              <span class="voice-cmd">기저귀 소변</span>
+              <span class="voice-cmd">기저귀 대변</span>
               <span class="voice-cmd">응가했어</span>
             </div>
           </div>
@@ -1649,16 +1649,13 @@ body.dark #fe-pump-ml {
           <!-- ① 핵심 지표 카드 -->
           <div class="pattern-grid" id="kpi-card-wrap" style="grid-template-columns:1fr 1fr 1fr;"></div>
 
-          <!-- ② 최근 7일 수유 막대그래프 -->
-          <div id="feed-bar-chart-wrap"></div>
-
-          <!-- ③ 시간대별 수유 빈도 히트맵 -->
+          <!-- ② 시간대별 수유 빈도 히트맵 -->
           <div id="time-heatmap-wrap"></div>
 
-          <!-- ④ 한 줄 인사이트 -->
+          <!-- ③ 한 줄 인사이트 -->
           <div id="oneline-insight-wrap"></div>
 
-          <!-- 상세 차트 (카테고리별 최근 7일) -->
+          <!-- ④ 최근 7일 차트 (카테고리별 토글 + 수유 탭엔 권장 범위 밴드) -->
           <div class="chart-tab-row">
             <button class="chart-tab active" id="ctab-feed" onclick="selectChartTab('feed')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6M10 2v3.5L8 8v11a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V8l-2-2.5V2"/><path d="M9 12h6"/></svg> 수유</button>
             <button class="chart-tab" id="ctab-sleep" onclick="selectChartTab('sleep')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg> 수면</button>
@@ -1705,6 +1702,11 @@ body.dark #fe-pump-ml {
           <div class="feature-page-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg> 성장 기록</div>
           <div class="feature-page-sub">키·몸무게를 기록하고 한국 평균과 비교해요</div>
 
+          <!-- 성장 요약 카드 -->
+          <div id="growth-latest-badge" style="display:none;background:#F0F7EC;border:1.5px solid #4A7A3F;border-radius:var(--radius-card);padding:16px;margin-bottom:16px;">
+            <div id="growth-latest-text" style="color:#4A7A3F;"></div>
+          </div>
+
           <!-- 새 기록 입력 카드 -->
           <div id="growth-input-card" class="growth-input-card">
             <div class="growth-card-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> 새 기록 추가</div>
@@ -1736,11 +1738,6 @@ body.dark #fe-pump-ml {
               style="width:100%;padding:13px;background:var(--amber-600);color:#fff;border:none;border-radius:var(--radius-btn);font-size:15px;font-weight:800;cursor:pointer;letter-spacing:-0.02em;">
               📝 기록 추가
             </button>
-          </div>
-
-          <!-- 성장 요약 카드 -->
-          <div id="growth-latest-badge" style="display:none;background:#F0F7EC;border:1.5px solid #4A7A3F;border-radius:var(--radius-card);padding:16px;margin-bottom:16px;">
-            <div id="growth-latest-text" style="color:#4A7A3F;"></div>
           </div>
 
           <!-- 차트 탭 -->
@@ -1813,7 +1810,7 @@ body.dark #fe-pump-ml {
             <div class="community-search-title">커뮤니티 검색</div>
             <div class="community-query-chips" id="community-chips"></div>
             <div class="community-result" id="community-result">검색 버튼을 눌러주세요</div>
-            <button class="search-btn" onclick="searchCommunity()">🔍 지금 검색하기</button>
+            <button class="search-btn" onclick="searchCommunity()" style="display:flex;align-items:center;justify-content:center;gap:6px;"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg> 지금 검색하기</button>
           </div>
         </div>
       </div>
@@ -1846,7 +1843,7 @@ body.dark #fe-pump-ml {
           <div class="dad-rec-section">
             <div class="dad-rec-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> 아빠 기록 <span class="dad-rec-badge">엄마 타임라인에 공유됨</span></div>
             <div class="dad-rec-btns" style="grid-template-columns:1fr 1fr;gap:10px;">
-              <button class="dad-rec-btn feed" onclick="dadRecordFeed()" style="padding:16px 8px;border-radius:var(--radius-btn);display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid #C2410C;background:var(--cream-soft);">
+              <button class="dad-rec-btn feed" onclick="dadRecordFeed()" style="padding:16px 8px;border-radius:var(--radius-btn);display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid var(--amber-600);background:var(--cream-soft);">
                 <span class="u-text28"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6M10 2v3.5L8 8v11a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V8l-2-2.5V2"/><path d="M9 12h6"/></svg></span>
                 <span style="font-size:13px;font-weight:800;color:var(--amber-800);">분유·수유</span>
                 <span style="font-size:10px;color:var(--amber-600);opacity:0.8;">기록하기</span>
@@ -1937,7 +1934,7 @@ body.dark #fe-pump-ml {
             </button>
             <!-- 출생 기념 카드 -->
             <button onclick="openBirthCard()" style="width:100%;margin-top:10px;padding:13px;background:var(--amber-600);color:#fff;border:none;border-radius:var(--radius-btn);font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
-              🎉 출생 기념 카드 만들기
+              출생 기념 카드 만들기
             </button>
           </div>
 
@@ -2047,11 +2044,11 @@ body.dark #fe-pump-ml {
             <div style="font-size:12px;color:var(--text-faint);margin-bottom:12px;line-height:1.6;">
               아래 작업은 되돌릴 수 없어요.<br>반드시 백업 후 진행하세요.
             </div>
-            <button onclick="confirmReset()" style="width:100%;padding:12px;background:none;border:1.5px solid #FAEEEC;border-radius:var(--radius-btn);color:#C0504A;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;">
-              ⛔ 모든 데이터 초기화
+            <button onclick="confirmReset()" style="width:100%;padding:12px;background:none;border:1.5px solid #FAEEEC;border-radius:var(--radius-btn);color:#C0504A;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:6px;">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M10 11v6M14 11v6"/></svg> 모든 데이터 초기화
             </button>
             <a href="/cdn-cgi/l/email-protection#83ebeef4b3b2b3b5c3ede2f5e6f1ade0eceebcf0f6e1e9e6e0f7be680b0768252f6f3f036f1537a3680e336f1e376e0733a36f012e6f231fa36f19176f312ea5e1ece7fabe6f012e6f231f68263fa36f19176f312e6e162a68080b680827ad" style="display:block;width:100%;padding:12px;background:none;border:1.5px solid var(--amber-100);border-radius:var(--radius-card);color:var(--text-sub);font-size:13px;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;box-sizing:border-box;">
-              📧 이메일로 삭제 요청 (앱스토어 정책)
+              이메일로 삭제 요청 (앱스토어 정책)
             </a>
           </div>
           <div class="feature-section-title" style="margin-top:16px;">앱 정보</div>
@@ -2065,7 +2062,7 @@ body.dark #fe-pump-ml {
               <span style="font-size:13px;font-weight:600;color:var(--text-dark);">vitaminwoo_app</span>
             </div>
             <a href="./privacy.html" target="_blank" style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid var(--cream-soft);text-decoration:none;">
-              <span style="font-size:14px;color:var(--amber-800);">🔐 개인정보처리방침</span>
+              <span style="font-size:14px;color:var(--amber-800);">개인정보처리방침</span>
               <span style="font-size:13px;color:var(--text-faint);">보기 →</span>
             </a>
           </div>
@@ -2202,8 +2199,8 @@ body.dark #fe-pump-ml {
     <div class="modal-actions">
       <button class="btn-cancel" aria-label="취소" onclick="closeDeleteModal()">취소</button>
       <button onclick="executeDelete()"
-        style="flex:1;padding:14px;background:#C0504A;color:#fff;border:none;border-radius:var(--radius-btn);font-size:15px;font-weight:700;cursor:pointer;">
-        ⛔ 삭제하기
+        style="flex:1;padding:14px;background:#C0504A;color:#fff;border:none;border-radius:var(--radius-btn);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M10 11v6M14 11v6"/></svg> 삭제하기
       </button>
     </div>
   </div>
@@ -2826,6 +2823,7 @@ const ICONS = {
   photo: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg>',
   settings: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>',
   gear: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>',
+  search: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>',
   bell: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>',
   mic: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M6 11v1a6 6 0 0 0 12 0v-1"/><path d="M12 18v3M9 21h6"/></svg>',
   stop: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor"/></svg>',
@@ -2834,8 +2832,8 @@ const ICONS = {
   warning: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20Z"/><path d="M12 9.5v4.5"/><path d="M12 17v.01"/></svg>',
   heart: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.35-9.5-8.5C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.5C14.3 5.2 15.8 4 18 4c4 0 5.5 4 3.5 7.5C19 15.65 12 20 12 20Z"/></svg>',
   baby: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M9.5 12.5h.01M14.5 12.5h.01"/><path d="M9.5 16c1 .8 4 .8 5 0"/><path d="M11 5c0-1.3 1.3-2 1.3-2"/></svg>',
-  momFace: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M9.5 12.5h.01M14.5 12.5h.01"/><path d="M9.5 16c1 .8 4 .8 5 0"/><path d="M5.3 11a6.7 6.7 0 0 1 13.4 0"/><path d="M5.3 11v6.5M18.7 11v6.5"/></svg>',
-  dadFace: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M9.5 12.5h.01M14.5 12.5h.01"/><path d="M9.5 16c1 .8 4 .8 5 0"/><path d="M5.5 10.5a6.7 6.7 0 0 1 13 0"/></svg>',
+  momFace: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M9.5 12.5h.01M14.5 12.5h.01"/><path d="M9.5 16c1 .8 4 .8 5 0"/><path d="M5.2 12a6.8 6.8 0 0 1 13.6 0" stroke-width="3.4"/><path d="M5.2 12v7M18.8 12v7" stroke-width="3.4"/></svg>',
+  dadFace: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M9.5 12.5h.01M14.5 12.5h.01"/><path d="M9.5 16c1 .8 4 .8 5 0"/><path d="M6.3 10.8a6 6 0 0 1 11.4 0" stroke-width="2.4"/></svg>',
   family: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="3"/><path d="M2 21c0-3.9 2.7-6.5 6-6.5s6 2.6 6 6.5"/><circle cx="17.5" cy="8" r="2.3"/><path d="M15 21c.3-2.9 2.1-5 4.8-5.3"/></svg>',
   tip: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.6 1 1.4 1 2.5h6c0-1.1.3-1.9 1-2.5A6 6 0 0 0 12 3Z"/></svg>',
   chart: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>',
@@ -3044,7 +3042,6 @@ function switchBaby(id) {
     try { renderMainChart(); } catch(e) {}
     try { renderPatternAnalysis(); } catch(e) {}
     try { renderKpiCards(); } catch(e) {}
-    try { renderFeedBarChart(); } catch(e) {}
     try { renderTimeHeatmap(); } catch(e) {}
     try { renderMomCarePage(); } catch(e) {}
   }, 100);
@@ -3424,7 +3421,7 @@ function renderDiaryList() {
     (e.img ? '<img class="diary-entry-img" src="' + e.img + '" alt="일기 사진">' : '') +
     '<div class="diary-entry-body">' +
     '<div class="diary-entry-date">' + fmtDiaryDate(e.date) +
-    (e.days ? ' <span class="diary-entry-day-badge">🍼 ' + e.days + '</span>' : '') + '</div>' +
+    (e.days ? ' <span class="diary-entry-day-badge">' + e.days + '</span>' : '') + '</div>' +
     (e.text ? '<div class="diary-entry-text">' + e.text.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>' : '') +
     '<div class="diary-entry-actions">' +
     '<button class="diary-action-btn" onclick="editDiaryEntry(' + i + ')">' + ICONS.diary + ' 수정</button>' +
@@ -3649,51 +3646,6 @@ function renderKpiCards() {
   `;
 }
 
-// ── 📊 최근 7일 수유 막대그래프 (SVG, 권장 범위 밴드 포함) ──
-function renderFeedBarChart() {
-  const wrap = document.getElementById('feed-bar-chart-wrap');
-  if (!wrap) return;
-  const days = [];
-  for (let i=6; i>=0; i--) { const d = new Date(); d.setDate(d.getDate()-i); days.push(d); }
-  const dowLabels = ['일','월','화','수','목','금','토'];
-  const counts = days.map(d => records.filter(r => r.cat==='feed' && new Date(r.time).toDateString()===d.toDateString()).length);
-
-  const ageDays = getBabyAgeDays() || 30;
-  const rec = getFeedRec(ageDays); // { min, max } — 기존 권장 수유 횟수 기준 재사용
-
-  const W = 300, H = 130, padL = 24, padR = 6, padT = 10, padB = 20;
-  const cW = W - padL - padR, cH = H - padT - padB;
-  const maxV = Math.max(...counts, rec.max, 1) * 1.1;
-  const yOf = v => padT + (1 - v/maxV) * cH;
-  const slotW = cW/7;
-  const barW = slotW * 0.5;
-  const bandTop = yOf(rec.max), bandBot = yOf(rec.min);
-  const dark = document.body.classList.contains('dark');
-  const bandFill = dark ? 'rgba(217,164,74,0.16)' : 'rgba(133,79,11,0.10)';
-
-  let bars = '';
-  counts.forEach((v,i) => {
-    const x = padL + slotW*i + (slotW-barW)/2;
-    const y = yOf(v);
-    const h = Math.max(0, (padT+cH) - y);
-    const isToday = i === 6;
-    bars += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="var(--amber-600)"${isToday ? ' stroke="var(--amber-800)" stroke-width="2"' : ''}/>`;
-    bars += `<text x="${(x+barW/2).toFixed(1)}" y="${(padT+cH+13).toFixed(1)}" font-size="9" text-anchor="middle" fill="var(--text-faint)">${dowLabels[days[i].getDay()]}</text>`;
-    if (v>0) bars += `<text x="${(x+barW/2).toFixed(1)}" y="${(y-4).toFixed(1)}" font-size="9" font-weight="700" text-anchor="middle" fill="var(--amber-600)">${v}</text>`;
-  });
-
-  wrap.innerHTML = `
-    <div class="feature-section-title" style="margin-top:4px;">최근 7일 수유</div>
-    <div style="background:var(--card-bg,var(--cream-card));border-radius:var(--radius-card);border:1.5px solid var(--border-color,var(--cream-soft));padding:12px;margin-bottom:12px;">
-      <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;">
-        <rect x="${padL}" y="${bandTop.toFixed(1)}" width="${cW}" height="${Math.max(0,bandBot-bandTop).toFixed(1)}" fill="${bandFill}"/>
-        ${bars}
-      </svg>
-      <div style="font-size:10px;color:var(--text-faint);text-align:center;margin-top:2px;">음영 = 권장 ${rec.min}~${rec.max}회/일 (월령 기준)</div>
-    </div>
-  `;
-}
-
 // ── 🗓️ 시간대별 수유 빈도 히트맵 (새벽/오전/오후/저녁 × 최근 7일) ──
 function renderTimeHeatmap() {
   const wrap = document.getElementById('time-heatmap-wrap');
@@ -3812,7 +3764,7 @@ function renderPatternAnalysis() {
   }
 
   wrap.innerHTML = `
-    <div style="font-size:11px;font-weight:700;color:var(--text-faint);letter-spacing:0.05em;margin-bottom:6px;">🍼 수유 패턴 · 최근 7일</div>
+    <div style="font-size:11px;font-weight:700;color:var(--text-faint);letter-spacing:0.05em;margin-bottom:6px;display:flex;align-items:center;gap:4px;">${ICONS.feed} 수유 패턴 · 최근 7일</div>
     <div class="pattern-grid">
       <div class="pattern-card">
         <div class="pattern-card-label">하루 평균</div>
@@ -3825,7 +3777,7 @@ function renderPatternAnalysis() {
         <div class="pattern-card-sub">직전 수유 기준</div>
       </div>
     </div>
-    <div style="font-size:11px;font-weight:700;color:var(--text-faint);letter-spacing:0.05em;margin:4px 0 6px;">😴 수면 패턴 · 최근 7일</div>
+    <div style="font-size:11px;font-weight:700;color:var(--text-faint);letter-spacing:0.05em;margin:4px 0 6px;display:flex;align-items:center;gap:4px;">${ICONS.sleep} 수면 패턴 · 최근 7일</div>
     <div class="pattern-grid">
       <div class="pattern-card">
         <div class="pattern-card-label">하루 평균 수면</div>
@@ -3838,7 +3790,7 @@ function renderPatternAnalysis() {
         <div class="pattern-card-sub">평균 취침 ${bedTimeStr}</div>
       </div>
     </div>
-    <div style="font-size:11px;font-weight:700;color:var(--text-faint);letter-spacing:0.05em;margin:4px 0 6px;">🌿 기저귀 패턴 · 최근 7일</div>
+    <div style="font-size:11px;font-weight:700;color:var(--text-faint);letter-spacing:0.05em;margin:4px 0 6px;display:flex;align-items:center;gap:4px;">${ICONS.diaper} 기저귀 패턴 · 최근 7일</div>
     <div class="pattern-grid">
       <div class="pattern-card">
         <div class="pattern-card-label">💧 소변</div>
@@ -4393,12 +4345,18 @@ function nowLocal() {
   return `${y}-${mo}-${d}T${h}:${mi}`;
 }
 
+// 공용 상대시간 포맷 — 앱 전체(빠른 기록 카드, 홈 위젯, 생활패턴 등)에서 재사용
 function timeDiff(t) {
-  const diff = Math.round((new Date() - new Date(t)) / 60000);
+  const diff = Math.round((new Date() - new Date(t)) / 60000); // 분
   if (diff < 1) return '방금';
   if (diff < 60) return diff + '분 전';
-  const h = Math.floor(diff / 60), m = diff % 60;
-  return h + '시간' + (m > 0 ? ' ' + m + '분' : '') + ' 전';
+  if (diff <= 60 * 48) {
+    const h = Math.floor(diff / 60), m = diff % 60;
+    return h + '시간' + (m > 0 ? ' ' + m + '분' : '') + ' 전';
+  }
+  const days = Math.floor(diff / 1440);
+  if (days <= 30) return days + '일 전';
+  return '한 달 이상 전';
 }
 
 function fmtTime(t) {
@@ -4729,11 +4687,7 @@ function renderPatternClock() {
   const feedStr = todayFeedCount > 0 ? `수유 ${todayFeedCount}회` : '수유 기록 전';
 
   const lastFeed = records.find(r => r.cat==='feed');
-  let lastFeedStr = '수유 기록 없음';
-  if (lastFeed) {
-    const diffMin = Math.max(0, Math.round((Date.now() - new Date(lastFeed.time).getTime())/60000));
-    lastFeedStr = diffMin < 60 ? `마지막 수유 ${diffMin}분 전` : `마지막 수유 ${Math.floor(diffMin/60)}시간 전`;
-  }
+  const lastFeedStr = lastFeed ? `마지막 수유 ${timeDiff(lastFeed.time)}` : '수유 기록 없음';
 
   ctx.textAlign='center'; ctx.textBaseline='middle';
   ctx.fillStyle = isDark ? '#D9A44A' : '#854F0B';
@@ -5749,7 +5703,7 @@ function renderDadScreen(readonly) {
   }
 
   const checks = JSON.parse(localStorage.getItem(getBabyKey('dad_checks')) || '{}');
-  const tagLabels = { urgent:'🚨 지금 바로', soon:'📋 곧 필요', prep:'💡 알아두기' };
+  const tagLabels = { urgent:'지금 바로', soon:'곧 필요', prep:'알아두기' };
 
   ['urgent','soon','prep'].forEach(section => {
     const elId = readonly ? 'dv-checklist-' + section : 'dad-checklist-' + section;
@@ -5766,7 +5720,7 @@ function renderDadScreen(readonly) {
         '<div class="dad-check-desc">' + item.desc.replace(/\n/g,'<br>') + '</div>' +
         (done ? '<div class="dad-praise">' + praise + '</div>' : '') +
         '<span class="dad-check-tag ' + (done ? 'done-tag' : item.tag) + '>' +
-          (done ? '✅ 완료' : tagLabels[item.tag]) +
+          (done ? '완료' : tagLabels[item.tag]) +
         '</span>' +
         '</div></div>';
     }).join('');
@@ -5786,7 +5740,7 @@ function renderDadScreen(readonly) {
             ? '<div style="font-size:13px;color:var(--amber-800);font-weight:600;margin-top:6px;">' + praise + '</div>'
             : '<div style="font-size:13px;color:var(--text-sub);margin-top:6px;line-height:1.7;word-break:keep-all;font-weight:400;">' + item.desc.replace(/\n/g,'<br>') + '</div>'
           ) +
-          '<span class="dad-event-tag ' + (done ? 'done-tag' : '') + ">'" + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
+          '<span class="dad-event-tag ' + (done ? 'done-tag' : '') + '">' + (done ? '완료' : '이벤트') + '</span>' +
           '</div></div>';
       }).join('');
     }
@@ -5801,7 +5755,7 @@ function renderDadTabChecklist() {
   const isDark = document.body.classList.contains('dark');
   const titleClr = isDark ? '#f0ead8' : 'var(--text-dark)';
   const descClr  = isDark ? '#c8b898' : 'var(--text-sub)';
-  const tagLabels = { urgent:'🚨 지금 바로', soon:'📋 곧 필요', prep:'💡 알아두기' };
+  const tagLabels = { urgent:'지금 바로', soon:'곧 필요', prep:'알아두기' };
 
   ['urgent','soon','prep'].forEach(section => {
     const el = document.getElementById('dad-tab-checklist-' + section);
@@ -5816,7 +5770,7 @@ function renderDadTabChecklist() {
         '<div class="dad-check-desc">' + item.desc.replace(/\n/g,'<br>') + '</div>' +
         (done ? '<div class="dad-praise">' + praise + '</div>' : '') +
         '<span class="dad-check-tag ' + (done ? 'done-tag' : item.tag) + '">' +
-          (done ? '✅ 완료' : tagLabels[item.tag]) +
+          (done ? '완료' : tagLabels[item.tag]) +
         '</span>' +
         '</div></div>';
     }).join('');
@@ -5835,7 +5789,7 @@ function renderDadTabChecklist() {
         (done
           ? '<div style="font-size:13px;color:' + (isDark?'var(--amber-600)':'var(--amber-800)') + ';font-weight:600;margin-top:6px;">' + praise + '</div>'
           : '<div style="font-size:13px;color:' + descClr + ';margin-top:6px;line-height:1.7;word-break:keep-all;">' + item.desc.replace(/\n/g,'<br>') + '</div>') +
-        '<span class="dad-event-tag' + (done ? ' done-tag' : '') + '">' + (done ? '✅ 완료' : '💝 이벤트') + '</span>' +
+        '<span class="dad-event-tag' + (done ? ' done-tag' : '') + '">' + (done ? '완료' : '이벤트') + '</span>' +
         '</div></div>';
     }).join('');
   }
@@ -6340,6 +6294,14 @@ function selectDiaperSub(sub) {
   renderMainChart();
 }
 
+// 카테고리별 대표 색상 (생활패턴 링과 동일한 팔레트로 통일)
+function _chartTabColor(tab) {
+  if (tab === 'feed')   return (getComputedStyle(document.documentElement).getPropertyValue('--amber-600') || '#854F0B').trim();
+  if (tab === 'sleep')  return '#8B7FC7';
+  if (tab === 'diaper') return '#4A7A3F';
+  return '#3E8E8B'; // pump
+}
+
 function renderMainChart() {
   const canvas = document.getElementById('main-chart');
   const emptyEl = document.getElementById('chart-empty');
@@ -6354,48 +6316,52 @@ function renderMainChart() {
   }
   const labels = days.map(d => { const dt = new Date(d); return (dt.getMonth()+1) + '/' + dt.getDate(); });
   let data = new Array(7).fill(0);
-  let color = 'var(--amber-600)';
+  const color = _chartTabColor(chartTab);
   let unit = '회';
 
   days.forEach((day, i) => {
     const recs = records.filter(r => new Date(r.time).toDateString() === day);
     if (chartTab === 'feed') {
       data[i] = recs.filter(r => r.cat === 'feed').length;
-      color = '#c0410f'; unit = '회';
+      unit = '회';
     } else if (chartTab === 'sleep') {
       const mins = recs.filter(r => r.cat === 'sleep' && r.sub.includes('시간')).reduce((a, r) => {
         const hm = r.sub.match(/(\d+)시간\s*(\d+)?분?/);
         return a + (hm ? parseInt(hm[1])*60 + (parseInt(hm[2])||0) : 0);
       }, 0);
       data[i] = Math.round(mins / 60 * 10) / 10;
-      color = '#1a5fa8'; unit = '시간';
+      unit = '시간';
     } else if (chartTab === 'diaper') {
       const dRecs = recs.filter(r => r.cat === 'diaper');
       if (diaperSub === 'all')  data[i] = dRecs.length;
       else if (diaperSub==='pee')  data[i] = dRecs.filter(r=>r.sub==='소변').length;
       else if (diaperSub==='poo')  data[i] = dRecs.filter(r=>r.sub==='대변').length;
       else if (diaperSub==='both') data[i] = dRecs.filter(r=>r.sub==='소변+대변').length;
-      color = diaperSub==='pee'?'#3b82f6':diaperSub==='poo'?'#92400e':diaperSub==='both'?'#7c3aaf':'#1d7a3a';
       unit = '회';
     } else if (chartTab === 'pump') {
       data[i] = recs.filter(r => r.cat === 'pump').reduce((a, r) => a + (r.total || 0), 0);
-      color = '#7c3aaf'; unit = 'ml';
+      unit = 'ml';
     }
   });
 
+  // 수유 탭에만: 월령별 권장 수유 횟수 범위 밴드 (기존 FEED_RECS/getFeedRec 재사용)
+  const feedRec = chartTab === 'feed' ? getFeedRec(getBabyAgeDays() || 30) : null;
+
   const hasData = data.some(v => v > 0);
   emptyEl.style.display = hasData ? 'none' : '';
-  if (!hasData) { ctx.clearRect(0, 0, canvas.width, canvas.height); return; }
+  if (!hasData && !feedRec) { ctx.clearRect(0, 0, canvas.width, canvas.height); if (summaryEl) summaryEl.innerHTML = ''; return; }
 
   // 간단한 바 차트 직접 그리기 (Chart.js 없이)
   const W = canvas.offsetWidth || 320, H = 160;
   canvas.width = W; canvas.height = H;
-  const max = Math.max(...data, 1);
+  const max = Math.max(...data, feedRec ? feedRec.max : 0, 1) * (feedRec ? 1.1 : 1);
   const barW = Math.floor((W - 40) / 7) - 4;
   ctx.clearRect(0, 0, W, H);
   const dark = document.body.classList.contains('dark');
   const gridColor = dark ? '#3d3628' : '#FAEEDA';
   const textColor = dark ? '#a89880' : '#9A8B70';
+  const plotTop = 10, plotBottom = H - 20;
+  const yOf = v => plotTop + (1 - v/max) * (plotBottom - plotTop);
   // 그리드
   for (let g = 0; g <= 4; g++) {
     const y = 10 + (H - 30) / 4 * g;
@@ -6403,6 +6369,23 @@ function renderMainChart() {
     ctx.beginPath(); ctx.moveTo(30, y); ctx.lineTo(W - 4, y); ctx.stroke();
     ctx.fillStyle = textColor; ctx.font = '10px sans-serif'; ctx.textAlign = 'right';
     ctx.fillText(Math.round(max - max/4*g), 26, y + 3);
+  }
+  // 권장 범위 밴드 (연한 앰버 + 위아래 점선 테두리 + 우측 라벨) — 막대보다 먼저 그려서 뒤에 깔림
+  if (feedRec) {
+    const bandTop = yOf(feedRec.max), bandBot = yOf(feedRec.min);
+    ctx.save();
+    ctx.fillStyle = dark ? 'rgba(217,164,74,0.14)' : 'rgba(133,79,11,0.10)';
+    ctx.fillRect(30, bandTop, W - 34, bandBot - bandTop);
+    ctx.strokeStyle = dark ? 'rgba(217,164,74,0.55)' : 'rgba(133,79,11,0.45)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(30, bandTop); ctx.lineTo(W - 4, bandTop); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(30, bandBot); ctx.lineTo(W - 4, bandBot); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = dark ? '#D9A44A' : '#854F0B';
+    ctx.font = '9px sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText(`권장 ${feedRec.min}~${feedRec.max}회`, W - 4, (bandTop + bandBot) / 2 + 3);
+    ctx.restore();
   }
   data.forEach((v, i) => {
     const x = 32 + i * ((W - 36) / 7);
@@ -6418,12 +6401,14 @@ function renderMainChart() {
   });
 
   // 요약
-  const total = data.reduce((a,b) => a+b, 0);
-  const avg = Math.round(total / 7 * 10) / 10;
-  summaryEl.innerHTML =
-    '7일 합계: <strong>' + total + unit + '</strong><br>' +
-    '하루 평균: <strong>' + avg + unit + '</strong><br>' +
-    '최다 기록일: <strong>' + labels[data.indexOf(Math.max(...data))] + ' (' + Math.max(...data) + unit + ')</strong>';
+  if (summaryEl) {
+    const total = data.reduce((a,b) => a+b, 0);
+    const avg = Math.round(total / 7 * 10) / 10;
+    summaryEl.innerHTML =
+      '7일 합계: <strong>' + total + unit + '</strong><br>' +
+      '하루 평균: <strong>' + avg + unit + '</strong><br>' +
+      '최다 기록일: <strong>' + labels[data.indexOf(Math.max(...data))] + ' (' + Math.max(...data) + unit + ')</strong>';
+  }
 }
 
 // ── 📏 성장 기록 ──
@@ -7127,7 +7112,6 @@ function toggleDarkMode() {
   try { renderGrowthChart(); } catch(e) {}
   try { renderPatternAnalysis(); } catch(e) {}
   try { renderKpiCards(); } catch(e) {}
-  try { renderFeedBarChart(); } catch(e) {}
   try { renderTimeHeatmap(); } catch(e) {}
   try { if (document.getElementById('dad-tab-checklist-urgent').innerHTML) renderDadTabChecklist(); } catch(e) {}
 }
@@ -7301,11 +7285,11 @@ function renderCoachCard() {
       const idealMin = ww.min;
 
       if (awakeMin >= ww.max + 10) {
-        cards.push({ color:'red', urgency:'🚨', level:'high', levelText:'긴급',
+        cards.push({ color:'red', urgency:ICONS.warning, level:'high', levelText:'긴급',
           title: '과피로 위험 — 지금 바로 재우세요',
           msg: `깨어있은 지 <strong>${awakeMin}분</strong>이에요. 권장 wake window(${ww.max}분)를 <strong>${awakeMin-ww.max}분 초과</strong>했어요. 과피로 상태에서는 오히려 잠들기 어려워요.`,
           reason: `${ww.label} 권장 wake window: ${ww.min}~${ww.max}분`,
-          action: '😴 수면 기록하기', actionType: 'sleep'
+          action: '수면 기록하기', actionType: 'sleep'
         });
       } else if (awakeMin >= ww.min) {
         cards.push({ color:'yellow', urgency:'⏰', level:'medium', levelText:'권장',
@@ -7409,7 +7393,7 @@ function renderCoachCard() {
       border-radius:var(--radius-card); padding:12px 14px; margin-bottom:10px;
       display:flex; align-items:center; gap:10px;
     ">
-      <span style="font-size:22px;flex-shrink:0;">${c.urgency}</span>
+      <span style="font-size:22px;flex-shrink:0;color:${col.text};">${c.urgency}</span>
       <div style="flex:1;min-width:0;">
         <div style="font-size:13px;font-weight:700;color:${col.text};line-height:1.4;">${c.title}</div>
         ${c.reason ? `<div style="font-size:11px;color:var(--text-faint);margin-top:2px;">${c.reason}</div>` : ''}
@@ -7613,7 +7597,7 @@ function initVoice() {
 // 음성 1회 시작 (내부 헬퍼)
 function _startVoiceOnce() {
   if (voiceStarting || voiceActive) return;
-  if (!initVoice()) return;
+  if (!initVoice()) { setVoiceBtnState(false); return; }
   voiceStarting = true;
   try {
     voiceRecognition.start();
@@ -7621,6 +7605,8 @@ function _startVoiceOnce() {
     voiceStarting = false;
     voiceActive = false;
     voiceRecognition = null;
+    // start()가 동기적으로 실패한 경우에도 버튼/FAB이 실제 상태(꺼짐)와 동기화되도록 표시만 갱신
+    setVoiceBtnState(false);
     if (voiceAutoMode) {
       voiceAutoRestartTimer = setTimeout(() => { if (voiceAutoMode) _startVoiceOnce(); }, 1500);
     }
@@ -8067,7 +8053,7 @@ function goToPage(n) {
   // 새로고침 복구용 저장 (앱 완전 종료 시 sessionStorage 자동 소멸)
   try { sessionStorage.setItem('nuri_last_page', String(currentPage)); } catch(e) {}
   if (n===3) try { renderPatternClock(); } catch(e) {}
-  if (n===4) try { renderScoreCard(); renderPatternAnalysis(); renderKpiCards(); renderFeedBarChart(); renderTimeHeatmap(); updateChart(); } catch(e) {}
+  if (n===4) try { renderScoreCard(); renderPatternAnalysis(); renderKpiCards(); renderTimeHeatmap(); renderMainChart(); } catch(e) {}
   document.getElementById('swipe-container').style.transform =
     `translateX(-${currentPage * 100 / 10}%)`;
   // dots (숨겨져 있지만 호환성 유지)
@@ -8083,7 +8069,7 @@ function goToPage(n) {
   updatePageLabel(currentPage);
   // 페이지 저장 없음 → 재실행 시 항상 메인(2)
   if (currentPage === 3) { try { updateTodayWidget(); } catch(e) {} }
-  if (currentPage === 4) setTimeout(() => { renderMainChart(); renderPatternAnalysis(); renderKpiCards(); renderFeedBarChart(); renderTimeHeatmap(); }, 100);
+  if (currentPage === 4) setTimeout(() => { renderMainChart(); renderPatternAnalysis(); renderKpiCards(); renderTimeHeatmap(); }, 100);
   if (currentPage === 5) setTimeout(() => { renderGrowthChart(); renderGrowthTable(); }, 100);
   if (currentPage === 6) { try { renderMilestoneList(); } catch(e){} }
   if (currentPage === 7) { try { renderMomCarePage(); } catch(e){} }
@@ -8250,12 +8236,12 @@ function updateNotifBtnUI() {
   const btn = document.getElementById('notif-req-btn');
   if (!btn) return;
   if (notifPermission) {
-    btn.textContent = '🔔 알림 켜짐 ✅';
+    btn.innerHTML = '🔔 알림 켜짐 ' + ICONS.check;
     btn.style.background = '#F0F7EC';
     btn.style.color = '#4A7A3F';
     btn.style.borderColor = '#4A7A3F';
   } else {
-    btn.textContent = '🔔 수유·수면 알림 켜기';
+    btn.innerHTML = '🔔 수유·수면 알림 켜기';
     btn.style.background = '';
     btn.style.color = '';
     btn.style.borderColor = '';
@@ -8842,7 +8828,6 @@ function enterApp() {
     try { renderGrowthTable(); } catch(e) {}
     try { renderPatternAnalysis(); } catch(e) {}
     try { renderKpiCards(); } catch(e) {}
-    try { renderFeedBarChart(); } catch(e) {}
     try { renderTimeHeatmap(); } catch(e) {}
     try { checkBackupReminder(); } catch(e) {}
     try { checkNotifBanner(); } catch(e) {}
@@ -10375,7 +10360,7 @@ function updateStatus() {
   if(el('today-pump-count')) el('today-pump-count').textContent = todayPumps.length+'회';
   renderCoachCard();
   renderScoreCard();
-  try { renderKpiCards(); renderFeedBarChart(); renderTimeHeatmap(); } catch(e) {}
+  try { renderKpiCards(); renderTimeHeatmap(); } catch(e) {}
   updateQuickBtns();
 }
 
