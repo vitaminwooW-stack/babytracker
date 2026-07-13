@@ -1450,8 +1450,8 @@ body.dark #fe-pump-ml {
       <button class="qnav-btn" onclick="goToPage(4)" id="qn-4" aria-label="통계 분석" title="통계 분석"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/></svg></button>
       <button class="qnav-btn" onclick="goToPage(5)" id="qn-5" aria-label="성장 기록" title="성장 기록"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></button>
       <button class="qnav-btn" onclick="goToPage(6)" id="qn-6" aria-label="발달 마일스톤" title="발달 마일스톤"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.9L21 9.6l-4.5 4.3 1.2 6.1L12 17l-5.7 3 1.2-6.1L3 9.6l6.4-.7Z"/></svg></button>
-      <button class="qnav-btn" onclick="goToPage(7)" id="qn-7" aria-label="엄마 케어" title="엄마 케어"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.35-9.5-8.5C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.5C14.3 5.2 15.8 4 18 4c4 0 5.5 4 3.5 7.5C19 15.65 12 20 12 20Z"/></svg></button>
-      <button class="qnav-btn" onclick="goToPage(8)" id="qn-8" aria-label="아빠 공간" title="아빠 공간"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="3"/><path d="M2 21c0-3.9 2.7-6.5 6-6.5s6 2.6 6 6.5"/><circle cx="17.5" cy="8" r="2.3"/><path d="M15 21c.3-2.9 2.1-5 4.8-5.3"/></svg></button>
+      <button class="qnav-btn" onclick="goToPage(7)" id="qn-7" aria-label="엄마 케어" title="엄마 케어"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M9.5 12.5h.01M14.5 12.5h.01"/><path d="M9.5 16c1 .8 4 .8 5 0"/><path d="M5.3 11a6.7 6.7 0 0 1 13.4 0"/><path d="M5.3 11v6.5M18.7 11v6.5"/></svg></button>
+      <button class="qnav-btn" onclick="goToPage(8)" id="qn-8" aria-label="아빠 공간" title="아빠 공간"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M9.5 12.5h.01M14.5 12.5h.01"/><path d="M9.5 16c1 .8 4 .8 5 0"/><path d="M5.5 10.5a6.7 6.7 0 0 1 13 0"/></svg></button>
       <button class="qnav-btn" onclick="goToPage(9)" id="qn-9" aria-label="설정" title="설정"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg></button>
     </div>
   </div>
@@ -1579,15 +1579,16 @@ body.dark #fe-pump-ml {
               <button id="ptab-week" onclick="patternSetTab('week')" style="flex:1;padding:7px;border-radius:20px;border:1.5px solid var(--border-color,var(--amber-100));background:var(--card-bg,var(--cream-card));color:var(--text-sub-legacy,var(--text-sub));font-size:12px;font-weight:700;cursor:pointer;">주</button>
             </div>
             <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;justify-content:center;" id="pattern-legend">
-              <span class="u-info-row"><span style="width:10px;height:10px;border-radius:2px;background:var(--amber-600);display:inline-block;"></span>수면</span>
-              <span class="u-info-row"><span style="width:10px;height:10px;border-radius:2px;background:var(--amber-600);display:inline-block;"></span>수유</span>
-              <span class="u-info-row"><span style="width:10px;height:10px;border-radius:2px;background:var(--amber-600);display:inline-block;"></span>유축</span>
-              <span class="u-info-row"><span style="width:10px;height:10px;border-radius:2px;background:#4A7A3F;display:inline-block;"></span>기저귀</span>
+              <span class="u-info-row"><span style="width:10px;height:10px;border-radius:50%;background:#8B7FC7;display:inline-block;"></span>수면</span>
+              <span class="u-info-row"><span style="width:10px;height:10px;border-radius:50%;background:#C8860A;display:inline-block;"></span>수유</span>
+              <span class="u-info-row"><span style="width:10px;height:10px;border-radius:50%;background:#3E8E8B;display:inline-block;"></span>유축</span>
+              <span class="u-info-row"><span style="width:10px;height:10px;border-radius:50%;background:#4A7A3F;display:inline-block;"></span>기저귀</span>
             </div>
             <div style="display:flex;justify-content:center;position:relative;">
-              <canvas id="pattern-clock" width="300" height="300"></canvas>
+              <canvas id="pattern-clock" width="320" height="320"></canvas>
             </div>
             <div id="pattern-insight-text" style="margin-top:12px;font-size:12px;color:var(--text-sub-legacy,var(--text-sub));text-align:center;line-height:1.6;min-height:36px;"></div>
+            <div id="pattern-weekly-summary" style="margin-top:2px;font-size:11px;color:var(--text-faint);text-align:center;display:none;"></div>
           </div>
 
           <!-- ── 오늘의 기록 타임라인 ── -->
@@ -1773,7 +1774,7 @@ body.dark #fe-pump-ml {
       <div class="swipe-page">
         <div class="mom-page" id="mom-care-page">
           <div class="mom-page-header" id="mom-page-header-el">
-            <h2><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.35-9.5-8.5C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.5C14.3 5.2 15.8 4 18 4c4 0 5.5 4 3.5 7.5C19 15.65 12 20 12 20Z"/></svg> 엄마 케어</h2>
+            <h2><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M9.5 12.5h.01M14.5 12.5h.01"/><path d="M9.5 16c1 .8 4 .8 5 0"/><path d="M5.3 11a6.7 6.7 0 0 1 13.4 0"/><path d="M5.3 11v6.5M18.7 11v6.5"/></svg> 엄마 케어</h2>
             <p>출산 후 엄마 회복 정보 &amp; 커뮤니티</p>
           </div>
           <div id="mom-birth-type-badge"></div>
@@ -1793,7 +1794,7 @@ body.dark #fe-pump-ml {
       <div class="swipe-page">
         <div class="feature-page" id="dad-tab-page">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-            <div class="feature-page-title" style="margin-bottom:0"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="3"/><path d="M2 21c0-3.9 2.7-6.5 6-6.5s6 2.6 6 6.5"/><circle cx="17.5" cy="8" r="2.3"/><path d="M15 21c.3-2.9 2.1-5 4.8-5.3"/></svg> 아빠 공간</div>
+            <div class="feature-page-title" style="margin-bottom:0"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M9.5 12.5h.01M14.5 12.5h.01"/><path d="M9.5 16c1 .8 4 .8 5 0"/><path d="M5.5 10.5a6.7 6.7 0 0 1 13 0"/></svg> 아빠 공간</div>
             <div id="dad-linked-status" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:var(--radius-card);background:#F0F7EC;color:#4A7A3F;display:none;">🔗 연동됨</div>
           </div>
           <div class="feature-page-sub" id="dad-tab-sub">소중한 육아 파트너와 함께해요 💛</div>
@@ -2804,6 +2805,8 @@ const ICONS = {
   warning: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20Z"/><path d="M12 9.5v4.5"/><path d="M12 17v.01"/></svg>',
   heart: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.35-9.5-8.5C.5 8 2 4 6 4c2.2 0 3.7 1.2 6 3.5C14.3 5.2 15.8 4 18 4c4 0 5.5 4 3.5 7.5C19 15.65 12 20 12 20Z"/></svg>',
   baby: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M9.5 12.5h.01M14.5 12.5h.01"/><path d="M9.5 16c1 .8 4 .8 5 0"/><path d="M11 5c0-1.3 1.3-2 1.3-2"/></svg>',
+  momFace: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M9.5 12.5h.01M14.5 12.5h.01"/><path d="M9.5 16c1 .8 4 .8 5 0"/><path d="M5.3 11a6.7 6.7 0 0 1 13.4 0"/><path d="M5.3 11v6.5M18.7 11v6.5"/></svg>',
+  dadFace: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M9.5 12.5h.01M14.5 12.5h.01"/><path d="M9.5 16c1 .8 4 .8 5 0"/><path d="M5.5 10.5a6.7 6.7 0 0 1 13 0"/></svg>',
   family: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="3"/><path d="M2 21c0-3.9 2.7-6.5 6-6.5s6 2.6 6 6.5"/><circle cx="17.5" cy="8" r="2.3"/><path d="M15 21c.3-2.9 2.1-5 4.8-5.3"/></svg>',
   tip: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.6 1 1.4 1 2.5h6c0-1.1.3-1.9 1-2.5A6 6 0 0 0 12 3Z"/></svg>',
   chart: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>',
@@ -4300,14 +4303,60 @@ function patternSetTab(tab) {
   renderPatternClock();
 }
 
+// 최근 7일 시간대별 수유/수면 빈도 집계 (보조 링용, 저장 구조는 그대로 읽기만 함)
+function calcWeeklyHourlyFreq() {
+  const feedByHour = new Array(24).fill(0);
+  const sleepByHour = new Array(24).fill(0);
+  const daysSeen = new Set();
+  let totalFeedCount = 0, totalSleepMin = 0;
+  const now = new Date();
+  const windowDates = Array.from({length:7}, (_,i) => patternDateStr(new Date(now.getTime() - i*86400000)));
+  records.forEach(r => {
+    if (!r.time) return;
+    const recDate = r.time.slice(0,10);
+    if (!windowDates.includes(recDate)) return;
+    daysSeen.add(recDate);
+    const hour = new Date(r.time).getHours();
+    if (r.cat === 'feed') {
+      feedByHour[hour]++;
+      totalFeedCount++;
+    } else if (r.cat === 'sleep' && r._startTime && r._startTime !== r.time) {
+      const st = new Date(r._startTime), en = new Date(r.time);
+      totalSleepMin += Math.max(0, Math.round((en-st)/60000));
+      const hoursSpanned = new Set();
+      let cur = new Date(st);
+      let guard = 0;
+      while (cur < en && guard < 48) {
+        hoursSpanned.add(cur.getHours());
+        cur = new Date(cur.getTime() + 3600000);
+        guard++;
+      }
+      hoursSpanned.forEach(h => sleepByHour[h]++);
+    }
+  });
+  return { feedByHour, sleepByHour, dayCount: daysSeen.size, totalFeedCount, totalSleepMin };
+}
+
 function renderPatternClock() {
   const canvas = document.getElementById('pattern-clock');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   const cx = W/2, cy = H/2;
-  const outerR = W*0.38, innerR = W*0.22, trackR = outerR+2;
+  const innerR = 62;
+  const weeklySleepR1 = 64, weeklySleepR2 = 68;
+  const weeklyFeedR1 = 68, weeklyFeedR2 = 72;
+  const mainR1 = 74;
+  const bandW = 17.5, bandGap = 2;
+  const CAT_RADIUS = {
+    feed:  mainR1 + bandW/2,
+    sleep: mainR1 + bandW + bandGap + bandW/2,
+    pump:  mainR1 + (bandW+bandGap)*2 + bandW/2,
+  };
+  const outerR = mainR1 + bandW*3 + bandGap*2; // 바깥 메인 링 경계
+  const diaperDotR = outerR + 5;
   ctx.clearRect(0, 0, W, H);
+  const isDark = document.body.classList.contains('dark');
 
   // 날짜 레이블
   const today = patternDateStr(new Date());
@@ -4332,28 +4381,32 @@ function renderPatternClock() {
     });
   }
   const dayRecs = records.filter(r => r.time && targetDates.includes(r.time.slice(0,10)));
-  const isDark = document.body.classList.contains('dark');
+  const totalMin = _patternTab==='week' ? 7*1440 : 1440;
 
-  // 배경 원 (트랙)
+  function angleOf(min) { return (min/totalMin)*Math.PI*2 - Math.PI/2; }
+
+  // 1) 밤/낮 배경 (원 윗쪽 절반=18~6시=밤, 아래쪽 절반=6~18시=낮), 안쪽 중앙은 카드 배경색 그대로(채우지 않음)
+  const nightColor = isDark ? '#3A3450' : '#E7E2F0';
+  const dayColor   = isDark ? '#3A3226' : '#F7EEDB';
   ctx.beginPath();
-  ctx.arc(cx, cy, outerR, 0, Math.PI*2);
-  ctx.fillStyle = isDark ? '#2a2520' : '#FAEEDA';
+  ctx.arc(cx, cy, outerR, -Math.PI, 0);
+  ctx.arc(cx, cy, innerR, 0, -Math.PI, true);
+  ctx.closePath();
+  ctx.fillStyle = nightColor;
   ctx.fill();
   ctx.beginPath();
-  ctx.arc(cx, cy, innerR, 0, Math.PI*2);
-  ctx.fillStyle = isDark ? '#1a1612' : '#FFFFFF';
+  ctx.arc(cx, cy, outerR, 0, Math.PI);
+  ctx.arc(cx, cy, innerR, Math.PI, 0, true);
+  ctx.closePath();
+  ctx.fillStyle = dayColor;
   ctx.fill();
 
-  // 호 그리기 함수
-  function drawArc(startMin, endMin, color, r1, r2, alpha) {
-    const totalMin = _patternTab==='week' ? 7*1440 : 1440;
-    const s = (startMin / totalMin) * Math.PI*2 - Math.PI/2;
-    const e = (endMin   / totalMin) * Math.PI*2 - Math.PI/2;
-    if (Math.abs(e-s) < 0.002) return;
+  // 2) 주간 평균 보조 링 (최근 7일 시간대별 빈도, 최대 40% 불투명)
+  function drawWedge(r1, r2, s, e, color, alpha) {
     ctx.save();
-    ctx.globalAlpha = alpha||1;
+    ctx.globalAlpha = alpha;
     ctx.beginPath();
-    ctx.moveTo(cx + r2*Math.cos(s), cy + r2*Math.sin(s));
+    ctx.moveTo(cx + r1*Math.cos(s), cy + r1*Math.sin(s));
     ctx.arc(cx, cy, r2, s, e);
     ctx.arc(cx, cy, r1, e, s, true);
     ctx.closePath();
@@ -4361,108 +4414,178 @@ function renderPatternClock() {
     ctx.fill();
     ctx.restore();
   }
+  const weeklyFreq = calcWeeklyHourlyFreq();
+  const weeklySummaryEl = document.getElementById('pattern-weekly-summary');
+  if (weeklyFreq.dayCount > 0) {
+    for (let h=0; h<24; h++) {
+      const s = (h/24)*Math.PI*2 - Math.PI/2;
+      const e = ((h+1)/24)*Math.PI*2 - Math.PI/2;
+      const sleepAlpha = Math.min(1, weeklyFreq.sleepByHour[h]/weeklyFreq.dayCount) * 0.4;
+      const feedAlpha  = Math.min(1, weeklyFreq.feedByHour[h]/weeklyFreq.dayCount) * 0.4;
+      if (sleepAlpha > 0.015) drawWedge(weeklySleepR1, weeklySleepR2, s, e, '#8B7FC7', sleepAlpha);
+      if (feedAlpha  > 0.015) drawWedge(weeklyFeedR1,  weeklyFeedR2,  s, e, '#C8860A', feedAlpha);
+    }
+    if (weeklySummaryEl) {
+      const avgFeed = (weeklyFreq.totalFeedCount / weeklyFreq.dayCount).toFixed(1);
+      const avgSleepMin = Math.round(weeklyFreq.totalSleepMin / weeklyFreq.dayCount);
+      const ash = Math.floor(avgSleepMin/60), asm = avgSleepMin%60;
+      weeklySummaryEl.style.display = '';
+      weeklySummaryEl.textContent = `최근 7일 평균 · 수유 ${avgFeed}회 / 수면 ${ash}시간 ${asm}분`;
+    }
+  } else if (weeklySummaryEl) {
+    weeklySummaryEl.style.display = 'none';
+  }
 
-  // 카테고리 색상
-  const CAT_COLORS = { sleep:'#60a5fa', feed:'#fb923c', pump:'#a78bfa', diaper:'#4ade80' };
-  // 트랙 두께 (카테고리별로 다른 반지름)
-  const CAT_BANDS = {
-    sleep: [innerR+2, outerR],
-    feed:  [innerR+2, outerR],
-    pump:  [innerR+2, outerR],
-    diaper:[innerR+2, outerR],
-  };
-  // 레이어 순서 (겹칠 때 위에 올 것)
-  const CAT_ORDER = ['sleep','feed','pump','diaper'];
-  const BAND_STEP = (outerR - innerR - 4) / CAT_ORDER.length;
+  // 3) 카테고리 색상 및 굵은 호 그리기 (수유/수면/유축), 기저귀는 점으로
+  const CAT_COLORS = { feed:'#C8860A', sleep:'#8B7FC7', pump:'#3E8E8B', diaper:'#4A7A3F' };
 
-  const totalMin = _patternTab==='week' ? 7*1440 : 1440;
+  function drawThickArc(radius, startMin, endMin, color, alpha) {
+    let s = angleOf(startMin), e = angleOf(endMin);
+    if (Math.abs(endMin-startMin) < 0.5) e = s + 0.001;
+    ctx.save();
+    ctx.globalAlpha = alpha||1;
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, s, e);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = bandW;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+    ctx.restore();
+  }
+  function drawDot(radius, atMin, color, alpha, r) {
+    const a = angleOf(atMin);
+    const x = cx + radius*Math.cos(a), y = cy + radius*Math.sin(a);
+    ctx.save();
+    ctx.globalAlpha = alpha||1;
+    ctx.beginPath();
+    ctx.arc(x, y, r||4, 0, Math.PI*2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.restore();
+  }
 
-  // 수면: _startTime ~ time 기반
-  CAT_ORDER.forEach((cat, ci) => {
-    const r1 = innerR + 2 + ci*BAND_STEP;
-    const r2 = r1 + BAND_STEP - 1;
+  ['feed','sleep','pump'].forEach(cat => {
+    const radius = CAT_RADIUS[cat];
     const color = CAT_COLORS[cat];
-
     dayRecs.filter(r => r.cat===cat).forEach(r => {
-      let startMin, endMin;
       const recDate = r.time.slice(0,10);
       const dayOffset = targetDates.indexOf(recDate);
       const dayBase = (_patternTab==='week') ? (6-dayOffset)*1440 : 0;
 
       if (r._startTime && r._startTime !== r.time) {
         // 시작~끝 범위 있는 기록 (수면, 수유 완료)
-        const st = new Date(r._startTime.replace('T',' ')+':00');
-        const en = new Date(r.time.replace('T',' ')+':00');
         const stKST = new Date(r._startTime);
         const enKST = new Date(r.time);
         const stMin = (stKST.getHours()*60 + stKST.getMinutes());
         const enMin = (enKST.getHours()*60 + enKST.getMinutes());
-        startMin = dayBase + stMin;
-        endMin   = dayBase + (enMin >= stMin ? enMin : enMin + 1440);
-        drawArc(startMin, endMin, color, r1, r2, 0.85);
+        const startMin = dayBase + stMin;
+        const endMin   = dayBase + (enMin >= stMin ? enMin : enMin + 1440);
+        drawThickArc(radius, startMin, endMin, color, 0.9);
       } else {
-        // 점 기록 (기저귀, 수유 시작 등) → 짧은 호 (5분)
+        // 점 기록 (기저귀, 수유 시작 등) → 짧은 호 (둥근 끝이라 점처럼 보임)
         const recKST = new Date(r.time);
         const recMin = recKST.getHours()*60 + recKST.getMinutes();
-        startMin = dayBase + recMin;
-        endMin   = startMin + (cat==='diaper' ? 4 : 8);
-        drawArc(startMin, endMin, color, r1, r2, 0.75);
+        const startMin = dayBase + recMin;
+        drawThickArc(radius, startMin, startMin+6, color, 0.85);
       }
     });
   });
 
-  // 눈금선 + 숫자 (모든 시간 표시)
+  // 기저귀: 호가 아니라 점
+  dayRecs.filter(r => r.cat==='diaper').forEach(r => {
+    const recDate = r.time.slice(0,10);
+    const dayOffset = targetDates.indexOf(recDate);
+    const dayBase = (_patternTab==='week') ? (6-dayOffset)*1440 : 0;
+    const recKST = new Date(r.time);
+    const recMin = recKST.getHours()*60 + recKST.getMinutes();
+    drawDot(diaperDotR, dayBase+recMin, CAT_COLORS.diaper, 0.9, 3.5);
+  });
+
+  // 지속 중인 기록(수면 중 등): 시작~현재까지 호 + 끝에 점 (선택한 날짜가 오늘일 때만 의미 있음)
+  if (sel === today) {
+    const nowKST = new Date();
+    const nowMinOfDay = nowKST.getHours()*60 + nowKST.getMinutes();
+    const nowDayBase = _patternTab==='week' ? 6*1440 : 0;
+    const nowMin = nowDayBase + nowMinOfDay;
+    [['sleep', sleepingStart], ['feed', feedingStart], ['pump', pumpingStart]].forEach(([cat, startVal]) => {
+      if (!startVal) return;
+      const st = startVal instanceof Date ? startVal : new Date(startVal);
+      const stMin = nowDayBase + st.getHours()*60 + st.getMinutes();
+      drawThickArc(CAT_RADIUS[cat], stMin, nowMin, CAT_COLORS[cat], 0.9);
+      drawDot(CAT_RADIUS[cat], nowMin, CAT_COLORS[cat], 1, bandW/2.4);
+    });
+
+    // 4) 현재 시각 바늘
+    const needleAngle = angleOf(nowMin);
+    const nr1 = innerR, nr2 = outerR + 6;
+    const nx1 = cx+nr1*Math.cos(needleAngle), ny1 = cy+nr1*Math.sin(needleAngle);
+    const nx2 = cx+nr2*Math.cos(needleAngle), ny2 = cy+nr2*Math.sin(needleAngle);
+    ctx.save();
+    ctx.strokeStyle = '#C0504A';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(nx1,ny1); ctx.lineTo(nx2,ny2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(nx2,ny2,3,0,Math.PI*2);
+    ctx.fillStyle = '#C0504A';
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // 5) 눈금선 (0/6/12/18만 굵게 표시, 나머지는 얇게 / 라벨은 0/6/12/18만)
   for (let h=0; h<24; h++) {
     const angle = (h/24)*Math.PI*2 - Math.PI/2;
     const isMajor = h%6===0;
-    const isMid   = h%3===0 && !isMajor;
-    const r1 = outerR + (isMajor ? 5 : isMid ? 3 : 2);
-    const r2 = outerR + (isMajor ? 12 : isMid ? 8 : 5);
+    const r1 = outerR + (isMajor ? 7 : 3);
+    const r2 = outerR + (isMajor ? 15 : 6);
     ctx.beginPath();
     ctx.moveTo(cx+r1*Math.cos(angle), cy+r1*Math.sin(angle));
     ctx.lineTo(cx+r2*Math.cos(angle), cy+r2*Math.sin(angle));
     ctx.strokeStyle = isDark ? (isMajor ? '#6b5f45' : '#4a4030') : (isMajor ? '#999' : '#ddd');
-    ctx.lineWidth = isMajor ? 1.5 : 1;
+    ctx.lineWidth = isMajor ? 1.5 : 0.75;
     ctx.stroke();
-    // 모든 짝수 시간 표시 (0,2,4,...22)
-    if (h%2===0) {
-      const labelR = outerR + (isMajor ? 22 : 18);
+    if (isMajor) {
+      const labelR = outerR + 24;
       const tx = cx + labelR*Math.cos(angle);
       const ty = cy + labelR*Math.sin(angle);
-      ctx.fillStyle = isDark ? (isMajor ? '#e0d5b8' : '#a89880') : (isMajor ? '#555' : '#aaa');
-      ctx.font = isMajor ? 'bold 10px sans-serif' : '9px sans-serif';
+      ctx.fillStyle = isDark ? '#e0d5b8' : '#555';
+      ctx.font = 'bold 10px sans-serif';
       ctx.textAlign='center'; ctx.textBaseline='middle';
       ctx.fillText(h, tx, ty);
     }
   }
 
-  // 중앙 텍스트 - 선택된 날짜 기준 D+일자 계산
-  let displayDays = null;
-  try {
-    const profile = JSON.parse(localStorage.getItem(getBabyKey('baby_profile')) || '{}');
-    const birthStr = profile.birthDate;
-    if (birthStr) {
-      // calcBabyDays와 동일한 방식: 로컬 날짜 기준, +1
-      const parts = birthStr.split('-');
-      const birth = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
-      const selParts = sel.split('-');
-      const selDate = new Date(parseInt(selParts[0]), parseInt(selParts[1])-1, parseInt(selParts[2]));
-      const diff = Math.floor((selDate - birth) / 86400000);
-      displayDays = diff >= 0 ? diff + 1 : null;
-    }
-  } catch(e) {}
-  // D+숫자 크게
-  ctx.textAlign='center'; ctx.textBaseline='middle';
-  if (displayDays !== null) {
-    ctx.fillStyle='#854F0B'; ctx.font='bold 18px sans-serif';
-    ctx.fillText('D+'+displayDays, cx, cy-6);
-  } else {
-    ctx.fillStyle=isDark ? '#a89880' : '#B8A888'; ctx.font='bold 14px sans-serif';
-    ctx.fillText('--', cx, cy-6);
+  // 6) 중앙 요약 - 오늘 수유/수면 합계 + 마지막 수유 시각
+  const todayStr = patternDateStr(new Date());
+  const todayRecs = records.filter(r => r.time && r.time.slice(0,10) === todayStr);
+  const todayFeedCount = todayRecs.filter(r => r.cat==='feed').length;
+  let todaySleepMin = 0;
+  todayRecs.filter(r => r.cat==='sleep' && r._startTime && r._startTime !== r.time).forEach(r => {
+    const st = new Date(r._startTime), en = new Date(r.time);
+    todaySleepMin += Math.max(0, Math.round((en-st)/60000));
+  });
+  if (sleepingStart) {
+    const st = sleepingStart instanceof Date ? sleepingStart : new Date(sleepingStart);
+    if (patternDateStr(st) === todayStr) todaySleepMin += Math.round((Date.now()-st.getTime())/60000);
   }
-  // 날짜 작게
-  ctx.fillStyle=isDark ? '#a89880' : '#B8A888'; ctx.font='10px sans-serif';
-  ctx.fillText(_patternTab==='day' ? sel.slice(5).replace('-','/') : '7일 평균', cx, cy+12);
+  const sleepHDisplay = (todaySleepMin/60).toFixed(1);
+
+  const lastFeed = records.find(r => r.cat==='feed');
+  let lastFeedStr = '수유 기록 없음';
+  if (lastFeed) {
+    const diffMin = Math.max(0, Math.round((Date.now() - new Date(lastFeed.time).getTime())/60000));
+    lastFeedStr = diffMin < 60 ? `마지막 수유 ${diffMin}분 전` : `마지막 수유 ${Math.floor(diffMin/60)}시간 전`;
+  }
+
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillStyle = isDark ? '#D9A44A' : '#854F0B';
+  ctx.font = 'bold 13px sans-serif';
+  ctx.fillText(`수유 ${todayFeedCount}회 · 수면 ${sleepHDisplay}h`, cx, cy-7);
+  ctx.fillStyle = isDark ? '#A89878' : '#B8A888';
+  ctx.font = '10px sans-serif';
+  ctx.fillText(lastFeedStr, cx, cy+9);
 
   // 패턴 인사이트 텍스트
   renderPatternInsight(dayRecs, sel);
@@ -4473,26 +4596,11 @@ function renderPatternInsight(dayRecs, sel) {
   if (!el) return;
   const today = patternDateStr(new Date());
 
-  const feedRecs = dayRecs.filter(r => r.cat==='feed');
-  const sleepRecs = dayRecs.filter(r => r.cat==='sleep' && r._startTime);
   const diaperRecs = dayRecs.filter(r => r.cat==='diaper');
 
   const insights = [];
 
-  // 수유 횟수
-  if (feedRecs.length > 0) {
-    insights.push(`${ICONS.feed} 수유 ${feedRecs.length}회`);
-  }
-  // 총 수면시간
-  if (sleepRecs.length > 0) {
-    let totalSleepMin = 0;
-    sleepRecs.forEach(r => {
-      const st = new Date(r._startTime); const en = new Date(r.time);
-      totalSleepMin += Math.round((en-st)/60000);
-    });
-    const sh = Math.floor(totalSleepMin/60), sm = totalSleepMin%60;
-    insights.push(`${ICONS.sleep} 수면 ${sh>0?sh+'시간 ':''}${sm}분`);
-  }
+  // 수유·수면 합계는 원 중앙 요약으로 이동함 — 여기서는 기저귀만 보조 표시
   // 기저귀
   if (diaperRecs.length > 0) {
     const pee = diaperRecs.filter(r=>r.sub==='소변'||r.sub==='소변+대변').length;
