@@ -183,7 +183,7 @@ body.dark .hdr-btn.dad { background: #18202a; border-color: #1e3a5a; color: #60a
 .swipe-container { display: flex; width: 1000%; height: 100%; transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
 .swipe-page { width: calc(100% / 10); height: 100%; flex-shrink: 0; overflow: hidden; }
 .swipe-page:nth-child(2) { overflow: hidden; }
-.diary-page { padding: 16px 16px 96px; background: var(--cream-bg); height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; }
+.diary-page { padding: 16px 16px 116px; background: var(--cream-bg); height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; }
 .diary-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .diary-header h2 { font-size: 20px; font-weight: 700; color: var(--text-dark); }
 .diary-write-btn { display: flex; align-items: center; gap: 5px; padding: 8px 16px; background: var(--amber-600); color: #fff; border: none; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; }
@@ -206,7 +206,7 @@ body.dark .hdr-btn.dad { background: #18202a; border-color: #1e3a5a; color: #60a
 .diary-img-preview { width: 100%; max-height: 200px; object-fit: cover; border-radius:var(--radius-card); margin-top: 10px; display: none; }
 .diary-img-upload-btn { display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: var(--cream-bg); border: 1px dashed var(--amber-200); border-radius:var(--radius-btn); font-size: 13px; color: var(--amber-600); cursor: pointer; margin-top: 10px; font-weight: 500; width: 100%; box-sizing: border-box; }
 .diary-img-upload-btn:active { background: var(--cream-soft); }
-.mom-page { padding: 16px 16px 40px; background: var(--page-bg, var(--cream-bg)); height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; touch-action: pan-y; }
+.mom-page { padding: 16px 16px 116px; background: var(--page-bg, var(--cream-bg)); height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; touch-action: pan-y; }
 .mom-page-header { margin-bottom: 16px; }
 .mom-page-header h2 { font-size: 20px; font-weight: 700; color: var(--text-dark); }
 .mom-page-header p { font-size: 13px; color: var(--text-sub); margin-top: 4px; }
@@ -401,7 +401,7 @@ body.dark .ms-month-title { color: var(--dark-amber) !important; }
 .export-btn { display: flex; align-items: center; gap: 6px; width: 100%; padding: 12px 14px; background: var(--cream-card); border: 1px solid var(--amber-200); border-radius:var(--radius-btn); font-size: 14px; font-weight: 600; color: var(--amber-600); cursor: pointer; margin-bottom: 8px; }
 .export-btn:active { background: var(--cream-soft); }
 body.dark .export-btn { background: var(--dark-card) !important; border-color: var(--dark-border) !important; color: var(--dark-amber) !important; }
-.feature-page { padding: 16px 16px 96px; background: var(--page-bg, var(--cream-bg)); height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; touch-action: pan-y; }
+.feature-page { padding: 16px 16px 116px; background: var(--page-bg, var(--cream-bg)); height: 100%; max-width: 480px; margin: 0 auto; width: 100%; box-sizing: border-box; overflow-y: auto; touch-action: pan-y; }
 .feature-page-title { font-size: 20px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
 .feature-page-sub { font-size: 13px; color: var(--text-sub); margin-bottom: 16px; }
 .feature-section-title { font-size: 12px; font-weight: 700; color: var(--amber-600); letter-spacing: 0.06em; text-transform: uppercase; margin: 16px 0 8px; }
@@ -621,6 +621,16 @@ body.dark .mom-detail-item { border-color: var(--dark-border); }
 .pattern-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
 .pattern-insight { background: var(--cream-soft); border: 1.5px solid var(--amber-200); border-radius:var(--radius-card); padding: 12px 14px; margin-bottom: 12px; font-size: 13px; color: var(--amber-600); line-height: 1.7; font-weight: 500; word-break: keep-all; }
 body.dark .pattern-bar-bg { background: var(--dark-border); }
+.heatmap-card { background: var(--cream-card); border-radius:var(--radius-card); padding: 10px 8px; border: 1.5px solid var(--cream-soft); box-shadow: 0 2px 8px rgba(122,86,0,0.06); margin-bottom: 12px; }
+.heatmap-row { display: flex; align-items: center; gap: 3px; margin-bottom: 3px; }
+.heatmap-row:last-child { margin-bottom: 0; }
+.heatmap-row-label { width: 26px; font-size: 10px; color: var(--text-faint); flex-shrink: 0; text-align: right; padding-right: 4px; }
+.heatmap-cell { flex: 1; aspect-ratio: 1; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: var(--amber-800); }
+.heatmap-dow-cell { font-weight: 600; color: var(--text-faint); background: none !important; }
+body.dark .heatmap-card { background: var(--dark-card) !important; border-color: var(--dark-border) !important; }
+body.dark .heatmap-row-label { color: var(--dark-sub) !important; }
+body.dark .heatmap-cell { color: var(--dark-text) !important; }
+body.dark .heatmap-dow-cell { color: var(--dark-sub) !important; }
 .mood-btn { font-size: 28px; background: none; border: 2.5px solid transparent; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; line-height: 1; color: var(--btn-inactive-color); }
 .mood-btn:active { transform: scale(0.9); }
 .mood-btn.selected { border-color: var(--amber-600); background: var(--cream-soft); transform: scale(1.15); }
@@ -991,6 +1001,8 @@ body.dark .growth-input-card { background: var(--dark-card); border-color: var(-
 body.dark .growth-card-title { color: var(--dark-amber); }
 body.dark .growth-field-label { color: var(--dark-sub); }
 body.dark .growth-input-field { background: var(--dark-bg); color: var(--dark-text); border-color: var(--dark-border); }
+.growth-pct-badge { position: absolute; top: 10px; right: 14px; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: var(--amber-100); color: var(--amber-600); z-index: 2; }
+body.dark .growth-pct-badge { background: var(--dark-soft); color: var(--dark-amber); }
 body.dark #growth-date,
 body.dark #growth-weight,
 body.dark #growth-height,
@@ -1452,7 +1464,7 @@ body.dark #fe-pump-ml {
       <button class="qnav-btn" onclick="goToPage(6)" id="qn-6" aria-label="발달 마일스톤" title="발달 마일스톤"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.9L21 9.6l-4.5 4.3 1.2 6.1L12 17l-5.7 3 1.2-6.1L3 9.6l6.4-.7Z"/></svg></button>
       <button class="qnav-btn" onclick="goToPage(7)" id="qn-7" aria-label="엄마 케어" title="엄마 케어"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M9.5 12.5h.01M14.5 12.5h.01"/><path d="M9.5 16c1 .8 4 .8 5 0"/><path d="M5.3 11a6.7 6.7 0 0 1 13.4 0"/><path d="M5.3 11v6.5M18.7 11v6.5"/></svg></button>
       <button class="qnav-btn" onclick="goToPage(8)" id="qn-8" aria-label="아빠 공간" title="아빠 공간"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="7"/><path d="M9.5 12.5h.01M14.5 12.5h.01"/><path d="M9.5 16c1 .8 4 .8 5 0"/><path d="M5.5 10.5a6.7 6.7 0 0 1 13 0"/></svg></button>
-      <button class="qnav-btn" onclick="goToPage(9)" id="qn-9" aria-label="설정" title="설정"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg></button>
+      <button class="qnav-btn" onclick="goToPage(9)" id="qn-9" aria-label="설정" title="설정"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></button>
     </div>
   </div>
   <div style="overflow:hidden; flex:1; height:0; min-height:0;">
@@ -1634,19 +1646,19 @@ body.dark #fe-pump-ml {
         <div class="feature-page">
           <div class="feature-page-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/></svg> 통계 & 분석</div>
 
-          <div id="mood-selector-wrap" style="background:var(--cream-soft);border-radius:var(--radius-card);padding:14px 16px;margin-bottom:12px;">
-            <div style="font-size:12px;font-weight:700;color:var(--amber-600);margin-bottom:10px;">오늘 육아는 어땠나요?</div>
-            <div style="display:flex;justify-content:space-around;">
-              <button onclick="setMood('😊')" class="mood-btn" id="mood-😊"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></button>
-              <button onclick="setMood('🥰')" class="mood-btn" id="mood-🥰"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 14.5s1.5 2 4 2 4-2 4-2"/><path d="M7.6 8.3c.4-.6 1.4-.6 1.7.2.3-.8 1.3-.8 1.7-.2.4.5-.2 1.4-1.7 2.2-1.5-.8-2.1-1.7-1.7-2.2Z" fill="currentColor"/><path d="M12.9 8.3c.4-.6 1.4-.6 1.7.2.3-.8 1.3-.8 1.7-.2.4.5-.2 1.4-1.7 2.2-1.5-.8-2.1-1.7-1.7-2.2Z" fill="currentColor"/></svg></button>
-              <button onclick="setMood('😴')" class="mood-btn" id="mood-😴"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 15c1-1 2-1 3.5-1s2.5 0 3.5 1"/><path d="M8 9.5h2.2M13.8 9.5H16"/></svg></button>
-              <button onclick="setMood('😅')" class="mood-btn" id="mood-😅"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="12" r="8"/><path d="M7.5 14.5s1.2 1.5 3.5 1.5 3.5-1.5 3.5-1.5"/><path d="M8.3 9h.01M13.3 9h.01"/><path d="M18 6.5c0 1.4-1.1 2.5-1.1 2.5s-1.1-1.1-1.1-2.5a1.1 1.1 0 0 1 2.2 0Z"/></svg></button>
-              <button onclick="setMood('😢')" class="mood-btn" id="mood-😢"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 15.5s1.5-1.5 4-1.5 4 1.5 4 1.5"/><path d="M9 9.5h.01M15 9.5h.01"/><path d="M16.2 12.2c0 1.1-.5 2.3-1 2.3"/></svg></button>
-            </div>
-          </div>
-          <div id="score-card-wrap"></div>
-          <div class="feature-section-title" style="margin-top:4px;">패턴 분석</div>
-          <div id="pattern-analysis-wrap"></div>
+          <!-- ① 핵심 지표 카드 -->
+          <div class="pattern-grid" id="kpi-card-wrap" style="grid-template-columns:1fr 1fr 1fr;"></div>
+
+          <!-- ② 최근 7일 수유 막대그래프 -->
+          <div id="feed-bar-chart-wrap"></div>
+
+          <!-- ③ 시간대별 수유 빈도 히트맵 -->
+          <div id="time-heatmap-wrap"></div>
+
+          <!-- ④ 한 줄 인사이트 -->
+          <div id="oneline-insight-wrap"></div>
+
+          <!-- 상세 차트 (카테고리별 최근 7일) -->
           <div class="chart-tab-row">
             <button class="chart-tab active" id="ctab-feed" onclick="selectChartTab('feed')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6M10 2v3.5L8 8v11a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V8l-2-2.5V2"/><path d="M9 12h6"/></svg> 수유</button>
             <button class="chart-tab" id="ctab-sleep" onclick="selectChartTab('sleep')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg> 수면</button>
@@ -1666,12 +1678,28 @@ body.dark #fe-pump-ml {
             <div id="chart-empty" class="chart-empty" style="display:none;">아직 기록이 없어요</div>
             <div class="chart-legend" id="chart-legend"></div>
           </div>
+
+          <div class="feature-section-title" style="margin-top:4px;">패턴 분석</div>
+          <div id="pattern-analysis-wrap"></div>
+
+          <!-- ⑤ 기분 체크 + 응원 메시지 (맨 아래) -->
+          <div id="mood-selector-wrap" style="background:var(--cream-soft);border-radius:var(--radius-card);padding:14px 16px;margin-bottom:12px;">
+            <div style="font-size:12px;font-weight:700;color:var(--amber-600);margin-bottom:10px;">오늘 육아는 어땠나요?</div>
+            <div style="display:flex;justify-content:space-around;">
+              <button onclick="setMood('😊')" class="mood-btn" id="mood-😊"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></button>
+              <button onclick="setMood('🥰')" class="mood-btn" id="mood-🥰"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 14.5s1.5 2 4 2 4-2 4-2"/><path d="M7.6 8.3c.4-.6 1.4-.6 1.7.2.3-.8 1.3-.8 1.7-.2.4.5-.2 1.4-1.7 2.2-1.5-.8-2.1-1.7-1.7-2.2Z" fill="currentColor"/><path d="M12.9 8.3c.4-.6 1.4-.6 1.7.2.3-.8 1.3-.8 1.7-.2.4.5-.2 1.4-1.7 2.2-1.5-.8-2.1-1.7-1.7-2.2Z" fill="currentColor"/></svg></button>
+              <button onclick="setMood('😴')" class="mood-btn" id="mood-😴"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 15c1-1 2-1 3.5-1s2.5 0 3.5 1"/><path d="M8 9.5h2.2M13.8 9.5H16"/></svg></button>
+              <button onclick="setMood('😅')" class="mood-btn" id="mood-😅"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="12" r="8"/><path d="M7.5 14.5s1.2 1.5 3.5 1.5 3.5-1.5 3.5-1.5"/><path d="M8.3 9h.01M13.3 9h.01"/><path d="M18 6.5c0 1.4-1.1 2.5-1.1 2.5s-1.1-1.1-1.1-2.5a1.1 1.1 0 0 1 2.2 0Z"/></svg></button>
+              <button onclick="setMood('😢')" class="mood-btn" id="mood-😢"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 15.5s1.5-1.5 4-1.5 4 1.5 4 1.5"/><path d="M9 9.5h.01M15 9.5h.01"/><path d="M16.2 12.2c0 1.1-.5 2.3-1 2.3"/></svg></button>
+            </div>
+          </div>
+          <div id="score-card-wrap"></div>
         </div>
       </div>
 
 <!-- ── 페이지 4: 성장 기록 & 예방접종 ── -->
       <div class="swipe-page">
-        <div class="feature-page" style="padding-bottom:80px;">
+        <div class="feature-page" style="padding-bottom:116px;">
 
           <!-- 헤더 -->
           <div class="feature-page-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg> 성장 기록</div>
@@ -1710,10 +1738,9 @@ body.dark #fe-pump-ml {
             </button>
           </div>
 
-          <!-- 최근 기록 배지 -->
-          <div id="growth-latest-badge" style="display:none;background:#F0F7EC;border:1.5px solid #4A7A3F;border-radius:var(--radius-card);padding:12px 16px;margin-bottom:16px;">
-            <div style="font-size:11px;font-weight:700;color:#4A7A3F;margin-bottom:4px;">최근 기록</div>
-            <div id="growth-latest-text" style="font-size:15px;font-weight:800;color:#4A7A3F;"></div>
+          <!-- 성장 요약 카드 -->
+          <div id="growth-latest-badge" style="display:none;background:#F0F7EC;border:1.5px solid #4A7A3F;border-radius:var(--radius-card);padding:16px;margin-bottom:16px;">
+            <div id="growth-latest-text" style="color:#4A7A3F;"></div>
           </div>
 
           <!-- 차트 탭 -->
@@ -1727,6 +1754,7 @@ body.dark #fe-pump-ml {
               style="flex:1;padding:9px 0;border-radius:var(--radius-btn);font-size:12px;font-weight:700;"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/></svg> 머리</button>
           </div>
           <div style="background:var(--card-bg,var(--cream-card));border-radius:var(--radius-card);border:1px solid var(--border-color);padding:14px;margin-bottom:6px;position:relative;">
+            <div id="growth-pct-badge" class="growth-pct-badge" style="display:none;"></div>
             <canvas id="growth-chart" height="220"></canvas>
             <div id="growth-empty" class="chart-empty" style="display:none;">아직 기록이 없어요</div>
           </div>
@@ -1760,7 +1788,7 @@ body.dark #fe-pump-ml {
 
       <!-- ── 페이지 5: 발달 마일스톤 ── -->
       <div class="swipe-page">
-        <div class="feature-page" style="padding:0 0 80px;">
+        <div class="feature-page" style="padding:0 0 116px;">
           <div style="padding:16px 16px 0;position:sticky;top:0;background:var(--ms-header-bg);z-index:10;">
             <div class="feature-page-title" style="margin-bottom:2px;"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.9L21 9.6l-4.5 4.3 1.2 6.1L12 17l-5.7 3 1.2-6.1L3 9.6l6.4-.7Z"/></svg> 발달 마일스톤</div>
             <div id="milestone-age-label" style="font-size:13px;color:var(--amber-600);font-weight:600;margin-bottom:12px;"></div>
@@ -1870,7 +1898,7 @@ body.dark #fe-pump-ml {
       <!-- ── 페이지 9: 설정 ── -->
       <div class="swipe-page">
         <div class="feature-page">
-          <div class="feature-page-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg> 설정</div>
+          <div class="feature-page-title"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg> 설정</div>
           <div class="feature-page-sub">앱 설정과 데이터를 관리해요</div>
           <!-- 실시간 동기화 섹션 숨김 -->
           <div style="display:none;">
@@ -2797,6 +2825,7 @@ const ICONS = {
   diary: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
   photo: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg>',
   settings: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>',
+  gear: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>',
   bell: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>',
   mic: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M6 11v1a6 6 0 0 0 12 0v-1"/><path d="M12 18v3M9 21h6"/></svg>',
   stop: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor"/></svg>',
@@ -3014,6 +3043,9 @@ function switchBaby(id) {
     try { renderDadTodayRecords(); } catch(e) {}
     try { renderMainChart(); } catch(e) {}
     try { renderPatternAnalysis(); } catch(e) {}
+    try { renderKpiCards(); } catch(e) {}
+    try { renderFeedBarChart(); } catch(e) {}
+    try { renderTimeHeatmap(); } catch(e) {}
     try { renderMomCarePage(); } catch(e) {}
   }, 100);
 
@@ -3562,12 +3594,151 @@ function openMomDetail(secIdEncoded) {
   document.getElementById('modal-mom-detail').classList.add('open');
 }
 
+// ── 📌 핵심 지표 카드 (오늘 vs 어제) ──
+function renderKpiCards() {
+  const wrap = document.getElementById('kpi-card-wrap');
+  if (!wrap) return;
+  const today = new Date().toDateString();
+  const y = new Date(); y.setDate(y.getDate()-1);
+  const yesterday = y.toDateString();
+  const recsOf = day => records.filter(r => new Date(r.time).toDateString() === day);
+  const todayRecs = recsOf(today), yestRecs = recsOf(yesterday);
+
+  const sleepMinOf = recs => recs.filter(r => r.cat==='sleep' && r.sub).reduce((a,r) => {
+    const hm = r.sub.match(/(\d+)시간\s*(\d+)?분?/);
+    if (hm) return a + parseInt(hm[1])*60 + (parseInt(hm[2])||0);
+    const m = r.sub.match(/(\d+)분/);
+    return a + (m ? parseInt(m[1]) : 0);
+  }, 0);
+
+  const todayFeed = todayRecs.filter(r=>r.cat==='feed').length;
+  const yestFeed  = yestRecs.filter(r=>r.cat==='feed').length;
+  const todaySleepMin = sleepMinOf(todayRecs);
+  const yestSleepMin  = sleepMinOf(yestRecs);
+  const todayDiaper = todayRecs.filter(r=>r.cat==='diaper').length;
+  const yestDiaper  = yestRecs.filter(r=>r.cat==='diaper').length;
+
+  function deltaHtml(diff, unit) {
+    if (diff > 0) return `<span style="color:#4A7A3F;">▲${Math.abs(diff)}${unit||''}</span>`;
+    if (diff < 0) return `<span style="color:#BA7517;">▼${Math.abs(diff)}${unit||''}</span>`;
+    return `<span style="color:var(--text-faint);">-</span>`;
+  }
+
+  const sleepDisplay = todaySleepMin < 60 ? `${todaySleepMin}분` : `${(todaySleepMin/60).toFixed(1)}h`;
+  const sleepDiffMin = todaySleepMin - yestSleepMin;
+  const sleepDeltaHtml = Math.abs(sleepDiffMin) >= 60
+    ? deltaHtml(Math.round(sleepDiffMin/60*10)/10, 'h')
+    : deltaHtml(sleepDiffMin, '분');
+
+  wrap.innerHTML = `
+    <div class="pattern-card">
+      <div class="pattern-card-label">오늘 수유</div>
+      <div class="pattern-card-value">${todayFeed}<span class="u-text13-600"> 회</span></div>
+      <div class="pattern-card-sub">${deltaHtml(todayFeed - yestFeed)} 어제 대비</div>
+    </div>
+    <div class="pattern-card">
+      <div class="pattern-card-label">오늘 수면</div>
+      <div class="pattern-card-value" style="font-size:18px;">${sleepDisplay}</div>
+      <div class="pattern-card-sub">${sleepDeltaHtml} 어제 대비</div>
+    </div>
+    <div class="pattern-card">
+      <div class="pattern-card-label">오늘 기저귀</div>
+      <div class="pattern-card-value">${todayDiaper}<span class="u-text13-600"> 회</span></div>
+      <div class="pattern-card-sub">${deltaHtml(todayDiaper - yestDiaper)} 어제 대비</div>
+    </div>
+  `;
+}
+
+// ── 📊 최근 7일 수유 막대그래프 (SVG, 권장 범위 밴드 포함) ──
+function renderFeedBarChart() {
+  const wrap = document.getElementById('feed-bar-chart-wrap');
+  if (!wrap) return;
+  const days = [];
+  for (let i=6; i>=0; i--) { const d = new Date(); d.setDate(d.getDate()-i); days.push(d); }
+  const dowLabels = ['일','월','화','수','목','금','토'];
+  const counts = days.map(d => records.filter(r => r.cat==='feed' && new Date(r.time).toDateString()===d.toDateString()).length);
+
+  const ageDays = getBabyAgeDays() || 30;
+  const rec = getFeedRec(ageDays); // { min, max } — 기존 권장 수유 횟수 기준 재사용
+
+  const W = 300, H = 130, padL = 24, padR = 6, padT = 10, padB = 20;
+  const cW = W - padL - padR, cH = H - padT - padB;
+  const maxV = Math.max(...counts, rec.max, 1) * 1.1;
+  const yOf = v => padT + (1 - v/maxV) * cH;
+  const slotW = cW/7;
+  const barW = slotW * 0.5;
+  const bandTop = yOf(rec.max), bandBot = yOf(rec.min);
+  const dark = document.body.classList.contains('dark');
+  const bandFill = dark ? 'rgba(217,164,74,0.16)' : 'rgba(133,79,11,0.10)';
+
+  let bars = '';
+  counts.forEach((v,i) => {
+    const x = padL + slotW*i + (slotW-barW)/2;
+    const y = yOf(v);
+    const h = Math.max(0, (padT+cH) - y);
+    const isToday = i === 6;
+    bars += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="var(--amber-600)"${isToday ? ' stroke="var(--amber-800)" stroke-width="2"' : ''}/>`;
+    bars += `<text x="${(x+barW/2).toFixed(1)}" y="${(padT+cH+13).toFixed(1)}" font-size="9" text-anchor="middle" fill="var(--text-faint)">${dowLabels[days[i].getDay()]}</text>`;
+    if (v>0) bars += `<text x="${(x+barW/2).toFixed(1)}" y="${(y-4).toFixed(1)}" font-size="9" font-weight="700" text-anchor="middle" fill="var(--amber-600)">${v}</text>`;
+  });
+
+  wrap.innerHTML = `
+    <div class="feature-section-title" style="margin-top:4px;">최근 7일 수유</div>
+    <div style="background:var(--card-bg,var(--cream-card));border-radius:var(--radius-card);border:1.5px solid var(--border-color,var(--cream-soft));padding:12px;margin-bottom:12px;">
+      <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;">
+        <rect x="${padL}" y="${bandTop.toFixed(1)}" width="${cW}" height="${Math.max(0,bandBot-bandTop).toFixed(1)}" fill="${bandFill}"/>
+        ${bars}
+      </svg>
+      <div style="font-size:10px;color:var(--text-faint);text-align:center;margin-top:2px;">음영 = 권장 ${rec.min}~${rec.max}회/일 (월령 기준)</div>
+    </div>
+  `;
+}
+
+// ── 🗓️ 시간대별 수유 빈도 히트맵 (새벽/오전/오후/저녁 × 최근 7일) ──
+function renderTimeHeatmap() {
+  const wrap = document.getElementById('time-heatmap-wrap');
+  if (!wrap) return;
+  const days = [];
+  for (let i=6; i>=0; i--) { const d = new Date(); d.setDate(d.getDate()-i); days.push(d); }
+  const dowLabels = ['일','월','화','수','목','금','토'];
+  const slots = [
+    { label:'새벽', test:h => h>=0  && h<6  },
+    { label:'오전', test:h => h>=6  && h<12 },
+    { label:'오후', test:h => h>=12 && h<18 },
+    { label:'저녁', test:h => h>=18 && h<24 },
+  ];
+  const grid = slots.map(slot => days.map(d => records.filter(r =>
+    r.cat==='feed' && new Date(r.time).toDateString()===d.toDateString() && slot.test(new Date(r.time).getHours())
+  ).length));
+  const maxV = Math.max(...grid.flat(), 1);
+  const dark = document.body.classList.contains('dark');
+  const baseRgb = dark ? '217,164,74' : '133,79,11';
+
+  let rowsHtml = `<div class="heatmap-row heatmap-dow-row"><div class="heatmap-row-label"></div>` +
+    days.map(d => `<div class="heatmap-cell heatmap-dow-cell">${dowLabels[d.getDay()]}</div>`).join('') + `</div>`;
+  slots.forEach((slot,ri) => {
+    rowsHtml += `<div class="heatmap-row"><div class="heatmap-row-label">${slot.label}</div>`;
+    grid[ri].forEach((v,ci) => {
+      const alpha = v===0 ? 0 : Math.min(0.8, 0.15 + (v/maxV)*0.65);
+      rowsHtml += `<div class="heatmap-cell" style="background:rgba(${baseRgb},${alpha.toFixed(2)});" title="${dowLabels[days[ci].getDay()]}요일 ${slot.label} ${v}회">${v>0?v:''}</div>`;
+    });
+    rowsHtml += `</div>`;
+  });
+
+  wrap.innerHTML = `
+    <div class="feature-section-title" style="margin-top:4px;">시간대별 수유 빈도</div>
+    <div class="heatmap-card">${rowsHtml}</div>
+  `;
+}
+
 // ── 🔍 패턴 분석 ──
 function renderPatternAnalysis() {
   const wrap = document.getElementById('pattern-analysis-wrap');
   if (!wrap) return;
+  const oneLineEl = document.getElementById('oneline-insight-wrap');
   if (!records.length) {
     wrap.innerHTML = '<div class="pattern-insight">기록이 쌓이면 패턴을 분석해드려요<br>수유·수면·기저귀를 기록해보세요!</div>';
+    if (oneLineEl) oneLineEl.innerHTML = '<div class="pattern-insight">기록이 쌓이면 인사이트를 보여드려요</div>';
     return;
   }
 
@@ -3602,7 +3773,6 @@ function renderPatternAnalysis() {
     const h = new Date(r.time).getHours();
     feedHourBuckets[h<4?0:h<8?1:h<12?2:h<17?3:h<21?4:5]++;
   });
-  const maxFeedBucket = Math.max(...feedHourBuckets, 1);
   const peakFeedTime = bucketLabels[feedHourBuckets.indexOf(Math.max(...feedHourBuckets))];
 
   // ── 수면 분석 ──
@@ -3629,35 +3799,19 @@ function renderPatternAnalysis() {
   const peeCount  = diapers7.filter(r => r.sub==='소변'||r.sub==='소변+대변').length;
   const poopCount = diapers7.filter(r => r.sub==='대변'||r.sub==='소변+대변').length;
 
-  // ── 인사이트 ──
   const days = getBabyAgeDays() || 1;
   const recFeed = days<60?8:days<120?6:5;
   const recSleep = days<60?16:days<120?15:14;
-  const insights = [];
-  if (parseFloat(avgFeed) > 0) {
-    const diff = parseFloat(avgFeed) - recFeed;
-    if (Math.abs(diff) <= 1) insights.push(`${ICONS.check} 수유 횟수(${avgFeed}회/일)가 권장량에 맞아요!`);
-    else if (diff < -1) insights.push(`${ICONS.tip} 수유가 하루 ${avgFeed}회예요. 권장 ${recFeed}회보다 적어요.`);
-    else insights.push(`${ICONS.tip} 수유가 하루 ${avgFeed}회예요. 권장 ${recFeed}회보다 많아요.`);
-  }
-  if (parseFloat(avgSleepH) > 0) {
-    if (parseFloat(avgSleepH) >= recSleep-1) insights.push(`${ICONS.check} 하루 평균 수면 ${avgSleepH}시간으로 양호해요!`);
-    else insights.push(`하루 평균 수면 ${avgSleepH}시간. 권장 ${recSleep}시간에 조금 부족해요.`);
-  }
-  if (avgFeedInterval !== '-') insights.push(`평균 수유 간격: ${avgFeedInterval}`);
-  if (peakFeedTime && Math.max(...feedHourBuckets) > 0) insights.push(`${peakFeedTime}에 수유가 가장 많아요.`);
-  if (!insights.length) insights.push('기록이 쌓이면 더 정확한 패턴을 분석해드려요!');
 
-  const feedBarHtml = feedHourBuckets.map((v,i) =>
-    `<div class="pattern-bar-row">
-      <div class="pattern-bar-label">${bucketLabels[i]}</div>
-      <div class="pattern-bar-bg"><div class="pattern-bar-fill" style="width:${Math.round(v/maxFeedBucket*100)}%;background:var(--amber-800);"></div></div>
-      <div style="font-size:10px;color:var(--text-faint);width:18px;text-align:right;">${v}</div>
-    </div>`
-  ).join('');
+  // 한 줄 인사이트로 압축 (평균 간격 + 피크 시간대) — 기존 계산값 재사용
+  if (oneLineEl) {
+    const oneLineParts = [];
+    if (avgFeedInterval !== '-') oneLineParts.push(`평균 간격 ${avgFeedInterval}`);
+    if (peakFeedTime && Math.max(...feedHourBuckets) > 0) oneLineParts.push(`${peakFeedTime}에 집중`);
+    oneLineEl.innerHTML = `<div class="pattern-insight">${oneLineParts.length ? oneLineParts.join(' · ') : '기록이 쌓이면 인사이트를 보여드려요'}</div>`;
+  }
 
   wrap.innerHTML = `
-    <div class="pattern-insight">${insights.map(t=>`<div>${t}</div>`).join('')}</div>
     <div style="font-size:11px;font-weight:700;color:var(--text-faint);letter-spacing:0.05em;margin-bottom:6px;">🍼 수유 패턴 · 최근 7일</div>
     <div class="pattern-grid">
       <div class="pattern-card">
@@ -3669,10 +3823,6 @@ function renderPatternAnalysis() {
         <div class="pattern-card-label">평균 간격</div>
         <div class="pattern-card-value" style="font-size:15px;">${avgFeedInterval}</div>
         <div class="pattern-card-sub">직전 수유 기준</div>
-      </div>
-      <div class="pattern-card wide">
-        <div class="pattern-card-label">시간대별 수유 빈도</div>
-        <div class="pattern-bar-wrap u-mt8">${feedBarHtml}</div>
       </div>
     </div>
     <div style="font-size:11px;font-weight:700;color:var(--text-faint);letter-spacing:0.05em;margin:4px 0 6px;">😴 수면 패턴 · 최근 7일</div>
@@ -4347,7 +4497,7 @@ function renderPatternClock() {
   const weeklySleepR1 = 64, weeklySleepR2 = 68;
   const weeklyFeedR1 = 68, weeklyFeedR2 = 72;
   const mainR1 = 74;
-  const bandW = 17.5, bandGap = 2;
+  const bandW = 12.25, bandGap = 2;
   const CAT_RADIUS = {
     feed:  mainR1 + bandW/2,
     sleep: mainR1 + bandW + bandGap + bandW/2,
@@ -4480,13 +4630,18 @@ function renderPatternClock() {
         const enMin = (enKST.getHours()*60 + enKST.getMinutes());
         const startMin = dayBase + stMin;
         const endMin   = dayBase + (enMin >= stMin ? enMin : enMin + 1440);
-        drawThickArc(radius, startMin, endMin, color, 0.9);
+        if (endMin - startMin < 20) {
+          // 20분 미만 짧은 기록 → 덩어리로 뭉쳐 보이지 않게 작은 도트로 표시
+          drawDot(radius, (startMin+endMin)/2, color, 0.9, bandW/2);
+        } else {
+          drawThickArc(radius, startMin, endMin, color, 0.9);
+        }
       } else {
-        // 점 기록 (기저귀, 수유 시작 등) → 짧은 호 (둥근 끝이라 점처럼 보임)
+        // 점 기록 (기저귀, 수유 시작 등) → 작은 도트
         const recKST = new Date(r.time);
         const recMin = recKST.getHours()*60 + recKST.getMinutes();
         const startMin = dayBase + recMin;
-        drawThickArc(radius, startMin, startMin+6, color, 0.85);
+        drawDot(radius, startMin, color, 0.85, bandW/2);
       }
     });
   });
@@ -4515,9 +4670,9 @@ function renderPatternClock() {
       drawDot(CAT_RADIUS[cat], nowMin, CAT_COLORS[cat], 1, bandW/2.4);
     });
 
-    // 4) 현재 시각 바늘
+    // 4) 현재 시각 바늘 (링 바깥쪽으로 짧게만 표시, 중앙 텍스트와 겹치지 않음)
     const needleAngle = angleOf(nowMin);
-    const nr1 = innerR, nr2 = outerR + 6;
+    const nr1 = outerR, nr2 = outerR + 6;
     const nx1 = cx+nr1*Math.cos(needleAngle), ny1 = cy+nr1*Math.sin(needleAngle);
     const nx2 = cx+nr2*Math.cos(needleAngle), ny2 = cy+nr2*Math.sin(needleAngle);
     ctx.save();
@@ -4570,7 +4725,8 @@ function renderPatternClock() {
     const st = sleepingStart instanceof Date ? sleepingStart : new Date(sleepingStart);
     if (patternDateStr(st) === todayStr) todaySleepMin += Math.round((Date.now()-st.getTime())/60000);
   }
-  const sleepHDisplay = (todaySleepMin/60).toFixed(1);
+  const sleepStr = todaySleepMin < 60 ? `수면 ${todaySleepMin}분` : `수면 ${(todaySleepMin/60).toFixed(1)}h`;
+  const feedStr = todayFeedCount > 0 ? `수유 ${todayFeedCount}회` : '수유 기록 전';
 
   const lastFeed = records.find(r => r.cat==='feed');
   let lastFeedStr = '수유 기록 없음';
@@ -4582,7 +4738,7 @@ function renderPatternClock() {
   ctx.textAlign='center'; ctx.textBaseline='middle';
   ctx.fillStyle = isDark ? '#D9A44A' : '#854F0B';
   ctx.font = 'bold 13px sans-serif';
-  ctx.fillText(`수유 ${todayFeedCount}회 · 수면 ${sleepHDisplay}h`, cx, cy-7);
+  ctx.fillText(`${feedStr} · ${sleepStr}`, cx, cy-7);
   ctx.fillStyle = isDark ? '#A89878' : '#B8A888';
   ctx.font = '10px sans-serif';
   ctx.fillText(lastFeedStr, cx, cy+9);
@@ -6281,6 +6437,7 @@ function growthSetTab(tab) {
     if (btn) btn.classList.toggle('active', t===tab);
   });
   renderGrowthChart();
+  renderGrowthSummary();
 }
 function addGrowthRecord() {
   const date   = document.getElementById('growth-date').value;
@@ -6316,10 +6473,7 @@ function renderGrowthChart() {
   const dark = document.body.classList.contains('dark');
   const gridColor = dark ? '#4a3a28' : '#FAEEDA';
   const textColor = dark ? '#d4c4a8' : '#633806';
-  const bgColor   = dark ? '#1a1612' : '#fff';
-  ctx.clearRect(0,0,W,H);
-  ctx.fillStyle = bgColor;
-  ctx.fillRect(0,0,W,H);
+  ctx.clearRect(0,0,W,H); // 카드 배경(var(--card-bg))이 그대로 비쳐 보이도록 별도 배경을 채우지 않음
 
   // 성별 가져오기
   let gender = 'girl';
@@ -6357,19 +6511,26 @@ function renderGrowthChart() {
   const dataRecs = tab==='weight' ? weights : tab==='height' ? heights : heads;
   const krAvg    = tab==='weight' ? KR_WEIGHT[gKey] : tab==='height' ? KR_HEIGHT[gKey] : KR_HEAD[gKey];
   const unit     = tab==='weight' ? 'kg' : 'cm';
-  const lineColor= tab==='weight' ? '#c8860a' : tab==='height' ? '#1d4ed8' : '#7c3aaf';
-  const dotColor = tab==='weight' ? '#7a5600' : tab==='height' ? '#1e40af' : '#6b21a8';
+  const babyLineColor = dark ? '#D9A44A' : '#854F0B';
+  const dotColor = babyLineColor;
+  const pctBadge = document.getElementById('growth-pct-badge');
 
   if (!dataRecs.length) {
     ctx.fillStyle = textColor;
     ctx.font = '13px sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('기록이 없어요', W/2, H/2);
+    if (pctBadge) pctBadge.style.display = 'none';
     return;
   }
 
-  // 기준 범위 계산 (아기 데이터 + 평균 모두 포함)
-  const allVals = dataRecs.map(r => tab==='weight'?r.weight:tab==='height'?r.height:r.head).filter(v=>v!=null).concat(krAvg||[]).filter(v=>v!=null);
+  // 참고 밴드: 백분위(3/50/97 등) 데이터가 없어, 평균 ±15%를 참고 범위로 표시
+  const bandUpper = (krAvg||[]).map(v => v*1.15);
+  const bandLower = (krAvg||[]).map(v => v*0.85);
+
+  // 기준 범위 계산 (아기 데이터 + 평균 + 참고 밴드 모두 포함)
+  const allVals = dataRecs.map(r => tab==='weight'?r.weight:tab==='height'?r.height:r.head).filter(v=>v!=null)
+    .concat(krAvg||[]).concat(bandUpper).concat(bandLower).filter(v=>v!=null);
   const minV = Math.min(...allVals)*0.95, maxV = Math.max(...allVals)*1.05;
 
   // 그리드 5줄
@@ -6391,33 +6552,58 @@ function renderGrowthChart() {
   };
   const yOf = v => pad.top + (1-(v-minV)/(maxV-minV))*cH;
 
-  // 한국 평균선 (개월수 0~18, 아기 날짜 범위에 맞게 그리기)
+  // 평균 참고 밴드 + 한국 평균선 (개월수 0~18, 아기 날짜 범위에 맞게 그리기)
   let birthDate = null;
   try { const p=JSON.parse(localStorage.getItem(getBabyKey('baby_profile'))||'{}');
     if(p.birthDate) birthDate=new Date(p.birthDate); } catch(e){}
-  if (birthDate) {
+  if (birthDate && krAvg && krAvg.length) {
+    const monthX = mo => { const d = new Date(birthDate); d.setMonth(d.getMonth()+mo); return xOf(d.getTime()); };
+
+    // 참고 밴드 채우기 (평균 ±15%)
+    ctx.save();
+    ctx.fillStyle = dark ? 'rgba(74,122,63,0.22)' : '#F0F7EC';
+    ctx.beginPath();
+    bandUpper.forEach((v,mo) => { const x=monthX(mo), y=yOf(v); mo===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+    for (let mo=bandLower.length-1; mo>=0; mo--) ctx.lineTo(monthX(mo), yOf(bandLower[mo]));
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // 평균선 (밴드 중앙)
     ctx.save();
     ctx.strokeStyle = gColor;
-    ctx.lineWidth = 1.5;
-    ctx.setLineDash([5,3]);
+    ctx.lineWidth = 1.2;
+    ctx.setLineDash([4,3]);
     ctx.beginPath();
-    let started = false;
     krAvg.forEach((v,mo) => {
-      const d = new Date(birthDate); d.setMonth(d.getMonth()+mo);
-      const x = xOf(d.getTime()), y = yOf(v);
-      if (!started) { ctx.moveTo(x,y); started=true; } else ctx.lineTo(x,y);
+      const x = monthX(mo), y = yOf(v);
+      mo===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
     });
     ctx.stroke();
     ctx.restore();
-    // 평균 레이블
     ctx.fillStyle = gColor; ctx.font='9px sans-serif'; ctx.textAlign='left';
-    ctx.fillText('한국 '+gLabel+' 평균', pad.left+4, pad.top+12);
+    ctx.fillText('평균 참고범위 (±15%)', pad.left+4, pad.top+12);
+
+    // 뱃지: 최근 측정값의 같은 개월수 평균 대비 %
+    if (pctBadge) {
+      const latestRec = dataRecs[dataRecs.length-1];
+      const latestVal = tab==='weight'?latestRec.weight:tab==='height'?latestRec.height:latestRec.head;
+      const moAtLatest = Math.max(0, Math.min(krAvg.length-1, Math.round((new Date(latestRec.date)-birthDate)/(1000*60*60*24*30.44))));
+      const avgAtAge = krAvg[moAtLatest];
+      if (avgAtAge) {
+        const pct = Math.round((latestVal-avgAtAge)/avgAtAge*100);
+        pctBadge.textContent = `평균 대비 ${pct>0?'+':''}${pct}%`;
+        pctBadge.style.display = '';
+      } else { pctBadge.style.display = 'none'; }
+    }
+  } else if (pctBadge) {
+    pctBadge.style.display = 'none';
   }
 
   // 아기 데이터 선
   ctx.save();
-  ctx.strokeStyle = lineColor;
-  ctx.lineWidth = 2.5;
+  ctx.strokeStyle = babyLineColor;
+  ctx.lineWidth = 3;
   ctx.lineJoin = 'round';
   ctx.beginPath();
   dataRecs.forEach((r,i) => {
@@ -6450,22 +6636,38 @@ function renderGrowthChart() {
   });
 }
 
+// 성장 요약 카드: 선택된 탭(몸무게/키/머리)의 최근 측정값 + 직전 측정 대비 변화 + 측정일
+function renderGrowthSummary() {
+  const badge = document.getElementById('growth-latest-badge');
+  const badgeText = document.getElementById('growth-latest-text');
+  if (!badge || !badgeText) return;
+  const tab = _growthTab || 'weight';
+  const key = tab;
+  const unit = tab==='weight' ? 'kg' : 'cm';
+  const label = tab==='weight' ? '몸무게' : tab==='height' ? '키' : '머리둘레';
+  const icon = tab==='weight' ? ICONS.weight : tab==='height' ? ICONS.height : ICONS.headCirc;
+  const withMetric = growthRecords.filter(r => r[key] != null).slice().sort((a,b) => b.date.localeCompare(a.date));
+  if (!withMetric.length) { badge.style.display = 'none'; return; }
+  const latest = withMetric[0];
+  const prev = withMetric[1];
+  let deltaHtml = '';
+  if (prev) {
+    const diff = Math.round((latest[key] - prev[key]) * 100) / 100;
+    deltaHtml = `<div style="font-size:12px;margin-top:2px;">지난 측정 대비 ${diff>0?'+':''}${diff}${unit}</div>`;
+  }
+  badgeText.innerHTML =
+    `<div style="font-size:11px;font-weight:700;margin-bottom:2px;">${icon} 최근 ${label}</div>` +
+    `<div style="font-size:26px;font-weight:800;">${latest[key]}${unit}</div>` +
+    deltaHtml +
+    `<div style="font-size:11px;font-weight:400;opacity:0.75;margin-top:2px;">${latest.date} 측정</div>`;
+  badge.style.display = '';
+}
+
 function renderGrowthTable() {
   const table = document.getElementById('growth-table');
   if (!table) return;
 
-  // 최근 기록 배지
-  const badge = document.getElementById('growth-latest-badge');
-  const badgeText = document.getElementById('growth-latest-text');
-  if (badge && badgeText && growthRecords.length > 0) {
-    const latest = growthRecords[0];
-    const parts = [];
-    if (latest.weight) parts.push(ICONS.weight + ' ' + latest.weight + 'kg');
-    if (latest.height) parts.push(ICONS.height + ' ' + latest.height + 'cm');
-    if (latest.head)   parts.push(ICONS.headCirc + ' ' + latest.head + 'cm');
-    badgeText.innerHTML = latest.date + '  ' + parts.join('  ');
-    badge.style.display = '';
-  } else if (badge) { badge.style.display = 'none'; }
+  renderGrowthSummary();
 
   const rows = growthRecords.map((r, i) =>
     '<tr style="border-bottom:1px solid var(--border-color);">' +
@@ -6923,6 +7125,10 @@ function toggleDarkMode() {
   try { renderCoachCard(); } catch(e) {}
   try { renderMainChart(); } catch(e) {}
   try { renderGrowthChart(); } catch(e) {}
+  try { renderPatternAnalysis(); } catch(e) {}
+  try { renderKpiCards(); } catch(e) {}
+  try { renderFeedBarChart(); } catch(e) {}
+  try { renderTimeHeatmap(); } catch(e) {}
   try { if (document.getElementById('dad-tab-checklist-urgent').innerHTML) renderDadTabChecklist(); } catch(e) {}
 }
 
@@ -7861,7 +8067,7 @@ function goToPage(n) {
   // 새로고침 복구용 저장 (앱 완전 종료 시 sessionStorage 자동 소멸)
   try { sessionStorage.setItem('nuri_last_page', String(currentPage)); } catch(e) {}
   if (n===3) try { renderPatternClock(); } catch(e) {}
-  if (n===4) try { renderScoreCard(); renderPatternAnalysis(); updateChart(); } catch(e) {}
+  if (n===4) try { renderScoreCard(); renderPatternAnalysis(); renderKpiCards(); renderFeedBarChart(); renderTimeHeatmap(); updateChart(); } catch(e) {}
   document.getElementById('swipe-container').style.transform =
     `translateX(-${currentPage * 100 / 10}%)`;
   // dots (숨겨져 있지만 호환성 유지)
@@ -7877,7 +8083,7 @@ function goToPage(n) {
   updatePageLabel(currentPage);
   // 페이지 저장 없음 → 재실행 시 항상 메인(2)
   if (currentPage === 3) { try { updateTodayWidget(); } catch(e) {} }
-  if (currentPage === 4) setTimeout(() => { renderMainChart(); renderPatternAnalysis(); }, 100);
+  if (currentPage === 4) setTimeout(() => { renderMainChart(); renderPatternAnalysis(); renderKpiCards(); renderFeedBarChart(); renderTimeHeatmap(); }, 100);
   if (currentPage === 5) setTimeout(() => { renderGrowthChart(); renderGrowthTable(); }, 100);
   if (currentPage === 6) { try { renderMilestoneList(); } catch(e){} }
   if (currentPage === 7) { try { renderMomCarePage(); } catch(e){} }
@@ -8635,6 +8841,9 @@ function enterApp() {
     try { renderGrowthChart(); } catch(e) {}
     try { renderGrowthTable(); } catch(e) {}
     try { renderPatternAnalysis(); } catch(e) {}
+    try { renderKpiCards(); } catch(e) {}
+    try { renderFeedBarChart(); } catch(e) {}
+    try { renderTimeHeatmap(); } catch(e) {}
     try { checkBackupReminder(); } catch(e) {}
     try { checkNotifBanner(); } catch(e) {}
     try {
@@ -10166,6 +10375,7 @@ function updateStatus() {
   if(el('today-pump-count')) el('today-pump-count').textContent = todayPumps.length+'회';
   renderCoachCard();
   renderScoreCard();
+  try { renderKpiCards(); renderFeedBarChart(); renderTimeHeatmap(); } catch(e) {}
   updateQuickBtns();
 }
 
